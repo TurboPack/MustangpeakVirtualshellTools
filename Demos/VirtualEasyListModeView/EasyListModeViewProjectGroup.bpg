@@ -1,0 +1,33 @@
+#------------------------------------------------------------------------------
+VERSION = BWS.01
+#------------------------------------------------------------------------------
+!ifndef ROOT
+ROOT = $(MAKEDIR)\..
+!endif
+#------------------------------------------------------------------------------
+MAKE = $(ROOT)\bin\make.exe -$(MAKEFLAGS) -f$**
+DCC = $(ROOT)\bin\dcc32.exe $**
+BRCC = $(ROOT)\bin\brcc32.exe $**
+#------------------------------------------------------------------------------
+PROJECTS = EasyListviewD7.bpl EasyListviewD7D.bpl VirtualShellToolsD7.bpl \
+  VirtualShellToolsD7D.bpl VirtualExplorerListModeViewProject.exe
+#------------------------------------------------------------------------------
+default: $(PROJECTS)
+#------------------------------------------------------------------------------
+
+VirtualExplorerListModeViewProject.exe: VirtualExplorerListModeViewProject.dpr
+  $(DCC)
+
+EasyListviewD7.bpl: ..\..\..\EasyListview\Delphi\EasyListviewD7.dpk
+  $(DCC)
+
+EasyListviewD7D.bpl: ..\..\..\EasyListview\Delphi\EasyListviewD7D.dpk
+  $(DCC)
+
+VirtualShellToolsD7.bpl: ..\..\Delphi\VirtualShellToolsD7.dpk
+  $(DCC)
+
+VirtualShellToolsD7D.bpl: ..\..\Delphi\VirtualShellToolsD7D.dpk
+  $(DCC)
+
+

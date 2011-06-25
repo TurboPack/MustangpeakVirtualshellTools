@@ -1,0 +1,6551 @@
+
+
+*****************
+Control Name: VirtualExplorerTreeview1
+Logging Event: 10:32:24 PM
+Event Type: Update Directory
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 1354192
+PIDL1: C:\Documents and Settings\All Users\Start Menu\Programs\BitZipper
+PIDL2 = 0
+ParentPIDL1 = 1353744
+C:\Documents and Settings\All Users\Start Menu\Programs
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerTreeview1
+Logging Event: 10:32:24 PM
+Event Type: Update Item
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 1677320
+PIDL1: C:\Documents and Settings\All Users\Start Menu\Programs\BitZipper\BitZipper.lnk
+PIDL2 = 0
+ParentPIDL1 = 1353216
+C:\Documents and Settings\All Users\Start Menu\Programs\BitZipper
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerTreeview1
+Logging Event: 10:32:24 PM
+Event Type: Free Space
+DoubleWord1 = 4
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 0
+PIDL2 = 0
+ParentPIDL1 = 0
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerTreeview1
+Logging Event: 10:32:24 PM
+Event Type: Update Item
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 1678392
+PIDL1: C:\Documents and Settings\All Users\Start Menu\Programs\BitZipper\BitZipper Help.lnk
+PIDL2 = 0
+ParentPIDL1 = 1677848
+C:\Documents and Settings\All Users\Start Menu\Programs\BitZipper
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerTreeview1
+Logging Event: 10:32:24 PM
+Event Type: Update Directory
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 1678936
+PIDL1: C:\Documents and Settings\All Users\Start Menu\Programs
+PIDL2 = 0
+ParentPIDL1 = 1354640
+C:\Documents and Settings\All Users\Start Menu
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerTreeview1
+Logging Event: 10:32:24 PM
+Event Type: Update Directory
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 1679640
+PIDL1: C:\Documents and Settings\All Users\Start Menu
+PIDL2 = 0
+ParentPIDL1 = 1679320
+C:\Documents and Settings\All Users
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerTreeview1
+Logging Event: 10:32:24 PM
+Event Type: Update Directory
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 1648144
+PIDL1: C:\Documents and Settings\All Users
+PIDL2 = 0
+ParentPIDL1 = 1520064
+C:\Documents and Settings
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerListview1
+Logging Event: 10:32:24 PM
+Event Type: Update Directory
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 1354192
+PIDL1: C:\Documents and Settings\All Users\Start Menu\Programs\BitZipper
+PIDL2 = 0
+ParentPIDL1 = 1353744
+C:\Documents and Settings\All Users\Start Menu\Programs
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerListview1
+Logging Event: 10:32:24 PM
+Event Type: Update Item
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 1677320
+PIDL1: C:\Documents and Settings\All Users\Start Menu\Programs\BitZipper\BitZipper.lnk
+PIDL2 = 0
+ParentPIDL1 = 1353216
+C:\Documents and Settings\All Users\Start Menu\Programs\BitZipper
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerListview1
+Logging Event: 10:32:24 PM
+Event Type: Free Space
+DoubleWord1 = 4
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 0
+PIDL2 = 0
+ParentPIDL1 = 0
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerListview1
+Logging Event: 10:32:24 PM
+Event Type: Update Item
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 1678392
+PIDL1: C:\Documents and Settings\All Users\Start Menu\Programs\BitZipper\BitZipper Help.lnk
+PIDL2 = 0
+ParentPIDL1 = 1677848
+C:\Documents and Settings\All Users\Start Menu\Programs\BitZipper
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerListview1
+Logging Event: 10:32:24 PM
+Event Type: Update Directory
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 1678936
+PIDL1: C:\Documents and Settings\All Users\Start Menu\Programs
+PIDL2 = 0
+ParentPIDL1 = 1354640
+C:\Documents and Settings\All Users\Start Menu
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerListview1
+Logging Event: 10:32:24 PM
+Event Type: Update Directory
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 1679640
+PIDL1: C:\Documents and Settings\All Users\Start Menu
+PIDL2 = 0
+ParentPIDL1 = 1679320
+C:\Documents and Settings\All Users
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerListview1
+Logging Event: 10:32:24 PM
+Event Type: Update Directory
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 1648144
+PIDL1: C:\Documents and Settings\All Users
+PIDL2 = 0
+ParentPIDL1 = 1520064
+C:\Documents and Settings
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerTreeview1
+Logging Event: 10:32:28 PM
+Event Type: Assocciation Changed
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 0
+PIDL2 = 0
+ParentPIDL1 = 0
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerListview1
+Logging Event: 10:32:29 PM
+Event Type: Assocciation Changed
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 0
+PIDL2 = 0
+ParentPIDL1 = 0
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerTreeview1
+Logging Event: 10:32:31 PM
+Event Type: Update Image
+DoubleWord1 = 4294967295
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 0
+PIDL2 = 0
+ParentPIDL1 = 0
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerTreeview1
+Logging Event: 10:32:31 PM
+Event Type: Update Image
+DoubleWord1 = 4294967295
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 0
+PIDL2 = 0
+ParentPIDL1 = 0
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerTreeview1
+Logging Event: 10:32:31 PM
+Event Type: Update Image
+DoubleWord1 = 4294967295
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 0
+PIDL2 = 0
+ParentPIDL1 = 0
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerListview1
+Logging Event: 10:32:31 PM
+Event Type: Update Image
+DoubleWord1 = 4294967295
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 0
+PIDL2 = 0
+ParentPIDL1 = 0
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerListview1
+Logging Event: 10:32:31 PM
+Event Type: Update Image
+DoubleWord1 = 4294967295
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 0
+PIDL2 = 0
+ParentPIDL1 = 0
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerListview1
+Logging Event: 10:32:31 PM
+Event Type: Update Image
+DoubleWord1 = 4294967295
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 0
+PIDL2 = 0
+ParentPIDL1 = 0
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerTreeview1
+Logging Event: 10:32:34 PM
+Event Type: Update Image
+DoubleWord1 = 4294967295
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 0
+PIDL2 = 0
+ParentPIDL1 = 0
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerListview1
+Logging Event: 10:32:34 PM
+Event Type: Update Image
+DoubleWord1 = 4294967295
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 0
+PIDL2 = 0
+ParentPIDL1 = 0
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerTreeview1
+Logging Event: 10:34:24 PM
+Event Type: Update Directory
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 1352736
+PIDL1: C:\Documents and Settings\All Users\Start Menu\Programs\BitZipper
+PIDL2 = 0
+ParentPIDL1 = 1660672
+C:\Documents and Settings\All Users\Start Menu\Programs
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerTreeview1
+Logging Event: 10:34:24 PM
+Event Type: Update Item
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 1353184
+PIDL1: C:\Documents and Settings\All Users\Start Menu\Programs\BitZipper\BitZipper.lnk
+PIDL2 = 0
+ParentPIDL1 = 1352208
+C:\Documents and Settings\All Users\Start Menu\Programs\BitZipper
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerTreeview1
+Logging Event: 10:34:24 PM
+Event Type: Free Space
+DoubleWord1 = 4
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 0
+PIDL2 = 0
+ParentPIDL1 = 0
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerTreeview1
+Logging Event: 10:34:24 PM
+Event Type: Update Item
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 1354256
+PIDL1: C:\Documents and Settings\All Users\Start Menu\Programs\BitZipper\BitZipper Help.lnk
+PIDL2 = 0
+ParentPIDL1 = 1353712
+C:\Documents and Settings\All Users\Start Menu\Programs\BitZipper
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerTreeview1
+Logging Event: 10:34:24 PM
+Event Type: Update Directory
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 1354800
+PIDL1: C:\Documents and Settings\All Users\Start Menu\Programs
+PIDL2 = 0
+ParentPIDL1 = 1662040
+C:\Documents and Settings\All Users\Start Menu
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerTreeview1
+Logging Event: 10:34:24 PM
+Event Type: Update Directory
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 1355504
+PIDL1: C:\Documents and Settings\All Users\Start Menu
+PIDL2 = 0
+ParentPIDL1 = 1355184
+C:\Documents and Settings\All Users
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerTreeview1
+Logging Event: 10:34:24 PM
+Event Type: Update Directory
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 1355824
+PIDL1: C:\Documents and Settings\All Users
+PIDL2 = 0
+ParentPIDL1 = 1520080
+C:\Documents and Settings
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerListview1
+Logging Event: 10:34:24 PM
+Event Type: Update Directory
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 1352736
+PIDL1: C:\Documents and Settings\All Users\Start Menu\Programs\BitZipper
+PIDL2 = 0
+ParentPIDL1 = 1660672
+C:\Documents and Settings\All Users\Start Menu\Programs
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerListview1
+Logging Event: 10:34:24 PM
+Event Type: Update Item
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 1353184
+PIDL1: C:\Documents and Settings\All Users\Start Menu\Programs\BitZipper\BitZipper.lnk
+PIDL2 = 0
+ParentPIDL1 = 1352208
+C:\Documents and Settings\All Users\Start Menu\Programs\BitZipper
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerListview1
+Logging Event: 10:34:24 PM
+Event Type: Free Space
+DoubleWord1 = 4
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 0
+PIDL2 = 0
+ParentPIDL1 = 0
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerListview1
+Logging Event: 10:34:24 PM
+Event Type: Update Item
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 1354256
+PIDL1: C:\Documents and Settings\All Users\Start Menu\Programs\BitZipper\BitZipper Help.lnk
+PIDL2 = 0
+ParentPIDL1 = 1353712
+C:\Documents and Settings\All Users\Start Menu\Programs\BitZipper
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerListview1
+Logging Event: 10:34:24 PM
+Event Type: Update Directory
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 1354800
+PIDL1: C:\Documents and Settings\All Users\Start Menu\Programs
+PIDL2 = 0
+ParentPIDL1 = 1662040
+C:\Documents and Settings\All Users\Start Menu
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerListview1
+Logging Event: 10:34:24 PM
+Event Type: Update Directory
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 1355504
+PIDL1: C:\Documents and Settings\All Users\Start Menu
+PIDL2 = 0
+ParentPIDL1 = 1355184
+C:\Documents and Settings\All Users
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerListview1
+Logging Event: 10:34:24 PM
+Event Type: Update Directory
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 1355824
+PIDL1: C:\Documents and Settings\All Users
+PIDL2 = 0
+ParentPIDL1 = 1520080
+C:\Documents and Settings
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerTreeview1
+Logging Event: 10:34:28 PM
+Event Type: Assocciation Changed
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 0
+PIDL2 = 0
+ParentPIDL1 = 0
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerListview1
+Logging Event: 10:34:29 PM
+Event Type: Assocciation Changed
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 0
+PIDL2 = 0
+ParentPIDL1 = 0
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerTreeview1
+Logging Event: 10:34:31 PM
+Event Type: Update Image
+DoubleWord1 = 4294967295
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 0
+PIDL2 = 0
+ParentPIDL1 = 0
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerTreeview1
+Logging Event: 10:34:32 PM
+Event Type: Update Image
+DoubleWord1 = 4294967295
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 0
+PIDL2 = 0
+ParentPIDL1 = 0
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerTreeview1
+Logging Event: 10:34:32 PM
+Event Type: Update Image
+DoubleWord1 = 4294967295
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 0
+PIDL2 = 0
+ParentPIDL1 = 0
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerListview1
+Logging Event: 10:34:32 PM
+Event Type: Update Image
+DoubleWord1 = 4294967295
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 0
+PIDL2 = 0
+ParentPIDL1 = 0
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerListview1
+Logging Event: 10:34:32 PM
+Event Type: Update Image
+DoubleWord1 = 4294967295
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 0
+PIDL2 = 0
+ParentPIDL1 = 0
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerListview1
+Logging Event: 10:34:32 PM
+Event Type: Update Image
+DoubleWord1 = 4294967295
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 0
+PIDL2 = 0
+ParentPIDL1 = 0
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerTreeview1
+Logging Event: 10:34:34 PM
+Event Type: Update Image
+DoubleWord1 = 4294967295
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 0
+PIDL2 = 0
+ParentPIDL1 = 0
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerListview1
+Logging Event: 10:34:34 PM
+Event Type: Update Image
+DoubleWord1 = 4294967295
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 0
+PIDL2 = 0
+ParentPIDL1 = 0
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerTreeview1
+Logging Event: 10:35:12 PM
+Event Type: Update Directory
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 1355168
+PIDL1: C:\Documents and Settings\All Users\Start Menu\Programs\BitZipper
+PIDL2 = 0
+ParentPIDL1 = 1354720
+C:\Documents and Settings\All Users\Start Menu\Programs
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerTreeview1
+Logging Event: 10:35:12 PM
+Event Type: Update Item
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 1355616
+PIDL1: C:\Documents and Settings\All Users\Start Menu\Programs\BitZipper\BitZipper.lnk
+PIDL2 = 0
+ParentPIDL1 = 1354192
+C:\Documents and Settings\All Users\Start Menu\Programs\BitZipper
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerTreeview1
+Logging Event: 10:35:12 PM
+Event Type: Free Space
+DoubleWord1 = 4
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 0
+PIDL2 = 0
+ParentPIDL1 = 0
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerTreeview1
+Logging Event: 10:35:12 PM
+Event Type: Update Item
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 1630840
+PIDL1: C:\Documents and Settings\All Users\Start Menu\Programs\BitZipper\BitZipper Help.lnk
+PIDL2 = 0
+ParentPIDL1 = 1630296
+C:\Documents and Settings\All Users\Start Menu\Programs\BitZipper
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerTreeview1
+Logging Event: 10:35:12 PM
+Event Type: Update Directory
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 1631768
+PIDL1: C:\Documents and Settings\All Users\Start Menu\Programs
+PIDL2 = 0
+ParentPIDL1 = 1631384
+C:\Documents and Settings\All Users\Start Menu
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerTreeview1
+Logging Event: 10:35:12 PM
+Event Type: Update Directory
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 1351336
+PIDL1: C:\Documents and Settings\All Users\Start Menu
+PIDL2 = 0
+ParentPIDL1 = 1352624
+C:\Documents and Settings\All Users
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerTreeview1
+Logging Event: 10:35:12 PM
+Event Type: Update Directory
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 1632152
+PIDL1: C:\Documents and Settings\All Users
+PIDL2 = 0
+ParentPIDL1 = 1519384
+C:\Documents and Settings
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerListview1
+Logging Event: 10:35:12 PM
+Event Type: Update Directory
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 1355168
+PIDL1: C:\Documents and Settings\All Users\Start Menu\Programs\BitZipper
+PIDL2 = 0
+ParentPIDL1 = 1354720
+C:\Documents and Settings\All Users\Start Menu\Programs
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerListview1
+Logging Event: 10:35:12 PM
+Event Type: Update Item
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 1355616
+PIDL1: C:\Documents and Settings\All Users\Start Menu\Programs\BitZipper\BitZipper.lnk
+PIDL2 = 0
+ParentPIDL1 = 1354192
+C:\Documents and Settings\All Users\Start Menu\Programs\BitZipper
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerListview1
+Logging Event: 10:35:12 PM
+Event Type: Free Space
+DoubleWord1 = 4
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 0
+PIDL2 = 0
+ParentPIDL1 = 0
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerListview1
+Logging Event: 10:35:12 PM
+Event Type: Update Item
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 1630840
+PIDL1: C:\Documents and Settings\All Users\Start Menu\Programs\BitZipper\BitZipper Help.lnk
+PIDL2 = 0
+ParentPIDL1 = 1630296
+C:\Documents and Settings\All Users\Start Menu\Programs\BitZipper
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerListview1
+Logging Event: 10:35:12 PM
+Event Type: Update Directory
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 1631768
+PIDL1: C:\Documents and Settings\All Users\Start Menu\Programs
+PIDL2 = 0
+ParentPIDL1 = 1631384
+C:\Documents and Settings\All Users\Start Menu
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerListview1
+Logging Event: 10:35:12 PM
+Event Type: Update Directory
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 1351336
+PIDL1: C:\Documents and Settings\All Users\Start Menu
+PIDL2 = 0
+ParentPIDL1 = 1352624
+C:\Documents and Settings\All Users
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerListview1
+Logging Event: 10:35:12 PM
+Event Type: Update Directory
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 1632152
+PIDL1: C:\Documents and Settings\All Users
+PIDL2 = 0
+ParentPIDL1 = 1519384
+C:\Documents and Settings
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerTreeview1
+Logging Event: 10:35:16 PM
+Event Type: Assocciation Changed
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 0
+PIDL2 = 0
+ParentPIDL1 = 0
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerListview1
+Logging Event: 10:35:17 PM
+Event Type: Assocciation Changed
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 0
+PIDL2 = 0
+ParentPIDL1 = 0
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerTreeview1
+Logging Event: 10:35:19 PM
+Event Type: Update Image
+DoubleWord1 = 4294967295
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 0
+PIDL2 = 0
+ParentPIDL1 = 0
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerTreeview1
+Logging Event: 10:35:19 PM
+Event Type: Update Image
+DoubleWord1 = 4294967295
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 0
+PIDL2 = 0
+ParentPIDL1 = 0
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerTreeview1
+Logging Event: 10:35:19 PM
+Event Type: Update Image
+DoubleWord1 = 4294967295
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 0
+PIDL2 = 0
+ParentPIDL1 = 0
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerListview1
+Logging Event: 10:35:19 PM
+Event Type: Update Image
+DoubleWord1 = 4294967295
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 0
+PIDL2 = 0
+ParentPIDL1 = 0
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerListview1
+Logging Event: 10:35:19 PM
+Event Type: Update Image
+DoubleWord1 = 4294967295
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 0
+PIDL2 = 0
+ParentPIDL1 = 0
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerListview1
+Logging Event: 10:35:19 PM
+Event Type: Update Image
+DoubleWord1 = 4294967295
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 0
+PIDL2 = 0
+ParentPIDL1 = 0
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerTreeview1
+Logging Event: 10:35:23 PM
+Event Type: Update Image
+DoubleWord1 = 4294967295
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 0
+PIDL2 = 0
+ParentPIDL1 = 0
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerListview1
+Logging Event: 10:35:23 PM
+Event Type: Update Image
+DoubleWord1 = 4294967295
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 0
+PIDL2 = 0
+ParentPIDL1 = 0
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerTreeview1
+Logging Event: 10:37:27 PM
+Event Type: Update Directory
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 1352136
+PIDL1: C:\Documents and Settings\All Users\Start Menu\Programs\BitZipper
+PIDL2 = 0
+ParentPIDL1 = 1351688
+C:\Documents and Settings\All Users\Start Menu\Programs
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerTreeview1
+Logging Event: 10:37:27 PM
+Event Type: Update Item
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 1352584
+PIDL1: C:\Documents and Settings\All Users\Start Menu\Programs\BitZipper\BitZipper.lnk
+PIDL2 = 0
+ParentPIDL1 = 1351160
+C:\Documents and Settings\All Users\Start Menu\Programs\BitZipper
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerTreeview1
+Logging Event: 10:37:27 PM
+Event Type: Free Space
+DoubleWord1 = 4
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 0
+PIDL2 = 0
+ParentPIDL1 = 0
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerTreeview1
+Logging Event: 10:37:27 PM
+Event Type: Update Item
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 1353656
+PIDL1: C:\Documents and Settings\All Users\Start Menu\Programs\BitZipper\BitZipper Help.lnk
+PIDL2 = 0
+ParentPIDL1 = 1353112
+C:\Documents and Settings\All Users\Start Menu\Programs\BitZipper
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerTreeview1
+Logging Event: 10:37:27 PM
+Event Type: Update Directory
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 1354584
+PIDL1: C:\Documents and Settings\All Users\Start Menu\Programs
+PIDL2 = 0
+ParentPIDL1 = 1354200
+C:\Documents and Settings\All Users\Start Menu
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerTreeview1
+Logging Event: 10:37:27 PM
+Event Type: Update Directory
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 1654848
+PIDL1: C:\Documents and Settings\All Users\Start Menu
+PIDL2 = 0
+ParentPIDL1 = 1656656
+C:\Documents and Settings\All Users
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerTreeview1
+Logging Event: 10:37:27 PM
+Event Type: Update Directory
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 1514096
+PIDL1: C:\Documents and Settings\All Users
+PIDL2 = 0
+ParentPIDL1 = 1657312
+C:\Documents and Settings
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerListview1
+Logging Event: 10:37:27 PM
+Event Type: Update Directory
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 1352136
+PIDL1: C:\Documents and Settings\All Users\Start Menu\Programs\BitZipper
+PIDL2 = 0
+ParentPIDL1 = 1351688
+C:\Documents and Settings\All Users\Start Menu\Programs
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerListview1
+Logging Event: 10:37:27 PM
+Event Type: Update Item
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 1352584
+PIDL1: C:\Documents and Settings\All Users\Start Menu\Programs\BitZipper\BitZipper.lnk
+PIDL2 = 0
+ParentPIDL1 = 1351160
+C:\Documents and Settings\All Users\Start Menu\Programs\BitZipper
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerListview1
+Logging Event: 10:37:27 PM
+Event Type: Free Space
+DoubleWord1 = 4
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 0
+PIDL2 = 0
+ParentPIDL1 = 0
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerListview1
+Logging Event: 10:37:27 PM
+Event Type: Update Item
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 1353656
+PIDL1: C:\Documents and Settings\All Users\Start Menu\Programs\BitZipper\BitZipper Help.lnk
+PIDL2 = 0
+ParentPIDL1 = 1353112
+C:\Documents and Settings\All Users\Start Menu\Programs\BitZipper
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerListview1
+Logging Event: 10:37:27 PM
+Event Type: Update Directory
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 1354584
+PIDL1: C:\Documents and Settings\All Users\Start Menu\Programs
+PIDL2 = 0
+ParentPIDL1 = 1354200
+C:\Documents and Settings\All Users\Start Menu
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerListview1
+Logging Event: 10:37:27 PM
+Event Type: Update Directory
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 1654848
+PIDL1: C:\Documents and Settings\All Users\Start Menu
+PIDL2 = 0
+ParentPIDL1 = 1656656
+C:\Documents and Settings\All Users
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerListview1
+Logging Event: 10:37:27 PM
+Event Type: Update Directory
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 1514096
+PIDL1: C:\Documents and Settings\All Users
+PIDL2 = 0
+ParentPIDL1 = 1657312
+C:\Documents and Settings
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerTreeview1
+Logging Event: 10:37:31 PM
+Event Type: Assocciation Changed
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 0
+PIDL2 = 0
+ParentPIDL1 = 0
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerListview1
+Logging Event: 10:37:33 PM
+Event Type: Assocciation Changed
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 0
+PIDL2 = 0
+ParentPIDL1 = 0
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerTreeview1
+Logging Event: 10:40:37 PM
+Event Type: Update Image
+DoubleWord1 = 4294967295
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 0
+PIDL2 = 0
+ParentPIDL1 = 0
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerTreeview1
+Logging Event: 10:40:37 PM
+Event Type: Update Image
+DoubleWord1 = 4294967295
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 0
+PIDL2 = 0
+ParentPIDL1 = 0
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerTreeview1
+Logging Event: 10:40:37 PM
+Event Type: Update Image
+DoubleWord1 = 4294967295
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 0
+PIDL2 = 0
+ParentPIDL1 = 0
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerTreeview1
+Logging Event: 10:40:37 PM
+Event Type: Update Image
+DoubleWord1 = 4294967295
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 0
+PIDL2 = 0
+ParentPIDL1 = 0
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerListview1
+Logging Event: 10:40:37 PM
+Event Type: Update Image
+DoubleWord1 = 4294967295
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 0
+PIDL2 = 0
+ParentPIDL1 = 0
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerListview1
+Logging Event: 10:40:37 PM
+Event Type: Update Image
+DoubleWord1 = 4294967295
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 0
+PIDL2 = 0
+ParentPIDL1 = 0
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerListview1
+Logging Event: 10:40:37 PM
+Event Type: Update Image
+DoubleWord1 = 4294967295
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 0
+PIDL2 = 0
+ParentPIDL1 = 0
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerListview1
+Logging Event: 10:40:37 PM
+Event Type: Update Image
+DoubleWord1 = 4294967295
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 0
+PIDL2 = 0
+ParentPIDL1 = 0
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerTreeview1
+Logging Event: 10:44:27 PM
+Event Type: Update Directory
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 1351680
+PIDL1: C:\Documents and Settings\All Users\Start Menu\Programs\BitZipper
+PIDL2 = 0
+ParentPIDL1 = 1351232
+C:\Documents and Settings\All Users\Start Menu\Programs
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerTreeview1
+Logging Event: 10:44:27 PM
+Event Type: Update Item
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 1352128
+PIDL1: C:\Documents and Settings\All Users\Start Menu\Programs\BitZipper\BitZipper.lnk
+PIDL2 = 0
+ParentPIDL1 = 1620768
+C:\Documents and Settings\All Users\Start Menu\Programs\BitZipper
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerTreeview1
+Logging Event: 10:44:27 PM
+Event Type: Free Space
+DoubleWord1 = 4
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 0
+PIDL2 = 0
+ParentPIDL1 = 0
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerTreeview1
+Logging Event: 10:44:27 PM
+Event Type: Update Item
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 1353200
+PIDL1: C:\Documents and Settings\All Users\Start Menu\Programs\BitZipper\BitZipper Help.lnk
+PIDL2 = 0
+ParentPIDL1 = 1352656
+C:\Documents and Settings\All Users\Start Menu\Programs\BitZipper
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerTreeview1
+Logging Event: 10:44:27 PM
+Event Type: Update Directory
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 1354128
+PIDL1: C:\Documents and Settings\All Users\Start Menu\Programs
+PIDL2 = 0
+ParentPIDL1 = 1353744
+C:\Documents and Settings\All Users\Start Menu
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerTreeview1
+Logging Event: 10:44:27 PM
+Event Type: Update Directory
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 1354832
+PIDL1: C:\Documents and Settings\All Users\Start Menu
+PIDL2 = 0
+ParentPIDL1 = 1354512
+C:\Documents and Settings\All Users
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerTreeview1
+Logging Event: 10:44:27 PM
+Event Type: Update Directory
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 1355400
+PIDL1: C:\Documents and Settings\All Users
+PIDL2 = 0
+ParentPIDL1 = 1355152
+C:\Documents and Settings
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerListview1
+Logging Event: 10:44:27 PM
+Event Type: Update Directory
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 1351680
+PIDL1: C:\Documents and Settings\All Users\Start Menu\Programs\BitZipper
+PIDL2 = 0
+ParentPIDL1 = 1351232
+C:\Documents and Settings\All Users\Start Menu\Programs
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerListview1
+Logging Event: 10:44:27 PM
+Event Type: Update Item
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 1352128
+PIDL1: C:\Documents and Settings\All Users\Start Menu\Programs\BitZipper\BitZipper.lnk
+PIDL2 = 0
+ParentPIDL1 = 1620768
+C:\Documents and Settings\All Users\Start Menu\Programs\BitZipper
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerListview1
+Logging Event: 10:44:27 PM
+Event Type: Free Space
+DoubleWord1 = 4
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 0
+PIDL2 = 0
+ParentPIDL1 = 0
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerListview1
+Logging Event: 10:44:27 PM
+Event Type: Update Item
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 1353200
+PIDL1: C:\Documents and Settings\All Users\Start Menu\Programs\BitZipper\BitZipper Help.lnk
+PIDL2 = 0
+ParentPIDL1 = 1352656
+C:\Documents and Settings\All Users\Start Menu\Programs\BitZipper
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerListview1
+Logging Event: 10:44:27 PM
+Event Type: Update Directory
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 1354128
+PIDL1: C:\Documents and Settings\All Users\Start Menu\Programs
+PIDL2 = 0
+ParentPIDL1 = 1353744
+C:\Documents and Settings\All Users\Start Menu
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerListview1
+Logging Event: 10:44:27 PM
+Event Type: Update Directory
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 1354832
+PIDL1: C:\Documents and Settings\All Users\Start Menu
+PIDL2 = 0
+ParentPIDL1 = 1354512
+C:\Documents and Settings\All Users
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerListview1
+Logging Event: 10:44:27 PM
+Event Type: Update Directory
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 1355400
+PIDL1: C:\Documents and Settings\All Users
+PIDL2 = 0
+ParentPIDL1 = 1355152
+C:\Documents and Settings
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerTreeview1
+Logging Event: 10:44:37 PM
+Event Type: Assocciation Changed
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 0
+PIDL2 = 0
+ParentPIDL1 = 0
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerTreeview1
+Logging Event: 10:44:38 PM
+Event Type: Update Image
+DoubleWord1 = 4294967295
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 0
+PIDL2 = 0
+ParentPIDL1 = 0
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerTreeview1
+Logging Event: 10:44:39 PM
+Event Type: Update Image
+DoubleWord1 = 4294967295
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 0
+PIDL2 = 0
+ParentPIDL1 = 0
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerListview1
+Logging Event: 10:44:39 PM
+Event Type: Assocciation Changed
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 0
+PIDL2 = 0
+ParentPIDL1 = 0
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerListview1
+Logging Event: 10:44:39 PM
+Event Type: Update Image
+DoubleWord1 = 4294967295
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 0
+PIDL2 = 0
+ParentPIDL1 = 0
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerListview1
+Logging Event: 10:44:39 PM
+Event Type: Update Image
+DoubleWord1 = 4294967295
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 0
+PIDL2 = 0
+ParentPIDL1 = 0
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerTreeview1
+Logging Event: 10:44:47 PM
+Event Type: Update Image
+DoubleWord1 = 4294967295
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 0
+PIDL2 = 0
+ParentPIDL1 = 0
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerTreeview1
+Logging Event: 10:44:47 PM
+Event Type: Update Image
+DoubleWord1 = 4294967295
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 0
+PIDL2 = 0
+ParentPIDL1 = 0
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerListview1
+Logging Event: 10:44:47 PM
+Event Type: Update Image
+DoubleWord1 = 4294967295
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 0
+PIDL2 = 0
+ParentPIDL1 = 0
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerListview1
+Logging Event: 10:44:47 PM
+Event Type: Update Image
+DoubleWord1 = 4294967295
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 0
+PIDL2 = 0
+ParentPIDL1 = 0
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerTreeview1
+Logging Event: 10:57:42 PM
+Event Type: Update Directory
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 1350672
+PIDL1: C:\Documents and Settings\All Users\Start Menu\Programs\BitZipper
+PIDL2 = 0
+ParentPIDL1 = 1350224
+C:\Documents and Settings\All Users\Start Menu\Programs
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerTreeview1
+Logging Event: 10:57:42 PM
+Event Type: Update Item
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 1351120
+PIDL1: C:\Documents and Settings\All Users\Start Menu\Programs\BitZipper\BitZipper.lnk
+PIDL2 = 0
+ParentPIDL1 = 1617016
+C:\Documents and Settings\All Users\Start Menu\Programs\BitZipper
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerTreeview1
+Logging Event: 10:57:42 PM
+Event Type: Free Space
+DoubleWord1 = 4
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 0
+PIDL2 = 0
+ParentPIDL1 = 0
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerTreeview1
+Logging Event: 10:57:42 PM
+Event Type: Update Item
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 1352192
+PIDL1: C:\Documents and Settings\All Users\Start Menu\Programs\BitZipper\BitZipper Help.lnk
+PIDL2 = 0
+ParentPIDL1 = 1351648
+C:\Documents and Settings\All Users\Start Menu\Programs\BitZipper
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerTreeview1
+Logging Event: 10:57:42 PM
+Event Type: Update Directory
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 1352736
+PIDL1: C:\Documents and Settings\All Users\Start Menu\Programs
+PIDL2 = 0
+ParentPIDL1 = 1658456
+C:\Documents and Settings\All Users\Start Menu
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerTreeview1
+Logging Event: 10:57:42 PM
+Event Type: Update Directory
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 1353440
+PIDL1: C:\Documents and Settings\All Users\Start Menu
+PIDL2 = 0
+ParentPIDL1 = 1353120
+C:\Documents and Settings\All Users
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerTreeview1
+Logging Event: 10:57:42 PM
+Event Type: Update Directory
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 1354008
+PIDL1: C:\Documents and Settings\All Users
+PIDL2 = 0
+ParentPIDL1 = 1353760
+C:\Documents and Settings
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerListview1
+Logging Event: 10:57:42 PM
+Event Type: Update Directory
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 1350672
+PIDL1: C:\Documents and Settings\All Users\Start Menu\Programs\BitZipper
+PIDL2 = 0
+ParentPIDL1 = 1350224
+C:\Documents and Settings\All Users\Start Menu\Programs
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerListview1
+Logging Event: 10:57:42 PM
+Event Type: Update Item
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 1351120
+PIDL1: C:\Documents and Settings\All Users\Start Menu\Programs\BitZipper\BitZipper.lnk
+PIDL2 = 0
+ParentPIDL1 = 1617016
+C:\Documents and Settings\All Users\Start Menu\Programs\BitZipper
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerListview1
+Logging Event: 10:57:42 PM
+Event Type: Free Space
+DoubleWord1 = 4
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 0
+PIDL2 = 0
+ParentPIDL1 = 0
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerListview1
+Logging Event: 10:57:42 PM
+Event Type: Update Item
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 1352192
+PIDL1: C:\Documents and Settings\All Users\Start Menu\Programs\BitZipper\BitZipper Help.lnk
+PIDL2 = 0
+ParentPIDL1 = 1351648
+C:\Documents and Settings\All Users\Start Menu\Programs\BitZipper
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerListview1
+Logging Event: 10:57:42 PM
+Event Type: Update Directory
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 1352736
+PIDL1: C:\Documents and Settings\All Users\Start Menu\Programs
+PIDL2 = 0
+ParentPIDL1 = 1658456
+C:\Documents and Settings\All Users\Start Menu
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerListview1
+Logging Event: 10:57:42 PM
+Event Type: Update Directory
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 1353440
+PIDL1: C:\Documents and Settings\All Users\Start Menu
+PIDL2 = 0
+ParentPIDL1 = 1353120
+C:\Documents and Settings\All Users
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerListview1
+Logging Event: 10:57:42 PM
+Event Type: Update Directory
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 1354008
+PIDL1: C:\Documents and Settings\All Users
+PIDL2 = 0
+ParentPIDL1 = 1353760
+C:\Documents and Settings
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerTreeview1
+Logging Event: 10:57:46 PM
+Event Type: Assocciation Changed
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 0
+PIDL2 = 0
+ParentPIDL1 = 0
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerListview1
+Logging Event: 10:57:46 PM
+Event Type: Assocciation Changed
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 0
+PIDL2 = 0
+ParentPIDL1 = 0
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerTreeview1
+Logging Event: 10:57:48 PM
+Event Type: Update Image
+DoubleWord1 = 4294967295
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 0
+PIDL2 = 0
+ParentPIDL1 = 0
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerListview1
+Logging Event: 10:57:49 PM
+Event Type: Update Image
+DoubleWord1 = 4294967295
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 0
+PIDL2 = 0
+ParentPIDL1 = 0
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerTreeview1
+Logging Event: 10:57:51 PM
+Event Type: Update Image
+DoubleWord1 = 4294967295
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 0
+PIDL2 = 0
+ParentPIDL1 = 0
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerListview1
+Logging Event: 10:57:51 PM
+Event Type: Update Image
+DoubleWord1 = 4294967295
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 0
+PIDL2 = 0
+ParentPIDL1 = 0
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerTreeview1
+Logging Event: 10:59:24 PM
+Event Type: Assocciation Changed
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 1643264
+PIDL1: C:\*.zip
+PIDL2 = 0
+ParentPIDL1 = 1641264
+C:\
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerTreeview1
+Logging Event: 10:59:24 PM
+Event Type: Update Directory
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 1643888
+PIDL1: C:\Documents and Settings\Jim\Recent
+PIDL2 = 0
+ParentPIDL1 = 1656216
+C:\Documents and Settings\Jim
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerTreeview1
+Logging Event: 10:59:24 PM
+Event Type: Update Item
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 1644768
+PIDL1: C:\Documents and Settings\Jim\Recent\Prereqs.zip.lnk
+PIDL2 = 0
+ParentPIDL1 = 1690328
+C:\Documents and Settings\Jim\Recent
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerTreeview1
+Logging Event: 10:59:24 PM
+Event Type: Free Space
+DoubleWord1 = 4
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 0
+PIDL2 = 0
+ParentPIDL1 = 0
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerTreeview1
+Logging Event: 10:59:24 PM
+Event Type: Update Directory
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 1755496
+PIDL1: My Computer
+PIDL2 = 0
+ParentPIDL1 = 1755040
+Today
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerTreeview1
+Logging Event: 10:59:24 PM
+Event Type: Update Directory
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 1760416
+PIDL1: By &Order Visited Today
+PIDL2 = 0
+ParentPIDL1 = 1760032
+C:\Documents and Settings\Jim\Local Settings\History
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerTreeview1
+Logging Event: 10:59:24 PM
+Event Type: Update Directory
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 1761352
+PIDL1: My Computer
+PIDL2 = 0
+ParentPIDL1 = 1760936
+By S&ite
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerListview1
+Logging Event: 10:59:24 PM
+Event Type: Assocciation Changed
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 1643264
+PIDL1: C:\*.zip
+PIDL2 = 0
+ParentPIDL1 = 1641264
+C:\
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerListview1
+Logging Event: 10:59:24 PM
+Event Type: Update Directory
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 1643888
+PIDL1: C:\Documents and Settings\Jim\Recent
+PIDL2 = 0
+ParentPIDL1 = 1656216
+C:\Documents and Settings\Jim
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerListview1
+Logging Event: 10:59:24 PM
+Event Type: Update Item
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 1644768
+PIDL1: C:\Documents and Settings\Jim\Recent\Prereqs.zip.lnk
+PIDL2 = 0
+ParentPIDL1 = 1690328
+C:\Documents and Settings\Jim\Recent
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerListview1
+Logging Event: 10:59:24 PM
+Event Type: Free Space
+DoubleWord1 = 4
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 0
+PIDL2 = 0
+ParentPIDL1 = 0
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerListview1
+Logging Event: 10:59:24 PM
+Event Type: Update Directory
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 1755496
+PIDL1: My Computer
+PIDL2 = 0
+ParentPIDL1 = 1755040
+Today
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerListview1
+Logging Event: 10:59:24 PM
+Event Type: Update Directory
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 1760416
+PIDL1: By &Order Visited Today
+PIDL2 = 0
+ParentPIDL1 = 1760032
+C:\Documents and Settings\Jim\Local Settings\History
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerListview1
+Logging Event: 10:59:24 PM
+Event Type: Update Directory
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 1761352
+PIDL1: My Computer
+PIDL2 = 0
+ParentPIDL1 = 1760936
+By S&ite
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerTreeview1
+Logging Event: 10:59:26 PM
+Event Type: Update Image
+DoubleWord1 = 4294967295
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 0
+PIDL2 = 0
+ParentPIDL1 = 0
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerListview1
+Logging Event: 10:59:27 PM
+Event Type: Update Image
+DoubleWord1 = 4294967295
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 0
+PIDL2 = 0
+ParentPIDL1 = 0
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerTreeview1
+Logging Event: 10:59:29 PM
+Event Type: Update Image
+DoubleWord1 = 4294967295
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 0
+PIDL2 = 0
+ParentPIDL1 = 0
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerListview1
+Logging Event: 10:59:29 PM
+Event Type: Update Image
+DoubleWord1 = 4294967295
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 0
+PIDL2 = 0
+ParentPIDL1 = 0
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerTreeview1
+Logging Event: 11:00:19 PM
+Event Type: Update Directory
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 1740504
+PIDL1: C:\Documents and Settings\All Users\Start Menu\Programs\BitZipper
+PIDL2 = 0
+ParentPIDL1 = 1643768
+C:\Documents and Settings\All Users\Start Menu\Programs
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerTreeview1
+Logging Event: 11:00:19 PM
+Event Type: Update Item
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 1650608
+PIDL1: C:\Documents and Settings\All Users\Start Menu\Programs\BitZipper\BitZipper.lnk
+PIDL2 = 0
+ParentPIDL1 = 1649496
+C:\Documents and Settings\All Users\Start Menu\Programs\BitZipper
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerTreeview1
+Logging Event: 11:00:19 PM
+Event Type: Free Space
+DoubleWord1 = 4
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 0
+PIDL2 = 0
+ParentPIDL1 = 0
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerTreeview1
+Logging Event: 11:00:19 PM
+Event Type: Update Item
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 1760928
+PIDL1: C:\Documents and Settings\All Users\Start Menu\Programs\BitZipper\BitZipper Help.lnk
+PIDL2 = 0
+ParentPIDL1 = 1760384
+C:\Documents and Settings\All Users\Start Menu\Programs\BitZipper
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerTreeview1
+Logging Event: 11:00:19 PM
+Event Type: Update Directory
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 1761856
+PIDL1: C:\Documents and Settings\All Users\Start Menu\Programs
+PIDL2 = 0
+ParentPIDL1 = 1761472
+C:\Documents and Settings\All Users\Start Menu
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerTreeview1
+Logging Event: 11:00:19 PM
+Event Type: Update Directory
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 1510856
+PIDL1: C:\Documents and Settings\All Users\Start Menu
+PIDL2 = 0
+ParentPIDL1 = 1755216
+C:\Documents and Settings\All Users
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerTreeview1
+Logging Event: 11:00:19 PM
+Event Type: Update Directory
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 1762240
+PIDL1: C:\Documents and Settings\All Users
+PIDL2 = 0
+ParentPIDL1 = 1514016
+C:\Documents and Settings
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerListview1
+Logging Event: 11:00:19 PM
+Event Type: Update Directory
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 1740504
+PIDL1: C:\Documents and Settings\All Users\Start Menu\Programs\BitZipper
+PIDL2 = 0
+ParentPIDL1 = 1643768
+C:\Documents and Settings\All Users\Start Menu\Programs
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerListview1
+Logging Event: 11:00:19 PM
+Event Type: Update Item
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 1650608
+PIDL1: C:\Documents and Settings\All Users\Start Menu\Programs\BitZipper\BitZipper.lnk
+PIDL2 = 0
+ParentPIDL1 = 1649496
+C:\Documents and Settings\All Users\Start Menu\Programs\BitZipper
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerListview1
+Logging Event: 11:00:19 PM
+Event Type: Free Space
+DoubleWord1 = 4
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 0
+PIDL2 = 0
+ParentPIDL1 = 0
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerListview1
+Logging Event: 11:00:19 PM
+Event Type: Update Item
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 1760928
+PIDL1: C:\Documents and Settings\All Users\Start Menu\Programs\BitZipper\BitZipper Help.lnk
+PIDL2 = 0
+ParentPIDL1 = 1760384
+C:\Documents and Settings\All Users\Start Menu\Programs\BitZipper
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerListview1
+Logging Event: 11:00:19 PM
+Event Type: Update Directory
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 1761856
+PIDL1: C:\Documents and Settings\All Users\Start Menu\Programs
+PIDL2 = 0
+ParentPIDL1 = 1761472
+C:\Documents and Settings\All Users\Start Menu
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerListview1
+Logging Event: 11:00:19 PM
+Event Type: Update Directory
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 1510856
+PIDL1: C:\Documents and Settings\All Users\Start Menu
+PIDL2 = 0
+ParentPIDL1 = 1755216
+C:\Documents and Settings\All Users
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerListview1
+Logging Event: 11:00:19 PM
+Event Type: Update Directory
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 1762240
+PIDL1: C:\Documents and Settings\All Users
+PIDL2 = 0
+ParentPIDL1 = 1514016
+C:\Documents and Settings
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerTreeview1
+Logging Event: 11:00:22 PM
+Event Type: Update Directory
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 1577368
+PIDL1: C:\Documents and Settings\All Users\Start Menu
+PIDL2 = 0
+ParentPIDL1 = 1618616
+C:\Documents and Settings\All Users
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerTreeview1
+Logging Event: 11:00:22 PM
+Event Type: Assocciation Changed
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 0
+PIDL2 = 0
+ParentPIDL1 = 0
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerListview1
+Logging Event: 11:00:24 PM
+Event Type: Update Directory
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 1577368
+PIDL1: C:\Documents and Settings\All Users\Start Menu
+PIDL2 = 0
+ParentPIDL1 = 1618616
+C:\Documents and Settings\All Users
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerListview1
+Logging Event: 11:00:24 PM
+Event Type: Assocciation Changed
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 0
+PIDL2 = 0
+ParentPIDL1 = 0
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerTreeview1
+Logging Event: 11:00:26 PM
+Event Type: Update Image
+DoubleWord1 = 4294967295
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 0
+PIDL2 = 0
+ParentPIDL1 = 0
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerTreeview1
+Logging Event: 11:00:27 PM
+Event Type: Update Image
+DoubleWord1 = 4294967295
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 0
+PIDL2 = 0
+ParentPIDL1 = 0
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerTreeview1
+Logging Event: 11:00:27 PM
+Event Type: Update Image
+DoubleWord1 = 4294967295
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 0
+PIDL2 = 0
+ParentPIDL1 = 0
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerListview1
+Logging Event: 11:00:27 PM
+Event Type: Update Image
+DoubleWord1 = 4294967295
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 0
+PIDL2 = 0
+ParentPIDL1 = 0
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerListview1
+Logging Event: 11:00:27 PM
+Event Type: Update Image
+DoubleWord1 = 4294967295
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 0
+PIDL2 = 0
+ParentPIDL1 = 0
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerListview1
+Logging Event: 11:00:27 PM
+Event Type: Update Image
+DoubleWord1 = 4294967295
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 0
+PIDL2 = 0
+ParentPIDL1 = 0
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerTreeview1
+Logging Event: 11:00:29 PM
+Event Type: Update Image
+DoubleWord1 = 4294967295
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 0
+PIDL2 = 0
+ParentPIDL1 = 0
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerListview1
+Logging Event: 11:00:29 PM
+Event Type: Update Image
+DoubleWord1 = 4294967295
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 0
+PIDL2 = 0
+ParentPIDL1 = 0
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerTreeview1
+Logging Event: 11:00:51 PM
+Event Type: Update Directory
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 1387024
+PIDL1: C:\Documents and Settings\All Users\Start Menu\Programs\BitZipper
+PIDL2 = 0
+ParentPIDL1 = 1386576
+C:\Documents and Settings\All Users\Start Menu\Programs
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerTreeview1
+Logging Event: 11:00:51 PM
+Event Type: Update Item
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 1380960
+PIDL1: C:\Documents and Settings\All Users\Start Menu\Programs\BitZipper\BitZipper.lnk
+PIDL2 = 0
+ParentPIDL1 = 1378784
+C:\Documents and Settings\All Users\Start Menu\Programs\BitZipper
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerTreeview1
+Logging Event: 11:00:51 PM
+Event Type: Free Space
+DoubleWord1 = 4
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 0
+PIDL2 = 0
+ParentPIDL1 = 0
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerTreeview1
+Logging Event: 11:00:51 PM
+Event Type: Update Item
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 1383768
+PIDL1: C:\Documents and Settings\All Users\Start Menu\Programs\BitZipper\BitZipper Help.lnk
+PIDL2 = 0
+ParentPIDL1 = 1381488
+C:\Documents and Settings\All Users\Start Menu\Programs\BitZipper
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerTreeview1
+Logging Event: 11:00:51 PM
+Event Type: Update Directory
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 1354344
+PIDL1: C:\Documents and Settings\All Users\Start Menu\Programs
+PIDL2 = 0
+ParentPIDL1 = 1384312
+C:\Documents and Settings\All Users\Start Menu
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerTreeview1
+Logging Event: 11:00:51 PM
+Event Type: Update Directory
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 1354728
+PIDL1: C:\Documents and Settings\All Users\Start Menu
+PIDL2 = 0
+ParentPIDL1 = 1387472
+C:\Documents and Settings\All Users
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerTreeview1
+Logging Event: 11:00:51 PM
+Event Type: Update Directory
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 1355048
+PIDL1: C:\Documents and Settings\All Users
+PIDL2 = 0
+ParentPIDL1 = 1384696
+C:\Documents and Settings
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerListview1
+Logging Event: 11:00:51 PM
+Event Type: Update Directory
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 1387024
+PIDL1: C:\Documents and Settings\All Users\Start Menu\Programs\BitZipper
+PIDL2 = 0
+ParentPIDL1 = 1386576
+C:\Documents and Settings\All Users\Start Menu\Programs
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerListview1
+Logging Event: 11:00:51 PM
+Event Type: Update Item
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 1380960
+PIDL1: C:\Documents and Settings\All Users\Start Menu\Programs\BitZipper\BitZipper.lnk
+PIDL2 = 0
+ParentPIDL1 = 1378784
+C:\Documents and Settings\All Users\Start Menu\Programs\BitZipper
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerListview1
+Logging Event: 11:00:51 PM
+Event Type: Free Space
+DoubleWord1 = 4
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 0
+PIDL2 = 0
+ParentPIDL1 = 0
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerListview1
+Logging Event: 11:00:51 PM
+Event Type: Update Item
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 1383768
+PIDL1: C:\Documents and Settings\All Users\Start Menu\Programs\BitZipper\BitZipper Help.lnk
+PIDL2 = 0
+ParentPIDL1 = 1381488
+C:\Documents and Settings\All Users\Start Menu\Programs\BitZipper
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerListview1
+Logging Event: 11:00:51 PM
+Event Type: Update Directory
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 1354344
+PIDL1: C:\Documents and Settings\All Users\Start Menu\Programs
+PIDL2 = 0
+ParentPIDL1 = 1384312
+C:\Documents and Settings\All Users\Start Menu
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerListview1
+Logging Event: 11:00:51 PM
+Event Type: Update Directory
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 1354728
+PIDL1: C:\Documents and Settings\All Users\Start Menu
+PIDL2 = 0
+ParentPIDL1 = 1387472
+C:\Documents and Settings\All Users
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerListview1
+Logging Event: 11:00:51 PM
+Event Type: Update Directory
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 1355048
+PIDL1: C:\Documents and Settings\All Users
+PIDL2 = 0
+ParentPIDL1 = 1384696
+C:\Documents and Settings
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerTreeview1
+Logging Event: 11:00:54 PM
+Event Type: Update Directory
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 1497032
+PIDL1: C:\Documents and Settings\All Users\Start Menu
+PIDL2 = 0
+ParentPIDL1 = 1496712
+C:\Documents and Settings\All Users
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerListview1
+Logging Event: 11:00:54 PM
+Event Type: Update Directory
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 1497032
+PIDL1: C:\Documents and Settings\All Users\Start Menu
+PIDL2 = 0
+ParentPIDL1 = 1496712
+C:\Documents and Settings\All Users
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerTreeview1
+Logging Event: 11:00:56 PM
+Event Type: Assocciation Changed
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 0
+PIDL2 = 0
+ParentPIDL1 = 0
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerListview1
+Logging Event: 11:00:57 PM
+Event Type: Assocciation Changed
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 0
+PIDL2 = 0
+ParentPIDL1 = 0
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerTreeview1
+Logging Event: 11:01:00 PM
+Event Type: Update Image
+DoubleWord1 = 4294967295
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 0
+PIDL2 = 0
+ParentPIDL1 = 0
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerTreeview1
+Logging Event: 11:01:01 PM
+Event Type: Update Image
+DoubleWord1 = 4294967295
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 0
+PIDL2 = 0
+ParentPIDL1 = 0
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerListview1
+Logging Event: 11:01:01 PM
+Event Type: Update Image
+DoubleWord1 = 4294967295
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 0
+PIDL2 = 0
+ParentPIDL1 = 0
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerListview1
+Logging Event: 11:01:01 PM
+Event Type: Update Image
+DoubleWord1 = 4294967295
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 0
+PIDL2 = 0
+ParentPIDL1 = 0
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerTreeview1
+Logging Event: 11:01:03 PM
+Event Type: Update Image
+DoubleWord1 = 4294967295
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 0
+PIDL2 = 0
+ParentPIDL1 = 0
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerListview1
+Logging Event: 11:01:03 PM
+Event Type: Update Image
+DoubleWord1 = 4294967295
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 0
+PIDL2 = 0
+ParentPIDL1 = 0
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerTreeview1
+Logging Event: 11:01:04 PM
+Event Type: Update Image
+DoubleWord1 = 4294967295
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 0
+PIDL2 = 0
+ParentPIDL1 = 0
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerListview1
+Logging Event: 11:01:04 PM
+Event Type: Update Image
+DoubleWord1 = 4294967295
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 0
+PIDL2 = 0
+ParentPIDL1 = 0
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerTreeview1
+Logging Event: 11:01:16 PM
+Event Type: Assocciation Changed
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 1641936
+PIDL1: C:\*.zip
+PIDL2 = 0
+ParentPIDL1 = 1510120
+C:\
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerListview1
+Logging Event: 11:01:18 PM
+Event Type: Assocciation Changed
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 1641936
+PIDL1: C:\*.zip
+PIDL2 = 0
+ParentPIDL1 = 1510120
+C:\
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerTreeview1
+Logging Event: 11:01:23 PM
+Event Type: Update Image
+DoubleWord1 = 4294967295
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 0
+PIDL2 = 0
+ParentPIDL1 = 0
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerTreeview1
+Logging Event: 11:01:24 PM
+Event Type: Update Image
+DoubleWord1 = 4294967295
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 0
+PIDL2 = 0
+ParentPIDL1 = 0
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerListview1
+Logging Event: 11:01:24 PM
+Event Type: Update Image
+DoubleWord1 = 4294967295
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 0
+PIDL2 = 0
+ParentPIDL1 = 0
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerListview1
+Logging Event: 11:01:24 PM
+Event Type: Update Image
+DoubleWord1 = 4294967295
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 0
+PIDL2 = 0
+ParentPIDL1 = 0
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerTreeview1
+Logging Event: 11:01:26 PM
+Event Type: Update Image
+DoubleWord1 = 4294967295
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 0
+PIDL2 = 0
+ParentPIDL1 = 0
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerTreeview1
+Logging Event: 11:01:26 PM
+Event Type: Update Image
+DoubleWord1 = 4294967295
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 0
+PIDL2 = 0
+ParentPIDL1 = 0
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerListview1
+Logging Event: 11:01:26 PM
+Event Type: Update Image
+DoubleWord1 = 4294967295
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 0
+PIDL2 = 0
+ParentPIDL1 = 0
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerListview1
+Logging Event: 11:01:26 PM
+Event Type: Update Image
+DoubleWord1 = 4294967295
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 0
+PIDL2 = 0
+ParentPIDL1 = 0
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerTreeview1
+Logging Event: 11:01:26 PM
+Event Type: Update Image
+DoubleWord1 = 4294967295
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 0
+PIDL2 = 0
+ParentPIDL1 = 0
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerListview1
+Logging Event: 11:01:26 PM
+Event Type: Update Image
+DoubleWord1 = 4294967295
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 0
+PIDL2 = 0
+ParentPIDL1 = 0
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerTreeview1
+Logging Event: 11:01:28 PM
+Event Type: Update Directory
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 1595184
+PIDL1: C:\Documents and Settings\Jim\Recent
+PIDL2 = 0
+ParentPIDL1 = 1641424
+C:\Documents and Settings\Jim
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerTreeview1
+Logging Event: 11:01:28 PM
+Event Type: Update Item
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 1495296
+PIDL1: C:\Documents and Settings\Jim\Recent\ShellExtGuide5_demo.zip.lnk
+PIDL2 = 0
+ParentPIDL1 = 1494888
+C:\Documents and Settings\Jim\Recent
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerTreeview1
+Logging Event: 11:01:28 PM
+Event Type: Free Space
+DoubleWord1 = 4
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 0
+PIDL2 = 0
+ParentPIDL1 = 0
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerTreeview1
+Logging Event: 11:01:28 PM
+Event Type: Update Directory
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 1383856
+PIDL1: My Computer
+PIDL2 = 0
+ParentPIDL1 = 1381288
+Today
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerTreeview1
+Logging Event: 11:01:28 PM
+Event Type: Update Directory
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 1384312
+PIDL1: By &Order Visited Today
+PIDL2 = 0
+ParentPIDL1 = 1381744
+C:\Documents and Settings\Jim\Local Settings\History
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerTreeview1
+Logging Event: 11:01:28 PM
+Event Type: Update Directory
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 1378616
+PIDL1: My Computer
+PIDL2 = 0
+ParentPIDL1 = 1378200
+By S&ite
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerListview1
+Logging Event: 11:01:28 PM
+Event Type: Update Directory
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 1595184
+PIDL1: C:\Documents and Settings\Jim\Recent
+PIDL2 = 0
+ParentPIDL1 = 1641424
+C:\Documents and Settings\Jim
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerListview1
+Logging Event: 11:01:28 PM
+Event Type: Update Item
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 1495296
+PIDL1: C:\Documents and Settings\Jim\Recent\ShellExtGuide5_demo.zip.lnk
+PIDL2 = 0
+ParentPIDL1 = 1494888
+C:\Documents and Settings\Jim\Recent
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerListview1
+Logging Event: 11:01:28 PM
+Event Type: Free Space
+DoubleWord1 = 4
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 0
+PIDL2 = 0
+ParentPIDL1 = 0
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerListview1
+Logging Event: 11:01:28 PM
+Event Type: Update Directory
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 1383856
+PIDL1: My Computer
+PIDL2 = 0
+ParentPIDL1 = 1381288
+Today
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerListview1
+Logging Event: 11:01:28 PM
+Event Type: Update Directory
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 1384312
+PIDL1: By &Order Visited Today
+PIDL2 = 0
+ParentPIDL1 = 1381744
+C:\Documents and Settings\Jim\Local Settings\History
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerListview1
+Logging Event: 11:01:28 PM
+Event Type: Update Directory
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 1378616
+PIDL1: My Computer
+PIDL2 = 0
+ParentPIDL1 = 1378200
+By S&ite
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerTreeview1
+Logging Event: 11:05:26 PM
+Event Type: Update Directory
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 1686304
+PIDL1: C:\Documents and Settings\All Users\Start Menu\Programs\BitZipper
+PIDL2 = 0
+ParentPIDL1 = 1683464
+C:\Documents and Settings\All Users\Start Menu\Programs
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerTreeview1
+Logging Event: 11:05:26 PM
+Event Type: Update Item
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 1578392
+PIDL1: C:\Documents and Settings\All Users\Start Menu\Programs\BitZipper\BitZipper.lnk
+PIDL2 = 0
+ParentPIDL1 = 1649184
+C:\Documents and Settings\All Users\Start Menu\Programs\BitZipper
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerTreeview1
+Logging Event: 11:05:26 PM
+Event Type: Free Space
+DoubleWord1 = 4
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 0
+PIDL2 = 0
+ParentPIDL1 = 0
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerTreeview1
+Logging Event: 11:05:26 PM
+Event Type: Update Item
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 1645160
+PIDL1: C:\Documents and Settings\All Users\Start Menu\Programs\BitZipper\BitZipper Help.lnk
+PIDL2 = 0
+ParentPIDL1 = 1644616
+C:\Documents and Settings\All Users\Start Menu\Programs\BitZipper
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerTreeview1
+Logging Event: 11:05:26 PM
+Event Type: Update Directory
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 1684096
+PIDL1: C:\Documents and Settings\All Users\Start Menu\Programs
+PIDL2 = 0
+ParentPIDL1 = 1435120
+C:\Documents and Settings\All Users\Start Menu
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerTreeview1
+Logging Event: 11:05:26 PM
+Event Type: Update Directory
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 1646024
+PIDL1: C:\Documents and Settings\All Users\Start Menu
+PIDL2 = 0
+ParentPIDL1 = 1645704
+C:\Documents and Settings\All Users
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerTreeview1
+Logging Event: 11:05:26 PM
+Event Type: Update Directory
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 1646592
+PIDL1: C:\Documents and Settings\All Users
+PIDL2 = 0
+ParentPIDL1 = 1646344
+C:\Documents and Settings
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerListview1
+Logging Event: 11:05:26 PM
+Event Type: Update Directory
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 1686304
+PIDL1: C:\Documents and Settings\All Users\Start Menu\Programs\BitZipper
+PIDL2 = 0
+ParentPIDL1 = 1683464
+C:\Documents and Settings\All Users\Start Menu\Programs
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerListview1
+Logging Event: 11:05:27 PM
+Event Type: Update Item
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 1578392
+PIDL1: C:\Documents and Settings\All Users\Start Menu\Programs\BitZipper\BitZipper.lnk
+PIDL2 = 0
+ParentPIDL1 = 1649184
+C:\Documents and Settings\All Users\Start Menu\Programs\BitZipper
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerListview1
+Logging Event: 11:05:27 PM
+Event Type: Free Space
+DoubleWord1 = 4
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 0
+PIDL2 = 0
+ParentPIDL1 = 0
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerListview1
+Logging Event: 11:05:27 PM
+Event Type: Update Item
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 1645160
+PIDL1: C:\Documents and Settings\All Users\Start Menu\Programs\BitZipper\BitZipper Help.lnk
+PIDL2 = 0
+ParentPIDL1 = 1644616
+C:\Documents and Settings\All Users\Start Menu\Programs\BitZipper
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerListview1
+Logging Event: 11:05:27 PM
+Event Type: Update Directory
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 1684096
+PIDL1: C:\Documents and Settings\All Users\Start Menu\Programs
+PIDL2 = 0
+ParentPIDL1 = 1435120
+C:\Documents and Settings\All Users\Start Menu
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerListview1
+Logging Event: 11:05:27 PM
+Event Type: Update Directory
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 1646024
+PIDL1: C:\Documents and Settings\All Users\Start Menu
+PIDL2 = 0
+ParentPIDL1 = 1645704
+C:\Documents and Settings\All Users
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerListview1
+Logging Event: 11:05:27 PM
+Event Type: Update Directory
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 1646592
+PIDL1: C:\Documents and Settings\All Users
+PIDL2 = 0
+ParentPIDL1 = 1646344
+C:\Documents and Settings
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerTreeview1
+Logging Event: 11:05:30 PM
+Event Type: Assocciation Changed
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 0
+PIDL2 = 0
+ParentPIDL1 = 0
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerTreeview1
+Logging Event: 11:09:28 PM
+Event Type: Update Directory
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 1617928
+PIDL1: C:\Documents and Settings\All Users\Start Menu\Programs\BitZipper
+PIDL2 = 0
+ParentPIDL1 = 1617480
+C:\Documents and Settings\All Users\Start Menu\Programs
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerTreeview1
+Logging Event: 11:09:28 PM
+Event Type: Update Item
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 1618376
+PIDL1: C:\Documents and Settings\All Users\Start Menu\Programs\BitZipper\BitZipper.lnk
+PIDL2 = 0
+ParentPIDL1 = 1616952
+C:\Documents and Settings\All Users\Start Menu\Programs\BitZipper
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerTreeview1
+Logging Event: 11:09:28 PM
+Event Type: Free Space
+DoubleWord1 = 4
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 0
+PIDL2 = 0
+ParentPIDL1 = 0
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerTreeview1
+Logging Event: 11:09:28 PM
+Event Type: Update Item
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 1619448
+PIDL1: C:\Documents and Settings\All Users\Start Menu\Programs\BitZipper\BitZipper Help.lnk
+PIDL2 = 0
+ParentPIDL1 = 1618904
+C:\Documents and Settings\All Users\Start Menu\Programs\BitZipper
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerTreeview1
+Logging Event: 11:09:28 PM
+Event Type: Update Directory
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 1620376
+PIDL1: C:\Documents and Settings\All Users\Start Menu\Programs
+PIDL2 = 0
+ParentPIDL1 = 1619992
+C:\Documents and Settings\All Users\Start Menu
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerTreeview1
+Logging Event: 11:09:28 PM
+Event Type: Update Directory
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 1620760
+PIDL1: C:\Documents and Settings\All Users\Start Menu
+PIDL2 = 0
+ParentPIDL1 = 1613416
+C:\Documents and Settings\All Users
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerTreeview1
+Logging Event: 11:09:28 PM
+Event Type: Update Directory
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 1621080
+PIDL1: C:\Documents and Settings\All Users
+PIDL2 = 0
+ParentPIDL1 = 1575040
+C:\Documents and Settings
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerListview1
+Logging Event: 11:09:28 PM
+Event Type: Update Directory
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 1617928
+PIDL1: C:\Documents and Settings\All Users\Start Menu\Programs\BitZipper
+PIDL2 = 0
+ParentPIDL1 = 1617480
+C:\Documents and Settings\All Users\Start Menu\Programs
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerListview1
+Logging Event: 11:09:28 PM
+Event Type: Update Item
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 1618376
+PIDL1: C:\Documents and Settings\All Users\Start Menu\Programs\BitZipper\BitZipper.lnk
+PIDL2 = 0
+ParentPIDL1 = 1616952
+C:\Documents and Settings\All Users\Start Menu\Programs\BitZipper
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerListview1
+Logging Event: 11:09:28 PM
+Event Type: Free Space
+DoubleWord1 = 4
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 0
+PIDL2 = 0
+ParentPIDL1 = 0
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerListview1
+Logging Event: 11:09:28 PM
+Event Type: Update Item
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 1619448
+PIDL1: C:\Documents and Settings\All Users\Start Menu\Programs\BitZipper\BitZipper Help.lnk
+PIDL2 = 0
+ParentPIDL1 = 1618904
+C:\Documents and Settings\All Users\Start Menu\Programs\BitZipper
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerListview1
+Logging Event: 11:09:28 PM
+Event Type: Update Directory
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 1620376
+PIDL1: C:\Documents and Settings\All Users\Start Menu\Programs
+PIDL2 = 0
+ParentPIDL1 = 1619992
+C:\Documents and Settings\All Users\Start Menu
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerListview1
+Logging Event: 11:09:28 PM
+Event Type: Update Directory
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 1620760
+PIDL1: C:\Documents and Settings\All Users\Start Menu
+PIDL2 = 0
+ParentPIDL1 = 1613416
+C:\Documents and Settings\All Users
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerListview1
+Logging Event: 11:09:28 PM
+Event Type: Update Directory
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 1621080
+PIDL1: C:\Documents and Settings\All Users
+PIDL2 = 0
+ParentPIDL1 = 1575040
+C:\Documents and Settings
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerTreeview1
+Logging Event: 11:09:32 PM
+Event Type: Assocciation Changed
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 0
+PIDL2 = 0
+ParentPIDL1 = 0
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerListview1
+Logging Event: 11:09:32 PM
+Event Type: Assocciation Changed
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 0
+PIDL2 = 0
+ParentPIDL1 = 0
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerTreeview1
+Logging Event: 11:09:35 PM
+Event Type: Update Image
+DoubleWord1 = 4294967295
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 0
+PIDL2 = 0
+ParentPIDL1 = 0
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerTreeview1
+Logging Event: 11:09:35 PM
+Event Type: Update Image
+DoubleWord1 = 4294967295
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 0
+PIDL2 = 0
+ParentPIDL1 = 0
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerTreeview1
+Logging Event: 11:09:35 PM
+Event Type: Update Image
+DoubleWord1 = 4294967295
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 0
+PIDL2 = 0
+ParentPIDL1 = 0
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerListview1
+Logging Event: 11:09:35 PM
+Event Type: Update Image
+DoubleWord1 = 4294967295
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 0
+PIDL2 = 0
+ParentPIDL1 = 0
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerListview1
+Logging Event: 11:09:35 PM
+Event Type: Update Image
+DoubleWord1 = 4294967295
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 0
+PIDL2 = 0
+ParentPIDL1 = 0
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerListview1
+Logging Event: 11:09:35 PM
+Event Type: Update Image
+DoubleWord1 = 4294967295
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 0
+PIDL2 = 0
+ParentPIDL1 = 0
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerTreeview1
+Logging Event: 11:09:38 PM
+Event Type: Update Image
+DoubleWord1 = 4294967295
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 0
+PIDL2 = 0
+ParentPIDL1 = 0
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerListview1
+Logging Event: 11:09:38 PM
+Event Type: Update Image
+DoubleWord1 = 4294967295
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 0
+PIDL2 = 0
+ParentPIDL1 = 0
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerTreeview1
+Logging Event: 11:13:15 PM
+Event Type: Update Directory
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 1614296
+PIDL1: C:\Documents and Settings\All Users\Start Menu\Programs\BitZipper
+PIDL2 = 0
+ParentPIDL1 = 1612080
+C:\Documents and Settings\All Users\Start Menu\Programs
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerTreeview1
+Logging Event: 11:13:15 PM
+Event Type: Update Item
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 1614744
+PIDL1: C:\Documents and Settings\All Users\Start Menu\Programs\BitZipper\BitZipper.lnk
+PIDL2 = 0
+ParentPIDL1 = 1613768
+C:\Documents and Settings\All Users\Start Menu\Programs\BitZipper
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerTreeview1
+Logging Event: 11:13:15 PM
+Event Type: Free Space
+DoubleWord1 = 4
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 0
+PIDL2 = 0
+ParentPIDL1 = 0
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerTreeview1
+Logging Event: 11:13:15 PM
+Event Type: Update Item
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 1615816
+PIDL1: C:\Documents and Settings\All Users\Start Menu\Programs\BitZipper\BitZipper Help.lnk
+PIDL2 = 0
+ParentPIDL1 = 1615272
+C:\Documents and Settings\All Users\Start Menu\Programs\BitZipper
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerTreeview1
+Logging Event: 11:13:15 PM
+Event Type: Update Directory
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 1616744
+PIDL1: C:\Documents and Settings\All Users\Start Menu\Programs
+PIDL2 = 0
+ParentPIDL1 = 1616360
+C:\Documents and Settings\All Users\Start Menu
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerTreeview1
+Logging Event: 11:13:15 PM
+Event Type: Update Directory
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 1617448
+PIDL1: C:\Documents and Settings\All Users\Start Menu
+PIDL2 = 0
+ParentPIDL1 = 1617128
+C:\Documents and Settings\All Users
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerTreeview1
+Logging Event: 11:13:15 PM
+Event Type: Update Directory
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 1617768
+PIDL1: C:\Documents and Settings\All Users
+PIDL2 = 0
+ParentPIDL1 = 1574720
+C:\Documents and Settings
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerListview1
+Logging Event: 11:13:15 PM
+Event Type: Update Directory
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 1614296
+PIDL1: C:\Documents and Settings\All Users\Start Menu\Programs\BitZipper
+PIDL2 = 0
+ParentPIDL1 = 1612080
+C:\Documents and Settings\All Users\Start Menu\Programs
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerListview1
+Logging Event: 11:13:15 PM
+Event Type: Update Item
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 1614744
+PIDL1: C:\Documents and Settings\All Users\Start Menu\Programs\BitZipper\BitZipper.lnk
+PIDL2 = 0
+ParentPIDL1 = 1613768
+C:\Documents and Settings\All Users\Start Menu\Programs\BitZipper
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerListview1
+Logging Event: 11:13:15 PM
+Event Type: Free Space
+DoubleWord1 = 4
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 0
+PIDL2 = 0
+ParentPIDL1 = 0
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerListview1
+Logging Event: 11:13:15 PM
+Event Type: Update Item
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 1615816
+PIDL1: C:\Documents and Settings\All Users\Start Menu\Programs\BitZipper\BitZipper Help.lnk
+PIDL2 = 0
+ParentPIDL1 = 1615272
+C:\Documents and Settings\All Users\Start Menu\Programs\BitZipper
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerListview1
+Logging Event: 11:13:15 PM
+Event Type: Update Directory
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 1616744
+PIDL1: C:\Documents and Settings\All Users\Start Menu\Programs
+PIDL2 = 0
+ParentPIDL1 = 1616360
+C:\Documents and Settings\All Users\Start Menu
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerListview1
+Logging Event: 11:13:15 PM
+Event Type: Update Directory
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 1617448
+PIDL1: C:\Documents and Settings\All Users\Start Menu
+PIDL2 = 0
+ParentPIDL1 = 1617128
+C:\Documents and Settings\All Users
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerListview1
+Logging Event: 11:13:15 PM
+Event Type: Update Directory
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 1617768
+PIDL1: C:\Documents and Settings\All Users
+PIDL2 = 0
+ParentPIDL1 = 1574720
+C:\Documents and Settings
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerTreeview1
+Logging Event: 11:13:19 PM
+Event Type: Assocciation Changed
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 0
+PIDL2 = 0
+ParentPIDL1 = 0
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerTreeview1
+Logging Event: 11:16:32 PM
+Event Type: Assocciation Changed
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 1718936
+PIDL1: C:\*.zip
+PIDL2 = 0
+ParentPIDL1 = 1710784
+C:\
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerTreeview1
+Logging Event: 11:16:32 PM
+Event Type: Update Directory
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 1510912
+PIDL1: C:\Documents and Settings\Jim\Recent
+PIDL2 = 0
+ParentPIDL1 = 1710248
+C:\Documents and Settings\Jim
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerTreeview1
+Logging Event: 11:16:33 PM
+Event Type: Update Item
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 1732616
+PIDL1: C:\Documents and Settings\Jim\Recent\project1.zip.lnk
+PIDL2 = 0
+ParentPIDL1 = 1727344
+C:\Documents and Settings\Jim\Recent
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerTreeview1
+Logging Event: 11:16:33 PM
+Event Type: Free Space
+DoubleWord1 = 4
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 0
+PIDL2 = 0
+ParentPIDL1 = 0
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerTreeview1
+Logging Event: 11:16:33 PM
+Event Type: Update Directory
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 1734120
+PIDL1: My Computer
+PIDL2 = 0
+ParentPIDL1 = 1733664
+Today
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerTreeview1
+Logging Event: 11:16:33 PM
+Event Type: Update Directory
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 1734960
+PIDL1: By &Order Visited Today
+PIDL2 = 0
+ParentPIDL1 = 1734576
+C:\Documents and Settings\Jim\Local Settings\History
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerTreeview1
+Logging Event: 11:16:33 PM
+Event Type: Update Directory
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 1735760
+PIDL1: My Computer
+PIDL2 = 0
+ParentPIDL1 = 1735344
+By S&ite
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerListview1
+Logging Event: 11:16:33 PM
+Event Type: Assocciation Changed
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 1718936
+PIDL1: C:\*.zip
+PIDL2 = 0
+ParentPIDL1 = 1710784
+C:\
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerListview1
+Logging Event: 11:16:33 PM
+Event Type: Update Directory
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 1510912
+PIDL1: C:\Documents and Settings\Jim\Recent
+PIDL2 = 0
+ParentPIDL1 = 1710248
+C:\Documents and Settings\Jim
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerListview1
+Logging Event: 11:16:33 PM
+Event Type: Update Item
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 1732616
+PIDL1: C:\Documents and Settings\Jim\Recent\project1.zip.lnk
+PIDL2 = 0
+ParentPIDL1 = 1727344
+C:\Documents and Settings\Jim\Recent
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerListview1
+Logging Event: 11:16:33 PM
+Event Type: Free Space
+DoubleWord1 = 4
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 0
+PIDL2 = 0
+ParentPIDL1 = 0
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerListview1
+Logging Event: 11:16:33 PM
+Event Type: Update Directory
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 1734120
+PIDL1: My Computer
+PIDL2 = 0
+ParentPIDL1 = 1733664
+Today
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerListview1
+Logging Event: 11:16:33 PM
+Event Type: Update Directory
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 1734960
+PIDL1: By &Order Visited Today
+PIDL2 = 0
+ParentPIDL1 = 1734576
+C:\Documents and Settings\Jim\Local Settings\History
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerListview1
+Logging Event: 11:16:33 PM
+Event Type: Update Directory
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 1735760
+PIDL1: My Computer
+PIDL2 = 0
+ParentPIDL1 = 1735344
+By S&ite
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerTreeview1
+Logging Event: 11:16:35 PM
+Event Type: Update Image
+DoubleWord1 = 4294967295
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 0
+PIDL2 = 0
+ParentPIDL1 = 0
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerListview1
+Logging Event: 11:16:36 PM
+Event Type: Update Image
+DoubleWord1 = 4294967295
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 0
+PIDL2 = 0
+ParentPIDL1 = 0
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerTreeview1
+Logging Event: 11:16:38 PM
+Event Type: Update Image
+DoubleWord1 = 4294967295
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 0
+PIDL2 = 0
+ParentPIDL1 = 0
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerListview1
+Logging Event: 11:16:38 PM
+Event Type: Update Image
+DoubleWord1 = 4294967295
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 0
+PIDL2 = 0
+ParentPIDL1 = 0
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerTreeview1
+Logging Event: 11:30:16 PM
+Event Type: Update Directory
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 1617368
+PIDL1: C:\Documents and Settings\All Users\Start Menu\Programs\BitZipper
+PIDL2 = 0
+ParentPIDL1 = 1616920
+C:\Documents and Settings\All Users\Start Menu\Programs
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerTreeview1
+Logging Event: 11:30:16 PM
+Event Type: Update Item
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 1617816
+PIDL1: C:\Documents and Settings\All Users\Start Menu\Programs\BitZipper\BitZipper.lnk
+PIDL2 = 0
+ParentPIDL1 = 1612912
+C:\Documents and Settings\All Users\Start Menu\Programs\BitZipper
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerTreeview1
+Logging Event: 11:30:16 PM
+Event Type: Free Space
+DoubleWord1 = 4
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 0
+PIDL2 = 0
+ParentPIDL1 = 0
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerTreeview1
+Logging Event: 11:30:16 PM
+Event Type: Update Item
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 1618888
+PIDL1: C:\Documents and Settings\All Users\Start Menu\Programs\BitZipper\BitZipper Help.lnk
+PIDL2 = 0
+ParentPIDL1 = 1618344
+C:\Documents and Settings\All Users\Start Menu\Programs\BitZipper
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerTreeview1
+Logging Event: 11:30:16 PM
+Event Type: Update Directory
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 1619816
+PIDL1: C:\Documents and Settings\All Users\Start Menu\Programs
+PIDL2 = 0
+ParentPIDL1 = 1619432
+C:\Documents and Settings\All Users\Start Menu
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerTreeview1
+Logging Event: 11:30:16 PM
+Event Type: Update Directory
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 1620520
+PIDL1: C:\Documents and Settings\All Users\Start Menu
+PIDL2 = 0
+ParentPIDL1 = 1620200
+C:\Documents and Settings\All Users
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerTreeview1
+Logging Event: 11:30:16 PM
+Event Type: Update Directory
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 1620840
+PIDL1: C:\Documents and Settings\All Users
+PIDL2 = 0
+ParentPIDL1 = 1540544
+C:\Documents and Settings
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerListview1
+Logging Event: 11:30:16 PM
+Event Type: Update Directory
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 1617368
+PIDL1: C:\Documents and Settings\All Users\Start Menu\Programs\BitZipper
+PIDL2 = 0
+ParentPIDL1 = 1616920
+C:\Documents and Settings\All Users\Start Menu\Programs
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerListview1
+Logging Event: 11:30:16 PM
+Event Type: Update Item
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 1617816
+PIDL1: C:\Documents and Settings\All Users\Start Menu\Programs\BitZipper\BitZipper.lnk
+PIDL2 = 0
+ParentPIDL1 = 1612912
+C:\Documents and Settings\All Users\Start Menu\Programs\BitZipper
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerListview1
+Logging Event: 11:30:16 PM
+Event Type: Free Space
+DoubleWord1 = 4
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 0
+PIDL2 = 0
+ParentPIDL1 = 0
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerListview1
+Logging Event: 11:30:16 PM
+Event Type: Update Item
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 1618888
+PIDL1: C:\Documents and Settings\All Users\Start Menu\Programs\BitZipper\BitZipper Help.lnk
+PIDL2 = 0
+ParentPIDL1 = 1618344
+C:\Documents and Settings\All Users\Start Menu\Programs\BitZipper
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerListview1
+Logging Event: 11:30:16 PM
+Event Type: Update Directory
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 1619816
+PIDL1: C:\Documents and Settings\All Users\Start Menu\Programs
+PIDL2 = 0
+ParentPIDL1 = 1619432
+C:\Documents and Settings\All Users\Start Menu
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerListview1
+Logging Event: 11:30:16 PM
+Event Type: Update Directory
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 1620520
+PIDL1: C:\Documents and Settings\All Users\Start Menu
+PIDL2 = 0
+ParentPIDL1 = 1620200
+C:\Documents and Settings\All Users
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerListview1
+Logging Event: 11:30:16 PM
+Event Type: Update Directory
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 1620840
+PIDL1: C:\Documents and Settings\All Users
+PIDL2 = 0
+ParentPIDL1 = 1540544
+C:\Documents and Settings
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerTreeview1
+Logging Event: 11:30:20 PM
+Event Type: Assocciation Changed
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 0
+PIDL2 = 0
+ParentPIDL1 = 0
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerListview1
+Logging Event: 11:30:22 PM
+Event Type: Assocciation Changed
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 0
+PIDL2 = 0
+ParentPIDL1 = 0
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerTreeview1
+Logging Event: 11:36:39 PM
+Event Type: Update Image
+DoubleWord1 = 4294967295
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 0
+PIDL2 = 0
+ParentPIDL1 = 0
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerTreeview1
+Logging Event: 11:38:52 PM
+Event Type: Update Directory
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 1766368
+PIDL1: C:\Documents and Settings\All Users\Start Menu\Programs\BitZipper
+PIDL2 = 0
+ParentPIDL1 = 1765920
+C:\Documents and Settings\All Users\Start Menu\Programs
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerTreeview1
+Logging Event: 11:38:52 PM
+Event Type: Update Item
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 1766816
+PIDL1: C:\Documents and Settings\All Users\Start Menu\Programs\BitZipper\BitZipper.lnk
+PIDL2 = 0
+ParentPIDL1 = 1618464
+C:\Documents and Settings\All Users\Start Menu\Programs\BitZipper
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerTreeview1
+Logging Event: 11:38:52 PM
+Event Type: Free Space
+DoubleWord1 = 4
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 0
+PIDL2 = 0
+ParentPIDL1 = 0
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerTreeview1
+Logging Event: 11:38:52 PM
+Event Type: Update Item
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 1767888
+PIDL1: C:\Documents and Settings\All Users\Start Menu\Programs\BitZipper\BitZipper Help.lnk
+PIDL2 = 0
+ParentPIDL1 = 1767344
+C:\Documents and Settings\All Users\Start Menu\Programs\BitZipper
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerTreeview1
+Logging Event: 11:38:52 PM
+Event Type: Update Directory
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 1768816
+PIDL1: C:\Documents and Settings\All Users\Start Menu\Programs
+PIDL2 = 0
+ParentPIDL1 = 1768432
+C:\Documents and Settings\All Users\Start Menu
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerTreeview1
+Logging Event: 11:38:52 PM
+Event Type: Update Directory
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 1769520
+PIDL1: C:\Documents and Settings\All Users\Start Menu
+PIDL2 = 0
+ParentPIDL1 = 1769200
+C:\Documents and Settings\All Users
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerTreeview1
+Logging Event: 11:38:52 PM
+Event Type: Update Directory
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 1770088
+PIDL1: C:\Documents and Settings\All Users
+PIDL2 = 0
+ParentPIDL1 = 1769840
+C:\Documents and Settings
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerListview1
+Logging Event: 11:38:52 PM
+Event Type: Update Directory
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 1766368
+PIDL1: C:\Documents and Settings\All Users\Start Menu\Programs\BitZipper
+PIDL2 = 0
+ParentPIDL1 = 1765920
+C:\Documents and Settings\All Users\Start Menu\Programs
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerListview1
+Logging Event: 11:38:52 PM
+Event Type: Update Item
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 1766816
+PIDL1: C:\Documents and Settings\All Users\Start Menu\Programs\BitZipper\BitZipper.lnk
+PIDL2 = 0
+ParentPIDL1 = 1618464
+C:\Documents and Settings\All Users\Start Menu\Programs\BitZipper
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerListview1
+Logging Event: 11:38:52 PM
+Event Type: Free Space
+DoubleWord1 = 4
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 0
+PIDL2 = 0
+ParentPIDL1 = 0
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerListview1
+Logging Event: 11:38:52 PM
+Event Type: Update Item
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 1767888
+PIDL1: C:\Documents and Settings\All Users\Start Menu\Programs\BitZipper\BitZipper Help.lnk
+PIDL2 = 0
+ParentPIDL1 = 1767344
+C:\Documents and Settings\All Users\Start Menu\Programs\BitZipper
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerListview1
+Logging Event: 11:38:52 PM
+Event Type: Update Directory
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 1768816
+PIDL1: C:\Documents and Settings\All Users\Start Menu\Programs
+PIDL2 = 0
+ParentPIDL1 = 1768432
+C:\Documents and Settings\All Users\Start Menu
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerListview1
+Logging Event: 11:38:52 PM
+Event Type: Update Directory
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 1769520
+PIDL1: C:\Documents and Settings\All Users\Start Menu
+PIDL2 = 0
+ParentPIDL1 = 1769200
+C:\Documents and Settings\All Users
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerListview1
+Logging Event: 11:38:52 PM
+Event Type: Update Directory
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 1770088
+PIDL1: C:\Documents and Settings\All Users
+PIDL2 = 0
+ParentPIDL1 = 1769840
+C:\Documents and Settings
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerTreeview1
+Logging Event: 11:39:18 PM
+Event Type: Update Directory
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 1766960
+PIDL1: C:\Documents and Settings\All Users\Start Menu\Programs\BitZipper
+PIDL2 = 0
+ParentPIDL1 = 1765216
+C:\Documents and Settings\All Users\Start Menu\Programs
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerTreeview1
+Logging Event: 11:39:18 PM
+Event Type: Update Item
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 1767408
+PIDL1: C:\Documents and Settings\All Users\Start Menu\Programs\BitZipper\BitZipper.lnk
+PIDL2 = 0
+ParentPIDL1 = 1618464
+C:\Documents and Settings\All Users\Start Menu\Programs\BitZipper
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerTreeview1
+Logging Event: 11:39:18 PM
+Event Type: Free Space
+DoubleWord1 = 4
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 0
+PIDL2 = 0
+ParentPIDL1 = 0
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerTreeview1
+Logging Event: 11:39:18 PM
+Event Type: Update Item
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 1768480
+PIDL1: C:\Documents and Settings\All Users\Start Menu\Programs\BitZipper\BitZipper Help.lnk
+PIDL2 = 0
+ParentPIDL1 = 1767936
+C:\Documents and Settings\All Users\Start Menu\Programs\BitZipper
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerTreeview1
+Logging Event: 11:39:18 PM
+Event Type: Update Directory
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 1769408
+PIDL1: C:\Documents and Settings\All Users\Start Menu\Programs
+PIDL2 = 0
+ParentPIDL1 = 1769024
+C:\Documents and Settings\All Users\Start Menu
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerTreeview1
+Logging Event: 11:39:18 PM
+Event Type: Update Directory
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 1769792
+PIDL1: C:\Documents and Settings\All Users\Start Menu
+PIDL2 = 0
+ParentPIDL1 = 1524800
+C:\Documents and Settings\All Users
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerTreeview1
+Logging Event: 11:39:18 PM
+Event Type: Update Directory
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 1770112
+PIDL1: C:\Documents and Settings\All Users
+PIDL2 = 0
+ParentPIDL1 = 1765664
+C:\Documents and Settings
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerListview1
+Logging Event: 11:39:18 PM
+Event Type: Update Directory
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 1766960
+PIDL1: C:\Documents and Settings\All Users\Start Menu\Programs\BitZipper
+PIDL2 = 0
+ParentPIDL1 = 1765216
+C:\Documents and Settings\All Users\Start Menu\Programs
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerListview1
+Logging Event: 11:39:18 PM
+Event Type: Update Item
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 1767408
+PIDL1: C:\Documents and Settings\All Users\Start Menu\Programs\BitZipper\BitZipper.lnk
+PIDL2 = 0
+ParentPIDL1 = 1618464
+C:\Documents and Settings\All Users\Start Menu\Programs\BitZipper
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerListview1
+Logging Event: 11:39:18 PM
+Event Type: Free Space
+DoubleWord1 = 4
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 0
+PIDL2 = 0
+ParentPIDL1 = 0
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerListview1
+Logging Event: 11:39:18 PM
+Event Type: Update Item
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 1768480
+PIDL1: C:\Documents and Settings\All Users\Start Menu\Programs\BitZipper\BitZipper Help.lnk
+PIDL2 = 0
+ParentPIDL1 = 1767936
+C:\Documents and Settings\All Users\Start Menu\Programs\BitZipper
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerListview1
+Logging Event: 11:39:18 PM
+Event Type: Update Directory
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 1769408
+PIDL1: C:\Documents and Settings\All Users\Start Menu\Programs
+PIDL2 = 0
+ParentPIDL1 = 1769024
+C:\Documents and Settings\All Users\Start Menu
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerListview1
+Logging Event: 11:39:18 PM
+Event Type: Update Directory
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 1769792
+PIDL1: C:\Documents and Settings\All Users\Start Menu
+PIDL2 = 0
+ParentPIDL1 = 1524800
+C:\Documents and Settings\All Users
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerListview1
+Logging Event: 11:39:18 PM
+Event Type: Update Directory
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 1770112
+PIDL1: C:\Documents and Settings\All Users
+PIDL2 = 0
+ParentPIDL1 = 1765664
+C:\Documents and Settings
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerTreeview1
+Logging Event: 11:39:22 PM
+Event Type: Assocciation Changed
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 0
+PIDL2 = 0
+ParentPIDL1 = 0
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerListview1
+Logging Event: 11:39:23 PM
+Event Type: Assocciation Changed
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 0
+PIDL2 = 0
+ParentPIDL1 = 0
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerTreeview1
+Logging Event: 11:39:30 PM
+Event Type: Update Image
+DoubleWord1 = 4294967295
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 0
+PIDL2 = 0
+ParentPIDL1 = 0
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerTreeview1
+Logging Event: 11:39:30 PM
+Event Type: Update Image
+DoubleWord1 = 4294967295
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 0
+PIDL2 = 0
+ParentPIDL1 = 0
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerTreeview1
+Logging Event: 11:39:30 PM
+Event Type: Update Image
+DoubleWord1 = 4294967295
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 0
+PIDL2 = 0
+ParentPIDL1 = 0
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerTreeview1
+Logging Event: 11:39:30 PM
+Event Type: Update Image
+DoubleWord1 = 4294967295
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 0
+PIDL2 = 0
+ParentPIDL1 = 0
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerListview1
+Logging Event: 11:39:30 PM
+Event Type: Update Image
+DoubleWord1 = 4294967295
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 0
+PIDL2 = 0
+ParentPIDL1 = 0
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerListview1
+Logging Event: 11:39:31 PM
+Event Type: Update Image
+DoubleWord1 = 4294967295
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 0
+PIDL2 = 0
+ParentPIDL1 = 0
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerListview1
+Logging Event: 11:39:31 PM
+Event Type: Update Image
+DoubleWord1 = 4294967295
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 0
+PIDL2 = 0
+ParentPIDL1 = 0
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerListview1
+Logging Event: 11:39:31 PM
+Event Type: Update Image
+DoubleWord1 = 4294967295
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 0
+PIDL2 = 0
+ParentPIDL1 = 0
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerTreeview1
+Logging Event: 11:43:40 PM
+Event Type: Update Directory
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 1350672
+PIDL1: C:\Documents and Settings\All Users\Start Menu\Programs\BitZipper
+PIDL2 = 0
+ParentPIDL1 = 1350224
+C:\Documents and Settings\All Users\Start Menu\Programs
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerTreeview1
+Logging Event: 11:43:40 PM
+Event Type: Update Item
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 1351120
+PIDL1: C:\Documents and Settings\All Users\Start Menu\Programs\BitZipper\BitZipper.lnk
+PIDL2 = 0
+ParentPIDL1 = 1648568
+C:\Documents and Settings\All Users\Start Menu\Programs\BitZipper
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerTreeview1
+Logging Event: 11:43:40 PM
+Event Type: Free Space
+DoubleWord1 = 4
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 0
+PIDL2 = 0
+ParentPIDL1 = 0
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerTreeview1
+Logging Event: 11:43:40 PM
+Event Type: Update Item
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 1352192
+PIDL1: C:\Documents and Settings\All Users\Start Menu\Programs\BitZipper\BitZipper Help.lnk
+PIDL2 = 0
+ParentPIDL1 = 1351648
+C:\Documents and Settings\All Users\Start Menu\Programs\BitZipper
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerTreeview1
+Logging Event: 11:43:40 PM
+Event Type: Update Directory
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 1353120
+PIDL1: C:\Documents and Settings\All Users\Start Menu\Programs
+PIDL2 = 0
+ParentPIDL1 = 1352736
+C:\Documents and Settings\All Users\Start Menu
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerTreeview1
+Logging Event: 11:43:40 PM
+Event Type: Update Directory
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 1646872
+PIDL1: C:\Documents and Settings\All Users\Start Menu
+PIDL2 = 0
+ParentPIDL1 = 1676016
+C:\Documents and Settings\All Users
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerTreeview1
+Logging Event: 11:43:40 PM
+Event Type: Update Directory
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 1353504
+PIDL1: C:\Documents and Settings\All Users
+PIDL2 = 0
+ParentPIDL1 = 1540864
+C:\Documents and Settings
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerListview1
+Logging Event: 11:43:40 PM
+Event Type: Update Directory
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 1350672
+PIDL1: C:\Documents and Settings\All Users\Start Menu\Programs\BitZipper
+PIDL2 = 0
+ParentPIDL1 = 1350224
+C:\Documents and Settings\All Users\Start Menu\Programs
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerListview1
+Logging Event: 11:43:40 PM
+Event Type: Update Item
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 1351120
+PIDL1: C:\Documents and Settings\All Users\Start Menu\Programs\BitZipper\BitZipper.lnk
+PIDL2 = 0
+ParentPIDL1 = 1648568
+C:\Documents and Settings\All Users\Start Menu\Programs\BitZipper
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerListview1
+Logging Event: 11:43:40 PM
+Event Type: Free Space
+DoubleWord1 = 4
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 0
+PIDL2 = 0
+ParentPIDL1 = 0
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerListview1
+Logging Event: 11:43:40 PM
+Event Type: Update Item
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 1352192
+PIDL1: C:\Documents and Settings\All Users\Start Menu\Programs\BitZipper\BitZipper Help.lnk
+PIDL2 = 0
+ParentPIDL1 = 1351648
+C:\Documents and Settings\All Users\Start Menu\Programs\BitZipper
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerListview1
+Logging Event: 11:43:40 PM
+Event Type: Update Directory
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 1353120
+PIDL1: C:\Documents and Settings\All Users\Start Menu\Programs
+PIDL2 = 0
+ParentPIDL1 = 1352736
+C:\Documents and Settings\All Users\Start Menu
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerListview1
+Logging Event: 11:43:40 PM
+Event Type: Update Directory
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 1646872
+PIDL1: C:\Documents and Settings\All Users\Start Menu
+PIDL2 = 0
+ParentPIDL1 = 1676016
+C:\Documents and Settings\All Users
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerListview1
+Logging Event: 11:43:40 PM
+Event Type: Update Directory
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 1353504
+PIDL1: C:\Documents and Settings\All Users
+PIDL2 = 0
+ParentPIDL1 = 1540864
+C:\Documents and Settings
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerTreeview1
+Logging Event: 11:43:44 PM
+Event Type: Assocciation Changed
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 0
+PIDL2 = 0
+ParentPIDL1 = 0
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerListview1
+Logging Event: 11:43:45 PM
+Event Type: Assocciation Changed
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 0
+PIDL2 = 0
+ParentPIDL1 = 0
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerTreeview1
+Logging Event: 11:43:47 PM
+Event Type: Update Image
+DoubleWord1 = 4294967295
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 0
+PIDL2 = 0
+ParentPIDL1 = 0
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerTreeview1
+Logging Event: 11:43:47 PM
+Event Type: Update Image
+DoubleWord1 = 4294967295
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 0
+PIDL2 = 0
+ParentPIDL1 = 0
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerTreeview1
+Logging Event: 11:43:47 PM
+Event Type: Update Image
+DoubleWord1 = 4294967295
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 0
+PIDL2 = 0
+ParentPIDL1 = 0
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerListview1
+Logging Event: 11:43:47 PM
+Event Type: Update Image
+DoubleWord1 = 4294967295
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 0
+PIDL2 = 0
+ParentPIDL1 = 0
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerListview1
+Logging Event: 11:43:47 PM
+Event Type: Update Image
+DoubleWord1 = 4294967295
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 0
+PIDL2 = 0
+ParentPIDL1 = 0
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerListview1
+Logging Event: 11:43:47 PM
+Event Type: Update Image
+DoubleWord1 = 4294967295
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 0
+PIDL2 = 0
+ParentPIDL1 = 0
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerTreeview1
+Logging Event: 11:43:51 PM
+Event Type: Update Image
+DoubleWord1 = 4294967295
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 0
+PIDL2 = 0
+ParentPIDL1 = 0
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerListview1
+Logging Event: 11:43:51 PM
+Event Type: Update Image
+DoubleWord1 = 4294967295
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 0
+PIDL2 = 0
+ParentPIDL1 = 0
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerTreeview1
+Logging Event: 11:44:46 PM
+Event Type: Update Directory
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 1657728
+PIDL1: C:\Documents and Settings\All Users\Start Menu\Programs\BitZipper
+PIDL2 = 0
+ParentPIDL1 = 1655536
+C:\Documents and Settings\All Users\Start Menu\Programs
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerTreeview1
+Logging Event: 11:44:46 PM
+Event Type: Update Item
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 1658176
+PIDL1: C:\Documents and Settings\All Users\Start Menu\Programs\BitZipper\BitZipper.lnk
+PIDL2 = 0
+ParentPIDL1 = 1657200
+C:\Documents and Settings\All Users\Start Menu\Programs\BitZipper
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerTreeview1
+Logging Event: 11:44:46 PM
+Event Type: Free Space
+DoubleWord1 = 4
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 0
+PIDL2 = 0
+ParentPIDL1 = 0
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerTreeview1
+Logging Event: 11:44:46 PM
+Event Type: Update Item
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 1659248
+PIDL1: C:\Documents and Settings\All Users\Start Menu\Programs\BitZipper\BitZipper Help.lnk
+PIDL2 = 0
+ParentPIDL1 = 1658704
+C:\Documents and Settings\All Users\Start Menu\Programs\BitZipper
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerTreeview1
+Logging Event: 11:44:46 PM
+Event Type: Update Directory
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 1660176
+PIDL1: C:\Documents and Settings\All Users\Start Menu\Programs
+PIDL2 = 0
+ParentPIDL1 = 1659792
+C:\Documents and Settings\All Users\Start Menu
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerTreeview1
+Logging Event: 11:44:46 PM
+Event Type: Update Directory
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 1660880
+PIDL1: C:\Documents and Settings\All Users\Start Menu
+PIDL2 = 0
+ParentPIDL1 = 1660560
+C:\Documents and Settings\All Users
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerTreeview1
+Logging Event: 11:44:46 PM
+Event Type: Update Directory
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 1351920
+PIDL1: C:\Documents and Settings\All Users
+PIDL2 = 0
+ParentPIDL1 = 1561288
+C:\Documents and Settings
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerListview1
+Logging Event: 11:44:46 PM
+Event Type: Update Directory
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 1657728
+PIDL1: C:\Documents and Settings\All Users\Start Menu\Programs\BitZipper
+PIDL2 = 0
+ParentPIDL1 = 1655536
+C:\Documents and Settings\All Users\Start Menu\Programs
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerListview1
+Logging Event: 11:44:46 PM
+Event Type: Update Item
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 1658176
+PIDL1: C:\Documents and Settings\All Users\Start Menu\Programs\BitZipper\BitZipper.lnk
+PIDL2 = 0
+ParentPIDL1 = 1657200
+C:\Documents and Settings\All Users\Start Menu\Programs\BitZipper
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerListview1
+Logging Event: 11:44:46 PM
+Event Type: Free Space
+DoubleWord1 = 4
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 0
+PIDL2 = 0
+ParentPIDL1 = 0
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerListview1
+Logging Event: 11:44:46 PM
+Event Type: Update Item
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 1659248
+PIDL1: C:\Documents and Settings\All Users\Start Menu\Programs\BitZipper\BitZipper Help.lnk
+PIDL2 = 0
+ParentPIDL1 = 1658704
+C:\Documents and Settings\All Users\Start Menu\Programs\BitZipper
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerListview1
+Logging Event: 11:44:46 PM
+Event Type: Update Directory
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 1660176
+PIDL1: C:\Documents and Settings\All Users\Start Menu\Programs
+PIDL2 = 0
+ParentPIDL1 = 1659792
+C:\Documents and Settings\All Users\Start Menu
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerListview1
+Logging Event: 11:44:46 PM
+Event Type: Update Directory
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 1660880
+PIDL1: C:\Documents and Settings\All Users\Start Menu
+PIDL2 = 0
+ParentPIDL1 = 1660560
+C:\Documents and Settings\All Users
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerListview1
+Logging Event: 11:44:46 PM
+Event Type: Update Directory
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 1351920
+PIDL1: C:\Documents and Settings\All Users
+PIDL2 = 0
+ParentPIDL1 = 1561288
+C:\Documents and Settings
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerTreeview1
+Logging Event: 11:44:50 PM
+Event Type: Assocciation Changed
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 0
+PIDL2 = 0
+ParentPIDL1 = 0
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerListview1
+Logging Event: 11:44:51 PM
+Event Type: Assocciation Changed
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 0
+PIDL2 = 0
+ParentPIDL1 = 0
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerTreeview1
+Logging Event: 11:46:12 PM
+Event Type: Update Image
+DoubleWord1 = 4294967295
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 0
+PIDL2 = 0
+ParentPIDL1 = 0
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerTreeview1
+Logging Event: 11:47:32 PM
+Event Type: Update Image
+DoubleWord1 = 4294967295
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 0
+PIDL2 = 0
+ParentPIDL1 = 0
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerTreeview1
+Logging Event: 11:47:32 PM
+Event Type: Update Image
+DoubleWord1 = 4294967295
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 0
+PIDL2 = 0
+ParentPIDL1 = 0
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerTreeview1
+Logging Event: 11:47:32 PM
+Event Type: Update Image
+DoubleWord1 = 4294967295
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 0
+PIDL2 = 0
+ParentPIDL1 = 0
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerListview1
+Logging Event: 11:47:32 PM
+Event Type: Update Image
+DoubleWord1 = 4294967295
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 0
+PIDL2 = 0
+ParentPIDL1 = 0
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerListview1
+Logging Event: 11:47:32 PM
+Event Type: Update Image
+DoubleWord1 = 4294967295
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 0
+PIDL2 = 0
+ParentPIDL1 = 0
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerListview1
+Logging Event: 11:47:32 PM
+Event Type: Update Image
+DoubleWord1 = 4294967295
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 0
+PIDL2 = 0
+ParentPIDL1 = 0
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerListview1
+Logging Event: 11:47:32 PM
+Event Type: Update Image
+DoubleWord1 = 4294967295
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 0
+PIDL2 = 0
+ParentPIDL1 = 0
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerTreeview1
+Logging Event: 11:48:28 PM
+Event Type: Update Directory
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 1658072
+PIDL1: C:\Documents and Settings\All Users\Start Menu\Programs\BitZipper
+PIDL2 = 0
+ParentPIDL1 = 1657624
+C:\Documents and Settings\All Users\Start Menu\Programs
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerTreeview1
+Logging Event: 11:48:28 PM
+Event Type: Update Item
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 1658520
+PIDL1: C:\Documents and Settings\All Users\Start Menu\Programs\BitZipper\BitZipper.lnk
+PIDL2 = 0
+ParentPIDL1 = 1657096
+C:\Documents and Settings\All Users\Start Menu\Programs\BitZipper
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerTreeview1
+Logging Event: 11:48:28 PM
+Event Type: Free Space
+DoubleWord1 = 4
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 0
+PIDL2 = 0
+ParentPIDL1 = 0
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerTreeview1
+Logging Event: 11:48:28 PM
+Event Type: Update Item
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 1659592
+PIDL1: C:\Documents and Settings\All Users\Start Menu\Programs\BitZipper\BitZipper Help.lnk
+PIDL2 = 0
+ParentPIDL1 = 1659048
+C:\Documents and Settings\All Users\Start Menu\Programs\BitZipper
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerTreeview1
+Logging Event: 11:48:28 PM
+Event Type: Update Directory
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 1660520
+PIDL1: C:\Documents and Settings\All Users\Start Menu\Programs
+PIDL2 = 0
+ParentPIDL1 = 1660136
+C:\Documents and Settings\All Users\Start Menu
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerTreeview1
+Logging Event: 11:48:28 PM
+Event Type: Update Directory
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 1660904
+PIDL1: C:\Documents and Settings\All Users\Start Menu
+PIDL2 = 0
+ParentPIDL1 = 1630952
+C:\Documents and Settings\All Users
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerTreeview1
+Logging Event: 11:48:28 PM
+Event Type: Update Directory
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 1661224
+PIDL1: C:\Documents and Settings\All Users
+PIDL2 = 0
+ParentPIDL1 = 1355904
+C:\Documents and Settings
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerListview1
+Logging Event: 11:48:28 PM
+Event Type: Update Directory
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 1658072
+PIDL1: C:\Documents and Settings\All Users\Start Menu\Programs\BitZipper
+PIDL2 = 0
+ParentPIDL1 = 1657624
+C:\Documents and Settings\All Users\Start Menu\Programs
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerListview1
+Logging Event: 11:48:28 PM
+Event Type: Update Item
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 1658520
+PIDL1: C:\Documents and Settings\All Users\Start Menu\Programs\BitZipper\BitZipper.lnk
+PIDL2 = 0
+ParentPIDL1 = 1657096
+C:\Documents and Settings\All Users\Start Menu\Programs\BitZipper
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerListview1
+Logging Event: 11:48:28 PM
+Event Type: Free Space
+DoubleWord1 = 4
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 0
+PIDL2 = 0
+ParentPIDL1 = 0
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerListview1
+Logging Event: 11:48:28 PM
+Event Type: Update Item
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 1659592
+PIDL1: C:\Documents and Settings\All Users\Start Menu\Programs\BitZipper\BitZipper Help.lnk
+PIDL2 = 0
+ParentPIDL1 = 1659048
+C:\Documents and Settings\All Users\Start Menu\Programs\BitZipper
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerListview1
+Logging Event: 11:48:28 PM
+Event Type: Update Directory
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 1660520
+PIDL1: C:\Documents and Settings\All Users\Start Menu\Programs
+PIDL2 = 0
+ParentPIDL1 = 1660136
+C:\Documents and Settings\All Users\Start Menu
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerListview1
+Logging Event: 11:48:28 PM
+Event Type: Update Directory
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 1660904
+PIDL1: C:\Documents and Settings\All Users\Start Menu
+PIDL2 = 0
+ParentPIDL1 = 1630952
+C:\Documents and Settings\All Users
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerListview1
+Logging Event: 11:48:28 PM
+Event Type: Update Directory
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 1661224
+PIDL1: C:\Documents and Settings\All Users
+PIDL2 = 0
+ParentPIDL1 = 1355904
+C:\Documents and Settings
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerTreeview1
+Logging Event: 11:48:32 PM
+Event Type: Assocciation Changed
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 0
+PIDL2 = 0
+ParentPIDL1 = 0
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerListview1
+Logging Event: 11:48:33 PM
+Event Type: Assocciation Changed
+DoubleWord1 = 0
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 0
+PIDL2 = 0
+ParentPIDL1 = 0
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerTreeview1
+Logging Event: 11:48:39 PM
+Event Type: Update Image
+DoubleWord1 = 4294967295
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 0
+PIDL2 = 0
+ParentPIDL1 = 0
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerTreeview1
+Logging Event: 11:48:39 PM
+Event Type: Update Image
+DoubleWord1 = 4294967295
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 0
+PIDL2 = 0
+ParentPIDL1 = 0
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerTreeview1
+Logging Event: 11:48:39 PM
+Event Type: Update Image
+DoubleWord1 = 4294967295
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 0
+PIDL2 = 0
+ParentPIDL1 = 0
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerTreeview1
+Logging Event: 11:48:39 PM
+Event Type: Update Image
+DoubleWord1 = 4294967295
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 0
+PIDL2 = 0
+ParentPIDL1 = 0
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerListview1
+Logging Event: 11:48:39 PM
+Event Type: Update Image
+DoubleWord1 = 4294967295
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 0
+PIDL2 = 0
+ParentPIDL1 = 0
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerListview1
+Logging Event: 11:48:39 PM
+Event Type: Update Image
+DoubleWord1 = 4294967295
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 0
+PIDL2 = 0
+ParentPIDL1 = 0
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerListview1
+Logging Event: 11:48:39 PM
+Event Type: Update Image
+DoubleWord1 = 4294967295
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 0
+PIDL2 = 0
+ParentPIDL1 = 0
+ParentPIDL2 = 0
+Handled = False
+*****************
+
+*****************
+Control Name: VirtualExplorerListview1
+Logging Event: 11:48:39 PM
+Event Type: Update Image
+DoubleWord1 = 4294967295
+DoubleWord2 = 0
+FreeContentsOnDestroy = False
+PIDL1 = 0
+PIDL2 = 0
+ParentPIDL1 = 0
+ParentPIDL2 = 0
+Handled = False
+*****************

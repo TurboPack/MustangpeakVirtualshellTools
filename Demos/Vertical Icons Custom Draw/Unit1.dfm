@@ -1,0 +1,55 @@
+object Form1: TForm1
+  Left = 522
+  Top = 325
+  Width = 829
+  Height = 511
+  Caption = 'Form1'
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'MS Sans Serif'
+  Font.Style = []
+  OldCreateOrder = False
+  PixelsPerInch = 96
+  TextHeight = 13
+  object VirtualExplorerEasyListview1: TVirtualExplorerEasyListview
+    Left = 0
+    Top = 0
+    Width = 813
+    Height = 475
+    Active = True
+    Align = alClient
+    CompressedFile.Color = clRed
+    CompressedFile.Font.Charset = DEFAULT_CHARSET
+    CompressedFile.Font.Color = clWindowText
+    CompressedFile.Font.Height = -11
+    CompressedFile.Font.Name = 'MS Sans Serif'
+    CompressedFile.Font.Style = []
+    DefaultSortColumn = 0
+    EditManager.Font.Charset = DEFAULT_CHARSET
+    EditManager.Font.Color = clWindowText
+    EditManager.Font.Height = -11
+    EditManager.Font.Name = 'MS Sans Serif'
+    EditManager.Font.Style = []
+    EncryptedFile.Color = 32832
+    EncryptedFile.Font.Charset = DEFAULT_CHARSET
+    EncryptedFile.Font.Color = clWindowText
+    EncryptedFile.Font.Height = -11
+    EncryptedFile.Font.Name = 'MS Sans Serif'
+    EncryptedFile.Font.Style = []
+    FileSizeFormat = vfsfDefault
+    Grouped = False
+    GroupingColumn = 0
+    PaintInfoGroup.MarginBottom.CaptionIndent = 4
+    PaintInfoGroup.MarginTop.Visible = False
+    Sort.Algorithm = esaQuickSort
+    Sort.AutoSort = True
+    Selection.AlphaBlendSelRect = True
+    Selection.EnableDragSelect = True
+    Selection.MultiSelect = True
+    TabOrder = 0
+    ThumbsManager.StorageFilename = 'Thumbnails.album'
+    OnCustomGrid = VirtualExplorerEasyListview1CustomGrid
+  end
+end

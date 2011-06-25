@@ -1,0 +1,89 @@
+#------------------------------------------------------------------------------
+VERSION = BWS.01
+#------------------------------------------------------------------------------
+!ifndef ROOT
+ROOT = $(MAKEDIR)\..
+!endif
+#------------------------------------------------------------------------------
+MAKE = $(ROOT)\bin\make.exe -$(MAKEFLAGS) -f$**
+DCC = $(ROOT)\bin\dcc32.exe $**
+BRCC = $(ROOT)\bin\brcc32.exe $**
+#------------------------------------------------------------------------------
+PROJECTS = ShellDetailsCustomColumns.exe AutoCompleteComponentProject.exe \
+  CheckBoxes.exe VET.exe ShellLinkShortcuts.exe ShellNotify.exe \
+  ShellColumnStateStoring.exe ShellNew_NewFileMenu.exe ShellToolbars.exe \
+  VirtualExplorer.exe ShellHistory.exe FolderSizeDemo.exe ExplorerCheckboxes.exe \
+  FileSearch.exe SendToMenuProject.exe UserDataProject.exe \
+  DOSCommandLineProject.exe CustomSortProject.exe VEasyListviewProject.exe \
+  EasyListviewPrevFolderProject.exe FileSearchProject.exe BkGndMenuProject.exe
+#------------------------------------------------------------------------------
+default: $(PROJECTS)
+#------------------------------------------------------------------------------
+
+ShellDetailsCustomColumns.exe: Adding Custom Columns Using ShellDetails\ShellDetailsCustomColumns.dpr
+  $(DCC)
+
+CheckBoxes.exe: CheckBoxes\CheckBoxes.dpr
+  $(DCC)
+
+VET.exe: Overview\VET.dpr
+  $(DCC)
+
+ShellLinkShortcuts.exe: Shell Link Shortcuts\ShellLinkShortcuts.dpr
+  $(DCC)
+
+ShellNotify.exe: Shell Notify\ShellNotify.dpr
+  $(DCC)
+
+ShellColumnStateStoring.exe: ShellColumn State Storing\ShellColumnStateStoring.dpr
+  $(DCC)
+
+ShellNew_NewFileMenu.exe: ShellNew (New File) Menu\ShellNew_NewFileMenu.dpr
+  $(DCC)
+
+ShellToolbars.exe: ShellToolbars\ShellToolbars.dpr
+  $(DCC)
+
+VirtualExplorer.exe: Virtual Explorer\VirtualExplorer.dpr
+  $(DCC)
+
+ShellHistory.exe: Shell History\ShellHistory.dpr
+  $(DCC)
+
+FolderSizeDemo.exe: FolderSize\FolderSizeDemo.dpr
+  $(DCC)
+
+AutoCompleteComponentProject.exe: AutoComplete Component\AutoCompleteComponentProject.dpr
+  $(DCC)
+
+ExplorerCheckboxes.exe: Explorer CheckBoxes\ExplorerCheckboxes.dpr
+  $(DCC)
+
+FileSearch.exe: File Search\FileSearch.dpr
+  $(DCC)
+
+SendToMenuProject.exe: SendTo Menu\SendToMenuProject.dpr
+  $(DCC)
+
+UserDataProject.exe: User Data\UserDataProject.dpr
+  $(DCC)
+
+DOSCommandLineProject.exe: DOS Shell CommandLine\DOSCommandLineProject.dpr
+  $(DCC)
+
+CustomSortProject.exe: Custom Sorting\CustomSortProject.dpr
+  $(DCC)
+
+VEasyListviewProject.exe: VirtualExplorerEasyListview\VEasyListviewProject.dpr
+  $(DCC)
+
+EasyListviewPrevFolderProject.exe: PrevDirNode EasyListview\EasyListviewPrevFolderProject.dpr
+  $(DCC)
+
+FileSearchProject.exe: FileSearch\FileSearchProject.dpr
+  $(DCC)
+
+BkGndMenuProject.exe: Backgnd Menu\BkGndMenuProject.dpr
+  $(DCC)
+
+

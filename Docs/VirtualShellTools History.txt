@@ -1,0 +1,2160 @@
+
+ Version 1.3.0 - 12-4-05  
+ 
+  - Support for D2006.
+  - Renamed OnAddCustomShellColumn to OnHeaderRebuild.
+    OnHeaderRebuild is fired after the header gets recreated.
+    Use this event to add, delete or modify the columns.
+    WARNING:
+      This will break your app if you used the OnAddCustomShellColumn 
+      event.  You will need to change over to this new event.  Sorry.
+   - Reworked the delayed shell notify handler for when a VET is dragging,
+     context menu is showing or editing.  Uses less resources and is more
+     robust.
+   - Added background enumeration of objects in the Listview.  See the new 
+     ThreadedEnum property and the EnumThreadLengthyOperation and OnEnumFinished
+     events.
+   - Fixed bug in IsDriveW when using "<Drive Letter>:' format.
+   - Incorporated changes to make hard coded text in header dialog box and other 
+     places to be changed at runtime.  Allows localization at runtime.
+   - Fixed several bugs in the Threaded Enumerations
+   - Fixed bug in resetting the column sort column and direction.
+   - Added new option, VETOptions.MiscOptions.toPersistListviewColumnSort
+   - Fixed incorrect use of compressed text color
+   - TVirtualExplorerListview.BrowseToByPIDL now checks if it's necessary to 
+     change the rootfolder.
+   - Added ESC key handler to cancel cut or copy.
+
+VLVEx - Version 1.4.6 
+
+4 September 2005 
+              - Made GetChildByIndex function more robust.
+  	- Fixed 0000017 Mantis entry: AV when deleting file.
+  	- Fixed 0000023 Mantis entry: incorrect mouse click events when
+  	  HideCaptions or ComCtl6 was used.
+  	- Fixed problem in CM_FONTCHANGED and Begin/End Update causing
+  	  TListview to access window handle during streaming, thanks to
+  	  Jim for the fix.
+  	- Fixed incorrect focus painting when syncronizing the selection.
+  	- Added new border styles, tbWindowed and tbFit.
+  	- Added new SingleLineCaptions property to the ThumbsOptions.
+  	- Added Ctrl-I shortcut to invert the selection.
+
+ Version 1.2.5
+    - 8-27-05   - Added foShareable and foNetworkPrinters for the enumeration property
+               - Fixed bug when renaming folders and causing sub-objects
+                 to be invalid during a refresh
+               - Ignore Mapped Drive shell notifier was not excluding mapped
+                 drive notifications as required.
+               - Made the
+                   VirtualShellNotifyRefreshRate: Integer = 750;  // milliseconds
+                 a variable so it can be set to any value in code
+               - Fixed bug introduced in last release, AV on shut down
+
+  Version 1.2.3
+     - 8.20.05 - Fixed long standing issue of the context menu cursor turning
+                 into an hourglass
+               - Fixed issue of refreshing trees when one is editing.  Now defers
+                 the WM_SHELLNOTIFY message until the drag, or edit is over instead
+                 of forcing a refresh on the entire tree it uses the actual message
+                 sent so that unnecessary refreshing is eliminated    
+    
+     - 6.18.05 - The time is here, Data Execution Prevention (DEP) requires
+                 executable code to not be in the data segment.  The CreateStub
+                 function used New() to allocate this but new processers would
+                 not execute this memory.  It now uses VirutalAlloc if VIRTUALMEMSTUB
+                 define is used.  It is enabled by default in this unit.
+               - Changed licence to match VirtualTreeview
+               - Changed the way the Include files work.  There is no longer
+                 a defined path to them.  The installer will add path to the include
+                 files to the IDE Library or Browse paths.  This is because every
+                 package Soft-Gems and Mustangpeak has use common include files
+                 and keeping them in sync is a pain.  This means that it may be
+                 necessary to add a path to the Include folder within the IDE.
+               - Fixed bug where VET would try to focus a node even if the tree
+                 was not visible
+               - Fixed bug where Toolbar buttons would not loose the hottrack
+                 state when the mouse moved off from them.
+               - Added the capability of Large Icons in the Toolbars
+              - Added PopupMenu property to the Toolbars
+               - I used a hack to make the right alignemnt work for the hidden
+                 Recycle Bin folders in the size column. This breaks normal
+                 hidden folders and the right align in the size column.  Now
+                 normal hidden folders will work and the hidden Recycle Bin
+                 folders will be wrong.
+               - Fixed DragDetectPlus function.  Caused strange behavior in the
+                 Toolbars when trying to right drag on a button for rearranging
+                 or removal.
+
+    - 01-10-05 - Fixed issue where images were not cached and being reloaded
+                 every paint cycle
+               - Refixed TNamespace.DetailsOf by wrapping it with SetErrorMode
+                 for Empty CD drive issues //
+             - Added new option: toExecuteOnDblClkFullRow to allow for the
+                 default action to the executed for a dbl click anywhere on
+                 an item if the tree is is full row select. 
+    - 12-24-04 - Fixed bug with event not firing for VEL on Paste
+
+
+  Version 1.2.0
+    - 12-14-04 - Fixed the problem with the Toolbar Images getting messed up
+                 when a notification event occurs! Whoo-Hoo!
+                - Fixed the problem where the treeview may lose it place during
+                  a shell event and reset to no expanded nodes! Whoo-Hoo*2!
+    - 11-10-04 - Fixed the fix from Robert and the focused node <G>.  It was
+                 begin saved but not restored and it corrupted the stream.
+    - 11-28-04 - Fixed bug in text color when full row selection on
+                 and column > 1.  When selected columns > 1 text did not
+                 respect the selected text color.
+               - Added code to log shell notifications if {$DEFINE LOGSHELLEVENTS}
+                 is enabled to find long standing annoying issues with refresh.
+               - Started updating to VT 4.2.23, issues found. Talking with Mike.
+                 Not backwards compatible must upgrade VT with new version of VSTools.
+               - Fixed the TNamespace.ShowContextMenu so that the context menu
+                 would show owner draw submenus it the Owner passed is not a
+                 VET or decendent
+               - Added an Active property to the Combobox.  WARNING its default
+                 is not Active so you must set to true.
+
+  Version 1.1.17
+    - 6-21-04 - Fixed VirtualRedirector to take parameters to the process
+    - 8-30-04 - Robert fixed the focused node not being saved in the VETPersistent object
+
+  Version 1.1.16
+        - 4.11.04 - Added Caching for the Overlay Indexed in TNamespace
+        - 3.17.04 - Fixed bug in the Context Menu injection code where looking for a Unique
+                    menu ID would never break out of the loop.
+        - 3.29.04 - Fixed bug if RootChanging returns False for Allow in the Listview.
+                    The root PIDL would be destroyed regardess and be nil.
+        - 4.23.04 - Fixed bug in the Injected context menu where my code to find
+                    a unique menu ID failed.
+        - 4.23.04 - Added new default parameter to the BrowseToXXXX methods,
+                    ShowAllSiblings.  If false the tree will only create a branch
+                    of folders to a particular object.  Any siblings of each branch
+                    will not be shown.  See how Explorer finds a network path
+                    by typing it directly into the address bar.
+        - 4.23.04 - Enhancements to the VirtualDataObject.pas file to allow
+                    for the shell info to be placed on the clipboard without destroying
+                    what was already on the clipboard
+6.2004
+
+VirtualShellTools 1.1.16 for Delphi 5-7 and CBuilder 5-6
+
+ For all versions it is necessary to install Mike Lischke's VirtualTreeview first.
+
+For Delphi 5 and 6 and CBuilder it is necessary to also install Mike Lischke's ThemeManager.
+
+www.soft-gems.net
+
+*******************************************
+NOTICE !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+*******************************************
+  As you can see VSTools is now has an installer.  As 
+such please remove all traces of VSTools from your Delphi 
+installation.
+
+1) Go to:
+
+   Component > Install Packages 
+
+   Select VirtualShellTools and press"Remove"
+   Select VirtualListviewEx and press "Remove"
+
+2) To to: 
+
+   Tools > Enviroment Options > Library > Library Paths
+
+   Remove the all paths to the current installation of VSTools
+
+3) Go to where you currently have VSTools installed.  Delete 
+   the entire Folder and all traces of VSTools.
+
+4) Run the new installer and it will:
+
+    a) create a new install folder (Mustangpeak root)
+    b) add all necessary paths to Delphi
+    c) Build all packages and put them in the folder
+       designated as the BPL/DCP output by Delphi.
+    d) Install VSTools into the IDE
+
+   Right now BCB simply copies the BCB folder to the install 
+   directory, since I don't have BCB I will need some assistance
+   completing the same for CBuilder.
+
+NOTE:
+  The directory structure of VSTools has been changed.
+
+*******************************************
+
+VSTools Version 1.1.16
+
+- 4.11.04 - Added Caching for the Overlay Indexed in TNamespace
+- 3.17.04 - Fixed bug in the Context Menu injection code where 
+            looking for a Unique menu ID would never break out 
+            of the loop.
+- 3.29.04 - Fixed bug if RootChanging returns False for Allow in 
+            the Listview. The root PIDL would be destroyed 
+            regardess and be nil.
+- 4.23.04 - Fixed bug in the Injected context menu where my 
+            code to find a unique menu ID failed.
+- 4.23.04 - Added new default parameter to the BrowseToXXXX methods,
+            ShowAllSiblings.  If false the tree will only create 
+            a branch of folders to a particular object.  Any 
+            siblings of each branch will not be shown.  See how 
+            Explorer finds a network path by typing it directly 
+            into the address bar.
+- 4.23.04 - Enhancements to the VirtualDataObject.pas file to allow
+            for the shell info to be placed on the clipboard without 
+            destroying what was already on the clipboard
+
+*******************************************
+
+VLVEx Version 1.4.2
+
+23 May 2004 - version 1.4.2
+  - Added support for toHideOverlay and toRestoreTopNodeOnRefresh 
+    properties.
+  - Added new property: ThumbsOptions.CacheOptions.CacheProcessing 
+    to allow ascending or descending sorting of the thread cache 
+    processing list. When this property is tcpAscending the top 
+    files in the listview are thumbnailed first.
+  - Fixed incorrect selection painting, it now uses the values in
+    Colors.FocusedSelectionColor and Colors.UnFocusedSelectionColor.
+  - Fixed an incorrect call to OnEditCancelled.
+  - Reworked the internal cache events.
+
+//  Version 1.1.15
+//        - Fixed bug where Tree was rebuilt while a reference to the Namespace 
+//          contained in the tree was still held, causing an AV.  This will likely
+//          solve my long standing AV during a refresh and a shell notify event.
+//        - Fixed problem when creating a new folder in a VELV then hitting enter
+//          to browse to the folder before the attaced Treeview is updated with
+//          the new folder.  Now the treeview node is refreshed before the VELV
+//          is browsed to.
+//        - When autoexpand is enabled collapsing a node left the focus and selection
+//          in the collapsed branch (using the "+").  Fixed
+//        - Added OnCreateButtons and OnReCreateButtons events for the ShellToolbars
+//        - Added new option for the Toolbars toUserDefinedClickAction so if
+//          not connected to a VSTools control it won't open the default Shell action
+//          for the object
+//        - Added a new option, VETImageOptions > toHideOverlay to turn off the
+//          implememtation of IShellIconOverlay
+//        - Added new option to TreeOptions.VETMiscOptions: toRestoreTopNodeOnRefresh
+//          to keep tree from scrolling back to top when a shell notify refresh occurs.
+//          Allows VET to not change scroll position on Refresh.
+//
+//  Version 1.1.14
+//        - Fixed support for IShellIconOverlay
+//        - Fixed the gathering of Column Detail handlers
+//  Version 1.1.13
+//        - Added support for IShellIconOverlay
+//        - TCustomVirtualExplorerCombobox.GetPath now returns the NameforParsing for
+//           all OS.
+//        - Ensured support for 64 bit with the CreateStub and DisposeStub functions
+//
+//  Version 1.1.12c
+//        - Fixed Selection and visiblilty problem in WalkPIDLToNode (through ForceNode)
+//
+//  Version 1.1.12c Beta
+//        - Fixed a couple of annoying bugs with the VCB AutoComplete dropdown
+//
+//  Version 1.1.12b
+//    11-9-03
+//        - Fixed a few mistakes in the new toVETReadOnly implementation
+//
+//  Version 1.1.12a
+//     9-29-03
+//        - Made some mysterious changes to the Unicode Controls unit.
+//          One in MakeWMCharMsgSafeForAnsi and another in TWinControlTrap.DefWin32Proc
+//          Since I am FAR from an expert on this subject (it is Troy's TNT code)
+//          I added the suggestions based on it is completely conceivable that
+//          Windows could have a bug in this WM_CHAR message <G>.
+//    11-6-03
+//        - Added a TreeOptions.VETMiscOptions > toVETReadOnly option.  VT's ReadOnly
+//          option is too different from what I wanted that I created a new one.
+//          With ReadOnly on the tree will not respond to keycommands, mouse commands,
+//          or context menu commands that would allow changes to the file system
+//
+//          Allows descendants (like VLVEx) to stop user actions if the Tree is VETReadOnly
+//
+//        - Fixed bug with folder enumeration when show hidden folders is off and
+//          a folder contains only hidden folders
+//
+//        - Changed the default options of the combobox so it will not autoscroll
+//          horizontally automatically
+//
+//        - Fixed VirtualCombobox to look disabled when the control is disabled
+//          There seems to be a bug that does not paint the background of the edit
+//          frame gray when disabled but the text is grayed and the dropdown
+//          button is grayed.
+//
+//        - Added a new protected function for Robert:
+//            function IsAnyEditing: Boolean; virtual;
+//          so he can override it to let VET know if VLVEx is editing or not for
+//          so it will not refresh on a shell notify if the user is editing
+//
+//
+//  Version 1.1.12
+//     9-25-03
+//        - Fixed bug in WalkPIDLToNode when a parent folder had the same name
+//          as a child folder
+//
+//  Version 1.1.11
+//     9-24-03
+//        - Added an OnNamespaceStructureChange event that is called when ever
+//          VET adds or deletes an item in the tree.
+//        - Fixed several small bugs and memory leak in the Listview
+//
+//     9-23-03
+//        - Added Roberts code for a Flat and BorderStyle property in the ExplorerListview
+//
+//     6-12-03
+//        - Fixed small memory leak if using EnumFolder and returning False a lot
+//        - Fixed logic error in TCustomVirtualExplorerTree.DragOver and
+//          TCustomVirtualExplorerTree.DragEnter to allow custom handing of the
+//          drag drop
+//	    - Fixed inconsistancy in Right Click context menu operation to match Explorer
+//		NOTE:  This requires a change in the VT Source as of VT 3.8.3
+//			 See the ReadMe.txt file in the Zip package
+//
+//     5-11-03
+//        - Fixed "missing" scrollbar in ExplorerCombo boxes on first roll down
+//          in rare instances
+//        - Added two methods to VET, VELV, VETV
+//            function ForceNode(APath: WideString; Expand: Boolean): PVirtualNode;
+//            function ForceNodeByPIDL(APIDL: PItemIDList; Expand: Boolean): PVirtualNode;
+//          They force the tree to expand to find the passes PIDL or Path.  If Expand
+//          is false then the nodes are created and expanded but the UI does not
+//          display them, i.e. the branch is left collapsed during the process
+//
+//     5-4-03
+//        - Enhanced the BrowseToXXX methods to work for paths with filenames as
+//          well as folders
+// 
+//     5-2-03
+//        - Fixed bug in toListviewLimitBrowseToRoot where the listview could browse
+//          above its initial root folder.
+//
+//     5-1-03
+//        - Memory leaks in TWideStringList fixed, thanks Robert and Hideo Koiso
+//
+//  Version 1.1.10
+//     4-28-03
+//        - Fixed bug where the cached IShellFolder may miss a new folder created
+//          under a recently created folder during a WM_SHELLNOTIFY ReReadAndRefreshNode
+//          call.
+//
+//     4-27-03
+//        - Fixed bug when pasting to the desktop in Win2k
+//        - Added toUserSort and published the OnCompareNodes property to allow
+//          for custom sorting of nodes
+//
+//     4-7-03
+//        - VT seems to have changed the way it handles right clicks.  Does not
+//          select the node if VETMiscOption > toRightButtonSelect is off. Reworked
+//          the right click context menu actions to be more like Explorer
+//
+//  Version 1.1.9
+//     4-1-03
+//        - Changes in RebuildRootNamespace where the hidden node's TNamespace
+//          was not being freed
+//
+//     3-28-03
+//        - Reworked the auto calculated Explorer ComboHeight to allow the edit
+//          to be sized smaller than 23 pixels.  It will now go down to the
+//          size of the image (16).
+//
+//     3-25-03
+//        - Added the focused node to the VETPersistent class to save the Focused node
+//          in the tree state to be restored later
+//
+//     3-20-03
+//        - Changed all LoadLibrary to GetModuleHandle to eliminate orphaned
+//          dll's due to reference counting.  The dll's needed are the common
+//          dll's that will be staticlly linked with other functions anyway so
+//          there is no reason to use LoadLibrary.
+//
+//     3-6-03
+//        - Fixed ScrollIntoView problem with the BrowseTo methods.
+//
+//     - Robert: Fixed a problem with the TWideStringList, it saved the strings on unicode
+//       format even on W9x, making it unreadable for non-unicode systems.
+//     - Fixed bugs with TWideStringList.IndexOfName and TCacheList.GetCacheFileToSave
+//       under Win9x.  They were using lstrcmpiW which is only avaiable under NT.
+//       Thanks to Eric Fookes for finding finding this.
+//
+//  Version 1.1.8
+//    2.19.03
+//      - Fixed Windows Shutdown problem on Win9x.
+//      - Improved Shell Notifications to work with 9x in the "My Documents" folder
+//        that is under the desktop
+//      - Extensive upgrades in VLVEx see the source file for details.
+//
+//  Version 1.1.7
+//    1.30.03
+//      - Fixed bug with Toolbar2000 and TBSkins.  AV with VET in floating window
+//        on shutdown.
+//
+//    1.28.03
+//      - Fixed "Can not focus a hidden or disabled window" problem with the Combobox
+//        in an OCX.
+//      - Added new option to ExplorerCombobox: vcboSelectPathOnDropDown.  If true
+//        when the combo is dropped down the path in the edit is automaticlly selected,
+//        if not it mimics explorer.
+//      - Added appropriate TMenu.PopupComponent assignments for VET Popup Menus.
+//
+//    1.27.03 PM
+//      - Separated the IMalloc in the Image thread.  I was using this interface in
+//        various threads without marshalling it!  Could be cause of past no draws
+//        of images and mysterous AV's
+//      - Enhanced ComboBox with Focus/Selection that mimics explorer edit before and
+//        after RollDown.
+//      - Fixed bug with new Combobox Rolldown implementation. Would re-rolldown when
+//        clicking the dropdown button expecting it to close the rolldown.
+//
+//    1.27.03 AM
+//      - Fixed bug in ExplorerComboBox in enhanced mode.  When expanding/collapsing
+//        the scrollbar was not updated correctly.
+//      - Added more tree navigation keys to the ExplorerComboBox in enhanced mode that
+//        are passed to the VET and now do not close the dropdown.
+//  Version 1.1.6
+//    1.26.03
+//      - Completely reworked the ComboBox drop down to allow it to work correctly
+//        in an active form.  Switched from the VCL type WndProc hooks to a local
+//        message loop.  Much more clear and concise.
+//      - Bug fix when asking for lower case letters for the Attributes column
+//    1.23.03
+//      - Fixed issue with speed of ShellColumn mode when using custom column.
+//        I was asking the Shell Namespace for the details of the custom column
+//        which made them take a lot of time trying to decide what to do with
+//        a column index greater than they were expecting, making the screen
+//        refresh really sluggish.
+//    1.20.03
+//      - Fixed bug in the VET Persistent stream reading and writing
+//      - Added new option TreeOption.VETMiscOptions-toShowCompressedInAttributes
+//          When enabled adds a "C" to the attribute string in details mode.
+//          NOTE: Only works for VET and UserDefined Columns.  In Shell Columns mode
+//                the shell decides what goes in that column.
+//      - Upped the prioritity to the image thread to normal, it was unintentionally
+//        set to idle.
+//
+//    1.17.03
+//      - Made Combobox Path published.
+//      - Updated the WideEdit in the ComboBox with Troys lastest code to try to
+//        solve some issues when used with other components that hook the windows
+//        WindowProc.
+//      - Changed all instances of TFileStream to TWideFileStream since Robert
+//        quietly slipped it into VirtualWideStrings.pas.   Again thanks to
+//        Troy and his TNT package.
+//      - Fixed issue when VET is used in a Frame that is created dynamiclly the
+//        images thread may loose some images.  Due to fact that the VCL is recreating
+//        the window and that causes the image thread reference to count do 0 and
+//        free itself after a few image have been cached. Added calls in CreateWnd
+//        to ensure everything is reloaded.
+//      - Added new VETMiscOption: toRemoveContextMenuShortCut.
+//        A Folder only treeview connected to a listview should not have shortcut
+//        item as the short cut is created in the parent of the tree item, as is should be,
+//        but the listview is in the folder so it appears nothing happened.  Explorer
+//        removes the Shortcut item from the menu. This option allows the same effect.
+//  Version 1.1.5
+//
+//  12.29.02
+//      - Fixed issue with Change Notifiers using interfaces accessed across threads
+//        without marshalling.  Could be cause of infrequent mysterous AV with notifer
+//        seen (by me) recently.
+//      - Finally found why VET apps won't let Windows shut down.  Added WM_QUERYENDSESSION
+//        handler in the Listener window created to funnel the change notifies to
+//        the main thread.
+//      - Fixed Deadlock issue with the Kernel Notifier thread
+//      - Fixed Reference counting bug with the Kernel Notifier thread
+//
+//  12.28.02
+//      - Fixed bug: SelectedPathsW and SelectedFilesW where never created!
+//
+//  12.16.02
+//      - Forced a Form paint update after the combobox is rolled up before
+//        any slow processing takes place.  Looks more professional rather than
+//        having the drawing update hang up in the middle waiting for the roll
+//        up to finish.
+//
+//  Version 1.1.4 Beta
+//
+//  12.14.02
+//      - Fixed problem with combobox in Win9x.  After rolldown if dialog popped
+//        immediately after it went behind the form.
+//	- Reworked ShellNotifiers to use referenced counted threads.  This was to ensure
+//        the threads where terminated before the ShellNotifier object was destroyed in
+//        finalization section of the unit.  If not the threads would deadlock due to
+//	  serialization of DLLs when VET was used in a COM object.
+//  12.13.02
+//      - Added 3 new properties to TNamespace:
+//          property LastAccessTime  : TDateTime read GetLastAccessTime;
+//          property LastWriteTime   : TDateTime read GetLastWriteTime;
+//          property CreationTime    : TDateTime read GetCreationTime;
+//      - Forgot to set the default Handled to False in CopyToClipBoard
+//      - Combined instances of
+//          function CreateStub(ObjectPtr: Pointer; MethodPtr: Pointer): Pointer;
+//          procedure DisposeStub(Stub: Pointer);
+//        into the VirtualUtilites.pas file
+//
+//  Version 1.1.3
+//
+//  12.12.02
+//      - I think Robert found the problem with the images coming in slow
+//        and why the My Picture image was wrong.  The thread never could
+//        use IShellIcon to extract the icon because I was passing it the
+//        the wrong PIDL. This happened between 1.0.5 and 1.1
+//        Thanks Robert.
+//      - Robert extended the capabilites of TWideStringList by addes associated
+//        Objects to each string.
+//      - Robert updated the packages to better represent the VSTools Common from
+//        the VSTools components.
+//      - **** VLV By Robert ****
+//      - Added the latest VLVEx from Robert:
+//      - Reworked the cache mechanism, improved thumbnails creation and
+//        painting speed.
+//      - Added new public method for cache cleaning, ThumbsCacheOptions.ClearCache
+//      - Added new public method for cache item reload, ThumbsCacheOptions.Reload
+//      - Added new property, ThumbsCacheOptions.CompressionQuality, to
+//        control the thumbnail compression, default value of 60 (1..100, 1 highest
+//        compression but lowest quality, 100 lowest compression but highest quality).
+//      - Updated demo.
+//      - **** End VLV By Robert ****
+//  Version 1.1.2
+//
+//  12.11.02
+//      - Fixed issues with CreateNewFolderXXXX and autoselecting of the file
+//        for editing.  In Win98 it appears that the actual creation of the file
+//        can be delayed till after CreateDir returns and as such VET can't find
+//        the new folder to edit.  Added a loop to wait for the new folder to
+//        appear (with a "SafteyValve" to quit looking after a second or two)
+//        Thanks Boris for being persistent till I duplicated it.
+//      - Implemented my own thread class to get rid of WaitFor which has been
+//        troublesome forever.  Now VET DLL in other processes won't hang up
+//        the the app closes and the DLL unloads.
+//      - Added an AFTEREDITDELAY constant in VirtualExplorerTree.pas that forces
+//        a wait after enter is pressed to try to delay VET enough to let the
+//        ChangeNotifies pass such that the tree will keep the newly created
+//        node on the bottom of the list and not do a refresh and resort it.
+//
+//  12.8.02
+//      - Fixed inconsistancy in various flavors of Windows.
+//          function TNamespace.GetNameForParsing: WideString;
+//          function TNamespace.GetNameForParsingInFolder: WideString;
+//        may or may not return the full real path for the Desktop on the
+//        Desktop TNamespace.  They will always now return the
+//        physical path for the Desktop
+//
+//  12.5.02
+//      - Let PIDLs be collected (although incorrectly) from various folders
+//        in TNamespace.ShowContextMenuMulti. It is the apps responsiblity to
+//        parse out the right selection by hooking to menu with the Menu Events
+//        See the FileFind demo.
+//
+//  12.02.02
+//      - TPopupAutoCompleteDropDown.AlwaysShow has been depreciated and removed.
+//        its function was inconsistant and no longer valid it its original context.
+//        There is an OnAutoCompleteRollDown event that can be used to stop the rolldown
+//      - Fixed Unused function in VirtualShellUtilities.pas in D5
+//      - Added stubs for ExcludeTrailingPathDelimiter and IncludeTrailingPathDelimiter
+//        in VirtualWideStrings.pas that are defined only if using D5. This allows
+//        demos to use these functions and still work with D5 (if they use the
+//        VirtualWideStrings.pas unit)
+//
+//  Version 1.1
+//
+//  12.01.02
+//      - Checked compatibilty with VT 3.5.7
+//      - Many updates for the VirtualNamespace with a partially working Zip
+//        extenstion in the demos, thanks to Gerard Slurink.  A full working
+//        version is on the horizon.
+//      - Added override events for CutToClipboard, CopyToClipboard, and
+//        PasteFromClipboard, CreateDaataObject.  This allows for objects
+//        from different folders to be saved to the dataobject, removing the
+//        constraint of only child objects of a folder being saved to the
+//        dataobject.  The implementer is responsible for adding the appropriate
+//        structure and data to the IDataObject.  A File Search demo will soon
+//        be available to demonstrate this feature.
+//      - Added a Handled property in the TVirtualShellEvent class.  This allows
+//        for the application to handle the refresh of the VET in the OnShellNotify
+//        event.  Simply set
+//            ShellEvent.Handled := True;
+//        and VET will not try to update the tree during a notify.
+//
+//  11.26.02
+//      - Added Roberts change for when a selected node is deleted. VET now selects the
+//        the next sibling before resorting to selecting the parent node.  This is
+//        mainly for the listview mode and mimics Explorer.
+//
+//  11.18.02
+//      - Added toRightButtonSelect to VETMiscOptions to mimic the explorer Listview
+//        For various reasons I had to override VT's right buttons select Options and
+//        make it true all the time.  Use this one instead.
+//
+//  Version 1.0.5
+//  11.10.02
+//      - Fixed ComboBox TabStop property default value set wrong in constructor
+//      - Fixed ComboBox could not set focus through code
+//      - Fixed issue with autocomplete with empty string when debugging app in
+//        IDE, stopped exeception
+//      - Fixed bug with IShellList that kept sending change notificiations when
+//        reading the link.
+//      - Created a new class, TShellSortHelper, in VirtualShellUtilites to
+//        allows those using custom columns to have access to the same sorting
+//        routines VET uses.  They automaticlly handle the details of sorting
+//        folders and files separately
+//
+//  Version 1.0.4
+//  11.06.02
+//      - Published new VT property SelectionBlendFactor;
+//      - Fixed bug in TPIDLList, was not freeing the List for the PIDL's
+//      - Fixed bug when browsing between two folder of the same name but in
+//        different branches. The linked control would not browse as it interperted
+//        it as being in the same folder.
+//
+//      - Robert updated VLVEx
+//      - The cache file is now compressed and the size is reduced by 10 times,
+//        thanks to Gerald Koeder for the tip.
+//      - Improved the cache management, introduced a new property ThumbsCacheOptions.
+//      - The cache will now be automatically loaded/saved when
+//        ThumbsCacheOptions.AutoLoad/AutoSave is true.
+//       - ThumbWidth and ThumbHeight now reflect the real pixel size of the thumbnail.
+//       - Improved the demo.
+//
+//  Version 1.0.3
+//  11.05.02
+//      - Fixed bug when switching back from large images
+//      - Fixed bug with Notifier Thread and a race condition when using
+//        RegisterKernelSpecialFolderWatch (may have been Roberts problem the
+//        other day)
+//      - Used Roberts SendTo Menu unit that supports Toolbar2000 and TBX
+//      - Fixed bug with colors in VExplorerCombo to match what Delphi does with
+//        themes.
+//
+//  Version 1.0.2
+//  11.04.02
+//      - Fixed bug with Cut/Copy Marking
+//      - Added nil check for a strange problem Robert has seen a couple of
+//        times in procedure TVirtualChangeNotifier.ListenerWndProc
+//      - Added compatiblity changes for BCB
+//
+//  Version 1.0.1
+//
+//  11.02.02
+//      - Compatibility with VT 3.5.1 performed. No changes necessray
+//      - DFM now does not store the columns info if in ShellColums since they
+//        are dynamiclly rebuild depending on where the current root folder is
+//
+//  10.31.02
+//      - Fixed bug in Send To Menu when selecting a Send To Item that is a link
+//
+//  10.26.02
+//      - A few more adjustments to the Shell Notifier to catch some special circumstances
+//
+//  10.21.02
+//      - Added custom exception object in the TNamespace.CreateFromFileName constructor
+//        so it can be easily turned off during debugging through the IDE
+//
+//  10.14.02
+//      - Centralized all System ImageLists to the VirtualSystemImageLists.pas objects
+//
+//   Version 1.0
+//
+//  10.13.02
+//      - Added an OnAddButton event to the VirtualShellToolbars to selectivly
+//        leave out particular drives
+//      - Added a RebuildToolbar to the VirtualShellToolbars to force buttons
+//        to be recreated
+//
+//  10.6.02
+//      - Robert fixed VirtualUnicodeControls so Mikes ThemeManager can work with it
+//        now. Basiclly implemented Troy's latest TNT code
+//      -Robert fixed a few more selection bugs in VLVEx
+//
+//  Version 1.0 RC3
+//
+//  10.6.02
+//      - Added support of ghosted Cut images.  This required two things:
+//          1) VT Version 3.4.13  (Thanks Mike for making the changes I needed)
+//          2) Breaking existing code for those who show context menus programmaticlly
+//             I added a new callback paramameter, all you need to do is pass a "nil"
+//      - Cleaned up the "Versions" All VSTools files are version 1.0 now
+//      - The Kernel Shell Notify thread now can register special folders to watch
+//        as well, using
+//          ChangeNotifier.RegisterKernelSpecialFolderWatch(CSIDL_DESKTOP)
+//        for instance.  This will cause the Kernel Shell Notify thread to detect
+//        a change in the physical file folder and map it to both a Notification
+//        for the physical file, PLUS as notification for the Virtual Desktop.
+//        With this system it is possible to use only the Kernel Notification System
+//        to monitor changes in all File folders, virtual or real.  It will not detect
+//        things like media change, printer status changes etc.  for that it is still
+//        necessary to use the Shell Notification system.
+//
+//      - Reworked the Notification system to try to minimize time needed to process
+//        thousands of file operations.... again.  The last attempt tried to minimize
+//        VET's effect on Explorer by not blocking Explorer at all on a notification.
+//        The notifications were stored and processed later. This causes VET to
+//        need to sort through a lot of information and appear to hang for a while
+//        after the operation was complete.  Since VET's effect on the Explorer notification
+//        is minimal compared to the actual operation (confirmed now that I used
+//        an optimizer to track times) it is better to process the notifies during
+//        the operation so a minimal data set is maintained by the VET notification threads.
+//
+//  Version 1.0 RC2a
+//
+//  10.6.02
+//      - Added support for CTL-UP/DOWN and CTL-PAGEUP/PAGEDOWN
+//
+//  09.22.02
+//      - Fixed CreateFolder varients so they work with the Desktop and Desktop
+//         sub folders
+//      - Number of small bug and non standard compiler option fixes (thanks to Milan)
+//
+//  09.12.02
+//      - ShellToolbars now aware of the ExplorerComboBox
+//      - Fixed bug at design time with Toolbars not unlinking with VET or Combobox if
+//        the other control was deleted from Form
+//      - Created new AutoComplete component (for the file select autocomplete like
+//          when typing in the combo box of explorer and VSTools comobo box.
+//           NOTE: Only works with newer versions of the Common Controls (IE 4.0 or so)
+//              This inteface is flaky and buggy. The options to select what is displayed
+//              in the list works one way on some OS's and a different way on a another OS.
+//              Eventually need to implement it so it always works the right way by doing
+//              some the work myself.
+//      - Reworked the AutoComplete list callback event so it is easy to fill the
+//        list with the normal autocomplete strings before modifing the list.  Does not
+//        break existing code just makes it easier to do the that task
+//
+//  09.04.02
+//      - Optimized the ChangeNotifier so it is *much* faster when tracking large (1000's)
+//        file operations.
+//      - Change notifier now work much better/faster in the RecycleBin
+//      - Bug fixes in VirtualShellHistory
+//      - Finished implementing the new Icon Thread (single thread for all controls)
+//          added threaded images to toolbars and Combobox
+//      - Enabled Vert autoscroll in combo enhanaced mode
+//      - Milan is back!  Implemented changes to allow BCB to compile latest version
+//      - Fixed problem with D7 and VirtualExplorerListviewEx thumb thread, thank you Robert.
+//
+//  09.03.02
+//      - Fixed bugs with the new threading routines for icons and notifiers, thanks Robert.
+//      - Optimization of Notify thread for NT4 when deleting large number of files.
+//      - Fixed bug with VLVEx thumbnail thread and D7.  Just a guess, seems to work, need to get real
+//        D7 and look at the thread source to see what has changed.
+//  09.01.02
+//      - Updated VSTools for D7 Compatiblitly!!!!!
+//      - Removed the OLEDragManager from the package because of D7 compatibility/bugs (Trail Version Only)
+//        I don't want to support it anymore as I don't really like the way it was done.
+//      - Implemented necessary changes to make the VirtualNamespaces a reality and they
+//        works SLICK!  Better yet the classes that you derive from to create the virtual
+//        namespace get to about 75% of the way to a REAL namespace extentsion for Explorer!
+//        These classes allows everything except Context Menus.. well you can do context menus
+//        but they must be done with 100% API.  Because of the way the VCL deals with TPopupMenus
+//        it is not easy to hook a TPopupMenu to a shell context menu (VCL creates Item ID automaticlly,
+//        Shell menus send a range of values that the Item ID's must fall under)
+//      - Created a new include file.  It allows more flexabilty in what is linked into
+//        the VSTools package.  These are done through conditional defines.  By default
+//        the VirtualNamespaces are NOT enabled so they WILL effect performance. Also
+//      - Reworked the Image Thread.  Now one thread is shared across all controls.
+//      - ImageThread Priority can be now set using ImageThreadManager.SetThreadPriority in
+//        the VirtualIconThread.pas file
+//      - Included some bug fixes/enhancements in the VirtualToolbars from Robert Lee, thanks as usual
+//      - Added a number of conditional defines to strip pieced of VET out of the
+//        package.  This produced the following results in D5:
+//            Basic Form - 307kB
+//            Basic Form with 1 VT - 574kB
+//            Basic Form with 1 VET - 792kB
+//            Basic Form with 1 VET stripped down package - 659kB
+//              This produces a basic file/folder browser with no refresh capability
+//        This whole idea is experimental and I have not tested the actual functionality
+//        of any of the controls with pieces stripped out.  The main focus of this
+//        was to block it off to get D4 to compile <G>
+//        The result produced the follown analysis of the project:
+//              VirtualExplorerTree.pas    54,113 (summary)
+//              VirtualPIDLTools.pas          900 (summary)
+//              VirtualResources.pas        1,584 (summary)
+//              VirtualShellUtilities.pas  28,037 (summary)
+//              VirtualTrees.pas          161,337 (summary)
+//              VirtualUtilities.pas          124 (summary)
+//              VirtualWideStrings.pas      2,096 (summary)
+//        It does not appear there is much more to gain from VET or VSU.  The rest
+//        of the size comes from sections of the VCL being pulled into the project
+//        with VET. I tried to remove these with the conditional defines as well
+//
+//
+//  08.23.02
+//      - Bought new digital camera.  Found VET did not refresh right when removing
+//        a removable disk (FLASH Card).  Finally got to see some new Shell Notify
+//        types!  It also fixed a refresh problem with CD's that I never noticed.
+//
+//  Version 1.8.276 Release Candidate 2
+//
+//  08.22.02
+//      - The background threads for the Shell Notification have been reworked and
+//        are much more efficient and clean.  They have been broken out of the
+//        VirtualShellUtilities.pas file and placed in their own unit VirtualShellNotifier.pas
+//        After a struggle with the unhappiness this may create I have broken your code
+//        if you are using the stand alone functions that allow you to Watch a folder above
+//        and beyond what the shell notification was doing.  The watch thread uses the
+//        documented FindFirstChangeNotification API.  The first attempt was a hack
+//        on top of what was there, the undocumented SHChangeNotify registration.  Now
+//        you may register a TWinContol with one, or the other, or both systems
+//        The default is only using the SHChangeNotify thread.  To use the "Kernel"
+//        notification the global functions are replaced with global ChangeNotifier object
+//        that you register the Kernel change with.  Then you may change the watch folder.
+//        See the "Shell Notify" demo.  A few names changed in the events too for
+//        type.  The change should be basiclly to add a "Virtual" to the front of
+//        unknown types or a "v", for example sneMkDir is now vsneMkDir.  The changes should
+//        not be too bad to update as it is not likely there is more than a few lines of
+//        code in an app for this mechinisim.  Also the VirtualShellNotifier.pas file
+//        must be added to the form unit if you are using any of the ShellNofiy stuff
+//        in the app.
+//      - Fixed Refresh bug when using CustomRootPaths in VET, ExplorerTree, and ExplorerList
+//
+//  08.21.02
+//      - Fixed bug in ExplorerCombo that during creation of the component in code
+//        the Edit box was created with a 0 height, due to the fact that the DesignTime
+//        name was not present to calculate a proper height based.
+//      - Fixed bug in ExplorerCombo NT4 shows Desktop/Folder1/....  when you
+//        retrive the Path.  Seems Namespace.NameAddressBar in NT4 give you this
+//        strange string.  NT4 now uses Namespace.ForParsing.  Newer OS will give
+//        you as string of the CLSID if you use ForParsing so we can't use it for all OSs
+//      - Used FreeAndNil in the finalization section on global classes and added
+//        checks in the destructors of the necessary VSTools classes so a Halt(0)
+//        call won't cause AV's.  This is because the VCL will call all the finalization
+//        sections for the units, THEN it frees the objects on the Form causing access
+//        to freed global objects.
+//
+//  08.20.02
+//      - Fixed bug in VET InitAllChildren
+//      - Fixed bug in VETPersistent when restoring
+//        the special case of when the root node is hidden and no nodes are selected
+//      - Added new option to catch and update Mapped Drive changes (Thanks to
+//        Soren Harest for making me aware of this). This could be a rather expensive
+//        update so use it wisely.  Also toChangeNotifierThread must be set too.
+//
+//  Version 1.8.267 Release Candidate 2
+//  08.15.02
+//      - Fixed "bug" in IDropTarget implementation.  WinZip is very particular
+//        on exactly what Effects its IDropTarget is called with.  It gets confused
+//        if you pass it all choices, copy, move, and link.  It does not know what
+//        to do with too much information and just cuts back to "no drop at all" mode
+//        Now only the effects that are passed to the VET window are passed on to
+//        to the namespaces IDropTarget
+//
+//  08.13.02
+//      - Fixed bug with right click on different node than selected to get context menu.
+//        Explorer only temporarily selects the new node for the context menu then
+//        returns to previous node.  Had to mess with the context menu manager code
+//        again.  Please retest any custom popupmenu handling in your applications
+//        and make sure I did not change the handling I have spend so long trying to
+//        get right
+//
+//  Version 1.8.265 Release Candidate 2
+//  08.11.02
+//      - Fixed bug with streaming when trying to use Radio Buttons or non-TriState
+//         checkboxes.   Increased streaming version to 2. Old file streams should
+//         not be effected and automaticlly updated to version 2.
+//      - VirtualExplorerListboxEx MUST have ThemeManager 1.9.0 to work properly
+//
+//  8.09.02
+//      - Added toNoUseVETColorsProp to force VET to use the Font.Color property instead
+//        of defaulting to the VETColors property.  Dumb design decision long ago
+//
+//  8.07.02
+//      - *Really* fixed bug with ReReadAndRefreshNode adding expand buttons to trees not
+//        wanting toFoldersExpandable this time!.
+//
+//  Version 1.8.260 Release Candidate 2
+//  8.04.02
+//      - Added support for TPoupMenu to be used as an injected submenu into the
+//        system context menu.  See the overview demo.  It currently does not support
+//        images but it should support other TMenuItem properties as well as ActionLists
+//
+//  8.03.02
+//      - Fixed bug in the Streaming of persistent tree data (columns, user data, etc)
+//
+//  Version 1.8.255 Release Candidate 2
+//
+//  7.30.02
+//      - Fixed bug in VirtualWideStrings.SumFolder, not checking for correct return
+//        value with FindFirstFileW
+//
+//  7.23.02
+//      - Image thread is now a last in first out and is a bit more efficient.  The
+//        last in first out allows the current view scrolled into view get its images
+//        first to update the current user screen first.
+//
+//  7.22.02
+//      - Added toDisableGhostedFolders to VETFolderOptions to not allow
+//        blended images on folders for mimicing Explorer Treeview
+//
+//  7.20.02
+//      - Updated VirtualShellHistory so the notify events do not fire when destorying
+//        saves checking for valid objects in the event handler.
+//
+//  7.19.02
+//      - Fixed bug with ReReadAndRefreshNode adding expand buttons to trees not
+//        wanting toFoldersExpandable.
+//
+//  Version 1.8.250 Release Candidate 2
+//  7.15.02
+//      - Fixed small issue with OnGetPopupMenu when no columns defined
+//      - Changed default indent for comboBox dropdown to 10
+//      - Opimized the ChangeNotifier to stop redundant notification calls
+//      - Reworked the VirtualShellHistory unit to create a Most Recently Used (MRU)
+//        class that the VirtualShellHistory is derived from
+//      - Added support to write the MRU and History to the Registry
+//  7.14.02
+//      - Added functionality to Favorites Toolbar.  Now left click dragging off
+//        from toolbar will remove the button from the toolbar
+//      - Added ability in VirtualDriveToolbar to show/hide Removable (Floppy), ReadOnly
+//          (CD), and Fixed (HardDrive) Drives
+//      - Changed order that OnComboRollUp was fired with respect to when the combo
+//        is hidden.  It is hidden first then OnRollUp is fired so any long processing
+//        in OnRollUp does not leave an empty combo visible.
+//      - Fixed design time issue with VirtualShellToolbars, changing Caption then
+//        Name reset Caption to new Name
+//  7.13.02
+//      - Fixed menu to have correct colors in XP, also drawn a bit more "XP" like
+//  7.13.02
+//      - Upgraded and added Robert Lee's VirtualShellHistory component to the package.
+//
+// 7.05.02
+//      - VirtualShellUtilites.pas:
+//              Dymamiclly loaded SHGetDataFromIDListW for Win95 compatibility
+//
+//  07.04.02
+//      - Fixed bug in ContextMenus when not using context menus.  Would not show
+//        PopupMenu Property menu if clicked on item.  Simplified old old checks after
+//        learning of result to WM_CONTEXTMENU for the VCL to stop propogation to assigned
+//        context menu.
+//      - Fixed bug in ContextMenus when using per node context menu handler and
+//        also wanting ShellContextMenus.  The File column always overrides any user
+//        menu and uses the ContextMenus if turned on.
+//  07.02.02
+//      - VirtualShellNewMenu: Added an "After File Create" event to allow the
+//        new node to be selected for editing after it is created.
+//      - Changed the logic in OnGetVETText.  It is now called for ALL columns so
+//        any columns text can be modified.  The Text sent to the event is what
+//        will appear in the column if it is unmodified
+//      - Fixed designtime bug where TExplorerComoboBox would not show its name
+//        in the control when first dropped on form
+//
+//  Version 1.8.230
+//
+//  06.30.02
+//      - Updated to work with VT 3.3.2
+//        This means that:
+//              1) The AV with the column selection dialog is fixed and the
+//              2) The problem with the Drag Image ghosting should be fixed
+//      - ShellNotifyWatchFolder now takes an optional parameter ChangeReason that
+//        allows the application to decide what will trigger a ShellNoify event
+//      - Fixed bug with shell notify with 2 listviews in one app
+//      - Fixed bug with the WaitCursor sticking the cursor to an hourglass with two VETs in one app
+//      - Added Option to allow the Listview to not lock the backbrowsing to the rootfoler using
+//        the keyboard or BrowseTo
+//      - add Option, toNoRebuildIconListOnAssocChange, to stop icon rebuilding on
+//        an Association change as XP has a side effect of changing the iconsize then
+//        back again.  It reorganizes the desktop icons.
+//      - Fixed AV in SetBackBrowseRoot property setter, added check for nil
+//  05.20.02
+//      - Themes would not disable in the Combobox, fixed
+//      - Reworked the UI of the Combobox DropDown list to mimic the normal TCombobox DropDownList style for focus and selection
+//      - Cached the InFolderName for speed reasons
+//
+//  04.26.02
+//      - Finished up the Drag and Drop in the Toolbars.
+//      - Changed the name of ShellUtilites to VirtualShellUtilites to be consistant
+//
+//  04.25.02
+//      - Added two new options to deal with what happens to a Folder or Folder Shortcut
+//        when it is doubleclicked and the ShellExecute code is called (if that
+//        option is enabled, toExecuteOnDblClk)
+//            toBrowseExecuteFolder,        // Substitues the default ShellExecute action (opens an explorer window) for a folder namespace to a VET navigation action
+//            toBrowseExecuteFolderShortcut // Substitues the default ShellExecute action (opens an explorer window) for a shortcut to a folder namespace to a VET navigation action
+//         $$ WARNING $$ These may need to be set in your application by hand. If
+//            the tree will not expand then check these new options $$ WARNING OFF $$
+//      - Fixed bug with the new ShellNotifyWatchFolder ShellNotify function and
+//        WinNT 4.0 with a network.
+//      - Removed the ReadOnly property in the ExplorerCombobox and replaced it
+//        with a Style propery that more closely resembles TComboBox for DropDown styles
+//      - Fixed the ComboBox TabStop property for all VSTools components!
+
+//  04.23.02
+//      - Fixed AV when deleting ExplorerCombobox from form
+//      - Improved OnShellExectue event, new parameters
+//      - Shortcuts of Folders now browse to the folder rather than opening an explorer window
+//      - Added another level of Shell Change notifiers.  See the VirtualExplorer Demo and the
+//        global function:
+//           procedure ShellNotifyWatchFolder(WatchFolderPath: WideString; Control: TWinControl);
+//        NOTE the control must already be registered with the shellnotifier thread
+//           procedure RegisterShellNotifyControl(Control: TWinControl);
+//           procedure UnRegisterShellNotifyControl(Control: TWinControl);
+//
+//
+//  04.15.02
+//      - Added intellegant filtering of ShellNotifications to the Listview. Only
+//          passes notification if for the tree level that is displayed
+//
+//  04.14.02
+//      - Milan's nagging memory leak with TVirtualExplorerCombobox is fixed!
+//
+//  04.13.02
+//      - Reorginized the VSTools package, renamed units and components to be
+//        consistant.
+//      - Implemented a FindFirstChangeNotification thread to catch those pesky
+//        file creates that sneak by the Shell Notification
+//
+//  04.12.02
+//      - Fixed AV when ExplorerComboBox deleted at designtime.
+//      - Restructured the heirarcy of TExplorerTreeviews and Listviews so they are
+//        compatible with each other.  They both now derive from TVirtualExplorerViews
+//        which  publishes all common properties between both components.
+//
+//  04.06.02
+//      - Fixed bug in notification updates.  If node was collapsed and an update
+//        occured in that folder the items were duplicated until a refresh occured
+//      - All Virtual Namespace issues will be dealt with after VSTools 1.0 is released
+//
+//  04.06.02
+//      - Added overloaded CreateNewFolder method that returns the new folders name
+//        if successful.
+//      - Implemented the Assign and AssignTo methods for VET
+//              NOTE as of VT 3.1.8 there is a bug in its Assign (D4-D5 only) so these must not
+//              be used until Mike fixes the bug.
+//
+//  04.03.02
+//      - Fixed problem with network machine paths and the combobox in Path mode
+//      - TExplorerListbox: added a BackBrowseRoot property.  It is initally set
+//        to the designtime RootFolder and is used to compare when the user tries
+//        to navigate up the tree with the keyboard (Backspace).  The BackBrowseRoot
+//        clones the TNamespace that is used to set so simply set the back space
+//        lock using any TNamespace object.
+//      - Tree/List links make listview navigation respect the treeviews root folder
+//
+//  04.03.02
+//      - Reworked the InternalCreateFolder to be Uniocde and fixed few bugs
+//
+// 03.23.02
+//       - Changed logic in DragDrop so it is possible to set Effect to DROPEFFECT_NONE
+//         in the event handler and cancel the drop
+//
+// 03.23.02
+//      - SelectedFilesCut
+//        SelectedFilesCopy
+//        replaced with VT methods CopyToClipboard and CutToClipboard
+//
+// 03.19.02
+//      - Fixed bug with context menu showing parent menu after showing context menu
+//
+// 03.10.02
+//      - Fixed issues compiling with D4.  Finally done.  Unfortunately there are
+//        a few issues with converting the OLE Drag Managers designtime forms to D4
+//        as I took advantage of events in the TListview that are only available in
+//        D5 and up.  The OLE Drag Managers are avaiable but they will have to be
+//        created at runtime.
+//
+// 03.07.02
+//      - Fixed bug in Dropdowns in Combobox.  AutoScrolls inop and VETEnhanced mode
+//        did not work after last round with the dropdown focus issue
+//      - Fixed bug where the AutoEdit after Folder create would cancel the edit
+//        when the control recieved a ShellNotify for the new creation.
+//
+// 03.04.02
+//      - Fixed Memory leak in the Tree Persistence classes.  Reworked a few list
+//        classes (TPIDLList and TLeafNodeList) to take advantage of the newer
+//        Streamable classes in VirtualShellUtilities.  Changed the Create parameters to none
+//        and there is no longer FreeOnDestroy properties, it is now SharePIDLs and
+//        ShareNodes to be more like TImageList.  If Share then the objects are not
+//        freeded during a Clear or Destroy.
+//      - Fixed problem in the Storage "GetCheckedPath" and "GetResolvedPath" when
+//        a flopply is checked with no disk in the drive. It would throw dialog boxes
+//        and the drive would not be returned in the path list.
+//
+// 03.02.02
+//      - Fixed bug introduced by fixing another bug in ShellNotify thread.  Did not
+//        reflect changes in a directory if the directory was empty. Fixed.
+//      - Fixed issues with right clicking and clicking on no node in the drop
+//        down windows.
+//
+// 03.01.02
+//      - Stripped out the #$@% RichEdit and plugged in Troy Wolbrink's Unicode
+//        TEdit, Thanks Troy.
+//      - Removed the Combo MinEditHeight property, that is what Constraints are for!
+//
+// 02.27.02
+//      - Reworked the painting of the Combobox. It now is fliker free without using
+//        double buffering
+//      - Had to shift Milan RichEdit alignment by 1 pixel
+//
+// 02.23.02
+//      - Many more tweaks and inhancements in the dropdowns for the combobox.
+//        They now mimic the IE and Explorer Dropdowns and are XP enabled
+//      - Added more shortcuts present in Explorer to show context menus, Shift-F10 and ContextMenu Key
+//      - Bug Fixes
+//      - Changed implementation for Clipboard operations.  VT now has virtual methods
+//        for CopyToClipboard, CutToClipboard and PasteFromClipboard so now use
+//        these instead of SelectedFilesCopy and SelectedFilesCut.
+//        SelectedFilePaste(MultipleTargets) is still avaiable for pasting into
+//        several folders at once.
+//        By doing this the standard Actions will automagiclly work with VET!
+//
+//
+// 02.17.02
+//      - Major renaming of ComboDrop down components to make it more consistent
+//      - Added necessary hooks to create new customized decendants of the Dropdown
+//        windows and the VET and VT contained within each.
+//
+// 02.16.02
+//      - Too many changes to list in any detail
+//      - TNamespace reworked and 30% smaller memory footprint per node
+//          - This will effect anyone using the IExtractImage and IShellLink (shortcut)
+//            interfaces.  These are now sub objects of TNamespace.
+//      - Reworked the dropdowns on TExplorerCombobox. After MUCH work they are
+//        fully XP theme aware and look like the ones in IE and Windows Explorer
+//      - Bug fixes
+//      - Added new event for RootNamespace rebuild
+//      - Cleaned up the ShellUtilites.pas file and the VirtualExplorerTree.pas file so
+//        they are in logical order and added more comments.
+//      - Fixed right click of header caused resort of column before showing context menu
+//      - Reworked the Column edit dialog for showing/Hiding columns on right click of header
+//      - Found solution to drag image being left on screen after popup or dialog shown.
+//        Mike is implementing it in next release of VT (after 3.0.4)
+//      - Published a lot more properties from VT.  I am not sure of 100% compatiblilty with
+//        VET but if not let me know and I will try to work it out.
+//      - Fixed memory leak in shell notifictions after last reworking of Combobox Dropdowns.
+//      - Fixed memory leak in Combobox auto complete
+//      - Moved all WideString calls to a separate unit and wrote a few extras to deal with path names in Unicode
+//      - Implemented all calls in VirtualExplorerTree and ShellUtilties to make exclusive use
+//        of WideStrings. Only Three functions in ShellUtities are not Unicode and only
+//        effect VET if NOT using the shell defined Columns.
+//      - Changed to property name System in TNamespace to SystemFile due to confict
+//        with the use of the System unit and the Copy function (Reported by Adem Babba, thanks)
+//
+// 01.19.02
+//      - Eliminated the VETDropdownForm file and associated overhead of that method of making
+//        a dropdown window
+//      - Implemented dual speed Auto scrolling of combobox dropdown like Explorer,
+//        just because Werner asked :^)
+//      - Added AutoComplete to Edit of Combobox.  A few things are still not done
+//         1) the autoscroll of the AutoComplete is not working
+//         2) The selection rectangle is drawn in an inactive color
+//         3) The autocomplete is not Unicode (waiting for Poll results)
+//         4) Need to understand how it should work with the TExplorerComboBox (like explorer?)
+//      - Rewrote the whole Combobox class breaking it up into sub-objects that expand in
+//        the OI for easier usability.  No effort was made to make it a transparent upgrade,
+//        you will get errors and loose property settings.
+//
+// 01.17.02
+//      - Add the Current RootNamespace to the parameter list of OnRootChanging. *Note the order*
+//      - Add Alt-Down Arrow to drop combo
+//      - Combo browses to path if typed in even if it not connected to anything
+//      - Dropdown animation respects system settings (SPI_GETCOMBOBOXANIMATION)
+//      - Added SelectedNodesDelete, SelectedNodesCopy, SelectedNodesShowProperties, SelectedNodeCut and PasteFromClipboard methods to VET
+//
+// 01.16.02
+//      - Bug fix in the Enumfolder method with OnEnumFolder defined and toHideRecycleBin
+// 01.13.02
+//      - Compatible with VT 3.0.4
+//
+// 01.10.02
+//      - Reworked mouse handling of TExplorerCombo to be like Explorer
+//      - Reworked the drawing of the combo dropdown button
+//      - Changed defaults of combo properties to be like explorer
+//      - Auto select path text in TExplorerCombo after node selection like explorer
+//      - Bug fix: ExplorerComboBox text not selected when path typed in then browsed to
+//      - Implemented code to allow special folders (at least at the desktop and
+//        My Computer levels) to be typed in and browsed to in the ExplorerComboBox
+//      - Combobox defaults to the desktop folder if not linked with other VET
+//      - Implemented the sizing of the Edit box in ExplorerComboBox like the
+//        TEdit control so they can stay the same size regardless of Font.
+//      - Implemented a MinEditHeight property to override the above calculation
+//      - Implemented an AlwaysExpandDrives property in ExplorerComboBox to mimic
+//        explorer if desired
+//      - Implemented an OnInvalidPath event in ExplorerComboBox that fires if the
+//        user enters a path that can not be found. If not assigned a default
+//        message is shown
+//      - Disabled the annoying hourglass cursors in ExplorerComboBox on dropdown
+//      - Fixed couple of memory leaks thanks to Milan Vandrovec
+//
+//
+// 01.08.02
+//      - Updated the UnicodeRichEdit again for Milan.  Only uses the custom draw
+//        for BCB under Win9x and RichEd20.dll.
+//      - Reworked the new custom draw code for the pushbutton on the combobox
+//        now scales with the windows settings. Uses windows setting to calcualate
+//        positions and dimenstions.
+//
+// 01.07.02
+//      - Added Theme support for the ExplorerCombobox.  Removed the TSpeedbutton since
+//        I have to custom draw the themed button anyway custom draw the regualar button
+//      - Used system images and metrics to display the dropdown button
+//      - Modification for BCB compatibility
+//
+// 01.06.02
+//      - Fixed problem in VET Persistence class when tree rooted with custom
+//        path or PIDL.
+//      - Reimplement the streams so future changes will not break existing persistent
+//        streams unfortunately streams created previous to this release will be broken.
+//
+// 01.05.02
+//      - Fixed color issues with ExplorerCombobox.
+//      - Fixed design time drawing of text and image in ExplorerComboBox
+//      - Fixed issue with not allowing Desktop node to be without a checkbox
+//      - Fixed small issue with TNodeStream Load and Save methods
+//      - Fixed problem with ViewManager and duplicating TStorage trees causing file
+//        to double with each save.
+//      - Fixed issue with Storage.CheckedFileNames.  Was returning files that only
+//        had the mixed checkbox so it was not a valid checked node.
+//              The property as it stands now will return *all* nodes that are
+//              valid files/directories and have a checkmark.  This means that it
+//              is possible to return a directory and all subdirectories under it
+//              if the parent directory is fully checked.  It is up to calling
+//              program to filter out any folders that may be redunant for cases where
+//              the parent node is expanded and checked, causing all its children to
+//              be checked.
+//
+// 01.02.02
+//      - Reworked the Shell Notifier thread.  Removed a lot of unnecessary overhead
+//        and found a better implementation to drasticlly speed up the response of
+//        VET to any shell response.  For small number of files the response is
+//        instantanous yet for large number files this does not have negative effects on
+//        the thread and it is still significantly faster then before.
+//      - Added special case handling of UpdateDir notify events to rebuild the tree.
+//        XP is very lazy (Win2k less so) about sending detailed events (even if we
+//        explicitly send a CreateItem notification to the shell it still only generates
+//        a UpdateDir for the Desktop)
+//      - Fixed problem with user defined menus popping up after the context menu
+//        closed.
+//      - Fixed logic error in Notification causing VET to miss some file change events
+//      - Fixed memory leak when "Hide root folder" option was used
+//      - Fixed AV issue with RichEdit in ExplorerComboBox and BCB debugger
+//
+//                               Version 1.7.6
+//        COMPILE COMPATIBLE WITH VIRTUALTREEVIEW 2.7.5 AN UP ONLY
+//
+//  12.28.01
+//      - Fixed the UnicodeRichText for the ExplorerCombobox.  Win9x with       }
+//        RichEdit 2.0 or greater (unicode aware richedit) was done incorrectly }
+//      - Bug fixes.
+//      - Reworked FreeNode to be faster
+//      - If a Folder node is selected then deleted the focus moves to the deleted
+//        nodes parent. (Forces a change event to keep linked compoents from displaying
+//        the contents of a delete node, plus it is how Explorer works)
+//      - "Spiced up" the TExplorerCombobox. It now supports:
+//              - Background colors
+//              - Background images
+//              - Added a defineable "grabbable" border around the dropdown so it
+//                  is easier to grab
+//              - Added option to show full path or just the file name
+//      - Fixed issue with the new ChangeNotification system.  It is highly
+//        possible that the ChangeNotifier event can be called reentrantly
+//        depending on how the components are connected together.  Added flags to let
+//        the VET components keep track of when they are processing a change notification
+//        and to ignore notifications that are fired due to something done from
+//        within that notification cycle.
+//      - Added parameter to OnRootChanging to actually make it a useful event
+//
+//  12.26.01
+//      - Reworked the Combobox edit.  When typing in the path the feedback was
+//        strange compared to Explorer
+//      - Could not copy the text in the ComboEdit, pressing Ctrl erased text! Fixed
+//      - Added intellegece to the ComboEdit.  If an invalid path is entered the
+//        Combo will walk the entered path and hilight the path from the point that
+//        it becomes invalid to the end to help show where the error occured.
+//      - Added F4 hot key to force dropdown
+//      - Fixed typo in ExplorerComboBox. Sizable property is now Sizeable.
+//
+//                               Version 1.7.5
+//        COMPILE COMPATIBLE WITH VIRTUALTREEVIEW 2.7.5 AN UP ONLY
+//
+//  12.21.01
+//      - Added work around for a small problem with VT's AutoTriStateTracking by
+//        adding the ctTriStateCheckBox check type to the node immediatly after adding
+//        it to the tree if toCheckSupport is enabled.
+//      - Finished up details of Checkbox support (Setting checks by passing
+//        file names)
+//      - Minor changes to Combobox edit to mimic Explorer more closely
+//      - Bug fixes in the DropDownForm
+//
+//  12.18.01
+//      - Reworked all the threads.  It turns out I was abusing the Event Objects.
+//        Since I did not want to be branded an Event abuser I now track if the event
+//        is signaled or not and only call ResetEvent or SetEvent if it is not already
+//        in the desired state.  By setting and resetting events over and over unnecessarily
+//        the event becomes unpredictable in triggering a WaitForSingleObject function.
+//        The threads are now much more predictable and don't miss events/images filling
+//      - Fixed self triggering ShellNotifications if the hidden recycle folders
+//        accross multiple drives where expanded.  Reading the folders fires Notify
+//        Events which cause VET to reread the folder which caused more firing of
+//        Notify Events.  The hidden Recycle folders will not auto update if
+//        their contents change without a manual refresh.  The normal RecycleBin will
+//        work as expected and auto-update.  It is not the best solution but I do
+//        not know how to detect the recycle folders with high confidence (the folders
+//        are renameable)
+//
+//  12.15.01
+//      - Checkbox persistence is finally working as it should.
+//
+//  12.14.01
+//      - Added a global ViewManager object so an application with muliple VETs can
+//        take on the views of other VETs without those needing to be created to get
+//        at their ViewObject property.  It also allows all VETs to be saved in one file.
+//      - Bug fixes: Obviously *NOBODY* is using Views since a few versions ago it was totally broken <g>
+//
+//  12.12.01
+//      - Reworked Inter-Component linking.  Now works on by global VETChangeDispatch
+//        object.  This object manages IVETChangeLink interface objects.  Any thing
+//        can be a client of or server to TVirtualExplorerTree, TExplorerListview, TExplorerTreeview,
+//        or TExplorerCombobox.
+//        CLIENTS:
+//        Simply define a client class and add a TVETChangeNotifyEvent
+//        method in it.  Register the client with the desired VirtualControl with
+//        VETChangeDispatch.RegisterChangeLink passing the Source (VirtualControl),
+//        Client (the object wanting to be notified of the VirtualControl changes),
+//        the address of the method to call in the Client object when a change
+//        occurs, and a method to call when any IVETChangeLink object is being destroyed.
+//        If the Client object is destroyed or if the link is to be broken
+//        call VETChangeDispatch.UnRegisterChangeLink using one of the following flags:
+//        utServer,       // ONLY USED FOR SERVER OBJECTS: Breaks links of a server object with clients
+//        utClient,       // Breaks Changes links of a particualr Client from all Server object, only Client parameter used
+//        utLink,         // Breaks a particular link between a Client and a Server, both Client and Server paramaters must be used.
+//        utAll           // ONLY USED FOR SERVER OBJECTS: Breaks all links of a
+//                        // single object regardless, Client and Server parameters should point to same object
+//        SERVER:
+//        To create a server to a VET component call TChangeDispatch.RegisterChangeLink
+//        with a Server object and the VET component as the client.  The ClientOnChangeEvent must be the
+//        VET's ChangeLinkChanging method and the OnFreeing method should be the
+//        VET's ChangeLinkFreeing method.  Then in your server object call
+//        VETChangeDispatch.DispatchChange with the new PIDL the VET control should BrowseTo.
+//        This architecture allows any number of VirtualControls to be synced together and in any order
+//
+//  12.08.01
+//      - Fixed bug introduced with VT 2.7.3 with setting parent node selected when
+//        the current selected node is within a collapsing a branch
+//      - Updated the TExplorerCombobox.  It now an editable Unicode aware control
+//      - Added options to allow TExplorerCombobox to be ReadOnly
+//      - Added options to allow TExplorerCombobox to display Normal Names or Full Paths
+//
+//
+//  12.03.01
+//      - Fix for new bug in VT with multiselect and selections
+//       toLevelSelectConstraint is buggy when setting focus through code switched
+//       over to toSiblingSelectConstraint.
+//
+//                        Version 2.7.0
+//
+//   COMPILE COMPATIBLE WITH VERSION 2.7.3 OF VIRTUALTREEVIEW AND ABOVE ONLY
+//
+//  12.04.01
+//      - Double Buffered TExplorerCombobox to keep from flickering.
+//
+//  12.02.01
+//      -  Updated VET to compile with VT 2.7.3
+//      -  Removed code! VT now supports IxxxxHelpers for drag images!
+//      -  Bug fixes
+//      -  Reworked and included overview demo
+//
+//
+//                        Version 2.6.8
+//
+//   COMPILE COMPATIBLE WITH VERSION 2.6.11 OF VIRTUALTREEVIEW AND ABOVE ONLY
+//
+//  11.22.01
+//      - More bug fixes with Checkbox support
+//      - More optimizations of the Checkbox/Persistent Column support
+//
+//  11.19.01
+//      - Fixed bug with file type association notification if registry key does not exist.
+//      - Reinsterted some code removed yesterday. VT is not quite fixed in the
+//        uninitialized children checking area.
+//      - If no node is selected in TExplorerListview then ctl-v paste should paste
+//        into that folder...  Fixed
+//      - Fixed bug in PIDLSearchForInsertPt.  If first or last node were checked,
+//        unchecked, then checked again the search would not find the insert point.
+//      - Fixed bug in TStorageRoot.SelectedPaths. Did not retrieve paths of nodes
+//        that had not been initialized.  Force initialization of all nodes first.
+//      - Reworked the IShellLink class to be more efficent and less mistake prone
+//
+//  11.18.01
+//      - Fixed bug with ShellColumns and VETColumns in base VET.
+//      - Removed some code that corrected bugs in VT that were corrected in VT 2.6.11
+//      - VET now will respond to icon changes during an file type association change
+//
+//
+//                      Version 2.6.7
+//
+//  11.15.01
+//      - Any class with ReadFromStream/File and WriteToStream/File were changed to
+//        be more "Delphi" like with LoadFromStream/File SaveToStream/File
+//      - ViewManger replaced Get and Set methods with corresponding properties with
+//        these methods as the getters and settter.  I don't know why this was not
+//        done in the first place.
+//      - Made sure everything is WideStrings where applicable.
+//      - Added a new OnRootChanging event, with an "Allowed" boolean
+//      - In TExplorerListview only (for now) column widths, position and visibilty
+//        are saved on a per node basis (like explorer) TreeOption.VETMiscOption
+//        toPersistentColumn.
+//      - Add event to allow user columns in ShellColumn mode, OnAddCustomShellColumn.
+//      - Fixed bug and published OnCustomColumnCompare
+//      - Added new simpler demos
+//      - Included TShellLink component that encapsulates reading and writing of
+//        ShellLink (*.lnk) shortcut files.
+//
+//  11.13.01
+//      - Fixed bug with restoring of selectetd nodes during refresh or using
+//        views
+//      - Checkbox persistence implemented.
+//      - Published the Incremental search properties
+//      - Drag Drop default is now False
+//
+//  11.12.01
+//      - Fixed bug with ShellNotifications.  VET did not respect OnEnumFolder
+//        filtering when responding to shell changes.
+//      - Implemented a more robust way of finding the "unknown" association icon
+//        and the closed folder icon.
+//      - First integration of the NodeStorage Classes.  These will make checkboxes,
+//        column widths, and NodeData persistent.
+//
+//  11.09.01
+//      - More issues with ExplorerComboBox fixed
+//           - did not work right with ExplorerListview
+//      - BrowseTo and BrowseToByPIDL is not work in ExplorerListview
+//
+//
+//                      VERSION 1.6.7
+//
+//  11.08.01
+//      - Changed the Attributes shell notify event to detect changes on network machine
+//        printers changes.
+//
+//  11.07.01
+//      - Fixed column editor locking the owner VET from updating screen.
+//      - Anchored the "Live Update" checkbox in the column editor correctly.
+//      - Added an OnRootChange event.  Called when the root shell folder of VET changes
+//
+//                              VERSION 1.6.6
+//         *************   Required VT 2.6.5 to compile *********************
+//
+//  11.06.01
+//      - Bug Fix with InternalWalkNodeToPIDL AV if control not active and Shell
+//        notification were active.
+//      - Fixed compatibility issuse for BCB
+//      - Fixed DropDownCount property in TExplorerComboBox
+//      - Added DefaultNodeHeight property to TExplorerComboBox
+//
+//  11.04.01
+//      - Fixed - "Mutual Exclusive" assertion if right clicking is done just right
+//      - Fixed - Right click draws lots of rectangles.
+//      - Fixed - Rename is selected from contextmenu edit cancels if mouse moves in window
+//      - Added Ctrl+Shift+A to invert selection
+//      - Added Alt+Enter & Alt+DblClick to execute Property Dialog
+//
+
+//  10.28.01
+//      - Fixed small bug in TExplorerComboBox when selecting the Desktop folder
+//        or if the VET attached to the ComboBox had selected the Desktop then
+//        opened the Combobox.
+//      - TExplorerComboBox now works like Explorer as "My Computer" is always expanded
+//
+//                          Version 2.6.5
+//      ***** THIS WILL NOT COMPILE WITH THE VET DEMO PROGRAM ******
+//
+//  10.28.01
+//      - Added TExplorerComboBox.  It is UNICODE aware although you can not type in
+//        the editbar yet.
+//
+//  10.27.01
+//      - TExplorerListview: New Backspace key now syncs TExplorerTreeview
+//      - TExplorerListview/TExplorerTreeview syncing problem when TExplorerTreeview
+//          collapsed... Fixed
+//      - Removed the code in BrowseToByPIDL that forced the selected node to the
+//        top node postion.  VT will do that if necessay when Selected := True
+//      - TExplorerListview now responds to Enter by going into selected folder if
+//        it is a folder or executing the file if it is a file, or more precisely
+//        Enter = Mouse Left Button Double Click
+//      - TExplorerTreeview ShowRoot now defaults to false to mimic Explorer
+//      - Added node Focus settings when VET is resets it RootFolder
+//
+//  10.23.01
+//      - Allowed TExplorerListview to be selected by clicking the icon as well as the text.
+//      - In TExplorerListview BackSpace backs up one level of folders.
+//      - More improvements and bug fixes in TExplorerListview
+//
+//  10.22.01
+//      - Fixed incorrect usage of internal IShellDetail usage
+//      - Overrode VT options to not allow toAutoSort, which cause infinate recursion
+//        and is not used in VET, and force the single level selection if toMultiSelect
+//        is set.
+//      - Fixed incorrect logic in the implemention of the toShellColumnDetails option
+//        so it did not conflict or be corrupted by the basic VET Column Options
+//      - Fixed "No Handle" problem when dropping a TExplorerListview on the form
+//
+//  10.21.01
+//      - Fixed files from having "+" buttons when VET FileObjects did not include
+//        foFolders.  (WinME shows the "+" for the built in Zip file utilites)
+//
+//                    Version 2.6.1
+//  10.21.01
+//      - Residual problems with all the changes to toShellColumnDetails. AV's in
+//        the demo and during design time.  More checks, fixed.
+//
+//                    Version 2.6.0
+//      **** MUST USE WITH VT VERSION 2.5.43 OR GREATER ***************
+//
+// 10.20.01
+//      - Applied my new found expertise <g> in sorting theory to the TVETPersistent
+//        class.  In a test case with a folder with 7000 files in it, all of which
+//        were selected (that was the weak point of this class restoring the selection
+//        of nodes)
+//           VET 1.5.40 - 12:00 MINUTES
+//           VET 2.6.0  - 3.5 SECONDS Whoo-Hoo!
+// 10.19.01
+//      - Cleaned up the VET file.
+//      - Implemented the "Right click on the header to change/show/hide columns"
+//        like Explorer
+//      - The data in toShellColumnDetails mode is not cached so it is a bit sluggish
+//        but the columns will have titles based on the local and special folder
+//        columns are now supported.  This option really has no real use unless you
+//        are implementing an Explorer Listview clone.  TVirtualExplorerListview
+//        automaticlly supports it.
+//      - Moved all strings into VETResources.pas to allow easier language translations
+//
+// 10.17.01
+//      - Expanded the toShellColumnDetails option to allow the TVirtualExplorerListview
+//        to emulate the number of headers and header titles like Explorer.  This
+//        includes some more work on the IShellFolder2 interface.  It is not fully
+//        implemented yet but the next round of improvement should finish it up.
+//      - PROBLEM: If using threaded images and the first folder expanded is MyDocuments
+//        the MyPictures folder image is wrong, same in ME and Win2k....
+//        SOLUTION:  Reworked Image thread.  Found a property that was calling a non
+//        threadsafe object dealing with the PIDLs.  All code dealing with threaded
+//        image extraction is now internal to the Image Thread. Likely the cause of rare
+//        mystery AV's in the PIDLMgr object though. Image extraction seems faster but
+//        could just be an illusion.
+//
+// 10.15.01
+//      - Moved the ThreadNotifyThread and associated classes to ShellUtilities.
+//        This move allows other components to use the Thread, such as the
+//        TShellToolbar, and TDriveToolbar. Reworked the registration and
+//        creation/deletion aspects of it.  Now to register a window (not just a VET)
+//        with it use the new global function in Shell Utilities:
+//           procedure RegisterShellNotifyControl(Control: TWinControl);
+//           procedure UnRegisterShellNotifyControl(Control: TWinControl);
+//        then respond to the WM_SHELLNOTIFY message.
+//
+//  10.14.01
+//      - Completely reworked the ShellNotificiation Thread.  It is *MUCH* faster
+//        and *MUCH* more professional looking as VET is updated by changes in the
+//        shell.  The update is several orders of magnitude faster, no exageration,
+//        and does not effect node selection in the target folder.  It works very
+//        similar to Explorer now.
+//      - Along with the above a more sophisticated ShellNotify event is available.
+//        it does not catch all file activity but the folder that the activity can be
+//        found along with media changes, drive mapping/unmapping etc.
+//      - The ShellNotifyThread now is completely dead if the VET options are set
+//        to not use it.
+//      - VET now detects and refreshes the details, such as Attributes, if they
+//        are changed.
+//      - When selecting mulitple objects and their context menu is shown the
+//        tree unselects all but the node that the mouse was over.  This is due
+//        to the toRightButtonSelect option but this also must be set to right
+//        drag.  Not sure how to fix it.  ... FIXED ...
+//      - Reworked the sort routine.  It still assumed a fixed order for column contents
+//        from a number of versions ago.
+//      - Added an event to handle Sorting of Custom Columns
+//      - Sorting now detects toShellColumnDetails and uses the Shell to sort the
+//        columns if possible.
+//      - Fixed AV problem the first time the TExplorerListview was clicked if it
+//        was connected to a TExplorerTreeview
+//
+//
+//  10.06.01
+//      - In Win2k the drag images where doubled
+//      - Win2k drag image did not track mouse button down correctly
+//      - Started reworking the ShellNotifyThread
+//
+//  10.04.01
+//      - Found another issue with ShellNotifyThread if more than 1 VET was
+//        registered. Caused invalid pointer AV.
+//
+//
+//                      VERSION 1.5.40
+//           VERSION 1.3.40 OF VET REQURES VT 2.5.40 TO COMPILE
+//
+//  10.01.01
+//      - Removed the toDragImage in VETMiscOptions.  VT now contains the necessary
+//        hooks to allow VET to handle the IxxxxHelper objects using only the
+//        DragImageKind property.  No streaming support was added for this transition
+//        so it will generate an error in the IDE when it can't read this flag,
+//        ignore it.
+//
+//  9.30.01
+//      - Fixed thread race condition in the ShellNotifyThread
+//
+//  9.29.01
+//      - Added VirtualExplorerTree property to automaticlly sync two
+//        ExplorerTrees. To expand this capablility a new VET option was added:
+//        VETSyncOptions which allows some flexability in how the target VET acts
+//        when it is syncronized with the source VET.
+//              toCollapseTargetFirst,      // Collapse all expanded node before selecting target node
+//              toSelectTarget              // Select the node in the syncronized Target VET
+//      - Created two VET decendants that that simplify the creation of an Explorer
+//        style Treeview and Listview.
+//
+//  9.14.01
+//      - Added support for Large Images
+//
+//                      VERSION 1.5.31
+//  9.13.01
+//      - property OnDrawHeader has become property OnHeaderDraw in VT
+//      - Added support for user defined ContextMenu in white area of VET
+//      - Published a number of snazzy XP control lookalike options
+//      - Published OnDragAllowed, OnDragOver, OnDragDrop it is highly recommended
+//        that the parameters be left alone.
+//
+//                      VERSION 1.5.28
+//      REQUIRED VT 2.5.28 OR GREATER
+// 9.9.01
+//      - Updated to compile with VT 2.5.28
+//      - Rework Options.  Made a decentant of VT options.
+//      - Added automatic conversion of previous properties
+//      - Removed upgrade support for old UseXXXXX option properties
+//      - Moved the version history to a separate file, History.txt
+//      - Published OnChecked and OnChecking
+//
+// 9.8.01
+//      - Added FindNode and FindNodeByPIDL to search for the node that is represented
+//        by the PathName or the PIDL.  WARNING: This only succeds if the node has
+//        been initialized!  It does not try to force anything to search for the
+//        node.
+//
+//                      VERSION 1.5.20
+// 8.26.01
+//      - With HideRootFolder you could not drop files it that folder
+//      - Shell Notifier thread did not work for HideRootFolder
+//      - If shell wanted to copy a file during D&D it VET alway moved it.
+//        Apparently this has been broken since 1.4.23!!!!!!!!!
+//      - Implemented a reference counting system for showing the wait cursor
+//      - Added two new options:
+//              vetoForceHideRecycleBin:   Never show the RecycleBin
+//              vetoForceShowMyDocuments   Always show the My Documents folder
+//                                         even if user has removed it from desktop
+// 
+//  ************************************************************************
+//  THIS VERSION OF VET REQUIRES THE MATCHING MINOR VERSION OF VT - 2.5.18
+//  ************************************************************************
+//      - VET and VT are now compatible.
+//
+//                      VERSION 1.5.16
+// 8.19.01
+//      - Bug fix. When using NodeDataSize for user data and HideRootFolder
+//        VET did not show any files
+//
+//                      VERSION 1.5.15
+// 8.10.01
+//  ************************************************************************
+//  THIS VERSION OF VET REQUIRES THE MATCHING MINOR VERSION OF VT - 2.5.15
+//  ************************************************************************
+//      - VET and VT are now compatible again with modifications to VT.
+//
+//                      VERSION 1.5.14
+//  8.8.01
+//      - Published HotCursor property.
+//      - TVETOnShellExecute declared incorrectly.
+//      - VET did not honor the HotColor property.
+//
+//                      VERSION 1.5.13
+//  8.2.01
+//      - Fixed a few bugs in the HideRootFolder option
+//  7.31.01
+//      - Updated to work with VT 2.5.13
+//
+//                      VERSION 1.5.9
+//  7.16.01
+//  ************************************************************************
+//  THIS VERSION OF VET REQUIRES THE MATCHING MINOR VERSION OF VT - 2.5.9
+//  ************************************************************************
+//      - Updated the VET to work with the new TreeOptions.
+//             - WARNING:
+//                 It is now possible to select options that will cause VET
+//                 problems.
+//                 The biggest one is toLevelSelectConstraint MUST be set to
+//                      true if using multiple select.  Some day I will try to
+//                      allow this but for now it will throw an error if the
+//                      tree is manipulated with children that are not immediate
+//                      decendants of a parent node.
+//
+//                      VERSION 1.5.8
+//  7.12.01
+//      - Split VET from the VT package
+//      - Added ShellHints option.  Use the hints option to show hints
+//        associated with file (Win98, WinMe, Win2k only)
+//      - Moved the following Properties in to a VETOptions set property:
+//              - UseChangeNotifierThread
+//              - UseContextMenus
+//              - UseDragDrop
+//              - ExecuteOnDblClk
+//              - FoldersExpandable
+//              - HideRootFolder
+//              - UseImages
+//              - UseShellColumnDetails
+//              - UseThreadedImages
+//        Defined read methods for the old properties in DefineProperties
+//        so the upgrade should be transparent to existing users.
+//
+//                      VERSION 1.5.7
+//  ************************************************************************
+//  THIS VERSION OF VET REQUIRES THE MATCHING MINOR VERSION OF VT - 2.5.7
+//  ************************************************************************
+//
+//  7.07.01
+//      - Made SelectedToPIDLArray and SelectedToNamespaceArray functions public
+//      - Fixed bug in test to see if "+" should be display (incorrect for Folder only view)
+//      - Published OnPaintText property
+//
+//                      VERSION 1.5.1
+//
+// 7.02.01
+//      - Enough changes to increment the minor version number.
+//      - Auto Edit Select for CreateNewFolder broken with last VT release - fixed.
+//
+// 7.01.01
+//      - Implemented the Columns using the new mechinism in VT which allows
+//        decendants of TVirtualColumn to be created.  Because of this Header is
+//        now published and it is possible to manipulate the Column Details in the
+//        the Object Inspector!!!!!!
+//          - EFFECTS TO CURRENT VET USERS
+//              1) The VET Column Colors properties under VETColors is gone, it
+//                 can be done through the Header property like VT.
+//              2) The VisibleColumns property is gone.  Use the Column Editor
+//                 through the Header Property to create new columns and assign
+//                 what detail required through the ColumnDetails property in
+//                 each column.
+//              3) Custom Columns are a bit different. The ONLY time OnGetVETText
+//                 is called is if the ColumnDetails is set to cdCustom.  To do
+//                 this at runtime you will have to cast the TVirtualColumn to
+//                 a TVETColumn:
+//                 (VirtualExplorerTree.Header.Columns[0] as TVETColumn).ColumnDetails := cdCustom;
+//
+//                 As a result of this the Handled parameter has been removed so
+//                 it is necessary to change the Event declaration.
+//      - Updated the Demo to reflect the new changes to the Columns.
+//
+// 6.26.01
+//      - Fixed another bug with Views and HideRootNode mode, WalkPIDLToNode
+//        should not return the RootNode
+//      - Published NodeDataSize so apps can attach custom data to a node.
+//
+//                      VERSION 1.4.35
+// 6.26.01
+//      - Fixed bug in ChangeNotification thread, not responding to UpdateDir
+//      - Added access to selected nodes:
+//              SelectedPath - Path of the currently selected node
+//              SelectedPaths - Paths of all currently selected nodes
+//              SelectedFile - Filename of the currently selected node
+//              SelectedFiles - FileNames of all currently selected nodes
+//      - Changed "Listview" mode to "HideRootFolder" to make it reflect what it does
+//      - Fixed AV if in HideRootFolder mode if the RootFolder that is requested
+//        can not be created because the SpecialFolder does not exist or the Path is invalid.
+//
+//
+//                      VERSION 1.4.34
+//  ************************************************************************
+//  THIS VERSION OF VET REQUIRES THE MATCHING MINOR VERSION OF VT 2.4.34
+//  ************************************************************************
+// 6.21.01
+//      - By popular request added "Listview" mode. The single root folder is not
+//        shown in this mode.
+//
+// 6.19.01
+//      - Added support for IDragSourceHelper.  If under Win2k the drag image
+//        will be shown over any drop target that supports IDragTargetHelper.
+//        This includes the Desktop IE and Windows Explorer.
+//
+// 6.18.01
+//      - Bug Fix Possible to send invalid values to IContextMenu.GetCommandString
+//        added additional checks. More RangeCheck errors fixed.
+//      - Implemented faster FullCollapse based on how VET expandes nodes.
+//      - Hooked '/' collapse all key to use my new FullCollapse method.
+//      - Finished porting over OLE stuff to VT 2.4.28, waiting for next version of VT
+//        to add a few items that were overlooked to complete conversion.
+//
+// 6.17.01
+//      - Bug Fix - logic errors at design time between Active and RootFolder.
+//
+// 6.16.01
+//      - Implemented my own FullCollapse method.
+//
+// 6.11.01
+//      - Fixed a number of range check errors in the MenuMessages.
+//
+// 6.08.01
+//      - Added another method to create new folders that is more generic
+//        CreateNewFolderByNode.  Pass a node and a new folder will be created
+//        in it, the node must be a folder itself.
+//
+//                     VERSION 1.4.24
+// 6.06.01
+//      - Added a CreateNewFolder method. Pass the target folder where a new folder
+//        will be created in.  The passed folder MUST exist.  It will act just like
+//        Explorer creating a new folder named "New Folder" or "New Folder (x)".
+//      - Reworked the context menu/ right click again.  Now the Right mouse button
+//        works just like Explorer with right dragging popping up a context menu to
+//        verify the operation or choose a different operation.
+//
+// 6.05.01
+//      - Fixed bug in NotifyThread for syncronization of threads.
+//      - Fixed bug calling Free instead of Release in a referenced counted object!
+//      - Work around for confirmation dialog popuping up when drag + shift to copy a
+//        file.  The Shell does not like VT's calling of DragOver from within the
+//        DragDrop method. Added Dragging flag so DragOver does not call the shells
+//        IDropTarget interfaces during this call to DragOver, the inherited DragOver
+//        is still called to preserve whatever VT was trying to do.
+//
+//                     VERSION 1.4.23
+//
+// 6.04.01
+//      - Reworked the Right Click Context Menu code to work just like Explorer.
+//
+//                     VERSION 1.4.22
+//
+// 6.03.01
+//      - Reworked the Right Click Context Menu code to work a bit more like
+//        Explorer.
+//
+//                     VERSION 1.4.21
+//
+// 6.03.01
+//      - Added Column Color options under VETColors as to allow VET to look like
+//        WindowsXP (or so I am told <g>).
+//      - Updated Demo to show the new Color properties.
+//      - Reworked the threaded images a bit.  If the file is a Folder and part
+//        of the File System then the default image is the Folder image and not
+//        the default Windows image.  It looks better.
+//
+//                     VERSION 1.4.20
+//
+// 6.02.01
+//      - Changes necessary to work with VT version 2.4.20
+//
+//                     VERSION 1.1.18
+// 6.01.01
+//      - Added two new events to add extra functionality to Context Menus.
+//           property OnContextMenuItemChange;
+//           property OnContextMenuShow;
+//      - OnContextMenuItemChange is called when the items in the context menu
+//        are hilighted during the time the menu is open.
+//      - OnContextMenuShow is called just before the menu is shown.  It is filled
+//        with items and it is possible to modify it at this time.  Items can be
+//        disabled (I would not recommed removing them) and new items added.  This
+//        will allow new ContextMenu items to be added WITHOUT creating ContextMenu
+//        handlers!!!!!
+//
+//                     VERSION 1.1.17
+//  5.25.01
+//      Image thread is now FINALLY thread safe!!!! :^)  Added a PeekMessage in
+//      during the DoFreeNode to flush out the message queue of SetIconIndex
+//      messages before allowing a node free itself.  This way a pending message
+//      will not try to access a node that was just freed.  I can't make it crash
+//      anymore!!!
+//
+//                     VERSION 1.1.16
+//  5.20.01
+//      - Updated VETPersistent to choose if the tree stores and restores the
+//        currenly selected nodes.  For large directorys with thousands of selected
+//        nodes being destroyed this became too time consuming.  After all it is
+//        redundant to save selected nodes if those nodes are being deleted or moved.
+//      - Reworked the ShellNotify thread.  Moved the delete timer into the thread and
+//        out of the VET.  Instead of sending a message for each file deleted it now
+//        simply updates the parent folders.  The thread queues the notifications and
+//        ignores duplicates.  The time between when the thread sends a TMessage to
+//        the VET's is definable through the ShellNotifyRefreshRate property the
+//        global TNotifyEventThread class.  Default is 250ms.  This change made a
+//        drastic difference on shell file manipulation speed when manipulating a
+//        large number of files.
+//
+//  5.14.01
+//      - Added an Active property to disable VET during design time mainly.
+//      - Added OnGetVETText to hook into the column text so more columns can be
+//        added or the existing ones overridden.
+//
+//  5.12.01
+//      - Added a RefreshNode method to refresh a node after a change in the
+//        enumeration filters for example.
+//
+//
+//                     VERSION 1.1.7
+//  5.11.01
+//      - Reworked the entire Shell Notification system.  Decided too many PIDLs
+//        and objects were being created.  Also if more than one VET was in the
+//        application weird things happened.  Created global thread that VET's
+//        register themselves with.  The objects passed to each VET are reference
+//        counted (not COM my own implementation) so only one object for each
+//        notificiation is now created and shared between the VETs.  One concequence
+//        of this is that this is not thread safe. The VETs temporaraly modify the
+//        PIDLs as they are processing the notification. The notifications MUST be handled
+//        within the context of the main thread and all VETs must be in the same thread.
+//        It is probably not an issue since the VCL is not thread safe anyway.
+//      - Removed static linking to external functions so Mathias Thorell can use
+//        VET in BCB5.  They are now dynamiclly linked in the initilization sections.
+//      - Reworked the icon thread to be completely (ha) thread safe.
+//
+//                     VERSION 1.1.2
+//  5.6.01
+//      - Made the Icon Thread more thread safe with critical sections. Ran into
+//        problems with more than 1 VET in a project, so up till now just lucky.
+//      - If the tree is rooted off a custom or special folder the Shell Notification
+//        thread did not work. Fixed.
+//
+//                      VERSION 1.1.1
+//  5.6.01
+//      - Moved all the VET color properties into a separate class.
+//      - Fixed bug with Compressed folder color.
+//      - Changed the version numbering to be consistant with VT
+//
+//                      VERSION 1.1
+//  5.5.01
+//      - Implemented MultiSelect.  It is slightly limited by the fact the Shell
+//        can only handle a folder and it immediate children in drag/drop operations.
+//        So VET forces the tree to have the voSiblingSelectConstraint in the options
+//        property for now.  There are some possibilites that need to be explored
+//        so this limitation may be eliminated in the future.
+//      - Implemented Short-Cut keys for Delete <Del>, Copy <Ctrl + 'C'>,
+//        Paste <Ctrl + 'V'>, and Cut <Ctrl + 'X'>.
+//
+//                      VERSION 1.0b
+//  5.4.01
+//      - Finally think the refreshing of the tree after a file delete/
+//        create is fixed and is working right in Win98, Win2k, and WinNT
+//
+//                      VERSION 1.0a
+// 4.29.01
+//      - Implemented Ctrl + Left Click on a column header to toggle between
+//        Autofit with and its previous width.
+//      - Implemented Shift + Left Click on a column header to toggle between
+//        minimum width and its previous width.
+//      - Bug fix in Created and Accessed Time (oversight when coverting to
+//        WideStrings)
+//      - Implemented column click sorting in report view.
+//      - "Fixed" refreshing of Recycle Bin by forcing a refresh of entire tree
+//         the notification PIDL is not valid.  :^(
+//      - Fixed bug when desktop item was created or renamed if c drive node is
+//        initialized but not expanded the refresh would expand as far as it
+//        could since VET also get a refresh for the physical desktop folder
+//      - Added FolderTextColor and FileTextColor properties to try to make folders
+//        and files visually different to help accent the distinction between them.
+//
+//                      VERSION 1.0
+//
+// 4.28.01
+//      - Bug Fixes
+//         : Saving VET to the stream did not save if the folder was expanded or
+//           not. It now stores this info.
+//         : Context menu actions were not being executed due to inverted logic
+//         : Implemented DoInitChildren so "*" would expand all subfolders correctly
+//         : Found a few memory leaks using MemProof thanks Atanas Stoyanov
+//           <www.totalqa.com> and it is FREE!
+//      - Implemented a Context menu event.  The verb is passed along with the
+//        chance to handle the action and not allow it to be passed on to the
+//        namespace to be executed by the shell.
+//      - Added property to choose file sizes shown in Explorer (KB) style or
+//        actual size.
+//      - Added F5 to refresh tree
+//
+// 4.27.01
+//      - Implemented a thread to monitor changes in the Shell using the
+//        undocumented SHChangeNotifyRegister function.  Tried various implementation
+//        ideas and finally settled on monitoring all deletion notifications.  In
+//        order to speed up the task on large file manipulations BeginUpdate is
+//        called on the first deletion of a node.  A timer is then started and
+//        and it calls EndUpdate some time later.  This allows the notification
+//        thread and the main thread to continue to call DeleteNode but with greatly
+//        increased speed since the display is not updated for every node.  It is not
+//        as fast as explorer but I will see how this works before changing the
+//        individual deletes into a single UpdateParentDirectory.  The way it is done
+//        has a better feel when taking a few files from a folder that contains thousands
+//        of files.  The other way would have to ReEnumerate the folder which "feels"
+//        slower.  User feedback will dictate which way this goes.
+//
+// 4.21.01
+//      - Implemented TVETPersistent to store and restore the state of VET.
+//
+//      - Worked on documenting methods in TNamespace.
+//
+//      - Implemented TVETPersistent, a class to to store the state of a VET.
+//      It can store the view state of the VET to a memory stream or to disk to
+//      allow the tree to be restored to the state it was in before, as long
+//      as the folders that were expanded are avaiable.  It expanded into
+//      these branches as far as possible before giving up.
+//
+//      - Implemented a TView, TViewManager, and TViewList class to store "Views"
+//      of VET.  These are simply a collection of TVETPersistent objects that can
+//      be quickly switched between.
+//
+// 4.20.01
+//      - Implemented FoldersExpandable property to be able to show folders but
+//      not allow the user to expand the folder
+//
+//      - Moved Header to public so the columns can be manipulated programaticlly
+//      This will be implemented in the Object Inspector at a later date.
+//
+//      - Updated ShowContextMenu to include "Rename". As a result VirtualExplorerTree
+//      is called just after the context menu is closed with the chosen verb as a
+//      parameter.  It is possible at this point to handle the users selection or
+//      allow IContextMenu.ExecuteCommand to handle it.  Thanks to Giannakopulos
+//      Kostas for clearing me up on a few issues.
+//
+//      - Redesigned the demo to not look so cluttered.
+//
+//      - Namespace names are now editable through VT's standard UI.
+//
+// 4.19.01:
+//      - Added an OnEnumFilter event that is fired during the enumeration of the
+//      folder. From this event the program can filter on name, type of folder,
+//      or any other criteria that is avialable in a TNamespace class. Thanks to
+//      Mathias Thorell for this idea. Updated Demo to show this feature.
+//
+//      - Began work on the notification thread that moniters the system for
+//      changes that need to be reflected in VET.  From past experience it is
+//      necessry to filter these to the minimum number necessray when a large
+//      number of files are being manipulated or performance suffers greatly.
+//
+//      - Began work on implementing the IShellFolder2 interface.  Thanks to
+//      Kostas Yannakopoulos for his Explorer Treeview component which contains
+//      the conversion from C to Delphi for this interface and for other various
+//      nuggets to make VET better.
+//
+//      - Made change to code to compile under D4.  IShellFolder function parameters
+//      defined incorrecty in D4 need type casting to pointer.
+//
+//      - Added support for "rooting" the tree off of special folder available
+//      through SHGetSpecialFolderLocation or allow a custom pathname to be used
+//      using the RootFolder and RootFolderCustomPath properties
+
+
+
+VIRTUALSHELLUTILITIES.PAS CHANGES
+
+//
+//                      VERSION 2.5.40
+// 10.3.01
+//      - Fixed bug in ExecuteContextMenuVerb it did not handle multiple items
+//      - Reworked ExecuteContextMenuVerb to make it try to find the actual menu
+//        item that corresponds to the verb.  That what the resource ID can be
+//        sent rather than the verb string.  This is important for some namespace
+//        items as they can be picky and not respond to the string verb.
+//
+//
+//                      VERSION 2.5.16
+// 8.18.01
+//      - Bug fix. Memory leak due to not freeing some global TNamespace Objects
+//        when unit unloaded
+//      - Brought version up to match VET.
+//
+// 7.08.01
+//      - Added a AdvDetailsSupported property to test if namespace can render
+//        information about its column details through IShellFolder2 or IShellDetails
+//
+//                      VERSION 1.4.35
+// 7.02.01
+//      - Fixed incorrect WideString to PChar casts
+//
+//                      VERSION 1.4.34
+// 6.20.01
+//      - Fixed bug in multiple object Properties
+//
+// 6.11.01
+//      - Fixed range check error in DirExists
+//
+// 6.08.01
+//      - Fixed bug in ValidDetailsIndex.
+//
+//                      VERSION 1.4.22
+// 6.06.01
+//      - Fixed bug in ShowPropertySheet
+//      - Reworked most methods that can use multiple namespaces as parameters to
+//        be consistant.  This may break some code and I am sorry but I did not
+//        realize how inconsistant it was.  To call methods that take multiple
+//        namespaces the passed namespaces MUST BE immediate CHILDREN of the namespace
+//        used to call the method. This means for instance to use the Delete method
+//        to delete a namespace you use the Parent propery of that namespace to
+//        call the Delete method with the child namespace to delete.  To only act on
+//        one namespace you may call the method of the namespace to be acted on.
+//
+//
+//  6.02.01
+//      - Reworked ShellDetailInteface property getter. Added nil checks and removed
+//        code to use the IShellFolder.GetUIObjectOf to retrieve interface.
+//      - Fixed DetailsOf() method. Returned information from nonexistant item. (or crashed)
+//
+//                      VERSION 1.4.21
+//
+// 6.02.01
+//      - Added support for Shift-Right click extended Context Menus
+//
+//                      VERSION 1.4.20
+//
+// 6.02.01
+//      - Changes necessary to work with VT version 2.4.20
+//
+//                      VERSTION 1.1.18
+//
+// 06.01.01
+//      - Added two ContextMenu related functions:
+//          function ContextMenuItemHelp(MenuItemID: integer): WideString;
+//          function ContextMenuVerb(MenuItemID: integer): WideString;
+//        The first retrieves the Help string assiciated with the item ID the second
+//        retrieves the verb assiciated with the menu item.  These functions will only
+//        retrieve valid data when a context menu is open.
+//
+//                      VERSTION 1.1.17
+//
+// 05.25.01
+//      - Some cleaning up while writing the documentation.
+//      - Added the missing $ to the BCB stuff.
+//
+// 05.21.01
+//      - Updated the code by Mathias with code from Alexander Egorushkin to make
+//        BCB5 happy.
+//      - Added IDropSourceHelper and IDropTargetHelper interface definitions for
+//        Win2000
+//
+// 05.14.01
+//      - Added code by Mathias Thorell to allow BCB5 to swallow this file.
+//
+//                      VERSTION 1.1.7
+// 05.11.01
+//      - Added a property to tell the namespace if a thread has been Assigned to
+//        retrieve the icon.  Allows VET to discriminate whether it should add
+//        the namespace to the thread queue or if is is already there.
+//      - Fixed some memory leaks again thank you MemProof <g>
+//      - Added OwnsParent property to handle some internal memory leak problems
+//        when a namespace had to create it own parent if it is rooted off something
+//        other than the desktop.
+//
+// 05.06.01
+//                      VERSTION 1.1.1
+//      - Changed the version numbering to be consistant with VT
+//
+//                      VERSION 1.1
+// 05.05.01
+//      - Added ability to execute context menu commands, i.e. Copy, Paste, Cut.
+//      - Added support for multiple PIDL IDataObject and IContextMenu.
+//
+//                      VERSION 1.0
+// 4.30.01
+//      - Bug Fix: Access, Create and Modified (after trying to access the
+//         first two) time were in valid due to an oversight when coverting to
+//         WideStrings.
+//
+// 4.29.01
+//      - Included FileSize format that calcuates the actual number of bytes on
+//        the disk the file is taking along with the physical size of the disk,
+//        and the Explorer version of xx KB
+//
+// 4.20.01
+//      - Added SetNameOf method to edit the namespace name.
+//
+//

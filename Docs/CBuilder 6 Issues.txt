@@ -1,0 +1,23 @@
+
+Issues with C++Builder 6
+
+1) ThemeManager is not put on the Include Path for the project automatically.  
+ 
+   Project > Options > Directories/Conditionals
+
+   Browse to the install path for 
+
+   ${ThemeManagerInstallPath}\Source 
+
+   and add it to the list.
+
+2) The uxtheme.h file has bug in it.  Replace the version that comes with 
+   C++Builder 6 with the supplied version. 
+
+   ${CBuilderINstallPath}\Include\uxtheme.h
+
+
+Drop a VirtualExplorerTree component on a form and compile!
+
+Enjoy,
+Jim

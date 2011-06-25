@@ -1,0 +1,298 @@
+Sep 3, 2007 Version 2.2.0
+
+- WARNING - WARNING - WARNING -
+     TNT is NOT required anymore.  If using TNT Define {$DEFINE TNTSUPPORT} AND YOU MUST ADD THE TNT PACKAGE TO THE REQUIRES SECTION OF THE VSTOOLS PACKAGE!!!!!!!
+- WARNING - WARNING - WARNING -
+
+
+
+- NEWS- NEWS- NEWS-
+New components
+     - TVirtualDropStack: Implements a drop stack as used in UltraExplorer ( Similar to Mac OS).  See the "VirtualDropStack" demo.
+     - TVirtualMultiPathExplorerEasyListview: Listview that may be filled with items from any Path. See the "File Search2" demo.
+     - TVirtualShellBackgroundContextMenu: Menu that mimics the background menu in the Explorer Listview, including all Namespace Extensions installed.  See the "Backgnd Menu" demo.
+     - TVirtualShellMultiParentContextMenu: Menu that allows namespaces from multiple paths be used.  See the "File Search2" demo.
+- NEWS- NEWS- NEWS-
+
+
+
+  - TNamespace is updated to handle context menus and executing verbs on sets of TNamespaces that are not immediate children of the parent namespace.
+  - Fixed bug in Storage associated with a node in VET
+  - Fixed bug in AutoSave and SaveAlbum for Thumbnails
+  - Disabled items no longer cause the HotTrack of the item to activate
+  - Updated the grouping labels 
+        changed STR_GROUPMODIFIEDTODAY to
+        STR_GROUPMODIFIEDHOUR: WideString = 'Last hour';
+        STR_GROUPMODIFIEDTODAY: WideString = 'Last twenty-four hours';
+  - Fixed bug with desktop in 
+     function TCustomVirtualExplorerTree.WalkPIDLToNode(AnAbsolutePIDL: PItemIDList;
+  - Added:
+     function ListBinarySearch(Target: PItemIDList; List: TEasyItemArray; const ParentFolder: IShellFolder; Min, Max: Longint) : Longint;
+     procedure ItemNamespaceQuickSort(ItemArray: TEasyItemArray; const ParentFolder: IShellFolder; L, R: Integer);
+     function ListBinarySearch(Target: PItemIDList; List: TEasyItemArray; const ParentFolder: IShellFolder; Min, Max: Longint) : Longint;
+ 
+      to help work with TExplorerItems in the listview
+
+  - Added Alt-Enter to show properties of selected files in VEELV
+  - Initialize TCustomVirtualExplorerEasyListview.MenuClass and ItemClass if USE_TOOLBAR_TB2K is defined.
+  - Bug fixed, OnRootRebuild wasn't fired when F5 was pressed.
+  - Fixed Mantis entry 0000224: Background color when using UseShellExtraction.
+  - Fixed Mantis entry 0000338: Some thumbs are not sized (UE)
+  - Bug fixed: the selection was not cleared when Browsing to a file using BrowseToByPIDL.
+  - Bug fixed: the first item wasn't focused when changing the root folder.
+  - Fixed selection bug: http://www.mustangpeak.net/phpBB2/viewtopic.php?p=4444#4444- Bug fixed: http://www.mustangpeak.net/phpBB2/viewtopic.php?t=1076
+     ###################################################################
+  - MUST UPGRADE WITH THE LASTEST VIRTUALTREEVIEW IN SVN FIRST!!!!!!!!
+     ###################################################################
+  - Added support for hilighting Encrypted files in VET and the LV
+  - Updated the way the DataObject was handled to allow for showing the new Vista shell images
+  - Added support for the new special variables in the combobox.  See the CommonL ibrary for details.
+  - Fixed ChangeNotify bug introduced last release
+  - Fixed drag drop and a possible AV if the last drop item was deleted from the listview
+  - Fixed problem with image extraction
+  - Bug fixed: all the columns were showed even when ALWAYS_SHOW_ALL_COLUMNS was not defined
+  - Removed StretchThumbs property from TVirtualExplorerEasyListview, it was not needed
+  - Corrected the menu painting of VirtualShellHistory in Vista
+  - Improved thumbnail painting
+  - New property added Selection.FirstItemFocus, it forces the focus on the first item when the LV is rebuilt.
+  - New property added ThumbsManager.Stretch, it stretches the thumbnail images if the bitmap is smaller than the thumbnail size.
+  - Allowed the inherited call for NewText in VET
+  - Added AllowHiddenCheckedItems property
+  - Added Categories to Events at Designtime
+  - Updated the stream version.  The Storage now stores the Thumbnail cell size too.
+  - Added VEELV.ThumbsManager.HideCaption and implemented a view class to display the Thumbnail type views without captions.
+  - Fixed EELV.ThumbsManager.LoadAllAtOnce
+  - Added SortFolderFirstAlways but it is not working yet, being harder then I thought.
+  - VEELV: Fixed bug where the control could rebuild the list and destroy the node that was being dragged if a ShellNotify occured during that time.
+  - VEELV: Reference to a Namespace as begin set to nil after the Namespace as destroyed.  Could cause intermittent AV
+  - VEELV: More robust resetting of cached reference to the LastDropTargetNS, could cause intermittent AV
+  - VET: Fixed bug where tree root would reset to desktop if the FileObject property was changes. 
+  - VET: WARNING - Fix bug where VET would trap an OnChange event and not pass it to the handler if the node was NIL.  Because of the way VT works this would cause event such as ClearAll or Select all to not pass the event.  YOU MUST CHECK FOR NIL A NODE in the OnChange event now.
+  - Added support to bypass VETs internal locking out of allowing multi select to occur in multiple folders.  It is not obvious how to disable this on purpose because TNamespace will crash if you try to do anything like DragAndDrop, contextmenus, etc.  This feature can be useful if carefully used.
+  - Added SelectedPIDL to compliment SelectedFile.  Note the caller must free the PIDL
+  - Added a threaded FileSearch component.
+  - Fixed bug with linking with VET and VEELV if controls created dynamically
+  - Fixed drawing issue with VEELV and captions drawn offset
+  - Updates and mods for more customization
+  - Fixed bug where two columns could have sort glyphs
+  - Some refactoring of Unicode File functions
+  - Fixed bug in selecting filename without the extension in editors that were multi line in VEELV.
+  - General cleaning up
+  - Bug fixes in the column view unit
+  - Fixed Threaded Details in VirtualExplorerEasyListview
+  - When pumping messages you must call PostQuitMessage when WM_QUIT is encountered or the app won't close.
+  - Fixed AV on destroying the VirtualExplorerEasyListview
+  - Fixed problems with D7 packages.
+  - Finally fixed SortFolderFirstAlways property in TVirtualExplorerEasyListview to keep folders on top regardless of sort direction
+  - Changed the order of DoEnumFinished to before the ThumbsManager.LoadAlbum and LoadAllThumbs
+  - Changed the order of DoRootChange to after LoadAllThumbs is called
+  - Fixed problem with property Categories in Delphi 5.  Delphi 5 will not support property Categories.
+  - Made TVirtualExplorerEasyListview.BrowseTo check the eloBrowseExecuteZipFolder option flag and stops the browse at the Zips parent folder.
+  - Fixed problem when using the original VET concept (file and folders shown in the tree). If the folder was on a removable disk and it contained only files it the folder would not have the "+" expand button on it
+  - Added support for filename select will toggle between selecting the entire file name including the extension and just the file name when pressing F2.
+  - Published OnAfterPaint
+  - Made popup hints Left Aligned
+  - Made Popup Info Tips dynamic, if the filename is not fulling show in the control (ends with ellipse "...") the full filename is added to the popup info Tip, else just in Info Tip information is shown.  Mimics Explorer.
+  - Removed redundant code in DoItemFreeing override which removed need for overriding the method, removed the override
+  - Fixed problem with delaying the changing of the root folder when a Treeview is attached to the Listview.  If a folder is dragged from the Treeview quickly the DragEnter will be set to one root folder of the Listview but when the delayed change occurs the listview root will change in the middle of the drag and cause an AV as the drag target is not valid anymore.
+  - Added an OnAfterShellNotify event.
+  - Added special feature for Jeff Pickard.  Define LUCION to add a ProcessMessages to the OnShellNotify call when updating network drives.  I am not a big fan of ProcessMessages so it is a define and not a default call.
+  - Made the Column Editor Forms close when the Escape key was pressed
+  - Fixed issue where if eloBrowseExecuteZipFolder was not set BrowseTo would still drill down into a zip file
+  - The parameter prototype for OnIncrementalSearch changed in EasyListview.  If you have a test in OnIncrementalSearch you should be able to just remove it and let EasyListview handle the incremental search automatically unless you want to do something special.
+  - Fixed bug in the way eloBrowseExecuteZipFolder is handled with BrowseTo
+  - Moved Shell Menus to Common Lib  
+  - Few small bug fixes
+  - Finally found bug with EasyListview/D2007 and Vista
+  - Fixed VirtualToolbar to work with Delphi 2007 and Vista with Composition Enabled
+
+
+
+
+
+
+
+March 18, 2007 Version 2.1.0
+
+  - Added option in Explorer EasyListview to allow threaded Details if the column says it is slow in extracting the Data
+  - Added option to support the "On By Default" flag for custom column handlers.  Some handlers misuse this flag and are always on and can be annoying.  This allows only the primary 4 columns to be show regardless of what the columnhandler returns.
+  - Added Caching the columns detail strings.  Some file types have very slow extraction of advanced columns.
+  - Added the ability to handle the column details string caching in a secondary thread
+  - Renamed UseModalDialogs to VST_UseModalDialogs
+  - Reworked the way the IShellFolder interface was retrived from a TNamespace.  I hope this does not have any negative effects on existing code.
+  - Fixed problem with a dialog showing when expanding a folder with a system folder that the shell will not allow access to.
+  - Implemented threaded background enumeration for the EasyListview Explorer control.
+  - Fixed bug in TNamespace.DetailsAlignment.
+  - Updated to work with new version of CommonLibrary.
+  - IMPORTANT: Some will hate it some will love it but I found a way to move VirtualShellUtilities into the common library so TNamespace can be used without the Shell Components.  It is Unicode enabled by using TntControls and the {$DEFINE TNTSUPPORT} like most other Mustangpeak libraries.  CommonLibrary, EasyListview and VSTools 2.0 all must be updated and rebuild, along with VirtualShellUtilities changed to MPShellUtilities in your projects.  Also a number of the strings that went with VirtualShellUtilities in VirtualResources.pas are now found in MPResources.pas so this unit may need to be added to your projects as well.
+  - Changed all occurrences of VirtualShellUtilities to MPShellUtilities.
+  - Fixed problem with DefaultSortColumn and DefaultSortDir in VirtualExplorerEasyListview
+  - Fixed problem with OnEnumFinished not being called correctly in VirtualExplorerEasyListview
+  - Changed VET_COLUMN_NAMES to STR_COLUMN_NAMES since they are strings after all.
+  - Moved some of the strings from VirtualResources.pas to MPResources.pas to support moving the ShellUtilities to the Common Library.
+  - There are some unused local variable in the the VirtualShellNewMenu.pas file to remind me to make the menu unicode enabled for SpTBX.
+  - Fixed bug in Streaming system for the EasyExplorerListview
+  - Fixed problem with thumbnails and transparency in VirtualThumbnails.pas.  This will cause the Folders to have clWindow borders around the images if using a background window color other then the standard.  I don't know how to handle both cases right now.
+  - Fixed test for Folder that could return an incorrect value in VirtualThumbnails.pas 
+  - Fixed bug with lastest version of ELV (after implementing the StateImages), was not respecting the Kind parameter if it was StateImage <G>.
+  - Fixed bug with VEELV and respecting the VST_UseModalDialogs flag in MPShellUtilities.pas 
+  - Removed SuppressShellDialogs, converted to using VST_UseModalDialogs in MPShellUtilities.pas 
+  - Refreshing the window in VEELV will now correctly track changes in details, such as file size
+  - Fixed bug in TEasyDetailStringsThreadRequest.HandleRequest thread method.
+  - Fixed bug in BackgroundEnumeration thread 
+  - Removed redundant properties in the command line components Pipe objects  
+  - Fixed bug that would not allow VET to redraw if the shell showed a dialog
+  - Fixed bug that would cause VirtualExplorerEasyListview to consume 100% cpu if the shell showed a dialog or another window tried to paint the Listview
+  - Fixed bug in VirtualExplorerEasyListview where item context menu would be shown if clicking in the first column but not on the item text or icon. The BackGround menu should be shown in that case
+  - Fixed problem with VET updating while being loaded.
+  - Fixed bug with Drives Toolbar and Vista
+  - Fixed bug with autosize and wrapping.
+  - Fixed bug not allowing comboBox to select all the text when the mouse clicked in it
+  - Added support to conditionally comment out the different components
+  - Fixed couple possible places for AV's in the threading of EVELV component
+  - Fixed bug with newly introduced Header.AlwaysShowHeader property in ELV
+  - First shot at implementing Custom Columns in VEELV
+  - Added Custom Column Demo
+  - Fixed Resize bug in Toolbars
+  - Changed calls from TNamespace.NameNormal to TNamespace.NameInFolder.  Makes a different on network objects
+  - Fixed problem with Vista and the ThumbDrawing routines and the shadowed folder thumbnails.
+  - Updated to take advantage of the MP_ThreadedShellExecute global variable
+  - Fixed bugs in the Change Notifiers threads that could cause the application to hang on shut down.
+   - Fixed compilation problem from last release.
+   - Added more check to eliminate problems with the controls trying to allocate handles before they should getting "Control has not parent" errors.
+  - Fixed VirtualThumbnails.pas with EXIF and ImageEn
+  - Published OnItemGetxxxx properties to allow for customizing captions/images etc.
+  - Fixed bug in inplace editor and FileName select in VirtualExplorerEasyListview when the filename included multiple "."'s
+  - Fixed bug in recreating the ShellToobar
+  - Added support for CRW thumbnail extraction in VirtualThumbnails.Pas
+  - Changed selection of object to not select the last part of the string after a "." for folders.  This allows the selection to start with the file extension not selected on a file only.
+  - Fixed AV when change RootFolder
+  - Removed toLockBrowseLevel (broken anyway) and added LockBrowseLevel method.  Call LockBrowseLevel when listview is at the level you don't want the user to be able to browse above.
+  - Added property to change color of compressed objects as in Explorer
+
+
+Nov 23, 2006 - Version 2.0.0  
+  - Fixed Memory lead in VET and TNodeStorage
+  - Threaded the Details in the columns that return they are Slow (WinME, Win2k and up only)
+
+Version 2.0.0 
+  - Added ability to keep MRU and History components from storing network and removable drives.
+  - Complete rework of the component structure, VSTools now requires Tnt Unicode controls and the
+    new MustangPeak Common Library components to be installed first.
+    Many of the units in VSTools have been removed or moved to the common library.  Most issues can
+    be solved by replacing any missing unit in your compile with...
+    
+    uses
+      MPCommonUtilities, MPCommonObjects, MPShellTypes, TntSysUtils, TntClasses;
+
+    Any use of 
+        TWideFileStream is now TTntFileStream
+        TWideStringList is now TTntStringList
+
+    Any function used in the old VirtualUtilities or VirtualWideStrings that ended with a "W" is now
+    like the Tnt functions and begin with "Wide"
+      
+      FileExistsW is now WideFileExists
+      ect...    
+      DirExistsW is an exception it maps to WideDirectoryExists
+
+    If any object that use to be called TVirtualXXXXX it is likely now called TCommonXXXXX and in
+    the MPCommonObjects.pas file of the Mustangpeak Common Library Package.
+
+    VirtualShellUtilities unit is now in MPShellUtilities
+    VirtualShellContainers unit is now in MPShellUtilities
+    VirtualThreads unit is now in MPThreadManager
+
+
+  - Drastic performance improvement when selecting a lot of objects
+  - Removed uses dependances on VirtualNamespace.pas.  Removed it from
+    the BCB packages as it was giving them trouble with the IShellDetails 
+    issues.  VirtualNamespaces.pas is going to be phased out soon.
+  - Added TreeOptions.VETFolderOptions > toThreadedExpandMark option.  This starts a 
+    thread that checks if the folder truly does have sub-folders and sets the [+] 
+    mark correctly.  Mainly for slow network resources that always return true for this
+    flag since it is to costly to actually check.  Now a background thread will correctly
+    set the [+] mark in the tree.
+  - Fixed leak in User Persistent data if object was renamed within VET.
+  - Fixed long standing bug of an AV with context menu shown
+  - Added a new VET property ShellNotifySuspended to force VET to cache up Shell Notify messages.  
+    This property should be called anytime a context menu is shown programatically.
+  - Fixed bug in FileRun object if the working path was not set
+  - Added threaded support to test if network path does have subfolders and hide the [+] 
+    symbol if it does not
+  - Fixed issue with not showing dialog box to log into a remote password protected 
+    resource
+  - Fixed problems induced by fixing long standing AV bug.  Would not restore top node or 
+    restore selections on refresh correctly.
+    
+    Nov 12, 2006
+  - ExplorerEasyListview: Added CreateNewFolder methods
+  - ExplorerEasyListview: Added new property to shut off AutoSorting (property AutoSort: Boolean)
+  - ExplorerEasyListview: Added method to force a sort (procedure SortList)
+  - ExplorerEasyListview: Fixed bug in the HintPopup test. Using local "Text" instead of the correct "AText" parameter
+  - ExplorerEasyListview: Optimization of the sorting to only sort once during a rebuild cycle
+  - ExplorerEasyListview: Fixed some bugs with the Column Default Sortdirection, DefaultSort Column, etc
+  - VirtaulExplorerTreeview: Started on 2 new components to implement the backgound menu of the Listview
+         (Yes finally I know how to do it) and one to deal with a list with objects from different
+         folders, as in a search.  Yes, I know how to do that now too.
+  - VirtualShellHistory, VirtualShellNewMenu: Added property to not store Network or Removable drives to the 
+     histories.
+  - Started to implement extracting details in a secondary thread if the column flags it is slow
+
+
+    8.27.06 
+
+  - Added new OnComboPathChanging to allow blocking the change
+  - Added TNamespace.OkToBrowse with a parameter to force it to show dialogs if it is not OK
+    (for instance the disk drive is empty)
+  - Fixed bug in Clipboard chain hook causing AV in Win9x
+  - Added more checks for empty drives and messages for the empty drives
+  - Fixed bug in hints, using the wrong Text being shown.
+  - Added DefaultSortColumn property to have details view sort the column in a particular columnn
+    when being rebuilt.
+  - Added TVirtualShellNewMenu.Populate(Item: TMenuItem); to allow the ShellNew to be shown as a 
+    submenu.  Use MPCommonObjects.SmallSysImages as the imagelist if images are desired
+
+ Version 1.4.0 - 12-4-05   
+ 
+  - Support for D2006. 
+   
+  - Incorporated changes to make hard coded text in header dialog box and other 
+    places to be changed at runtime.  Allows localization at runtime.
+  - Fixed several bugs in the Threaded Enumerations
+  - Fixed bug in resetting the column sort column and direction.
+  - Added new option, VETOptions.MiscOptions.toPersistListviewColumnSort
+  - Fixed incorrect use of compressed text color
+  - TVirtualExplorerListview.BrowseToByPIDL now checks if it's necessary to 
+    change the rootfolder.
+  - Added ESC key handler to cancel cut or copy.
+
+-  Version 1.3.0 - 11-6-05   
+
+  - Renamed OnAddCustomShellColumn to OnHeaderRebuild.
+    OnHeaderRebuild is fired after the header gets recreated.  Use this event to add, 
+    delete or modify the columns.
+    WARNING:
+      This will break your app if you used the OnAddCustomShellColumn
+      event.  You will need to change over to this new event.  Sorry.
+  - Reworked the delayed shell notify handler for when a VET is dragging,
+    context menu is showing or editing.  Uses less resources and is more robust.
+  - Added background enumeration of objects in the Listview.  See the new 
+    ThreadedEnum property and the EnumThreadLengthyOperation and OnEnumFinished
+    events.
+  - Fixed bug in IsDriveW when using "<Drive Letter>:' format.
+
+VLVEx - Version 1.4.6 
+
+4 September 2005 
+  - Made GetChildByIndex function more robust.
+  - Fixed 0000017 Mantis entry: AV when deleting file.
+  - Fixed 0000023 Mantis entry: incorrect mouse click events when
+    HideCaptions or ComCtl6 was used.
+  - Fixed problem in CM_FONTCHANGED and Begin/End Update causing
+    TListview to access window handle during streaming, thanks to
+    Jim for the fix.
+  - Fixed incorrect focus painting when syncronizing the selection.
+  - Added new border styles, tbWindowed and tbFit.
+  - Added new SingleLineCaptions property to the ThumbsOptions.
+  - Added Ctrl-I shortcut to invert the selection.

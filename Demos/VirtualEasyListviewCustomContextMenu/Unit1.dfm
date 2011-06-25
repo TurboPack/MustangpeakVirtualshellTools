@@ -1,0 +1,52 @@
+object Form1: TForm1
+  Left = 281
+  Top = 110
+  Width = 696
+  Height = 480
+  Caption = 'Form1'
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'MS Sans Serif'
+  Font.Style = []
+  OldCreateOrder = False
+  PixelsPerInch = 96
+  TextHeight = 13
+  object VirtualExplorerEasyListview1: TVirtualExplorerEasyListview
+    Left = 0
+    Top = 0
+    Width = 688
+    Height = 446
+    Active = True
+    Align = alClient
+    DefaultSortColumn = 0
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'MS Shell Dlg 2'
+    Font.Style = []
+    Grouped = False
+    GroupingColumn = 0
+    GroupFont.Charset = DEFAULT_CHARSET
+    GroupFont.Color = clWindowText
+    GroupFont.Height = -11
+    GroupFont.Name = 'MS Shell Dlg 2'
+    GroupFont.Style = []
+    Header.Font.Charset = DEFAULT_CHARSET
+    Header.Font.Color = clWindowText
+    Header.Font.Height = -11
+    Header.Font.Name = 'MS Shell Dlg 2'
+    Header.Font.Style = []
+    Options = [eloBrowseExecuteFolder, eloBrowseExecuteFolderShortcut, eloBrowseExecuteZipFolder, eloExecuteOnDblClick, eloThreadedImages, eloThreadedDetails, eloShellContextMenus]
+    PaintInfoGroup.MarginBottom.CaptionIndent = 4
+    PaintInfoGroup.MarginTop.Visible = False
+    ParentFont = False
+    Sort.AutoSort = True
+    TabOrder = 0
+    ThumbsManager.StorageFilename = 'Thumbnails.album'
+    View = elsIcon
+    OnContextMenuCmd = VirtualExplorerEasyListview1ContextMenuCmd
+    OnContextMenuShow = VirtualExplorerEasyListview1ContextMenuShow
+  end
+end

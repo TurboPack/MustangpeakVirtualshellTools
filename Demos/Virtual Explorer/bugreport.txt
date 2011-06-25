@@ -1,0 +1,2002 @@
+date/time         : 2006-04-12, 18:56:20, 203ms
+computer name     : LIFEBOOK
+user name         : Owner <admin>
+operating system  : Windows XP Service Pack 2 build 2600
+system language   : English
+system up time    : 41 minutes 19 seconds
+program up time   : 22 seconds
+processor         : AMD Turion(tm) 64 Mobile Technology MT-37
+physical memory   : 568/959 MB (free/total)
+free disk space   : (C:) 89.50 GB
+display mode      : 1024x768, 32 bit
+process id        : $ea0
+allocated memory  : 13.47 MB
+executable        : VirtualExplorer.exe
+exec. date/time   : 2006-04-12 18:55
+madExcept version : 3.0b
+callstack crc     : $4f32bb03, $d892df0d, $74463dac
+count             : 2
+exception number  : 2
+exception class   : EAccessViolation
+exception message : Access violation at address 00403808 in module 'VirtualExplorer.exe'. Read of address 0575C080.
+
+main thread ($df4):
+00403808 +008 VirtualExplorer.exe System                 TObject.Free
+00536be3 +00f VirtualExplorer.exe Unit1           276 +1 TForm1.Button1Click
+0048c618 +064 VirtualExplorer.exe Controls               TControl.Click
+004845e0 +01c VirtualExplorer.exe StdCtrls               TButton.Click
+004846d4 +00c VirtualExplorer.exe StdCtrls               TButton.CNCommand
+0048c480 +188 VirtualExplorer.exe Controls               TControl.WndProc
+0048f4df +157 VirtualExplorer.exe Controls               TWinControl.WndProc
+004844a4 +06c VirtualExplorer.exe StdCtrls               TButtonControl.WndProc
+0048c250 +024 VirtualExplorer.exe Controls               TControl.Perform
+0048f617 +023 VirtualExplorer.exe Controls               DoControlMsg
+0048fc6f +00b VirtualExplorer.exe Controls               TWinControl.WMCommand
+004a66f4 +02c VirtualExplorer.exe Forms                  TCustomForm.WMCommand
+0048c480 +188 VirtualExplorer.exe Controls               TControl.WndProc
+0048f4df +157 VirtualExplorer.exe Controls               TWinControl.WndProc
+004a474d +421 VirtualExplorer.exe Forms                  TCustomForm.WndProc
+0048f15c +02c VirtualExplorer.exe Controls               TWinControl.MainWndProc
+0046c65c +014 VirtualExplorer.exe Classes                StdWndProc
+77d4b8fe +044 user32.dll                                 SendMessageW
+77d4e900 +016 user32.dll                                 CallWindowProcA
+0048f5c3 +0d7 VirtualExplorer.exe Controls               TWinControl.DefaultHandler
+0048ca20 +010 VirtualExplorer.exe Controls               TControl.WMLButtonUp
+0048c480 +188 VirtualExplorer.exe Controls               TControl.WndProc
+0048f4df +157 VirtualExplorer.exe Controls               TWinControl.WndProc
+004844a4 +06c VirtualExplorer.exe StdCtrls               TButtonControl.WndProc
+0048f15c +02c VirtualExplorer.exe Controls               TWinControl.MainWndProc
+0046c65c +014 VirtualExplorer.exe Classes                StdWndProc
+77d496c2 +00a user32.dll                                 DispatchMessageA
+004aab83 +083 VirtualExplorer.exe Forms                  TApplication.ProcessMessage
+004aabba +00a VirtualExplorer.exe Forms                  TApplication.HandleMessage
+004aadda +096 VirtualExplorer.exe Forms                  TApplication.Run
+00536fe8 +04c VirtualExplorer.exe VirtualExplorer  18 +4 initialization
+
+thread $eb8 (TWorkerThread):
+7c90eb94 +00 ntdll.dll                        KiFastSystemCallRet
+7c90e9be +0a ntdll.dll                        NtWaitForSingleObject
+7c8025d5 +85 kernel32.dll                     WaitForSingleObjectEx
+7c80253d +0d kernel32.dll                     WaitForSingleObject
+004b8966 +16 VirtualExplorer.exe VirtualTrees TWorkerThread.Execute
+0044c6b3 +2b VirtualExplorer.exe madExcept    HookedTThreadExecute
+0046b080 +34 VirtualExplorer.exe Classes      ThreadProc
+004046b8 +28 VirtualExplorer.exe System       ThreadWrapper
+0044c595 +0d VirtualExplorer.exe madExcept    CallThreadProcSafe
+0044c5ff +37 VirtualExplorer.exe madExcept    ThreadExceptFrame
+>> created by main thread ($df4) at:
+004b888b +23 VirtualExplorer.exe VirtualTrees TWorkerThread.Create
+
+thread $ba0 (TVirtualImageThread):
+7c90eb94 +00 ntdll.dll                                    KiFastSystemCallRet
+7c90e9be +0a ntdll.dll                                    NtWaitForSingleObject
+7c8025d5 +85 kernel32.dll                                 WaitForSingleObjectEx
+7c80253d +0d kernel32.dll                                 WaitForSingleObject
+004fccb3 +4b VirtualExplorer.exe VirtualIconThread 344 +6 TVirtualImageThread.Execute
+0044c6b3 +2b VirtualExplorer.exe madExcept                HookedTThreadExecute
+0046b080 +34 VirtualExplorer.exe Classes                  ThreadProc
+004046b8 +28 VirtualExplorer.exe System                   ThreadWrapper
+0044c595 +0d VirtualExplorer.exe madExcept                CallThreadProcSafe
+0044c5ff +37 VirtualExplorer.exe madExcept                ThreadExceptFrame
+>> created by main thread ($df4) at:
+004fcbc3 +23 VirtualExplorer.exe VirtualIconThread 313 +1 TVirtualImageThread.Create
+
+thread $b5c:
+7c90eb94 +00 ntdll.dll                                         KiFastSystemCallRet
+7c90e9be +0a ntdll.dll                                         NtWaitForSingleObject
+7c8025d5 +85 kernel32.dll                                      WaitForSingleObjectEx
+7c80253d +0d kernel32.dll                                      WaitForSingleObject
+004fb97c +54 VirtualExplorer.exe VirtualShellNotifier 2165 +10 TVirtualChangeDispatchThread.Execute
+004f73cf +2f VirtualExplorer.exe VirtualThread         121  +4 TVirtualThread.ExecuteStub
+0044c595 +0d VirtualExplorer.exe madExcept                     CallThreadProcSafe
+0044c5ff +37 VirtualExplorer.exe madExcept                     ThreadExceptFrame
+>> created by main thread ($df4) at:
+004f72f7 +67 VirtualExplorer.exe VirtualThread         100  +9 TVirtualThread.Create
+
+thread $e7c:
+7c90eb94 +00 ntdll.dll                                         KiFastSystemCallRet
+77d5107d +3b user32.dll                                        GetMessageA
+004faba7 +bb VirtualExplorer.exe VirtualShellNotifier 1822 +16 TVirtualShellChangeThread.Execute
+004f73cf +2f VirtualExplorer.exe VirtualThread         121  +4 TVirtualThread.ExecuteStub
+0044c595 +0d VirtualExplorer.exe madExcept                     CallThreadProcSafe
+0044c5ff +37 VirtualExplorer.exe madExcept                     ThreadExceptFrame
+>> created by main thread ($df4) at:
+004f72f7 +67 VirtualExplorer.exe VirtualThread         100  +9 TVirtualThread.Create
+
+thread $ed8 (TVirtualExpandMarkThread):
+7c90eb94 +00 ntdll.dll                                    KiFastSystemCallRet
+7c90e9be +0a ntdll.dll                                    NtWaitForSingleObject
+7c8025d5 +85 kernel32.dll                                 WaitForSingleObjectEx
+7c80253d +0d kernel32.dll                                 WaitForSingleObject
+004fccb3 +4b VirtualExplorer.exe VirtualIconThread 344 +6 TVirtualImageThread.Execute
+0044c6b3 +2b VirtualExplorer.exe madExcept                HookedTThreadExecute
+0046b080 +34 VirtualExplorer.exe Classes                  ThreadProc
+004046b8 +28 VirtualExplorer.exe System                   ThreadWrapper
+0044c595 +0d VirtualExplorer.exe madExcept                CallThreadProcSafe
+0044c5ff +37 VirtualExplorer.exe madExcept                ThreadExceptFrame
+>> created by main thread ($df4) at:
+004fcbc3 +23 VirtualExplorer.exe VirtualIconThread 313 +1 TVirtualImageThread.Create
+
+thread $1f4:
+7c90eb94 +0 ntdll.dll  KiFastSystemCallRet
+7c90d85a +a ntdll.dll  NtDelayExecution
+
+thread $b7c:
+7c90eb94 +0 ntdll.dll  KiFastSystemCallRet
+7c90e319 +a ntdll.dll  NtRemoveIoCompletion
+
+modules:
+00400000 VirtualExplorer.exe                  C:\Documents and Settings\Owner\My Documents\Delphi\VirtualShellTools\Demos\Virtual Explorer
+02390000 intl3_svn.dll       0.14.5.0         C:\Program Files\TortoiseSVN\bin
+02ba0000 PDFShell.dll        7.0.0.0          C:\Program Files\Adobe\Acrobat 7.0\ActiveX
+02cf0000 odbcint.dll         3.525.1117.0     C:\WINDOWS\system32
+070d0000 WMASF.DLL           10.0.0.3646      C:\WINDOWS\system32
+086c0000 WMVCore.DLL         10.0.0.3646      C:\WINDOWS\system32
+092d0000 Audiodev.dll        5.2.3790.3646    C:\WINDOWS\system32
+10000000 tortoisesvn.dll     1.3.2.5840       C:\Program Files\TortoiseSVN\bin
+20000000 xpsp2res.dll        5.1.2600.2180    C:\WINDOWS\system32
+5ad70000 uxtheme.dll         6.0.2900.2180    C:\WINDOWS\system32
+5b860000 netapi32.dll        5.1.2600.2180    C:\WINDOWS\system32
+5d090000 comctl32.dll        5.82.2900.2180   C:\WINDOWS\system32
+5edd0000 olepro32.dll        5.1.2600.2180    C:\WINDOWS\system32
+6ee50000 libapriconv.dll     0.9.7.0          C:\Program Files\TortoiseSVN\bin
+6ee60000 libaprutil.dll      0.9.7.0          C:\Program Files\TortoiseSVN\bin
+6eec0000 libapr.dll          0.9.7.0          C:\Program Files\TortoiseSVN\bin
+71a50000 MSWSOCK.dll         5.1.2600.2180    C:\WINDOWS\system32
+71aa0000 WS2HELP.dll         5.1.2600.2180    C:\WINDOWS\system32
+71ab0000 WS2_32.dll          5.1.2600.2180    C:\WINDOWS\system32
+71ad0000 wsock32.dll         5.1.2600.2180    C:\WINDOWS\system32
+71b20000 mpr.dll             5.1.2600.2180    C:\WINDOWS\system32
+71bf0000 SAMLIB.dll          5.1.2600.2180    C:\WINDOWS\System32
+71c10000 ntlanman.dll        5.1.2600.2180    C:\WINDOWS\System32
+71c80000 NETRAP.dll          5.1.2600.2180    C:\WINDOWS\System32
+71c90000 NETUI1.dll          5.1.2600.2180    C:\WINDOWS\System32
+71cd0000 NETUI0.dll          5.1.2600.2180    C:\WINDOWS\System32
+73380000 zipfldr.dll         6.0.2900.2180    C:\WINDOWS\system32
+73d70000 shgina.dll          6.0.2900.2180    C:\WINDOWS\system32
+74320000 ODBC32.dll          3.525.1117.0     C:\WINDOWS\system32
+754d0000 CRYPTUI.dll         5.131.2600.2180  C:\WINDOWS\system32
+75970000 MSGINA.dll          5.1.2600.2180    C:\WINDOWS\system32
+75f60000 drprov.dll          5.1.2600.2180    C:\WINDOWS\System32
+75f70000 davclnt.dll         5.1.2600.2180    C:\WINDOWS\System32
+76360000 WINSTA.dll          5.1.2600.2180    C:\WINDOWS\system32
+763b0000 comdlg32.dll        6.0.2900.2180    C:\WINDOWS\system32
+76990000 ntshrui.dll         5.1.2600.2180    C:\WINDOWS\system32
+769c0000 USERENV.dll         5.1.2600.2180    C:\WINDOWS\system32
+76b20000 ATL.DLL             3.5.2284.0       C:\WINDOWS\system32
+76b40000 winmm.dll           5.1.2600.2180    C:\WINDOWS\system32
+76bf0000 psapi.dll           5.1.2600.2180    C:\WINDOWS\system32
+76c30000 WINTRUST.dll        5.131.2600.2180  C:\WINDOWS\system32
+76c90000 IMAGEHLP.dll        5.1.2600.2180    C:\WINDOWS\system32
+76f60000 WLDAP32.dll         5.1.2600.2180    C:\WINDOWS\system32
+76fd0000 CLBCATQ.DLL         2001.12.4414.308 C:\WINDOWS\system32
+77050000 COMRes.dll          2001.12.4414.258 C:\WINDOWS\system32
+77120000 oleaut32.dll        5.1.2600.2180    C:\WINDOWS\system32
+771b0000 WININET.dll         6.0.2900.2753    C:\WINDOWS\system32
+773d0000 comctl32.dll        6.0.2900.2180    C:\WINDOWS\WinSxS\x86_Microsoft.Windows.Common-Controls_6595b64144ccf1df_6.0.2600.2180_x-ww_a84f1ff9
+774e0000 ole32.dll           5.1.2600.2726    C:\WINDOWS\system32
+77760000 shdocvw.dll         6.0.2900.2753    C:\WINDOWS\system32
+77920000 SETUPAPI.dll        5.1.2600.2180    C:\WINDOWS\system32
+77a80000 CRYPT32.dll         5.131.2600.2180  C:\WINDOWS\system32
+77b20000 MSASN1.dll          5.1.2600.2180    C:\WINDOWS\system32
+77b40000 appHelp.dll         5.1.2600.2180    C:\WINDOWS\system32
+77c00000 version.dll         5.1.2600.2180    C:\WINDOWS\system32
+77c10000 msvcrt.dll          7.0.2600.2180    C:\WINDOWS\system32
+77d40000 user32.dll          5.1.2600.2622    C:\WINDOWS\system32
+77dd0000 advapi32.dll        5.1.2600.2180    C:\WINDOWS\system32
+77e70000 RPCRT4.dll          5.1.2600.2180    C:\WINDOWS\system32
+77f10000 GDI32.dll           5.1.2600.2770    C:\WINDOWS\system32
+77f60000 SHLWAPI.dll         6.0.2900.2753    C:\WINDOWS\system32
+77fe0000 Secur32.dll         5.1.2600.2180    C:\WINDOWS\system32
+78130000 MSVCR80.dll         8.0.50727.42     C:\WINDOWS\WinSxS\x86_Microsoft.VC80.CRT_1fc8b3b9a1e18e3b_8.0.50727.42_x-ww_0de06acd
+7c420000 MSVCP80.dll         8.0.50727.42     C:\WINDOWS\WinSxS\x86_Microsoft.VC80.CRT_1fc8b3b9a1e18e3b_8.0.50727.42_x-ww_0de06acd
+7c800000 kernel32.dll        5.1.2600.2180    C:\WINDOWS\system32
+7c900000 ntdll.dll           5.1.2600.2180    C:\WINDOWS\system32
+7c9c0000 shell32.dll         6.0.2900.2763    C:\WINDOWS\system32
+
+processes:
+000 Idle
+004 System              normal
+3d0 smss.exe            normal C:\WINDOWS\system32
+440 csrss.exe
+460 winlogon.exe        high   C:\WINDOWS\system32
+48c services.exe        normal C:\WINDOWS\system32
+498 lsass.exe           normal C:\WINDOWS\system32
+528 Ati2evxx.exe        normal C:\WINDOWS\system32
+534 svchost.exe         normal C:\WINDOWS\system32
+594 svchost.exe
+5b8 svchost.exe         normal C:\WINDOWS\System32
+5e8 svchost.exe
+620 svchost.exe
+778 spoolsv.exe         normal C:\WINDOWS\system32
+7dc cvpnd.exe           normal C:\Program Files\Cisco Systems\VPN Client
+0d0 svchost.exe         normal C:\WINDOWS\system32
+12c wdfmgr.exe
+150 MsPMSPSv.exe        normal C:\WINDOWS\system32
+2f0 alg.exe
+3a4 Ati2evxx.exe        normal C:\WINDOWS\system32
+3fc Explorer.EXE        normal C:\WINDOWS
+6f0 TSVNCache.exe       normal C:\Program Files\TortoiseSVN\bin
+6fc wscntfy.exe         normal C:\WINDOWS\system32
+730 cli.exe             normal C:\Program Files\ATI Technologies\ATI.ACE
+168 RTHDCPL.EXE         normal C:\WINDOWS
+2e4 IndicatorUty.exe    normal C:\Program Files\Fujitsu\Fujitsu Hotkey Utility
+2bc AGRSMMSG.exe        normal C:\WINDOWS
+370 fjdvrupd.exe        normal C:\Program Files\Fujitsu\fjdvrupd
+e10 cli.exe             normal C:\Program Files\ATI Technologies\ATI.ACE
+9c4 svchost.exe         normal C:\WINDOWS\System32
+ec0 delphi32.exe        normal C:\Program Files\Borland\Delphi7\Bin
+340 CodeFactor.exe      normal C:\Program Files\CodeFactor
+ea0 VirtualExplorer.exe normal C:\Documents and Settings\Owner\My Documents\Delphi\VirtualShellTools\Demos\Virtual Explorer
+
+hardware:
++ Batteries
+  - Microsoft AC Adapter
+  - Microsoft ACPI-Compliant Control Method Battery
++ Computer
+  - ACPI Uniprocessor PC
++ Disk drives
+  - FUJITSU MHV2120AT PL
++ Display adapters
+  - ATI RADEON XPRESS 200M Series     (driver 8.181.0.0)
++ DVD/CD-ROM drives
+  - HL-DT-ST DVDRAM GMA4082Nj
++ IDE ATA/ATAPI controllers
+  - Primary IDE Channel
+  - Ricoh Memory Stick Host Controller (driver 1.0.1.13)
+  - Ricoh SD Bus Host Adapter (driver 1.0.3.10)
+  - Ricoh xD-Picture Card Controller (driver 1.0.1.5)
+  - Secondary IDE Channel
+  - Standard Dual Channel PCI IDE Controller
++ IEEE 1394 Bus host controllers
+  - OHCI Compliant IEEE 1394 Host Controller
++ Keyboards
+  - Standard 101/102-Key or Microsoft Natural PS/2 Keyboard
++ Mice and other pointing devices
+  - Alps Pointing-device (driver 5.6.401.3)
++ Modems
+  - Agere Systems HDA Modem (driver 2.1.57.9)
++ Monitors
+  - Default Monitor
+  - Default Monitor
+  - Default Monitor
++ Network adapters
+  - 1394 Net Adapter
+  - Atheros AR5006X Wireless Network Adapter (driver 4.1.2.71)
+  - Broadcom NetXtreme Gigabit Ethernet (driver 8.39.1.0)
+  - Cisco Systems VPN Adapter (driver 4.0.0.106)
++ PCMCIA adapters
+  - Ricoh R/RL/5C476(II) or Compatible CardBus Controller
++ Processors
+  - AMD Turion(tm) 64 Mobile Technology MT-37 (driver 1.2.2.0)
++ Sound, video and game controllers
+  - Audio Codecs
+  - Legacy Audio Drivers
+  - Legacy Video Capture Devices
+  - Media Control Devices
+  - Realtek High Definition Audio (driver 5.10.0.5169)
+  - Video Codecs
++ System devices
+  - ACPI Fixed Feature Button
+  - ACPI Lid
+  - ACPI Power Button
+  - ATI SMBus (driver 5.10.1000.5)
+  - Direct memory access controller
+  - Fujitsu FUJ02B1 Device Driver (driver 1.21.0.0)
+  - Fujitsu FUJ02E3 Device Driver (driver 1.0.0.0)
+  - ISAPNP Read Data Port
+  - Microcode Update Device
+  - Microsoft ACPI-Compliant System
+  - Microsoft Composite Battery
+  - Microsoft System Management BIOS Driver
+  - Microsoft UAA Bus Driver for High Definition Audio
+  - Motherboard resources
+  - Motherboard resources
+  - Motherboard resources
+  - Motherboard resources
+  - Numeric data processor
+  - PCI bus
+  - PCI standard host CPU bridge
+  - PCI standard host CPU bridge
+  - PCI standard host CPU bridge
+  - PCI standard host CPU bridge
+  - PCI standard host CPU bridge
+  - PCI standard ISA bridge
+  - PCI standard PCI-to-PCI bridge
+  - PCI standard PCI-to-PCI bridge
+  - PCI standard PCI-to-PCI bridge
+  - PCI standard PCI-to-PCI bridge
+  - Plug and Play Software Device Enumerator
+  - Programmable interrupt controller
+  - System board
+  - System CMOS/real time clock
+  - System speaker
+  - System timer
+  - Terminal Server Keyboard Driver
+  - Terminal Server Mouse Driver
+  - Volume Manager
++ Universal Serial Bus controllers
+  - Standard Enhanced PCI to USB Host Controller
+  - Standard OpenHCD USB Host Controller
+  - Standard OpenHCD USB Host Controller
+  - USB Root Hub
+  - USB Root Hub
+  - USB Root Hub
+
+cpu registers:
+eax = 0040399f
+ebx = 00aaf644
+ecx = 0575c084
+edx = 00aaf601
+esi = 004845c4
+edi = 0012f7a8
+eip = 00403808
+esp = 0012f61c
+ebp = 0012f62c
+
+stack dump:
+0012f61c  e8 6b 53 00 44 f6 aa 00 - 9f 39 40 00 18 4a aa 00  .kS.D....9@..J..
+0012f62c  6c f7 12 00 1e c6 48 00 - 44 f6 aa 00 e5 45 48 00  l.....H.D....EH.
+0012f63c  a8 f7 12 00 d9 46 48 00 - 44 f6 aa 00 83 c4 48 00  .....FH.D.....H.
+0012f64c  a8 f7 12 00 a8 f7 12 00 - 44 f6 aa 00 14 03 08 00  ........D.......
+0012f65c  00 00 00 00 20 00 00 00 - 70 f6 12 00 00 c0 d4 77  ........p......w
+0012f66c  0a 80 00 00 fc f6 12 00 - f6 74 d5 77 0a 80 00 00  .........t.w....
+0012f67c  14 03 08 00 fc ff ff ff - 00 00 00 00 00 00 00 00  ................
+0012f68c  84 f7 12 00 72 6c d5 77 - b0 f6 12 00 20 00 00 00  ....rl.w........
+0012f69c  a8 f6 12 00 6d 32 00 00 - 0e b0 d6 77 5a b0 d6 77  ....m2.....wZ..w
+0012f6ac  48 e1 71 00 15 02 00 00 - 00 00 00 00 00 00 00 00  H.q.............
+0012f6bc  01 00 00 00 0e b0 d6 77 - f0 f6 12 00 34 87 d4 77  .......w....4..w
+0012f6cc  14 03 08 00 15 02 00 00 - 00 00 00 00 00 00 00 00  ................
+0012f6dc  0e b0 d6 77 cd ab ba dc - 00 00 00 00 2c f7 12 00  ...w........,...
+0012f6ec  0e b0 d6 77 58 f7 12 00 - d9 8b d4 77 00 d0 fd 7f  ...wX......w....
+0012f6fc  58 f7 12 00 20 00 00 00 - 58 f7 12 00 f8 db fd 7f  X.......X.......
+0012f70c  00 00 00 00 38 f7 12 00 - aa f0 90 7c 00 dc fd 7f  ....8......|....
+0012f71c  34 00 00 00 44 f7 12 00 - 4c 1c aa 00 1a 00 00 00  4...D...L.......
+0012f72c  f8 db fd 7f 04 fa 12 00 - 00 00 00 00 c1 d9 90 7c  ...............|
+0012f73c  09 cb 80 7c 00 dc fd 7f - 34 00 00 00 22 cb 80 7c  ...|....4..."..|
+0012f74c  04 fa 12 00 00 00 00 00 - 14 03 08 00 1a 00 1b 00  ................
+
+disassembling:
+[...]
+00536bd5       mov     ebp, esp
+00536bd7       add     esp, -$c
+00536bda       mov     [ebp-$c], edx
+00536bdd       mov     [ebp-4], eax
+00536be0 276   mov     eax, [ebp-8]
+00536be3     > call    -$1333e8 ($403800)     ; System.TObject.Free
+00536be8 277   mov     esp, ebp
+00536bea       pop     ebp
+00536beb       ret
+
+date/time         : 2006-04-12, 20:32:02, 796ms
+computer name     : LIFEBOOK
+user name         : Owner <admin>
+operating system  : Windows XP Service Pack 2 build 2600
+system language   : English
+system up time    : 2 hours 17 minutes
+program up time   : 16 seconds
+processor         : AMD Turion(tm) 64 Mobile Technology MT-37
+physical memory   : 507/959 MB (free/total)
+free disk space   : (C:) 89.50 GB
+display mode      : 1024x768, 32 bit
+process id        : $3e8
+allocated memory  : 25.72 MB
+executable        : VirtualExplorer.exe
+exec. date/time   : 2006-04-12 20:31
+madExcept version : 3.0b
+callstack crc     : $01080005, $01080005, $01080005
+count             : 2
+exception number  : 2
+exception class   : EInvalidPointer
+exception message : Invalid pointer operation.
+
+main thread ($cc8):
+01080005 ???
+
+thread $e2c:
+7c90eb94 +0 ntdll.dll  KiFastSystemCallRet
+7c90e397 +a ntdll.dll  NtReplyWaitReceivePortEx
+
+thread $c98:
+7c90eb94 +0 ntdll.dll  KiFastSystemCallRet
+7c90e397 +a ntdll.dll  NtReplyWaitReceivePortEx
+
+thread $eac: <priority:15>
+7c90eb94 +00 ntdll.dll     KiFastSystemCallRet
+7c90e9be +0a ntdll.dll     NtWaitForSingleObject
+7c8025d5 +85 kernel32.dll  WaitForSingleObjectEx
+7c80253d +0d kernel32.dll  WaitForSingleObject
+
+thread $680: <suspended> <priority:15>
+7c810856 kernel32.dll
+
+thread $cf0 (TWorkerThread):
+7c90eb94 +00 ntdll.dll     KiFastSystemCallRet
+7c90e9be +0a ntdll.dll     NtWaitForSingleObject
+7c8025d5 +85 kernel32.dll  WaitForSingleObjectEx
+7c80253d +0d kernel32.dll  WaitForSingleObject
+>> created by main thread ($cc8) at:
+01080005 +00 ???
+
+thread $aac (TVirtualImageThread):
+7c90eb94 +00 ntdll.dll     KiFastSystemCallRet
+7c90e9be +0a ntdll.dll     NtWaitForSingleObject
+7c8025d5 +85 kernel32.dll  WaitForSingleObjectEx
+7c80253d +0d kernel32.dll  WaitForSingleObject
+>> created by main thread ($cc8) at:
+01080005 +00 ???
+
+thread $e88:
+7c90eb94 +00 ntdll.dll     KiFastSystemCallRet
+7c90e9be +0a ntdll.dll     NtWaitForSingleObject
+7c8025d5 +85 kernel32.dll  WaitForSingleObjectEx
+7c80253d +0d kernel32.dll  WaitForSingleObject
+>> created by main thread ($cc8) at:
+01080005 +00 ???
+
+thread $b78:
+7c90eb94 +00 ntdll.dll   KiFastSystemCallRet
+77d5107d +3b user32.dll  GetMessageA
+>> created by main thread ($cc8) at:
+01080005 +00 ???
+
+thread $768 (TVirtualExpandMarkThread):
+7c90eb94 +00 ntdll.dll  KiFastSystemCallRet
+7c90e9be +0a ntdll.dll  NtWaitForSingleObject
+7c919016 +87 ntdll.dll  RtlpWaitForCriticalSection
+7c901046 +41 ntdll.dll  RtlEnterCriticalSection
+>> created by main thread ($cc8) at:
+01080005 +00 ???
+
+thread $fc8:
+7c90eb94 +0 ntdll.dll  KiFastSystemCallRet
+7c90d85a +a ntdll.dll  NtDelayExecution
+
+thread $d58:
+7c90eb94 +0 ntdll.dll  KiFastSystemCallRet
+7c90e319 +a ntdll.dll  NtRemoveIoCompletion
+
+modules:
+00400000 VirtualExplorer.exe                  C:\Documents and Settings\Owner\My Documents\Delphi\VirtualShellTools\Demos\Virtual Explorer
+04720000 VFuj02b1.dll        2.6.0.0          C:\Program Files\Fujitsu\Fujitsu Hotkey Utility
+04aa0000 intl3_svn.dll       0.14.5.0         C:\Program Files\TortoiseSVN\bin
+05240000 PDFShell.dll        7.0.0.0          C:\Program Files\Adobe\Acrobat 7.0\ActiveX
+055a0000 odbcint.dll         3.525.1117.0     C:\WINDOWS\system32
+070d0000 WMASF.DLL           10.0.0.3646      C:\WINDOWS\system32
+086c0000 WMVCore.DLL         10.0.0.3646      C:\WINDOWS\system32
+092d0000 Audiodev.dll        5.2.3790.3646    C:\WINDOWS\system32
+10000000 tortoisesvn.dll     1.3.2.5840       C:\Program Files\TortoiseSVN\bin
+20000000 xpsp2res.dll        5.1.2600.2180    C:\WINDOWS\system32
+30000000 aqProf.dll          4.91.654.0       C:\Program Files\Automated QA\AQtime 4\Bin
+30200000 aqComm.dll          4.91.654.0       C:\Program Files\Automated QA\AQtime 4\Bin
+30800000 AQNATPROF.DLL       4.91.654.0       C:\PROGRAM FILES\AUTOMATED QA\AQTIME 4\BIN\EXTENSIONS
+5ad70000 uxtheme.dll         6.0.2900.2180    C:\WINDOWS\system32
+5b860000 netapi32.dll        5.1.2600.2180    C:\WINDOWS\system32
+5d090000 comctl32.dll        5.82.2900.2180   C:\WINDOWS\system32
+5edd0000 olepro32.dll        5.1.2600.2180    C:\WINDOWS\system32
+6ee50000 libapriconv.dll     0.9.7.0          C:\Program Files\TortoiseSVN\bin
+6ee60000 libaprutil.dll      0.9.7.0          C:\Program Files\TortoiseSVN\bin
+6eec0000 libapr.dll          0.9.7.0          C:\Program Files\TortoiseSVN\bin
+71a50000 MSWSOCK.dll         5.1.2600.2180    C:\WINDOWS\system32
+71aa0000 WS2HELP.dll         5.1.2600.2180    C:\WINDOWS\system32
+71ab0000 WS2_32.dll          5.1.2600.2180    C:\WINDOWS\system32
+71ad0000 wsock32.dll         5.1.2600.2180    C:\WINDOWS\system32
+71b20000 mpr.dll             5.1.2600.2180    C:\WINDOWS\system32
+71bf0000 SAMLIB.dll          5.1.2600.2180    C:\WINDOWS\System32
+71c10000 ntlanman.dll        5.1.2600.2180    C:\WINDOWS\System32
+71c80000 NETRAP.dll          5.1.2600.2180    C:\WINDOWS\System32
+71c90000 NETUI1.dll          5.1.2600.2180    C:\WINDOWS\System32
+71cd0000 NETUI0.dll          5.1.2600.2180    C:\WINDOWS\System32
+73380000 zipfldr.dll         6.0.2900.2180    C:\WINDOWS\system32
+73d70000 shgina.dll          6.0.2900.2180    C:\WINDOWS\system32
+74320000 ODBC32.dll          3.525.1117.0     C:\WINDOWS\system32
+754d0000 CRYPTUI.dll         5.131.2600.2180  C:\WINDOWS\system32
+75970000 MSGINA.dll          5.1.2600.2180    C:\WINDOWS\system32
+75f60000 drprov.dll          5.1.2600.2180    C:\WINDOWS\System32
+75f70000 davclnt.dll         5.1.2600.2180    C:\WINDOWS\System32
+76360000 WINSTA.dll          5.1.2600.2180    C:\WINDOWS\system32
+763b0000 comdlg32.dll        6.0.2900.2180    C:\WINDOWS\system32
+76990000 ntshrui.dll         5.1.2600.2180    C:\WINDOWS\system32
+769c0000 USERENV.dll         5.1.2600.2180    C:\WINDOWS\system32
+76b20000 ATL.DLL             3.5.2284.0       C:\WINDOWS\system32
+76b40000 winmm.dll           5.1.2600.2180    C:\WINDOWS\system32
+76bf0000 psapi.dll           5.1.2600.2180    C:\WINDOWS\system32
+76c30000 WINTRUST.dll        5.131.2600.2180  C:\WINDOWS\system32
+76c90000 IMAGEHLP.dll        5.1.2600.2180    C:\WINDOWS\system32
+76f60000 WLDAP32.dll         5.1.2600.2180    C:\WINDOWS\system32
+76fd0000 CLBCATQ.DLL         2001.12.4414.308 C:\WINDOWS\system32
+77050000 COMRes.dll          2001.12.4414.258 C:\WINDOWS\system32
+77120000 oleaut32.dll        5.1.2600.2180    C:\WINDOWS\system32
+771b0000 WININET.dll         6.0.2900.2753    C:\WINDOWS\system32
+773d0000 comctl32.dll        6.0.2900.2180    C:\WINDOWS\WinSxS\x86_Microsoft.Windows.Common-Controls_6595b64144ccf1df_6.0.2600.2180_x-ww_a84f1ff9
+774e0000 ole32.dll           5.1.2600.2726    C:\WINDOWS\system32
+77760000 shdocvw.dll         6.0.2900.2753    C:\WINDOWS\system32
+77920000 SETUPAPI.dll        5.1.2600.2180    C:\WINDOWS\system32
+77a80000 CRYPT32.dll         5.131.2600.2180  C:\WINDOWS\system32
+77b20000 MSASN1.dll          5.1.2600.2180    C:\WINDOWS\system32
+77b40000 appHelp.dll         5.1.2600.2180    C:\WINDOWS\system32
+77c00000 version.dll         5.1.2600.2180    C:\WINDOWS\system32
+77c10000 msvcrt.dll          7.0.2600.2180    C:\WINDOWS\system32
+77d40000 user32.dll          5.1.2600.2622    C:\WINDOWS\system32
+77dd0000 advapi32.dll        5.1.2600.2180    C:\WINDOWS\system32
+77e70000 RPCRT4.dll          5.1.2600.2180    C:\WINDOWS\system32
+77f10000 GDI32.dll           5.1.2600.2770    C:\WINDOWS\system32
+77f60000 SHLWAPI.dll         6.0.2900.2753    C:\WINDOWS\system32
+77fe0000 Secur32.dll         5.1.2600.2180    C:\WINDOWS\system32
+78130000 MSVCR80.dll         8.0.50727.42     C:\WINDOWS\WinSxS\x86_Microsoft.VC80.CRT_1fc8b3b9a1e18e3b_8.0.50727.42_x-ww_0de06acd
+7c420000 MSVCP80.dll         8.0.50727.42     C:\WINDOWS\WinSxS\x86_Microsoft.VC80.CRT_1fc8b3b9a1e18e3b_8.0.50727.42_x-ww_0de06acd
+7c800000 kernel32.dll        5.1.2600.2180    C:\WINDOWS\system32
+7c900000 ntdll.dll           5.1.2600.2180    C:\WINDOWS\system32
+7c9c0000 shell32.dll         6.0.2900.2763    C:\WINDOWS\system32
+
+processes:
+000 Idle
+004 System              normal
+3d0 smss.exe            normal C:\WINDOWS\system32
+440 csrss.exe           normal C:\WINDOWS\system32
+460 winlogon.exe        high   C:\WINDOWS\system32
+48c services.exe        normal C:\WINDOWS\system32
+498 lsass.exe           normal C:\WINDOWS\system32
+528 Ati2evxx.exe        normal C:\WINDOWS\system32
+534 svchost.exe         normal C:\WINDOWS\system32
+594 svchost.exe         normal C:\WINDOWS\system32
+5b8 svchost.exe         normal C:\WINDOWS\System32
+5e8 svchost.exe         normal C:\WINDOWS\system32
+620 svchost.exe         normal C:\WINDOWS\system32
+778 spoolsv.exe         normal C:\WINDOWS\system32
+7dc cvpnd.exe           normal C:\Program Files\Cisco Systems\VPN Client
+0d0 svchost.exe         normal C:\WINDOWS\system32
+12c wdfmgr.exe          normal C:\WINDOWS\system32
+150 MsPMSPSv.exe        normal C:\WINDOWS\system32
+2f0 alg.exe             normal C:\WINDOWS\System32
+3a4 Ati2evxx.exe        normal C:\WINDOWS\system32
+3fc Explorer.EXE        normal C:\WINDOWS
+6f0 TSVNCache.exe       normal C:\Program Files\TortoiseSVN\bin
+6fc wscntfy.exe         normal C:\WINDOWS\system32
+730 cli.exe             normal C:\Program Files\ATI Technologies\ATI.ACE
+168 RTHDCPL.EXE         normal C:\WINDOWS
+2e4 IndicatorUty.exe    normal C:\Program Files\Fujitsu\Fujitsu Hotkey Utility
+2bc AGRSMMSG.exe        normal C:\WINDOWS
+370 fjdvrupd.exe        normal C:\Program Files\Fujitsu\fjdvrupd
+e10 cli.exe             normal C:\Program Files\ATI Technologies\ATI.ACE
+9c4 svchost.exe         normal C:\WINDOWS\System32
+ec0 delphi32.exe        normal C:\Program Files\Borland\Delphi7\Bin
+340 CodeFactor.exe      normal C:\Program Files\CodeFactor
+a98 taskmgr.exe         high   C:\WINDOWS\system32
+cfc AQtime.exe          normal C:\Program Files\Automated QA\AQtime 4\Bin
+3e8 VirtualExplorer.exe normal C:\Documents and Settings\Owner\My Documents\Delphi\VirtualShellTools\Demos\Virtual Explorer
+
+hardware:
++ Batteries
+  - Microsoft AC Adapter
+  - Microsoft ACPI-Compliant Control Method Battery
++ Computer
+  - ACPI Uniprocessor PC
++ Disk drives
+  - FUJITSU MHV2120AT PL
++ Display adapters
+  - ATI RADEON XPRESS 200M Series     (driver 8.181.0.0)
++ DVD/CD-ROM drives
+  - HL-DT-ST DVDRAM GMA4082Nj
++ Human Interface Devices
+  - Microsoft USB Wheel Mouse Optical
++ IDE ATA/ATAPI controllers
+  - Primary IDE Channel
+  - Ricoh Memory Stick Host Controller (driver 1.0.1.13)
+  - Ricoh SD Bus Host Adapter (driver 1.0.3.10)
+  - Ricoh xD-Picture Card Controller (driver 1.0.1.5)
+  - Secondary IDE Channel
+  - Standard Dual Channel PCI IDE Controller
++ IEEE 1394 Bus host controllers
+  - OHCI Compliant IEEE 1394 Host Controller
++ Keyboards
+  - Standard 101/102-Key or Microsoft Natural PS/2 Keyboard
++ Mice and other pointing devices
+  - Alps Pointing-device (driver 5.6.401.3)
+  - Microsoft USB Wheel Mouse Optical
++ Modems
+  - Agere Systems HDA Modem (driver 2.1.57.9)
++ Monitors
+  - Default Monitor
+  - Default Monitor
+  - Default Monitor
++ Network adapters
+  - 1394 Net Adapter
+  - Atheros AR5006X Wireless Network Adapter (driver 4.1.2.71)
+  - Broadcom NetXtreme Gigabit Ethernet (driver 8.39.1.0)
+  - Cisco Systems VPN Adapter (driver 4.0.0.106)
++ PCMCIA adapters
+  - Ricoh R/RL/5C476(II) or Compatible CardBus Controller
++ Processors
+  - AMD Turion(tm) 64 Mobile Technology MT-37 (driver 1.2.2.0)
++ Sound, video and game controllers
+  - Audio Codecs
+  - Legacy Audio Drivers
+  - Legacy Video Capture Devices
+  - Media Control Devices
+  - Realtek High Definition Audio (driver 5.10.0.5169)
+  - Video Codecs
++ System devices
+  - ACPI Fixed Feature Button
+  - ACPI Lid
+  - ACPI Power Button
+  - ATI SMBus (driver 5.10.1000.5)
+  - Direct memory access controller
+  - Fujitsu FUJ02B1 Device Driver (driver 1.21.0.0)
+  - Fujitsu FUJ02E3 Device Driver (driver 1.0.0.0)
+  - ISAPNP Read Data Port
+  - Microcode Update Device
+  - Microsoft ACPI-Compliant System
+  - Microsoft Composite Battery
+  - Microsoft System Management BIOS Driver
+  - Microsoft UAA Bus Driver for High Definition Audio
+  - Motherboard resources
+  - Motherboard resources
+  - Motherboard resources
+  - Motherboard resources
+  - Numeric data processor
+  - PCI bus
+  - PCI standard host CPU bridge
+  - PCI standard host CPU bridge
+  - PCI standard host CPU bridge
+  - PCI standard host CPU bridge
+  - PCI standard host CPU bridge
+  - PCI standard ISA bridge
+  - PCI standard PCI-to-PCI bridge
+  - PCI standard PCI-to-PCI bridge
+  - PCI standard PCI-to-PCI bridge
+  - PCI standard PCI-to-PCI bridge
+  - Plug and Play Software Device Enumerator
+  - Programmable interrupt controller
+  - System board
+  - System CMOS/real time clock
+  - System speaker
+  - System timer
+  - Terminal Server Keyboard Driver
+  - Terminal Server Mouse Driver
+  - Volume Manager
++ Universal Serial Bus controllers
+  - Standard Enhanced PCI to USB Host Controller
+  - Standard OpenHCD USB Host Controller
+  - Standard OpenHCD USB Host Controller
+  - USB Root Hub
+  - USB Root Hub
+  - USB Root Hub
+
+cpu registers:
+eax = 01360d04
+ebx = 01080005
+ecx = 0000000b
+edx = 01080005
+esi = 01080005
+edi = 004ff124
+eip = 01080005
+esp = 0012ec38
+ebp = 0012ec88
+
+stack dump:
+0012ec38  05 00 08 01 de fa ed 0e - 01 00 00 00 07 00 00 00  ................
+0012ec48  4c ec 12 00 05 00 08 01 - 04 0d 36 01 05 00 08 01  L.........6.....
+0012ec58  05 00 08 01 24 f1 4f 00 - 88 ec 12 00 68 ec 12 00  ....$.O.....h...
+0012ec68  02 00 00 00 59 2a 92 01 - e4 4f 36 01 0b 00 00 00  ....Y*...O6.....
+0012ec78  dd 28 92 01 f8 2d 38 01 - 4f 0a a3 01 98 23 4f 00  .(...-8.O....#O.
+0012ec88  90 ec 12 00 e5 1f a3 01 - a0 ec 12 00 84 18 a3 01  ................
+0012ec98  70 ee 12 00 49 24 4f 00 - d8 ec 12 00 f6 31 a5 01  p...I$O......1..
+0012eca8  40 ee 12 00 c4 3f 40 00 - d8 ec 12 00 60 e6 36 01  @....?@.....`.6.
+0012ecb8  60 e6 36 01 70 ee 12 00 - 00 00 00 00 70 ee 12 00  `.6.p.......p...
+0012ecc8  60 e6 36 01 01 31 a5 01 - 01 00 01 00 68 6c 38 01  `.6..1......hl8.
+0012ecd8  00 ee 12 00 b8 f8 9a 01 - 60 e6 36 01 70 ee 12 00  ........`.6.p...
+0012ece8  60 e6 36 01 3e 80 00 00 - 94 2c e6 00 84 2d e5 00  `.6.>....,...-..
+0012ecf8  38 23 e6 00 38 23 e6 00 - c8 0c 00 00 c8 0c 00 00  8#..8#..........
+0012ed08  38 23 e6 00 c8 0c 00 00 - c8 0c 00 00 38 23 e6 00  8#..........8#..
+0012ed18  ff 62 02 30 ff 62 02 30 - c8 0c 00 00 38 23 e6 00  .b.0.b.0....8#..
+0012ed28  c8 0c 00 00 ff 62 02 30 - 3e 80 00 00 94 2c e6 00  .....b.0>....,..
+0012ed38  84 2d e5 00 38 23 e6 00 - bc ed 12 00 bc ed 12 00  .-..8#..........
+0012ed48  28 bd e5 00 d8 b2 e5 00 - f9 8b 80 30 24 2e e6 00  (..........0$...
+0012ed58  54 af 50 01 00 ee 12 00 - 84 2d e5 00 1d fd 00 30  T.P......-.....0
+0012ed68  d8 b2 e5 00 ec 0f 00 00 - b0 2d e5 00 10 af e5 00  .........-......
+
+date/time         : 2006-04-12, 20:32:04, 125ms
+computer name     : LIFEBOOK
+user name         : Owner <admin>
+operating system  : Windows XP Service Pack 2 build 2600
+system language   : English
+system up time    : 2 hours 17 minutes
+program up time   : 17 seconds
+processor         : AMD Turion(tm) 64 Mobile Technology MT-37
+physical memory   : 508/959 MB (free/total)
+free disk space   : (C:) 89.50 GB
+display mode      : 1024x768, 32 bit
+process id        : $3e8
+allocated memory  : 25.87 MB
+executable        : VirtualExplorer.exe
+exec. date/time   : 2006-04-12 20:31
+madExcept version : 3.0b
+callstack crc     : $01a2f5b1, $87801c9d, $87801c9d
+exception number  : 3
+exception class   : EAccessViolation
+exception message : Access violation at address 01A2F5B1. Read of address 00000009.
+
+main thread ($cc8):
+01a2f5b1 +0 ???
+77d496c2 +a user32.dll  DispatchMessageA
+7c90eaf5 +9 ntdll.dll   KiUserExceptionDispatcher
+77d496c2 +a user32.dll  DispatchMessageA
+
+thread $e2c:
+7c90eb94 +0 ntdll.dll  KiFastSystemCallRet
+7c90e397 +a ntdll.dll  NtReplyWaitReceivePortEx
+
+thread $c98:
+7c90eb94 +0 ntdll.dll  KiFastSystemCallRet
+7c90e397 +a ntdll.dll  NtReplyWaitReceivePortEx
+
+thread $eac: <priority:15>
+7c90eb94 +00 ntdll.dll     KiFastSystemCallRet
+7c90e9be +0a ntdll.dll     NtWaitForSingleObject
+7c8025d5 +85 kernel32.dll  WaitForSingleObjectEx
+7c80253d +0d kernel32.dll  WaitForSingleObject
+
+thread $680: <suspended> <priority:15>
+7c810856 kernel32.dll
+
+thread $cf0 (TWorkerThread):
+7c90eb94 +00 ntdll.dll     KiFastSystemCallRet
+7c90e9be +0a ntdll.dll     NtWaitForSingleObject
+7c8025d5 +85 kernel32.dll  WaitForSingleObjectEx
+7c80253d +0d kernel32.dll  WaitForSingleObject
+>> created by main thread ($cc8) at:
+01080005 +00 ???
+
+thread $aac (TVirtualImageThread):
+7c90eb94 ntdll.dll  KiFastSystemCallRet
+>> created by main thread ($cc8) at:
+01080005 ???
+
+thread $e88:
+7c90eb94 +00 ntdll.dll     KiFastSystemCallRet
+7c90e9be +0a ntdll.dll     NtWaitForSingleObject
+7c8025d5 +85 kernel32.dll  WaitForSingleObjectEx
+7c80253d +0d kernel32.dll  WaitForSingleObject
+>> created by main thread ($cc8) at:
+01080005 +00 ???
+
+thread $b78:
+7c90eb94 +00 ntdll.dll   KiFastSystemCallRet
+77d5107d +3b user32.dll  GetMessageA
+>> created by main thread ($cc8) at:
+01080005 +00 ???
+
+thread $768 (TVirtualExpandMarkThread):
+7c90eb94 +00 ntdll.dll     KiFastSystemCallRet
+7c90e9be +0a ntdll.dll     NtWaitForSingleObject
+7c8025d5 +85 kernel32.dll  WaitForSingleObjectEx
+7c80253d +0d kernel32.dll  WaitForSingleObject
+7c90eaf5 +09 ntdll.dll     KiUserExceptionDispatcher
+>> created by main thread ($cc8) at:
+01080005 +00 ???
+
+thread $fc8:
+7c90eb94 +0 ntdll.dll  KiFastSystemCallRet
+7c90d85a +a ntdll.dll  NtDelayExecution
+
+thread $d58:
+7c90eb94 +0 ntdll.dll  KiFastSystemCallRet
+7c90e319 +a ntdll.dll  NtRemoveIoCompletion
+
+modules:
+00400000 VirtualExplorer.exe                  C:\Documents and Settings\Owner\My Documents\Delphi\VirtualShellTools\Demos\Virtual Explorer
+04720000 VFuj02b1.dll        2.6.0.0          C:\Program Files\Fujitsu\Fujitsu Hotkey Utility
+04aa0000 intl3_svn.dll       0.14.5.0         C:\Program Files\TortoiseSVN\bin
+05240000 PDFShell.dll        7.0.0.0          C:\Program Files\Adobe\Acrobat 7.0\ActiveX
+055a0000 odbcint.dll         3.525.1117.0     C:\WINDOWS\system32
+070d0000 WMASF.DLL           10.0.0.3646      C:\WINDOWS\system32
+086c0000 WMVCore.DLL         10.0.0.3646      C:\WINDOWS\system32
+092d0000 Audiodev.dll        5.2.3790.3646    C:\WINDOWS\system32
+10000000 tortoisesvn.dll     1.3.2.5840       C:\Program Files\TortoiseSVN\bin
+20000000 xpsp2res.dll        5.1.2600.2180    C:\WINDOWS\system32
+30000000 aqProf.dll          4.91.654.0       C:\Program Files\Automated QA\AQtime 4\Bin
+30200000 aqComm.dll          4.91.654.0       C:\Program Files\Automated QA\AQtime 4\Bin
+30800000 AQNATPROF.DLL       4.91.654.0       C:\PROGRAM FILES\AUTOMATED QA\AQTIME 4\BIN\EXTENSIONS
+5ad70000 uxtheme.dll         6.0.2900.2180    C:\WINDOWS\system32
+5b860000 netapi32.dll        5.1.2600.2180    C:\WINDOWS\system32
+5d090000 comctl32.dll        5.82.2900.2180   C:\WINDOWS\system32
+5edd0000 olepro32.dll        5.1.2600.2180    C:\WINDOWS\system32
+6ee50000 libapriconv.dll     0.9.7.0          C:\Program Files\TortoiseSVN\bin
+6ee60000 libaprutil.dll      0.9.7.0          C:\Program Files\TortoiseSVN\bin
+6eec0000 libapr.dll          0.9.7.0          C:\Program Files\TortoiseSVN\bin
+71a50000 MSWSOCK.dll         5.1.2600.2180    C:\WINDOWS\system32
+71aa0000 WS2HELP.dll         5.1.2600.2180    C:\WINDOWS\system32
+71ab0000 WS2_32.dll          5.1.2600.2180    C:\WINDOWS\system32
+71ad0000 wsock32.dll         5.1.2600.2180    C:\WINDOWS\system32
+71b20000 mpr.dll             5.1.2600.2180    C:\WINDOWS\system32
+71bf0000 SAMLIB.dll          5.1.2600.2180    C:\WINDOWS\System32
+71c10000 ntlanman.dll        5.1.2600.2180    C:\WINDOWS\System32
+71c80000 NETRAP.dll          5.1.2600.2180    C:\WINDOWS\System32
+71c90000 NETUI1.dll          5.1.2600.2180    C:\WINDOWS\System32
+71cd0000 NETUI0.dll          5.1.2600.2180    C:\WINDOWS\System32
+73380000 zipfldr.dll         6.0.2900.2180    C:\WINDOWS\system32
+73d70000 shgina.dll          6.0.2900.2180    C:\WINDOWS\system32
+74320000 ODBC32.dll          3.525.1117.0     C:\WINDOWS\system32
+754d0000 CRYPTUI.dll         5.131.2600.2180  C:\WINDOWS\system32
+75970000 MSGINA.dll          5.1.2600.2180    C:\WINDOWS\system32
+75f60000 drprov.dll          5.1.2600.2180    C:\WINDOWS\System32
+75f70000 davclnt.dll         5.1.2600.2180    C:\WINDOWS\System32
+76360000 WINSTA.dll          5.1.2600.2180    C:\WINDOWS\system32
+763b0000 comdlg32.dll        6.0.2900.2180    C:\WINDOWS\system32
+76990000 ntshrui.dll         5.1.2600.2180    C:\WINDOWS\system32
+769c0000 USERENV.dll         5.1.2600.2180    C:\WINDOWS\system32
+76b20000 ATL.DLL             3.5.2284.0       C:\WINDOWS\system32
+76b40000 winmm.dll           5.1.2600.2180    C:\WINDOWS\system32
+76bf0000 psapi.dll           5.1.2600.2180    C:\WINDOWS\system32
+76c30000 WINTRUST.dll        5.131.2600.2180  C:\WINDOWS\system32
+76c90000 IMAGEHLP.dll        5.1.2600.2180    C:\WINDOWS\system32
+76f60000 WLDAP32.dll         5.1.2600.2180    C:\WINDOWS\system32
+76fd0000 CLBCATQ.DLL         2001.12.4414.308 C:\WINDOWS\system32
+77050000 COMRes.dll          2001.12.4414.258 C:\WINDOWS\system32
+77120000 oleaut32.dll        5.1.2600.2180    C:\WINDOWS\system32
+771b0000 WININET.dll         6.0.2900.2753    C:\WINDOWS\system32
+773d0000 comctl32.dll        6.0.2900.2180    C:\WINDOWS\WinSxS\x86_Microsoft.Windows.Common-Controls_6595b64144ccf1df_6.0.2600.2180_x-ww_a84f1ff9
+774e0000 ole32.dll           5.1.2600.2726    C:\WINDOWS\system32
+77760000 shdocvw.dll         6.0.2900.2753    C:\WINDOWS\system32
+77920000 SETUPAPI.dll        5.1.2600.2180    C:\WINDOWS\system32
+77a80000 CRYPT32.dll         5.131.2600.2180  C:\WINDOWS\system32
+77b20000 MSASN1.dll          5.1.2600.2180    C:\WINDOWS\system32
+77b40000 appHelp.dll         5.1.2600.2180    C:\WINDOWS\system32
+77c00000 version.dll         5.1.2600.2180    C:\WINDOWS\system32
+77c10000 msvcrt.dll          7.0.2600.2180    C:\WINDOWS\system32
+77d40000 user32.dll          5.1.2600.2622    C:\WINDOWS\system32
+77dd0000 advapi32.dll        5.1.2600.2180    C:\WINDOWS\system32
+77e70000 RPCRT4.dll          5.1.2600.2180    C:\WINDOWS\system32
+77f10000 GDI32.dll           5.1.2600.2770    C:\WINDOWS\system32
+77f60000 SHLWAPI.dll         6.0.2900.2753    C:\WINDOWS\system32
+77fe0000 Secur32.dll         5.1.2600.2180    C:\WINDOWS\system32
+78130000 MSVCR80.dll         8.0.50727.42     C:\WINDOWS\WinSxS\x86_Microsoft.VC80.CRT_1fc8b3b9a1e18e3b_8.0.50727.42_x-ww_0de06acd
+7c420000 MSVCP80.dll         8.0.50727.42     C:\WINDOWS\WinSxS\x86_Microsoft.VC80.CRT_1fc8b3b9a1e18e3b_8.0.50727.42_x-ww_0de06acd
+7c800000 kernel32.dll        5.1.2600.2180    C:\WINDOWS\system32
+7c900000 ntdll.dll           5.1.2600.2180    C:\WINDOWS\system32
+7c9c0000 shell32.dll         6.0.2900.2763    C:\WINDOWS\system32
+
+processes:
+000 Idle
+004 System              normal
+3d0 smss.exe            normal C:\WINDOWS\system32
+440 csrss.exe           normal C:\WINDOWS\system32
+460 winlogon.exe        high   C:\WINDOWS\system32
+48c services.exe        normal C:\WINDOWS\system32
+498 lsass.exe           normal C:\WINDOWS\system32
+528 Ati2evxx.exe        normal C:\WINDOWS\system32
+534 svchost.exe         normal C:\WINDOWS\system32
+594 svchost.exe         normal C:\WINDOWS\system32
+5b8 svchost.exe         normal C:\WINDOWS\System32
+5e8 svchost.exe         normal C:\WINDOWS\system32
+620 svchost.exe         normal C:\WINDOWS\system32
+778 spoolsv.exe         normal C:\WINDOWS\system32
+7dc cvpnd.exe           normal C:\Program Files\Cisco Systems\VPN Client
+0d0 svchost.exe         normal C:\WINDOWS\system32
+12c wdfmgr.exe          normal C:\WINDOWS\system32
+150 MsPMSPSv.exe        normal C:\WINDOWS\system32
+2f0 alg.exe             normal C:\WINDOWS\System32
+3a4 Ati2evxx.exe        normal C:\WINDOWS\system32
+3fc Explorer.EXE        normal C:\WINDOWS
+6f0 TSVNCache.exe       normal C:\Program Files\TortoiseSVN\bin
+6fc wscntfy.exe         normal C:\WINDOWS\system32
+730 cli.exe             normal C:\Program Files\ATI Technologies\ATI.ACE
+168 RTHDCPL.EXE         normal C:\WINDOWS
+2e4 IndicatorUty.exe    normal C:\Program Files\Fujitsu\Fujitsu Hotkey Utility
+2bc AGRSMMSG.exe        normal C:\WINDOWS
+370 fjdvrupd.exe        normal C:\Program Files\Fujitsu\fjdvrupd
+e10 cli.exe             normal C:\Program Files\ATI Technologies\ATI.ACE
+9c4 svchost.exe         normal C:\WINDOWS\System32
+ec0 delphi32.exe        normal C:\Program Files\Borland\Delphi7\Bin
+340 CodeFactor.exe      normal C:\Program Files\CodeFactor
+a98 taskmgr.exe         high   C:\WINDOWS\system32
+cfc AQtime.exe          normal C:\Program Files\Automated QA\AQtime 4\Bin
+3e8 VirtualExplorer.exe normal C:\Documents and Settings\Owner\My Documents\Delphi\VirtualShellTools\Demos\Virtual Explorer
+
+hardware:
++ Batteries
+  - Microsoft AC Adapter
+  - Microsoft ACPI-Compliant Control Method Battery
++ Computer
+  - ACPI Uniprocessor PC
++ Disk drives
+  - FUJITSU MHV2120AT PL
++ Display adapters
+  - ATI RADEON XPRESS 200M Series     (driver 8.181.0.0)
++ DVD/CD-ROM drives
+  - HL-DT-ST DVDRAM GMA4082Nj
++ Human Interface Devices
+  - Microsoft USB Wheel Mouse Optical
++ IDE ATA/ATAPI controllers
+  - Primary IDE Channel
+  - Ricoh Memory Stick Host Controller (driver 1.0.1.13)
+  - Ricoh SD Bus Host Adapter (driver 1.0.3.10)
+  - Ricoh xD-Picture Card Controller (driver 1.0.1.5)
+  - Secondary IDE Channel
+  - Standard Dual Channel PCI IDE Controller
++ IEEE 1394 Bus host controllers
+  - OHCI Compliant IEEE 1394 Host Controller
++ Keyboards
+  - Standard 101/102-Key or Microsoft Natural PS/2 Keyboard
++ Mice and other pointing devices
+  - Alps Pointing-device (driver 5.6.401.3)
+  - Microsoft USB Wheel Mouse Optical
++ Modems
+  - Agere Systems HDA Modem (driver 2.1.57.9)
++ Monitors
+  - Default Monitor
+  - Default Monitor
+  - Default Monitor
++ Network adapters
+  - 1394 Net Adapter
+  - Atheros AR5006X Wireless Network Adapter (driver 4.1.2.71)
+  - Broadcom NetXtreme Gigabit Ethernet (driver 8.39.1.0)
+  - Cisco Systems VPN Adapter (driver 4.0.0.106)
++ PCMCIA adapters
+  - Ricoh R/RL/5C476(II) or Compatible CardBus Controller
++ Processors
+  - AMD Turion(tm) 64 Mobile Technology MT-37 (driver 1.2.2.0)
++ Sound, video and game controllers
+  - Audio Codecs
+  - Legacy Audio Drivers
+  - Legacy Video Capture Devices
+  - Media Control Devices
+  - Realtek High Definition Audio (driver 5.10.0.5169)
+  - Video Codecs
++ System devices
+  - ACPI Fixed Feature Button
+  - ACPI Lid
+  - ACPI Power Button
+  - ATI SMBus (driver 5.10.1000.5)
+  - Direct memory access controller
+  - Fujitsu FUJ02B1 Device Driver (driver 1.21.0.0)
+  - Fujitsu FUJ02E3 Device Driver (driver 1.0.0.0)
+  - ISAPNP Read Data Port
+  - Microcode Update Device
+  - Microsoft ACPI-Compliant System
+  - Microsoft Composite Battery
+  - Microsoft System Management BIOS Driver
+  - Microsoft UAA Bus Driver for High Definition Audio
+  - Motherboard resources
+  - Motherboard resources
+  - Motherboard resources
+  - Motherboard resources
+  - Numeric data processor
+  - PCI bus
+  - PCI standard host CPU bridge
+  - PCI standard host CPU bridge
+  - PCI standard host CPU bridge
+  - PCI standard host CPU bridge
+  - PCI standard host CPU bridge
+  - PCI standard ISA bridge
+  - PCI standard PCI-to-PCI bridge
+  - PCI standard PCI-to-PCI bridge
+  - PCI standard PCI-to-PCI bridge
+  - PCI standard PCI-to-PCI bridge
+  - Plug and Play Software Device Enumerator
+  - Programmable interrupt controller
+  - System board
+  - System CMOS/real time clock
+  - System speaker
+  - System timer
+  - Terminal Server Keyboard Driver
+  - Terminal Server Mouse Driver
+  - Volume Manager
++ Universal Serial Bus controllers
+  - Standard Enhanced PCI to USB Host Controller
+  - Standard OpenHCD USB Host Controller
+  - Standard OpenHCD USB Host Controller
+  - USB Root Hub
+  - USB Root Hub
+  - USB Root Hub
+
+cpu registers:
+eax = 00000000
+ebx = 00000000
+ecx = 0012ef20
+edx = 00000000
+esi = 0136cd70
+edi = 0000803e
+eip = 01a2f5b1
+esp = 0012ef90
+ebp = 0012efd0
+
+stack dump:
+0012ef90  f4 ef 12 00 c4 3f 40 00 - d0 ef 12 00 3e 80 00 00  .....?@.....>...
+0012efa0  60 e6 36 01 e4 4f 36 01 - 0c 07 02 00 3e 80 00 00  `.6..O6.....>...
+0012efb0  f8 2d 38 01 00 00 00 00 - 5d c4 6f 00 5f 01 00 00  .-8.....].o._...
+0012efc0  17 01 00 00 09 00 00 00 - 60 e6 36 01 78 34 37 01  ........`.6.x47.
+0012efd0  e8 ef 12 00 5c 10 a3 01 - 34 60 60 77 24 f1 4f 00  ....\...4``w$.O.
+0012efe0  49 24 4f 00 01 00 00 00 - 28 f0 12 00 b8 42 a5 01  I$O.....(....B..
+0012eff0  34 60 60 77 00 f0 12 00 - c4 3f 40 00 28 f0 12 00  4``w.....?@.(...
+0012f000  38 f0 12 00 c4 3f 40 00 - 28 f0 12 00 eb f1 12 00  8....?@.(.......
+0012f010  01 2c 4b 00 00 00 00 00 - 00 00 00 00 98 13 38 01  .,K...........8.
+0012f020  60 e6 36 01 28 f6 36 01 - 4c f0 12 00 94 bb a4 01  `.6.(.6.L.......
+0012f030  01 2c 4b 00 01 00 00 00 - 5c f3 12 00 c4 3f 40 00  .,K.....\....?@.
+0012f040  4c f0 12 00 90 f3 12 00 - 60 e6 36 01 64 f0 12 00  L.......`.6.d...
+0012f050  d6 39 a4 01 60 e6 36 01 - 8c f3 12 00 01 00 01 01  .9..`.6.........
+0012f060  60 e6 36 01 ec f1 12 00 - f1 79 9e 01 ec 53 52 00  `.6......y...SR.
+0012f070  60 e6 36 01 8c f3 12 00 - 38 23 e6 00 ff 62 02 30  `.6.....8#...b.0
+0012f080  ff 62 02 30 60 e6 36 01 - 94 2c e6 00 84 2d e5 00  .b.0`.6..,...-..
+0012f090  38 23 e6 00 c8 0c 00 00 - c8 0c 00 00 ff 62 02 30  8#...........b.0
+0012f0a0  ff 62 02 30 60 e6 36 01 - 94 2c e6 00 84 2d e5 00  .b.0`.6..,...-..
+0012f0b0  38 23 e6 00 c8 0c 00 00 - c8 0c 00 00 04 f4 12 00  8#..............
+0012f0c0  94 2c e6 00 84 2d e5 00 - 38 23 e6 00 38 23 e6 00  .,...-..8#..8#..
+
+disassembling:
+[...]
+77d496b8   mov     edi, edi
+77d496ba   push    ebp
+77d496bb   mov     ebp, esp
+77d496bd   push    1
+77d496bf   push    dword ptr [ebp+8]
+77d496c2 > call    -$dd6 ($77d488f1)
+77d496c7   pop     ebp
+77d496c8   ret     4
+
+date/time         : 2006-04-12, 20:32:05, 562ms
+computer name     : LIFEBOOK
+user name         : Owner <admin>
+operating system  : Windows XP Service Pack 2 build 2600
+system language   : English
+system up time    : 2 hours 17 minutes
+program up time   : 19 seconds
+processor         : AMD Turion(tm) 64 Mobile Technology MT-37
+physical memory   : 508/959 MB (free/total)
+free disk space   : (C:) 89.50 GB
+display mode      : 1024x768, 32 bit
+process id        : $3e8
+allocated memory  : 30.03 MB
+executable        : VirtualExplorer.exe
+exec. date/time   : 2006-04-12 20:31
+madExcept version : 3.0b
+callstack crc     : $01a2fb4c, $0b65dfe5, $0b65dfe5
+exception number  : 4
+exception class   : EAccessViolation
+exception message : Access violation at address 01A2FB4C. Read of address 00000000.
+
+thread $768 (TVirtualExpandMarkThread):
+01a2fb4c ???
+>> created by main thread ($cc8) at:
+01080005 ???
+
+main thread ($cc8):
+7c90eb94 +0 ntdll.dll   KiFastSystemCallRet
+77d496c2 +a user32.dll  DispatchMessageA
+
+thread $e2c:
+7c90eb94 +0 ntdll.dll  KiFastSystemCallRet
+7c90e397 +a ntdll.dll  NtReplyWaitReceivePortEx
+
+thread $c98:
+7c90eb94 +0 ntdll.dll  KiFastSystemCallRet
+7c90e397 +a ntdll.dll  NtReplyWaitReceivePortEx
+
+thread $eac: <priority:15>
+7c90eb94 +00 ntdll.dll     KiFastSystemCallRet
+7c90e9be +0a ntdll.dll     NtWaitForSingleObject
+7c8025d5 +85 kernel32.dll  WaitForSingleObjectEx
+7c80253d +0d kernel32.dll  WaitForSingleObject
+
+thread $680: <suspended> <priority:15>
+7c810856 kernel32.dll
+
+thread $cf0 (TWorkerThread):
+7c90eb94 +00 ntdll.dll     KiFastSystemCallRet
+7c90e9be +0a ntdll.dll     NtWaitForSingleObject
+7c8025d5 +85 kernel32.dll  WaitForSingleObjectEx
+7c80253d +0d kernel32.dll  WaitForSingleObject
+>> created by main thread ($cc8) at:
+01080005 +00 ???
+
+thread $aac (TVirtualImageThread):
+7c90eb94 +00 ntdll.dll     KiFastSystemCallRet
+7c90d590 +0a ntdll.dll     NtClose
+77dd6c6f +7f advapi32.dll  RegCloseKey
+7c9fbb3e +1d shell32.dll   SHMapPIDLToSystemImageListIndex
+7ca2b0f2 +d7 shell32.dll   SHGetFileInfoW
+7ca313a2 +69 shell32.dll   SHGetFileInfo
+77f640be +48 SHLWAPI.dll   #219
+>> created by main thread ($cc8) at:
+01080005 +00 ???
+
+thread $e88:
+7c90eb94 +00 ntdll.dll     KiFastSystemCallRet
+7c90e9be +0a ntdll.dll     NtWaitForSingleObject
+7c8025d5 +85 kernel32.dll  WaitForSingleObjectEx
+7c80253d +0d kernel32.dll  WaitForSingleObject
+>> created by main thread ($cc8) at:
+01080005 +00 ???
+
+thread $b78:
+7c90eb94 +00 ntdll.dll   KiFastSystemCallRet
+77d5107d +3b user32.dll  GetMessageA
+>> created by main thread ($cc8) at:
+01080005 +00 ???
+
+thread $fc8:
+7c90eb94 +0 ntdll.dll  KiFastSystemCallRet
+7c90d85a +a ntdll.dll  NtDelayExecution
+
+thread $d58:
+7c90eb94 +0 ntdll.dll  KiFastSystemCallRet
+7c90e319 +a ntdll.dll  NtRemoveIoCompletion
+
+modules:
+00400000 VirtualExplorer.exe                  C:\Documents and Settings\Owner\My Documents\Delphi\VirtualShellTools\Demos\Virtual Explorer
+04720000 VFuj02b1.dll        2.6.0.0          C:\Program Files\Fujitsu\Fujitsu Hotkey Utility
+04aa0000 intl3_svn.dll       0.14.5.0         C:\Program Files\TortoiseSVN\bin
+05240000 PDFShell.dll        7.0.0.0          C:\Program Files\Adobe\Acrobat 7.0\ActiveX
+055a0000 odbcint.dll         3.525.1117.0     C:\WINDOWS\system32
+070d0000 WMASF.DLL           10.0.0.3646      C:\WINDOWS\system32
+086c0000 WMVCore.DLL         10.0.0.3646      C:\WINDOWS\system32
+092d0000 Audiodev.dll        5.2.3790.3646    C:\WINDOWS\system32
+10000000 tortoisesvn.dll     1.3.2.5840       C:\Program Files\TortoiseSVN\bin
+20000000 xpsp2res.dll        5.1.2600.2180    C:\WINDOWS\system32
+30000000 aqProf.dll          4.91.654.0       C:\Program Files\Automated QA\AQtime 4\Bin
+30200000 aqComm.dll          4.91.654.0       C:\Program Files\Automated QA\AQtime 4\Bin
+30800000 AQNATPROF.DLL       4.91.654.0       C:\PROGRAM FILES\AUTOMATED QA\AQTIME 4\BIN\EXTENSIONS
+5ad70000 uxtheme.dll         6.0.2900.2180    C:\WINDOWS\system32
+5b860000 netapi32.dll        5.1.2600.2180    C:\WINDOWS\system32
+5d090000 comctl32.dll        5.82.2900.2180   C:\WINDOWS\system32
+5edd0000 olepro32.dll        5.1.2600.2180    C:\WINDOWS\system32
+6ee50000 libapriconv.dll     0.9.7.0          C:\Program Files\TortoiseSVN\bin
+6ee60000 libaprutil.dll      0.9.7.0          C:\Program Files\TortoiseSVN\bin
+6eec0000 libapr.dll          0.9.7.0          C:\Program Files\TortoiseSVN\bin
+71a50000 MSWSOCK.dll         5.1.2600.2180    C:\WINDOWS\system32
+71aa0000 WS2HELP.dll         5.1.2600.2180    C:\WINDOWS\system32
+71ab0000 WS2_32.dll          5.1.2600.2180    C:\WINDOWS\system32
+71ad0000 wsock32.dll         5.1.2600.2180    C:\WINDOWS\system32
+71b20000 mpr.dll             5.1.2600.2180    C:\WINDOWS\system32
+71bf0000 SAMLIB.dll          5.1.2600.2180    C:\WINDOWS\System32
+71c10000 ntlanman.dll        5.1.2600.2180    C:\WINDOWS\System32
+71c80000 NETRAP.dll          5.1.2600.2180    C:\WINDOWS\System32
+71c90000 NETUI1.dll          5.1.2600.2180    C:\WINDOWS\System32
+71cd0000 NETUI0.dll          5.1.2600.2180    C:\WINDOWS\System32
+73380000 zipfldr.dll         6.0.2900.2180    C:\WINDOWS\system32
+73d70000 shgina.dll          6.0.2900.2180    C:\WINDOWS\system32
+74320000 ODBC32.dll          3.525.1117.0     C:\WINDOWS\system32
+754d0000 CRYPTUI.dll         5.131.2600.2180  C:\WINDOWS\system32
+75970000 MSGINA.dll          5.1.2600.2180    C:\WINDOWS\system32
+75f60000 drprov.dll          5.1.2600.2180    C:\WINDOWS\System32
+75f70000 davclnt.dll         5.1.2600.2180    C:\WINDOWS\System32
+76360000 WINSTA.dll          5.1.2600.2180    C:\WINDOWS\system32
+763b0000 comdlg32.dll        6.0.2900.2180    C:\WINDOWS\system32
+76990000 ntshrui.dll         5.1.2600.2180    C:\WINDOWS\system32
+769c0000 USERENV.dll         5.1.2600.2180    C:\WINDOWS\system32
+76b20000 ATL.DLL             3.5.2284.0       C:\WINDOWS\system32
+76b40000 winmm.dll           5.1.2600.2180    C:\WINDOWS\system32
+76bf0000 psapi.dll           5.1.2600.2180    C:\WINDOWS\system32
+76c30000 WINTRUST.dll        5.131.2600.2180  C:\WINDOWS\system32
+76c90000 IMAGEHLP.dll        5.1.2600.2180    C:\WINDOWS\system32
+76f60000 WLDAP32.dll         5.1.2600.2180    C:\WINDOWS\system32
+76fd0000 CLBCATQ.DLL         2001.12.4414.308 C:\WINDOWS\system32
+77050000 COMRes.dll          2001.12.4414.258 C:\WINDOWS\system32
+77120000 oleaut32.dll        5.1.2600.2180    C:\WINDOWS\system32
+771b0000 WININET.dll         6.0.2900.2753    C:\WINDOWS\system32
+773d0000 comctl32.dll        6.0.2900.2180    C:\WINDOWS\WinSxS\x86_Microsoft.Windows.Common-Controls_6595b64144ccf1df_6.0.2600.2180_x-ww_a84f1ff9
+774e0000 ole32.dll           5.1.2600.2726    C:\WINDOWS\system32
+77760000 shdocvw.dll         6.0.2900.2753    C:\WINDOWS\system32
+77920000 SETUPAPI.dll        5.1.2600.2180    C:\WINDOWS\system32
+77a80000 CRYPT32.dll         5.131.2600.2180  C:\WINDOWS\system32
+77b20000 MSASN1.dll          5.1.2600.2180    C:\WINDOWS\system32
+77b40000 appHelp.dll         5.1.2600.2180    C:\WINDOWS\system32
+77c00000 version.dll         5.1.2600.2180    C:\WINDOWS\system32
+77c10000 msvcrt.dll          7.0.2600.2180    C:\WINDOWS\system32
+77d40000 user32.dll          5.1.2600.2622    C:\WINDOWS\system32
+77dd0000 advapi32.dll        5.1.2600.2180    C:\WINDOWS\system32
+77e70000 RPCRT4.dll          5.1.2600.2180    C:\WINDOWS\system32
+77f10000 GDI32.dll           5.1.2600.2770    C:\WINDOWS\system32
+77f60000 SHLWAPI.dll         6.0.2900.2753    C:\WINDOWS\system32
+77fe0000 Secur32.dll         5.1.2600.2180    C:\WINDOWS\system32
+78130000 MSVCR80.dll         8.0.50727.42     C:\WINDOWS\WinSxS\x86_Microsoft.VC80.CRT_1fc8b3b9a1e18e3b_8.0.50727.42_x-ww_0de06acd
+7c420000 MSVCP80.dll         8.0.50727.42     C:\WINDOWS\WinSxS\x86_Microsoft.VC80.CRT_1fc8b3b9a1e18e3b_8.0.50727.42_x-ww_0de06acd
+7c800000 kernel32.dll        5.1.2600.2180    C:\WINDOWS\system32
+7c900000 ntdll.dll           5.1.2600.2180    C:\WINDOWS\system32
+7c9c0000 shell32.dll         6.0.2900.2763    C:\WINDOWS\system32
+
+processes:
+000 Idle
+004 System              normal
+3d0 smss.exe            normal C:\WINDOWS\system32
+440 csrss.exe           normal C:\WINDOWS\system32
+460 winlogon.exe        high   C:\WINDOWS\system32
+48c services.exe        normal C:\WINDOWS\system32
+498 lsass.exe           normal C:\WINDOWS\system32
+528 Ati2evxx.exe        normal C:\WINDOWS\system32
+534 svchost.exe         normal C:\WINDOWS\system32
+594 svchost.exe         normal C:\WINDOWS\system32
+5b8 svchost.exe         normal C:\WINDOWS\System32
+5e8 svchost.exe         normal C:\WINDOWS\system32
+620 svchost.exe         normal C:\WINDOWS\system32
+778 spoolsv.exe         normal C:\WINDOWS\system32
+7dc cvpnd.exe           normal C:\Program Files\Cisco Systems\VPN Client
+0d0 svchost.exe         normal C:\WINDOWS\system32
+12c wdfmgr.exe          normal C:\WINDOWS\system32
+150 MsPMSPSv.exe        normal C:\WINDOWS\system32
+2f0 alg.exe             normal C:\WINDOWS\System32
+3a4 Ati2evxx.exe        normal C:\WINDOWS\system32
+3fc Explorer.EXE        normal C:\WINDOWS
+6f0 TSVNCache.exe       normal C:\Program Files\TortoiseSVN\bin
+6fc wscntfy.exe         normal C:\WINDOWS\system32
+730 cli.exe             normal C:\Program Files\ATI Technologies\ATI.ACE
+168 RTHDCPL.EXE         normal C:\WINDOWS
+2e4 IndicatorUty.exe    normal C:\Program Files\Fujitsu\Fujitsu Hotkey Utility
+2bc AGRSMMSG.exe        normal C:\WINDOWS
+370 fjdvrupd.exe        normal C:\Program Files\Fujitsu\fjdvrupd
+e10 cli.exe             normal C:\Program Files\ATI Technologies\ATI.ACE
+9c4 svchost.exe         normal C:\WINDOWS\System32
+ec0 delphi32.exe        normal C:\Program Files\Borland\Delphi7\Bin
+340 CodeFactor.exe      normal C:\Program Files\CodeFactor
+a98 taskmgr.exe         high   C:\WINDOWS\system32
+cfc AQtime.exe          normal C:\Program Files\Automated QA\AQtime 4\Bin
+3e8 VirtualExplorer.exe normal C:\Documents and Settings\Owner\My Documents\Delphi\VirtualShellTools\Demos\Virtual Explorer
+
+hardware:
++ Batteries
+  - Microsoft AC Adapter
+  - Microsoft ACPI-Compliant Control Method Battery
++ Computer
+  - ACPI Uniprocessor PC
++ Disk drives
+  - FUJITSU MHV2120AT PL
++ Display adapters
+  - ATI RADEON XPRESS 200M Series     (driver 8.181.0.0)
++ DVD/CD-ROM drives
+  - HL-DT-ST DVDRAM GMA4082Nj
++ Human Interface Devices
+  - Microsoft USB Wheel Mouse Optical
++ IDE ATA/ATAPI controllers
+  - Primary IDE Channel
+  - Ricoh Memory Stick Host Controller (driver 1.0.1.13)
+  - Ricoh SD Bus Host Adapter (driver 1.0.3.10)
+  - Ricoh xD-Picture Card Controller (driver 1.0.1.5)
+  - Secondary IDE Channel
+  - Standard Dual Channel PCI IDE Controller
++ IEEE 1394 Bus host controllers
+  - OHCI Compliant IEEE 1394 Host Controller
++ Keyboards
+  - Standard 101/102-Key or Microsoft Natural PS/2 Keyboard
++ Mice and other pointing devices
+  - Alps Pointing-device (driver 5.6.401.3)
+  - Microsoft USB Wheel Mouse Optical
++ Modems
+  - Agere Systems HDA Modem (driver 2.1.57.9)
++ Monitors
+  - Default Monitor
+  - Default Monitor
+  - Default Monitor
++ Network adapters
+  - 1394 Net Adapter
+  - Atheros AR5006X Wireless Network Adapter (driver 4.1.2.71)
+  - Broadcom NetXtreme Gigabit Ethernet (driver 8.39.1.0)
+  - Cisco Systems VPN Adapter (driver 4.0.0.106)
++ PCMCIA adapters
+  - Ricoh R/RL/5C476(II) or Compatible CardBus Controller
++ Processors
+  - AMD Turion(tm) 64 Mobile Technology MT-37 (driver 1.2.2.0)
++ Sound, video and game controllers
+  - Audio Codecs
+  - Legacy Audio Drivers
+  - Legacy Video Capture Devices
+  - Media Control Devices
+  - Realtek High Definition Audio (driver 5.10.0.5169)
+  - Video Codecs
++ System devices
+  - ACPI Fixed Feature Button
+  - ACPI Lid
+  - ACPI Power Button
+  - ATI SMBus (driver 5.10.1000.5)
+  - Direct memory access controller
+  - Fujitsu FUJ02B1 Device Driver (driver 1.21.0.0)
+  - Fujitsu FUJ02E3 Device Driver (driver 1.0.0.0)
+  - ISAPNP Read Data Port
+  - Microcode Update Device
+  - Microsoft ACPI-Compliant System
+  - Microsoft Composite Battery
+  - Microsoft System Management BIOS Driver
+  - Microsoft UAA Bus Driver for High Definition Audio
+  - Motherboard resources
+  - Motherboard resources
+  - Motherboard resources
+  - Motherboard resources
+  - Numeric data processor
+  - PCI bus
+  - PCI standard host CPU bridge
+  - PCI standard host CPU bridge
+  - PCI standard host CPU bridge
+  - PCI standard host CPU bridge
+  - PCI standard host CPU bridge
+  - PCI standard ISA bridge
+  - PCI standard PCI-to-PCI bridge
+  - PCI standard PCI-to-PCI bridge
+  - PCI standard PCI-to-PCI bridge
+  - PCI standard PCI-to-PCI bridge
+  - Plug and Play Software Device Enumerator
+  - Programmable interrupt controller
+  - System board
+  - System CMOS/real time clock
+  - System speaker
+  - System timer
+  - Terminal Server Keyboard Driver
+  - Terminal Server Mouse Driver
+  - Volume Manager
++ Universal Serial Bus controllers
+  - Standard Enhanced PCI to USB Host Controller
+  - Standard OpenHCD USB Host Controller
+  - Standard OpenHCD USB Host Controller
+  - USB Root Hub
+  - USB Root Hub
+  - USB Root Hub
+
+cpu registers:
+eax = 00000000
+ebx = 0136cd70
+ecx = 7ffaf000
+edx = 00000008
+esi = 013603bc
+edi = 00e5b248
+eip = 01a2fb4c
+esp = 0522fe98
+ebp = 0522fef8
+
+stack dump:
+0522fe98  a4 fe 22 05 c4 3f 40 00 - f8 fe 22 05 b0 fe 22 05  .."..?@..."...".
+0522fea8  c4 3f 40 00 f8 fe 22 05 - 00 ff 22 05 c4 3f 40 00  .?@..."..."..?@.
+0522feb8  f8 fe 22 05 48 b2 e5 00 - bc 03 36 01 78 29 4f 00  ..".H.....6.x)O.
+0522fec8  c3 47 80 88 d4 2d 06 00 - 00 00 00 00 60 e6 36 01  .G...-......`.6.
+0522fed8  28 6d 38 01 00 00 00 00 - a0 00 00 00 3e 80 00 00  (m8.........>...
+0522fee8  00 00 00 00 00 00 00 00 - 08 00 00 00 78 34 37 01  ............x47.
+0522fef8  28 ff 22 05 2a 2d 97 01 - 0c ff 22 05 e4 3d 40 00  (.".*-...."..=@.
+0522ff08  28 ff 22 05 30 ff 22 05 - 1e c7 44 00 28 ff 22 05  (.".0."...D.(.".
+0522ff18  48 b2 e5 00 bc 03 36 01 - 78 ff 22 05 78 34 37 01  H.....6.x.".x47.
+0522ff28  58 ff 22 05 05 00 08 01 - 3c ff 22 05 8d b0 46 00  X.".....<."...F.
+0522ff38  58 ff 22 05 60 ff 22 05 - e2 b0 46 00 58 ff 22 05  X.".`."...F.X.".
+0522ff48  48 b2 e5 00 bc 03 36 01 - 78 ff 22 05 78 34 37 01  H.....6.x.".x47.
+0522ff58  6c ff 22 05 05 00 08 01 - 8c ff 22 05 f4 41 40 00  l."......."..A@.
+0522ff68  6c ff 22 05 7c ff 22 05 - 05 00 08 01 bc 03 36 01  l.".|.".......6.
+0522ff78  90 46 40 00 b4 ff 22 05 - 05 00 08 01 90 46 40 00  .F@..."......F@.
+0522ff88  bc 03 36 01 98 ff 22 05 - 11 c6 44 00 b4 ff 22 05  ..6..."...D...".
+0522ff98  dc ff 22 05 75 c6 44 00 - b4 ff 22 05 48 b2 e5 00  ..".u.D...".H...
+0522ffa8  58 84 18 01 5c 2b 37 01 - b0 ff 22 05 ec ff 22 05  X...\+7..."...".
+0522ffb8  05 00 08 01 5c 2b 37 01 - 48 b2 e5 00 58 84 18 01  ....\+7.H...X...
+0522ffc8  5c 2b 37 01 00 f0 fa 7f - 00 06 9c 85 c0 ff 22 05  \+7...........".
+
+date/time         : 2006-04-12, 20:32:09, 359ms
+computer name     : LIFEBOOK
+user name         : Owner <admin>
+operating system  : Windows XP Service Pack 2 build 2600
+system language   : English
+system up time    : 2 hours 17 minutes
+program up time   : 23 seconds
+processor         : AMD Turion(tm) 64 Mobile Technology MT-37
+physical memory   : 508/959 MB (free/total)
+free disk space   : (C:) 89.50 GB
+display mode      : 1024x768, 32 bit
+process id        : $3e8
+allocated memory  : 30.64 MB
+executable        : VirtualExplorer.exe
+exec. date/time   : 2006-04-12 20:31
+madExcept version : 3.0b
+callstack crc     : $01a2f5b1, $1604b7a2, $1604b7a2
+exception number  : 5
+exception class   : EAccessViolation
+exception message : Access violation at address 01A2F5B1. Read of address 00000009.
+
+main thread ($cc8):
+01a2f5b1 +00 ???
+7c90eae0 +10 ntdll.dll  KiUserCallbackDispatcher
+
+thread $e2c:
+7c90eb94 +0 ntdll.dll  KiFastSystemCallRet
+7c90e397 +a ntdll.dll  NtReplyWaitReceivePortEx
+
+thread $c98:
+7c90eb94 +0 ntdll.dll  KiFastSystemCallRet
+7c90e397 +a ntdll.dll  NtReplyWaitReceivePortEx
+
+thread $eac: <priority:15>
+7c90eb94 +00 ntdll.dll     KiFastSystemCallRet
+7c90e9be +0a ntdll.dll     NtWaitForSingleObject
+7c8025d5 +85 kernel32.dll  WaitForSingleObjectEx
+7c80253d +0d kernel32.dll  WaitForSingleObject
+
+thread $680: <suspended> <priority:15>
+7c810856 kernel32.dll
+
+thread $cf0 (TWorkerThread):
+7c90eb94 +00 ntdll.dll     KiFastSystemCallRet
+7c90e9be +0a ntdll.dll     NtWaitForSingleObject
+7c8025d5 +85 kernel32.dll  WaitForSingleObjectEx
+7c80253d +0d kernel32.dll  WaitForSingleObject
+>> created by main thread ($cc8) at:
+01080005 +00 ???
+
+thread $aac (TVirtualImageThread):
+7c90eb94 +00 ntdll.dll     KiFastSystemCallRet
+7c90e9be +0a ntdll.dll     NtWaitForSingleObject
+7c8025d5 +85 kernel32.dll  WaitForSingleObjectEx
+7c80253d +0d kernel32.dll  WaitForSingleObject
+>> created by main thread ($cc8) at:
+01080005 +00 ???
+
+thread $fc8:
+7c90eb94 +0 ntdll.dll  KiFastSystemCallRet
+7c90d85a +a ntdll.dll  NtDelayExecution
+
+thread $d58:
+7c90eb94 +0 ntdll.dll  KiFastSystemCallRet
+7c90e319 +a ntdll.dll  NtRemoveIoCompletion
+
+modules:
+00400000 VirtualExplorer.exe                  C:\Documents and Settings\Owner\My Documents\Delphi\VirtualShellTools\Demos\Virtual Explorer
+04720000 VFuj02b1.dll        2.6.0.0          C:\Program Files\Fujitsu\Fujitsu Hotkey Utility
+04aa0000 intl3_svn.dll       0.14.5.0         C:\Program Files\TortoiseSVN\bin
+05240000 PDFShell.dll        7.0.0.0          C:\Program Files\Adobe\Acrobat 7.0\ActiveX
+055a0000 odbcint.dll         3.525.1117.0     C:\WINDOWS\system32
+070d0000 WMASF.DLL           10.0.0.3646      C:\WINDOWS\system32
+086c0000 WMVCore.DLL         10.0.0.3646      C:\WINDOWS\system32
+092d0000 Audiodev.dll        5.2.3790.3646    C:\WINDOWS\system32
+10000000 tortoisesvn.dll     1.3.2.5840       C:\Program Files\TortoiseSVN\bin
+20000000 xpsp2res.dll        5.1.2600.2180    C:\WINDOWS\system32
+30000000 aqProf.dll          4.91.654.0       C:\Program Files\Automated QA\AQtime 4\Bin
+30200000 aqComm.dll          4.91.654.0       C:\Program Files\Automated QA\AQtime 4\Bin
+30800000 AQNATPROF.DLL       4.91.654.0       C:\PROGRAM FILES\AUTOMATED QA\AQTIME 4\BIN\EXTENSIONS
+5ad70000 uxtheme.dll         6.0.2900.2180    C:\WINDOWS\system32
+5b860000 netapi32.dll        5.1.2600.2180    C:\WINDOWS\system32
+5d090000 comctl32.dll        5.82.2900.2180   C:\WINDOWS\system32
+5edd0000 olepro32.dll        5.1.2600.2180    C:\WINDOWS\system32
+6ee50000 libapriconv.dll     0.9.7.0          C:\Program Files\TortoiseSVN\bin
+6ee60000 libaprutil.dll      0.9.7.0          C:\Program Files\TortoiseSVN\bin
+6eec0000 libapr.dll          0.9.7.0          C:\Program Files\TortoiseSVN\bin
+71a50000 MSWSOCK.dll         5.1.2600.2180    C:\WINDOWS\system32
+71aa0000 WS2HELP.dll         5.1.2600.2180    C:\WINDOWS\system32
+71ab0000 WS2_32.dll          5.1.2600.2180    C:\WINDOWS\system32
+71ad0000 wsock32.dll         5.1.2600.2180    C:\WINDOWS\system32
+71b20000 mpr.dll             5.1.2600.2180    C:\WINDOWS\system32
+71bf0000 SAMLIB.dll          5.1.2600.2180    C:\WINDOWS\System32
+71c10000 ntlanman.dll        5.1.2600.2180    C:\WINDOWS\System32
+71c80000 NETRAP.dll          5.1.2600.2180    C:\WINDOWS\System32
+71c90000 NETUI1.dll          5.1.2600.2180    C:\WINDOWS\System32
+71cd0000 NETUI0.dll          5.1.2600.2180    C:\WINDOWS\System32
+73380000 zipfldr.dll         6.0.2900.2180    C:\WINDOWS\system32
+73d70000 shgina.dll          6.0.2900.2180    C:\WINDOWS\system32
+74320000 ODBC32.dll          3.525.1117.0     C:\WINDOWS\system32
+754d0000 CRYPTUI.dll         5.131.2600.2180  C:\WINDOWS\system32
+75970000 MSGINA.dll          5.1.2600.2180    C:\WINDOWS\system32
+75f60000 drprov.dll          5.1.2600.2180    C:\WINDOWS\System32
+75f70000 davclnt.dll         5.1.2600.2180    C:\WINDOWS\System32
+76360000 WINSTA.dll          5.1.2600.2180    C:\WINDOWS\system32
+763b0000 comdlg32.dll        6.0.2900.2180    C:\WINDOWS\system32
+76990000 ntshrui.dll         5.1.2600.2180    C:\WINDOWS\system32
+769c0000 USERENV.dll         5.1.2600.2180    C:\WINDOWS\system32
+76b20000 ATL.DLL             3.5.2284.0       C:\WINDOWS\system32
+76b40000 winmm.dll           5.1.2600.2180    C:\WINDOWS\system32
+76bf0000 psapi.dll           5.1.2600.2180    C:\WINDOWS\system32
+76c30000 WINTRUST.dll        5.131.2600.2180  C:\WINDOWS\system32
+76c90000 IMAGEHLP.dll        5.1.2600.2180    C:\WINDOWS\system32
+76f60000 WLDAP32.dll         5.1.2600.2180    C:\WINDOWS\system32
+76fd0000 CLBCATQ.DLL         2001.12.4414.308 C:\WINDOWS\system32
+77050000 COMRes.dll          2001.12.4414.258 C:\WINDOWS\system32
+77120000 oleaut32.dll        5.1.2600.2180    C:\WINDOWS\system32
+771b0000 WININET.dll         6.0.2900.2753    C:\WINDOWS\system32
+773d0000 comctl32.dll        6.0.2900.2180    C:\WINDOWS\WinSxS\x86_Microsoft.Windows.Common-Controls_6595b64144ccf1df_6.0.2600.2180_x-ww_a84f1ff9
+774e0000 ole32.dll           5.1.2600.2726    C:\WINDOWS\system32
+77760000 shdocvw.dll         6.0.2900.2753    C:\WINDOWS\system32
+77920000 SETUPAPI.dll        5.1.2600.2180    C:\WINDOWS\system32
+77a80000 CRYPT32.dll         5.131.2600.2180  C:\WINDOWS\system32
+77b20000 MSASN1.dll          5.1.2600.2180    C:\WINDOWS\system32
+77b40000 appHelp.dll         5.1.2600.2180    C:\WINDOWS\system32
+77c00000 version.dll         5.1.2600.2180    C:\WINDOWS\system32
+77c10000 msvcrt.dll          7.0.2600.2180    C:\WINDOWS\system32
+77d40000 user32.dll          5.1.2600.2622    C:\WINDOWS\system32
+77dd0000 advapi32.dll        5.1.2600.2180    C:\WINDOWS\system32
+77e70000 RPCRT4.dll          5.1.2600.2180    C:\WINDOWS\system32
+77f10000 GDI32.dll           5.1.2600.2770    C:\WINDOWS\system32
+77f60000 SHLWAPI.dll         6.0.2900.2753    C:\WINDOWS\system32
+77fe0000 Secur32.dll         5.1.2600.2180    C:\WINDOWS\system32
+78130000 MSVCR80.dll         8.0.50727.42     C:\WINDOWS\WinSxS\x86_Microsoft.VC80.CRT_1fc8b3b9a1e18e3b_8.0.50727.42_x-ww_0de06acd
+7c420000 MSVCP80.dll         8.0.50727.42     C:\WINDOWS\WinSxS\x86_Microsoft.VC80.CRT_1fc8b3b9a1e18e3b_8.0.50727.42_x-ww_0de06acd
+7c800000 kernel32.dll        5.1.2600.2180    C:\WINDOWS\system32
+7c900000 ntdll.dll           5.1.2600.2180    C:\WINDOWS\system32
+7c9c0000 shell32.dll         6.0.2900.2763    C:\WINDOWS\system32
+
+processes:
+000 Idle
+004 System              normal
+3d0 smss.exe            normal C:\WINDOWS\system32
+440 csrss.exe           normal C:\WINDOWS\system32
+460 winlogon.exe        high   C:\WINDOWS\system32
+48c services.exe        normal C:\WINDOWS\system32
+498 lsass.exe           normal C:\WINDOWS\system32
+528 Ati2evxx.exe        normal C:\WINDOWS\system32
+534 svchost.exe         normal C:\WINDOWS\system32
+594 svchost.exe         normal C:\WINDOWS\system32
+5b8 svchost.exe         normal C:\WINDOWS\System32
+5e8 svchost.exe         normal C:\WINDOWS\system32
+620 svchost.exe         normal C:\WINDOWS\system32
+778 spoolsv.exe         normal C:\WINDOWS\system32
+7dc cvpnd.exe           normal C:\Program Files\Cisco Systems\VPN Client
+0d0 svchost.exe         normal C:\WINDOWS\system32
+12c wdfmgr.exe          normal C:\WINDOWS\system32
+150 MsPMSPSv.exe        normal C:\WINDOWS\system32
+2f0 alg.exe             normal C:\WINDOWS\System32
+3a4 Ati2evxx.exe        normal C:\WINDOWS\system32
+3fc Explorer.EXE        normal C:\WINDOWS
+6f0 TSVNCache.exe       normal C:\Program Files\TortoiseSVN\bin
+6fc wscntfy.exe         normal C:\WINDOWS\system32
+730 cli.exe             normal C:\Program Files\ATI Technologies\ATI.ACE
+168 RTHDCPL.EXE         normal C:\WINDOWS
+2e4 IndicatorUty.exe    normal C:\Program Files\Fujitsu\Fujitsu Hotkey Utility
+2bc AGRSMMSG.exe        normal C:\WINDOWS
+370 fjdvrupd.exe        normal C:\Program Files\Fujitsu\fjdvrupd
+e10 cli.exe             normal C:\Program Files\ATI Technologies\ATI.ACE
+9c4 svchost.exe         normal C:\WINDOWS\System32
+ec0 delphi32.exe        normal C:\Program Files\Borland\Delphi7\Bin
+340 CodeFactor.exe      normal C:\Program Files\CodeFactor
+a98 taskmgr.exe         high   C:\WINDOWS\system32
+cfc AQtime.exe          normal C:\Program Files\Automated QA\AQtime 4\Bin
+3e8 VirtualExplorer.exe normal C:\Documents and Settings\Owner\My Documents\Delphi\VirtualShellTools\Demos\Virtual Explorer
+
+hardware:
++ Batteries
+  - Microsoft AC Adapter
+  - Microsoft ACPI-Compliant Control Method Battery
++ Computer
+  - ACPI Uniprocessor PC
++ Disk drives
+  - FUJITSU MHV2120AT PL
++ Display adapters
+  - ATI RADEON XPRESS 200M Series     (driver 8.181.0.0)
++ DVD/CD-ROM drives
+  - HL-DT-ST DVDRAM GMA4082Nj
++ Human Interface Devices
+  - Microsoft USB Wheel Mouse Optical
++ IDE ATA/ATAPI controllers
+  - Primary IDE Channel
+  - Ricoh Memory Stick Host Controller (driver 1.0.1.13)
+  - Ricoh SD Bus Host Adapter (driver 1.0.3.10)
+  - Ricoh xD-Picture Card Controller (driver 1.0.1.5)
+  - Secondary IDE Channel
+  - Standard Dual Channel PCI IDE Controller
++ IEEE 1394 Bus host controllers
+  - OHCI Compliant IEEE 1394 Host Controller
++ Keyboards
+  - Standard 101/102-Key or Microsoft Natural PS/2 Keyboard
++ Mice and other pointing devices
+  - Alps Pointing-device (driver 5.6.401.3)
+  - Microsoft USB Wheel Mouse Optical
++ Modems
+  - Agere Systems HDA Modem (driver 2.1.57.9)
++ Monitors
+  - Default Monitor
+  - Default Monitor
+  - Default Monitor
++ Network adapters
+  - 1394 Net Adapter
+  - Atheros AR5006X Wireless Network Adapter (driver 4.1.2.71)
+  - Broadcom NetXtreme Gigabit Ethernet (driver 8.39.1.0)
+  - Cisco Systems VPN Adapter (driver 4.0.0.106)
++ PCMCIA adapters
+  - Ricoh R/RL/5C476(II) or Compatible CardBus Controller
++ Processors
+  - AMD Turion(tm) 64 Mobile Technology MT-37 (driver 1.2.2.0)
++ Sound, video and game controllers
+  - Audio Codecs
+  - Legacy Audio Drivers
+  - Legacy Video Capture Devices
+  - Media Control Devices
+  - Realtek High Definition Audio (driver 5.10.0.5169)
+  - Video Codecs
++ System devices
+  - ACPI Fixed Feature Button
+  - ACPI Lid
+  - ACPI Power Button
+  - ATI SMBus (driver 5.10.1000.5)
+  - Direct memory access controller
+  - Fujitsu FUJ02B1 Device Driver (driver 1.21.0.0)
+  - Fujitsu FUJ02E3 Device Driver (driver 1.0.0.0)
+  - ISAPNP Read Data Port
+  - Microcode Update Device
+  - Microsoft ACPI-Compliant System
+  - Microsoft Composite Battery
+  - Microsoft System Management BIOS Driver
+  - Microsoft UAA Bus Driver for High Definition Audio
+  - Motherboard resources
+  - Motherboard resources
+  - Motherboard resources
+  - Motherboard resources
+  - Numeric data processor
+  - PCI bus
+  - PCI standard host CPU bridge
+  - PCI standard host CPU bridge
+  - PCI standard host CPU bridge
+  - PCI standard host CPU bridge
+  - PCI standard host CPU bridge
+  - PCI standard ISA bridge
+  - PCI standard PCI-to-PCI bridge
+  - PCI standard PCI-to-PCI bridge
+  - PCI standard PCI-to-PCI bridge
+  - PCI standard PCI-to-PCI bridge
+  - Plug and Play Software Device Enumerator
+  - Programmable interrupt controller
+  - System board
+  - System CMOS/real time clock
+  - System speaker
+  - System timer
+  - Terminal Server Keyboard Driver
+  - Terminal Server Mouse Driver
+  - Volume Manager
++ Universal Serial Bus controllers
+  - Standard Enhanced PCI to USB Host Controller
+  - Standard OpenHCD USB Host Controller
+  - Standard OpenHCD USB Host Controller
+  - USB Root Hub
+  - USB Root Hub
+  - USB Root Hub
+
+cpu registers:
+eax = 00000000
+ebx = 00000000
+ecx = 0012fb4c
+edx = 00000000
+esi = 0136cd70
+edi = 0000803e
+eip = 01a2f5b1
+esp = 0012fbbc
+ebp = 0012fbfc
+
+stack dump:
+0012fbbc  20 fc 12 00 c4 3f 40 00 - fc fb 12 00 3e 80 00 00  .....?@.....>...
+0012fbcc  60 e6 36 01 e4 4f 36 01 - 3e 80 00 00 60 e6 36 01  `.6..O6.>...`.6.
+0012fbdc  14 fc 12 00 60 e6 36 01 - 3e 80 00 00 e4 4f 36 01  ....`.6.>....O6.
+0012fbec  78 34 37 01 09 00 00 00 - 60 e6 36 01 78 34 37 01  x47.....`.6.x47.
+0012fbfc  14 fc 12 00 5c 10 a3 01 - 34 60 60 77 60 e6 36 01  ....\...4``w`.6.
+0012fc0c  60 e6 36 01 49 24 4f 00 - 40 fc 12 00 16 d7 a4 01  `.6.I$O.@.......
+0012fc1c  34 60 60 77 b8 fd 12 00 - c4 3f 40 00 40 fc 12 00  4``w.....?@.@...
+0012fc2c  e8 fd 12 00 60 e6 36 01 - 00 00 00 00 00 00 00 00  ....`.6.........
+0012fc3c  00 00 00 00 50 fc 12 00 - e5 17 a5 01 60 e6 36 01  ....P.......`.6.
+0012fc4c  e8 fd 12 00 78 fd 12 00 - b8 f8 9a 01 60 e6 36 01  ....x.......`.6.
+0012fc5c  e8 fd 12 00 60 e6 36 01 - 84 71 e3 00 00 00 00 00  ....`.6..q......
+0012fc6c  b8 f8 9a 01 b0 ff 77 01 - e8 fd 12 00 78 22 37 01  ......w.....x"7.
+0012fc7c  00 00 e3 00 38 6d e3 00 - 00 00 00 00 5c fd 12 00  ....8m......\...
+0012fc8c  78 01 e3 00 5c fd 12 00 - 91 0e 91 7c 08 06 e3 00  x...\......|....
+0012fc9c  6d 05 91 7c 00 00 00 00 - 40 6d e3 00 02 00 00 00  m..|....@m......
+0012fcac  00 00 00 00 a0 01 14 00 - 38 6d e3 00 78 01 e3 00  ........8m..x...
+0012fcbc  34 fd 12 00 28 bd e5 00 - d8 b2 e5 00 f9 8b 80 30  4...(..........0
+0012fccc  24 2e e6 00 54 af 50 01 - 78 fd 12 00 84 2d e5 00  $...T.P.x....-..
+0012fcdc  1d fd 00 30 d8 b2 e5 00 - ec 0f 00 00 b0 2d e5 00  ...0.........-..
+0012fcec  10 af e5 00 03 00 00 00 - 34 fd 12 00 b4 00 91 01  ........4.......
+
+disassembling:
+[...]
+7c90ead0   add     esp, 4
+7c90ead3   pop     edx
+7c90ead4   mov     eax, fs:[$18]
+7c90eada   mov     eax, [eax+$30]
+7c90eadd   mov     eax, [eax+$2c]
+7c90eae0 > call    dword ptr [eax+edx*4]
+7c90eae3   xor     ecx, ecx
+7c90eae5   xor     edx, edx
+7c90eae7   int     $2b
+7c90eae9   int     3
+7c90eaea   mov     edi, edi
+[...]
+
+date/time         : 2006-04-12, 20:32:11, 234ms
+computer name     : LIFEBOOK
+user name         : Owner <admin>
+operating system  : Windows XP Service Pack 2 build 2600
+system language   : English
+system up time    : 2 hours 17 minutes
+program up time   : 25 seconds
+processor         : AMD Turion(tm) 64 Mobile Technology MT-37
+physical memory   : 509/959 MB (free/total)
+free disk space   : (C:) 89.50 GB
+display mode      : 1024x768, 32 bit
+process id        : $3e8
+allocated memory  : 30.59 MB
+executable        : VirtualExplorer.exe
+exec. date/time   : 2006-04-12 20:31
+madExcept version : 3.0b
+callstack crc     : $01080005, $009d6175, $009d6175
+exception number  : 6
+exception class   : EInvalidPointer
+exception message : Invalid pointer operation.
+
+main thread ($cc8):
+01080005 +00 ???
+004045a8 +28 VirtualExplorer.exe System                @Halt0
+00526399 +51 VirtualExplorer.exe VirtualExplorer 19 +5 initialization
+
+thread $e2c:
+7c90eb94 +0 ntdll.dll  KiFastSystemCallRet
+7c90e397 +a ntdll.dll  NtReplyWaitReceivePortEx
+
+thread $c98:
+7c90eb94 +0 ntdll.dll  KiFastSystemCallRet
+7c90e397 +a ntdll.dll  NtReplyWaitReceivePortEx
+
+thread $eac: <priority:15>
+7c90eb94 +00 ntdll.dll     KiFastSystemCallRet
+7c90e9be +0a ntdll.dll     NtWaitForSingleObject
+7c8025d5 +85 kernel32.dll  WaitForSingleObjectEx
+7c80253d +0d kernel32.dll  WaitForSingleObject
+
+thread $680: <suspended> <priority:15>
+7c810856 kernel32.dll
+
+thread $cf0 (TWorkerThread):
+7c90eb94 +00 ntdll.dll     KiFastSystemCallRet
+7c90e9be +0a ntdll.dll     NtWaitForSingleObject
+7c8025d5 +85 kernel32.dll  WaitForSingleObjectEx
+7c80253d +0d kernel32.dll  WaitForSingleObject
+>> created by main thread ($cc8) at:
+01080005 +00 ???
+
+thread $aac (TVirtualImageThread):
+7c90eb94 +00 ntdll.dll     KiFastSystemCallRet
+7c90e9be +0a ntdll.dll     NtWaitForSingleObject
+7c8025d5 +85 kernel32.dll  WaitForSingleObjectEx
+7c80253d +0d kernel32.dll  WaitForSingleObject
+>> created by main thread ($cc8) at:
+01080005 +00 ???
+
+thread $fc8:
+7c90eb94 +0 ntdll.dll  KiFastSystemCallRet
+7c90d85a +a ntdll.dll  NtDelayExecution
+
+thread $d58:
+7c90eb94 +0 ntdll.dll  KiFastSystemCallRet
+7c90e319 +a ntdll.dll  NtRemoveIoCompletion
+
+modules:
+00400000 VirtualExplorer.exe                  C:\Documents and Settings\Owner\My Documents\Delphi\VirtualShellTools\Demos\Virtual Explorer
+04720000 VFuj02b1.dll        2.6.0.0          C:\Program Files\Fujitsu\Fujitsu Hotkey Utility
+04aa0000 intl3_svn.dll       0.14.5.0         C:\Program Files\TortoiseSVN\bin
+05240000 PDFShell.dll        7.0.0.0          C:\Program Files\Adobe\Acrobat 7.0\ActiveX
+055a0000 odbcint.dll         3.525.1117.0     C:\WINDOWS\system32
+070d0000 WMASF.DLL           10.0.0.3646      C:\WINDOWS\system32
+086c0000 WMVCore.DLL         10.0.0.3646      C:\WINDOWS\system32
+092d0000 Audiodev.dll        5.2.3790.3646    C:\WINDOWS\system32
+10000000 tortoisesvn.dll     1.3.2.5840       C:\Program Files\TortoiseSVN\bin
+20000000 xpsp2res.dll        5.1.2600.2180    C:\WINDOWS\system32
+30000000 aqProf.dll          4.91.654.0       C:\Program Files\Automated QA\AQtime 4\Bin
+30200000 aqComm.dll          4.91.654.0       C:\Program Files\Automated QA\AQtime 4\Bin
+30800000 AQNATPROF.DLL       4.91.654.0       C:\PROGRAM FILES\AUTOMATED QA\AQTIME 4\BIN\EXTENSIONS
+5ad70000 uxtheme.dll         6.0.2900.2180    C:\WINDOWS\system32
+5b860000 netapi32.dll        5.1.2600.2180    C:\WINDOWS\system32
+5d090000 comctl32.dll        5.82.2900.2180   C:\WINDOWS\system32
+5edd0000 olepro32.dll        5.1.2600.2180    C:\WINDOWS\system32
+6ee50000 libapriconv.dll     0.9.7.0          C:\Program Files\TortoiseSVN\bin
+6ee60000 libaprutil.dll      0.9.7.0          C:\Program Files\TortoiseSVN\bin
+6eec0000 libapr.dll          0.9.7.0          C:\Program Files\TortoiseSVN\bin
+71a50000 MSWSOCK.dll         5.1.2600.2180    C:\WINDOWS\system32
+71aa0000 WS2HELP.dll         5.1.2600.2180    C:\WINDOWS\system32
+71ab0000 WS2_32.dll          5.1.2600.2180    C:\WINDOWS\system32
+71ad0000 wsock32.dll         5.1.2600.2180    C:\WINDOWS\system32
+71b20000 mpr.dll             5.1.2600.2180    C:\WINDOWS\system32
+71bf0000 SAMLIB.dll          5.1.2600.2180    C:\WINDOWS\System32
+71c10000 ntlanman.dll        5.1.2600.2180    C:\WINDOWS\System32
+71c80000 NETRAP.dll          5.1.2600.2180    C:\WINDOWS\System32
+71c90000 NETUI1.dll          5.1.2600.2180    C:\WINDOWS\System32
+71cd0000 NETUI0.dll          5.1.2600.2180    C:\WINDOWS\System32
+73380000 zipfldr.dll         6.0.2900.2180    C:\WINDOWS\system32
+73d70000 shgina.dll          6.0.2900.2180    C:\WINDOWS\system32
+74320000 ODBC32.dll          3.525.1117.0     C:\WINDOWS\system32
+754d0000 CRYPTUI.dll         5.131.2600.2180  C:\WINDOWS\system32
+75970000 MSGINA.dll          5.1.2600.2180    C:\WINDOWS\system32
+75f60000 drprov.dll          5.1.2600.2180    C:\WINDOWS\System32
+75f70000 davclnt.dll         5.1.2600.2180    C:\WINDOWS\System32
+76360000 WINSTA.dll          5.1.2600.2180    C:\WINDOWS\system32
+763b0000 comdlg32.dll        6.0.2900.2180    C:\WINDOWS\system32
+76990000 ntshrui.dll         5.1.2600.2180    C:\WINDOWS\system32
+769c0000 USERENV.dll         5.1.2600.2180    C:\WINDOWS\system32
+76b20000 ATL.DLL             3.5.2284.0       C:\WINDOWS\system32
+76b40000 winmm.dll           5.1.2600.2180    C:\WINDOWS\system32
+76bf0000 psapi.dll           5.1.2600.2180    C:\WINDOWS\system32
+76c30000 WINTRUST.dll        5.131.2600.2180  C:\WINDOWS\system32
+76c90000 IMAGEHLP.dll        5.1.2600.2180    C:\WINDOWS\system32
+76f60000 WLDAP32.dll         5.1.2600.2180    C:\WINDOWS\system32
+76fd0000 CLBCATQ.DLL         2001.12.4414.308 C:\WINDOWS\system32
+77050000 COMRes.dll          2001.12.4414.258 C:\WINDOWS\system32
+77120000 oleaut32.dll        5.1.2600.2180    C:\WINDOWS\system32
+771b0000 WININET.dll         6.0.2900.2753    C:\WINDOWS\system32
+773d0000 comctl32.dll        6.0.2900.2180    C:\WINDOWS\WinSxS\x86_Microsoft.Windows.Common-Controls_6595b64144ccf1df_6.0.2600.2180_x-ww_a84f1ff9
+774e0000 ole32.dll           5.1.2600.2726    C:\WINDOWS\system32
+77760000 shdocvw.dll         6.0.2900.2753    C:\WINDOWS\system32
+77920000 SETUPAPI.dll        5.1.2600.2180    C:\WINDOWS\system32
+77a80000 CRYPT32.dll         5.131.2600.2180  C:\WINDOWS\system32
+77b20000 MSASN1.dll          5.1.2600.2180    C:\WINDOWS\system32
+77b40000 appHelp.dll         5.1.2600.2180    C:\WINDOWS\system32
+77c00000 version.dll         5.1.2600.2180    C:\WINDOWS\system32
+77c10000 msvcrt.dll          7.0.2600.2180    C:\WINDOWS\system32
+77d40000 user32.dll          5.1.2600.2622    C:\WINDOWS\system32
+77dd0000 advapi32.dll        5.1.2600.2180    C:\WINDOWS\system32
+77e70000 RPCRT4.dll          5.1.2600.2180    C:\WINDOWS\system32
+77f10000 GDI32.dll           5.1.2600.2770    C:\WINDOWS\system32
+77f60000 SHLWAPI.dll         6.0.2900.2753    C:\WINDOWS\system32
+77fe0000 Secur32.dll         5.1.2600.2180    C:\WINDOWS\system32
+78130000 MSVCR80.dll         8.0.50727.42     C:\WINDOWS\WinSxS\x86_Microsoft.VC80.CRT_1fc8b3b9a1e18e3b_8.0.50727.42_x-ww_0de06acd
+7c420000 MSVCP80.dll         8.0.50727.42     C:\WINDOWS\WinSxS\x86_Microsoft.VC80.CRT_1fc8b3b9a1e18e3b_8.0.50727.42_x-ww_0de06acd
+7c800000 kernel32.dll        5.1.2600.2180    C:\WINDOWS\system32
+7c900000 ntdll.dll           5.1.2600.2180    C:\WINDOWS\system32
+7c9c0000 shell32.dll         6.0.2900.2763    C:\WINDOWS\system32
+
+processes:
+000 Idle
+004 System              normal
+3d0 smss.exe            normal C:\WINDOWS\system32
+440 csrss.exe           normal C:\WINDOWS\system32
+460 winlogon.exe        high   C:\WINDOWS\system32
+48c services.exe        normal C:\WINDOWS\system32
+498 lsass.exe           normal C:\WINDOWS\system32
+528 Ati2evxx.exe        normal C:\WINDOWS\system32
+534 svchost.exe         normal C:\WINDOWS\system32
+594 svchost.exe         normal C:\WINDOWS\system32
+5b8 svchost.exe         normal C:\WINDOWS\System32
+5e8 svchost.exe         normal C:\WINDOWS\system32
+620 svchost.exe         normal C:\WINDOWS\system32
+778 spoolsv.exe         normal C:\WINDOWS\system32
+7dc cvpnd.exe           normal C:\Program Files\Cisco Systems\VPN Client
+0d0 svchost.exe         normal C:\WINDOWS\system32
+12c wdfmgr.exe          normal C:\WINDOWS\system32
+150 MsPMSPSv.exe        normal C:\WINDOWS\system32
+2f0 alg.exe             normal C:\WINDOWS\System32
+3a4 Ati2evxx.exe        normal C:\WINDOWS\system32
+3fc Explorer.EXE        normal C:\WINDOWS
+6f0 TSVNCache.exe       normal C:\Program Files\TortoiseSVN\bin
+6fc wscntfy.exe         normal C:\WINDOWS\system32
+730 cli.exe             normal C:\Program Files\ATI Technologies\ATI.ACE
+168 RTHDCPL.EXE         normal C:\WINDOWS
+2e4 IndicatorUty.exe    normal C:\Program Files\Fujitsu\Fujitsu Hotkey Utility
+2bc AGRSMMSG.exe        normal C:\WINDOWS
+370 fjdvrupd.exe        normal C:\Program Files\Fujitsu\fjdvrupd
+e10 cli.exe             normal C:\Program Files\ATI Technologies\ATI.ACE
+9c4 svchost.exe         normal C:\WINDOWS\System32
+ec0 delphi32.exe        normal C:\Program Files\Borland\Delphi7\Bin
+340 CodeFactor.exe      normal C:\Program Files\CodeFactor
+a98 taskmgr.exe         high   C:\WINDOWS\system32
+cfc AQtime.exe          normal C:\Program Files\Automated QA\AQtime 4\Bin
+3e8 VirtualExplorer.exe normal C:\Documents and Settings\Owner\My Documents\Delphi\VirtualShellTools\Demos\Virtual Explorer
+
+hardware:
++ Batteries
+  - Microsoft AC Adapter
+  - Microsoft ACPI-Compliant Control Method Battery
++ Computer
+  - ACPI Uniprocessor PC
++ Disk drives
+  - FUJITSU MHV2120AT PL
++ Display adapters
+  - ATI RADEON XPRESS 200M Series     (driver 8.181.0.0)
++ DVD/CD-ROM drives
+  - HL-DT-ST DVDRAM GMA4082Nj
++ Human Interface Devices
+  - Microsoft USB Wheel Mouse Optical
++ IDE ATA/ATAPI controllers
+  - Primary IDE Channel
+  - Ricoh Memory Stick Host Controller (driver 1.0.1.13)
+  - Ricoh SD Bus Host Adapter (driver 1.0.3.10)
+  - Ricoh xD-Picture Card Controller (driver 1.0.1.5)
+  - Secondary IDE Channel
+  - Standard Dual Channel PCI IDE Controller
++ IEEE 1394 Bus host controllers
+  - OHCI Compliant IEEE 1394 Host Controller
++ Keyboards
+  - Standard 101/102-Key or Microsoft Natural PS/2 Keyboard
++ Mice and other pointing devices
+  - Alps Pointing-device (driver 5.6.401.3)
+  - Microsoft USB Wheel Mouse Optical
++ Modems
+  - Agere Systems HDA Modem (driver 2.1.57.9)
++ Monitors
+  - Default Monitor
+  - Default Monitor
+  - Default Monitor
++ Network adapters
+  - 1394 Net Adapter
+  - Atheros AR5006X Wireless Network Adapter (driver 4.1.2.71)
+  - Broadcom NetXtreme Gigabit Ethernet (driver 8.39.1.0)
+  - Cisco Systems VPN Adapter (driver 4.0.0.106)
++ PCMCIA adapters
+  - Ricoh R/RL/5C476(II) or Compatible CardBus Controller
++ Processors
+  - AMD Turion(tm) 64 Mobile Technology MT-37 (driver 1.2.2.0)
++ Sound, video and game controllers
+  - Audio Codecs
+  - Legacy Audio Drivers
+  - Legacy Video Capture Devices
+  - Media Control Devices
+  - Realtek High Definition Audio (driver 5.10.0.5169)
+  - Video Codecs
++ System devices
+  - ACPI Fixed Feature Button
+  - ACPI Lid
+  - ACPI Power Button
+  - ATI SMBus (driver 5.10.1000.5)
+  - Direct memory access controller
+  - Fujitsu FUJ02B1 Device Driver (driver 1.21.0.0)
+  - Fujitsu FUJ02E3 Device Driver (driver 1.0.0.0)
+  - ISAPNP Read Data Port
+  - Microcode Update Device
+  - Microsoft ACPI-Compliant System
+  - Microsoft Composite Battery
+  - Microsoft System Management BIOS Driver
+  - Microsoft UAA Bus Driver for High Definition Audio
+  - Motherboard resources
+  - Motherboard resources
+  - Motherboard resources
+  - Motherboard resources
+  - Numeric data processor
+  - PCI bus
+  - PCI standard host CPU bridge
+  - PCI standard host CPU bridge
+  - PCI standard host CPU bridge
+  - PCI standard host CPU bridge
+  - PCI standard host CPU bridge
+  - PCI standard ISA bridge
+  - PCI standard PCI-to-PCI bridge
+  - PCI standard PCI-to-PCI bridge
+  - PCI standard PCI-to-PCI bridge
+  - PCI standard PCI-to-PCI bridge
+  - Plug and Play Software Device Enumerator
+  - Programmable interrupt controller
+  - System board
+  - System CMOS/real time clock
+  - System speaker
+  - System timer
+  - Terminal Server Keyboard Driver
+  - Terminal Server Mouse Driver
+  - Volume Manager
++ Universal Serial Bus controllers
+  - Standard Enhanced PCI to USB Host Controller
+  - Standard OpenHCD USB Host Controller
+  - Standard OpenHCD USB Host Controller
+  - USB Root Hub
+  - USB Root Hub
+  - USB Root Hub
+
+cpu registers:
+eax = 01360d04
+ebx = 01080005
+ecx = 0000000b
+edx = 01080005
+esi = 01080005
+edi = 01380e5c
+eip = 01080005
+esp = 0012fdf8
+ebp = 0012fe4c
+
+stack dump:
+0012fdf8  05 00 08 01 de fa ed 0e - 01 00 00 00 07 00 00 00  ................
+0012fe08  0c fe 12 00 05 00 08 01 - 04 0d 36 01 05 00 08 01  ..........6.....
+0012fe18  05 00 08 01 5c 0e 38 01 - 4c fe 12 00 28 fe 12 00  ....\.8.L...(...
+0012fe28  02 00 00 00 59 2a 92 01 - 9c 0d 38 01 0b 00 00 00  ....Y*....8.....
+0012fe38  dd 28 92 01 01 d5 52 00 - 5d 94 a0 01 5c 0e 38 01  .(....R.]...\.8.
+0012fe48  f4 ff 36 01 80 fe 12 00 - 1c 3f 92 01 07 18 a4 01  ..6......?......
+0012fe58  b0 fe 12 00 c4 3f 40 00 - 80 fe 12 00 5c 0e 38 01  .....?@.....\.8.
+0012fe68  f4 ff 36 01 a0 f6 4f 00 - 00 00 00 00 00 00 00 00  ..6...O.........
+0012fe78  98 0e 38 01 9c 0d 38 01 - a8 fe 12 00 91 6e 9f 01  ..8...8......n..
+0012fe88  ff fe 12 00 50 0d 38 01 - 01 ff 36 01 d8 fe 12 01  ....P.8...6.....
+0012fe98  94 12 37 01 00 00 00 00 - 00 00 00 00 f4 ff 36 01  ..7...........6.
+0012fea8  d8 fe 12 00 9a 6a 9f 01 - e0 fe 12 00 c4 3f 40 00  .....j.......?@.
+0012feb8  d8 fe 12 00 87 3c 4d 00 - f4 ff 36 01 00 00 00 00  .....<M...6.....
+0012fec8  00 00 00 00 01 00 00 01 - 94 12 37 01 f4 ff 36 01  ..........7...6.
+0012fed8  04 ff 12 00 3d 66 9f 01 - 64 ff 12 00 c4 3f 40 00  ....=f..d....?@.
+0012fee8  04 ff 12 00 1f ff 12 00 - 2f 02 37 01 f4 ff 36 01  ......../.7...6.
+0012fef8  00 00 00 00 00 00 00 01 - f4 ff 36 01 20 ff 12 00  ..........6.....
+0012ff08  20 e3 a3 01 3c 49 36 01 - f4 ff 36 01 00 ff 36 01  ....<I6...6...6.
+0012ff18  00 00 80 00 02 08 00 00 - 30 ff 12 00 7c f3 a3 01  ........0...|...
+0012ff28  f4 ff 36 01 01 ff 36 01 - 40 ff 12 00 8e b3 a5 01  ..6...6.@.......
+
+disassembling:
+[...]
+00526382       mov     edx, [$5253a0]
+00526388       call    -$7b6c9 ($4aacc4)      ; Forms.TApplication.CreateForm
+0052638d 018   mov     eax, [$52be60]
+00526392       mov     eax, [eax]
+00526394       call    -$7b655 ($4aad44)      ; Forms.TApplication.Run
+00526399 019 > call    -$121e1e ($404580)     ; System.@Halt0
+

@@ -1,0 +1,55 @@
+package VirtualShellToolsD6;
+
+{$ALIGN 8}
+{$ASSERTIONS ON}
+{$BOOLEVAL OFF}
+{$DEBUGINFO ON}
+{$EXTENDEDSYNTAX ON}
+{$IMPORTEDDATA ON}
+{$IOCHECKS ON}
+{$LOCALSYMBOLS ON}
+{$LONGSTRINGS ON}
+{$OPENSTRINGS ON}
+{$OPTIMIZATION OFF}
+{$OVERFLOWCHECKS OFF}
+{$RANGECHECKS OFF}
+{$REFERENCEINFO ON}
+{$SAFEDIVIDE OFF}
+{$STACKFRAMES OFF}
+{$TYPEDADDRESS OFF}
+{$VARSTRINGCHECKS ON}
+{$WRITEABLECONST ON}
+{$MINENUMSIZE 1}
+{$IMAGEBASE $30600000}
+{$DESCRIPTION 'Virtual Shell Tools RunTime Package'}
+{$RUNONLY}
+{$IMPLICITBUILD ON}
+
+requires
+  vcljpg,
+  VirtualTreesD6,
+  ThemeManagerD6,
+  EasyListviewD6,
+  MPCommonLibD6;
+
+contains
+  AppletsAndWizards in '..\Source\AppletsAndWizards.pas',
+  ColumnForm in '..\Source\ColumnForm.pas' {FormColumnSettings},
+  VirtualCommandLine in '..\Source\VirtualCommandLine.pas',
+  VirtualExplorerTree in '..\Source\VirtualExplorerTree.pas',
+  VirtualRedirector in '..\Source\VirtualRedirector.pas',
+  VirtualResources in '..\Source\VirtualResources.pas',
+  VirtualScrollbars in '..\Source\VirtualScrollbars.pas',
+  VirtualSendToMenu in '..\Source\VirtualSendToMenu.pas',
+  VirtualShellAutoComplete in '..\Source\VirtualShellAutoComplete.pas',
+  VirtualShellHistory in '..\Source\VirtualShellHistory.pas',
+  VirtualShellNewMenu in '..\Source\VirtualShellNewMenu.pas',
+  VirtualShellNotifier in '..\Source\VirtualShellNotifier.pas',
+  VirtualShellToolBar in '..\Source\VirtualShellToolBar.pas',
+  VirtualThumbnails in '..\Source\VirtualThumbnails.pas',
+  VirtualExplorerEasyListview in '..\Source\VirtualExplorerEasyListview.pas',
+  VirtualFileSearch in '..\Source\VirtualFileSearch.pas',
+  VirtualExplorerEasyListModeview in '..\Source\VirtualExplorerEasyListModeview.pas';
+
+
+end.

@@ -1,0 +1,45 @@
+#------------------------------------------------------------------------------
+VERSION = BWS.01
+#------------------------------------------------------------------------------
+!ifndef ROOT
+ROOT = $(MAKEDIR)\..
+!endif
+#------------------------------------------------------------------------------
+MAKE = $(ROOT)\bin\make.exe -$(MAKEFLAGS) -f$**
+DCC = $(ROOT)\bin\dcc32.exe $**
+BRCC = $(ROOT)\bin\brcc32.exe $**
+#------------------------------------------------------------------------------
+PROJECTS = VirtualTreesD7.bpl VirtualTreesD7D.bpl MPCommonLibD7.bpl \
+  MPCommonLibD7D.bpl EasyListviewD7.bpl EasyListviewD7D.bpl \
+  VirtualShellToolsD7.bpl VirtualShellToolsD7D.bpl
+#------------------------------------------------------------------------------
+default: $(PROJECTS)
+#------------------------------------------------------------------------------
+
+
+
+VirtualShellToolsD7D.bpl: VirtualShellToolsD7D.dpk
+  $(DCC)
+
+VirtualShellToolsD7.bpl: VirtualShellToolsD7.dpk
+  $(DCC)
+
+MPCommonLibD7.bpl: ..\..\Mustangpeak Common Library\Delphi\MPCommonLibD7.dpk
+  $(DCC)
+
+EasyListviewD7.bpl: ..\..\EasyListview\Delphi\EasyListviewD7.dpk
+  $(DCC)
+
+EasyListviewD7D.bpl: ..\..\EasyListview\Delphi\EasyListviewD7D.dpk
+  $(DCC)
+
+MPCommonLibD7D.bpl: ..\..\Mustangpeak Common Library\Delphi\MPCommonLibD7D.dpk
+  $(DCC)
+
+VirtualTreesD7.bpl: ..\..\VirtualTreeview\Delphi\VirtualTreesD7.dpk
+  $(DCC)
+
+VirtualTreesD7D.bpl: ..\..\VirtualTreeview\Delphi\VirtualTreesD7D.dpk
+  $(DCC)
+
+
