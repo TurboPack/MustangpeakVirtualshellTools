@@ -1504,7 +1504,11 @@ type
     procedure DoUpdating(State: TVTUpdateState); override;
     function DragDrop(const DataObject: IDataObject; KeyState: Integer; Pt: TPoint;  var Effect: Integer): HResult; override;
     function DragEnter(KeyState: Integer; Pt: TPoint; var Effect: Integer): HResult; override;
+    {$IFDEF COMPILER_16_UP}
+    procedure DragAndDrop(AllowedEffects: Integer; DataObject: IDataObject; var DragEffect: Integer); override;
+    {$ELSE}
     procedure DragAndDrop(AllowedEffects: Integer; DataObject: IDataObject; DragEffect: Integer); override;
+    {$ENDIF}
     procedure DragLeave; override;
     function DragOver(Source: TObject; KeyState: Integer; DragState: TDragState; Pt: TPoint; var Effect: Integer): HResult; override;
     procedure DummyOnDragOver(Sender: TBaseVirtualTree; Source: TObject; Shift: TShiftState; State: TDragState; Pt: TPoint; Mode: TDropMode; var Effect: Integer; var Accept: Boolean);
@@ -5176,8 +5180,13 @@ begin
     Effect := DROPEFFECT_NONE
 end;
 
+{$IFDEF COMPILER_16_UP}
+procedure TCustomVirtualExplorerTree.DragAndDrop(AllowedEffects: Integer;
+  DataObject: IDataObject; var DragEffect: Integer);
+{$ELSE}
 procedure TCustomVirtualExplorerTree.DragAndDrop(AllowedEffects: Integer;
   DataObject: IDataObject; DragEffect: Integer);
+{$ENDIF}
 begin
   if (Win32Platform = VER_PLATFORM_WIN32_NT) and (Win32MajorVersion >= 6) and Assigned(SHDoDragDrop_MP) then
     SHDoDragDrop_MP(Handle, DataObject, nil, AllowedEffects, DragEffect)

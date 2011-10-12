@@ -1,9 +1,9 @@
 object Form1: TForm1
   Left = 309
   Top = 145
-  Width = 854
-  Height = 576
   Caption = 'Virtual Explorer - ver 1.54'
+  ClientHeight = 518
+  ClientWidth = 838
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -1006,14 +1006,12 @@ object Form1: TForm1
     FileSizeFormat = fsfExplorer
     FileSort = fsFileType
     Header.AutoSizeIndex = -1
-    Header.DefaultHeight = 17
     Header.Font.Charset = DEFAULT_CHARSET
     Header.Font.Color = clWindowText
     Header.Font.Height = -11
     Header.Font.Name = 'MS Sans Serif'
     Header.Font.Style = []
     Header.Options = [hoColumnResize, hoDrag, hoHotTrack, hoShowSortGlyphs, hoVisible]
-    Header.Style = hsXPStyle
     HintAnimation = hatNone
     HintMode = hmHint
     IncrementalSearch = isAll
@@ -1359,7 +1357,6 @@ object Form1: TForm1
     FileSizeFormat = fsfExplorer
     FileSort = fsFileType
     Header.AutoSizeIndex = 0
-    Header.DefaultHeight = 17
     Header.Font.Charset = DEFAULT_CHARSET
     Header.Font.Color = clWindowText
     Header.Font.Height = -11

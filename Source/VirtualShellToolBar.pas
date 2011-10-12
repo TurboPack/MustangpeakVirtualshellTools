@@ -264,7 +264,7 @@ type
 
   protected
     procedure ActionChange(Sender: TObject; CheckDefaults: Boolean); override;
-    procedure CalcButtonLayout(DC: HDC; const Client: TRect; const Offset: TPoint;
+    procedure CalcButtonLayout(DC: HDC; const Client: TRect; const AnOffset: TPoint;
       const Caption: WideString; Layout: TButtonLayout; Margin, Spacing: Integer;
       var GlyphPos: TPoint; var TextBounds: TRect; BiDiFlags: Integer);
     function CanAutoSize(var NewWidth, NewHeight: Integer): Boolean; override;
@@ -862,7 +862,7 @@ begin
 end;
 
 procedure TCustomWideSpeedButton.CalcButtonLayout(DC: HDC; const Client: TRect;
-  const Offset: TPoint; const Caption: WideString; Layout: TButtonLayout;
+  const AnOffset: TPoint; const Caption: WideString; Layout: TButtonLayout;
   Margin, Spacing: Integer; var GlyphPos: TPoint; var TextBounds: TRect;
   BiDiFlags: Integer);
 var
@@ -989,11 +989,11 @@ begin
   // fixup the result variables
   with GlyphPos do
   begin
-    Inc(X, Client.Left + Offset.X);
-    Inc(Y, Client.Top + Offset.Y);
+    Inc(X, Client.Left + AnOffset.X);
+    Inc(Y, Client.Top + AnOffset.Y);
   end;
-  OffsetRect(TextBounds, TextPos.X + Client.Left + Offset.X,
-    TextPos.Y + Client.Top + Offset.X);
+  OffsetRect(TextBounds, TextPos.X + Client.Left + AnOffset.X,
+    TextPos.Y + Client.Top + AnOffset.X);
 end;
 
 function TCustomWideSpeedButton.CalcMaxExtentRect(Font: TFont): TRect;
@@ -2985,7 +2985,7 @@ var
   Pt: TPoint;
 begin
   // The timerID uses object address for a unique value
-  if Message.wParam = Integer(Self) then
+  if Message.wParam = Handle then
   begin
     Pt := ScreenToClient(Mouse.CursorPos);
     if not PtInRect(ClientRect, Pt) then

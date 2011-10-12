@@ -1,4 +1,4 @@
-package VirtualShellToolsD15;
+package VirtualShellToolsD16;
 
 {$R *.res}
 {$IFDEF IMPLICITBUILDING This IFDEF should not be used by users}
@@ -33,9 +33,9 @@ requires
   rtl,
   vcl,
   vclimg,
-  VirtualTreesD15,
-  EasyListviewD15,
-  MPCommonLibD15;
+  VirtualTreesR,
+  EasyListviewD16,
+  MPCommonLibD16;
 
 contains
   AppletsAndWizards in '..\Source\AppletsAndWizards.pas',

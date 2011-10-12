@@ -606,7 +606,7 @@
   {$define COMPILER_10_UP}
   {$define COMPILER_11_UP}
   {$define COMPILER_12_UP}
-  {$define COMPILER_13_UP}
+  {$define COMPILER_14_UP}
   {$define COMPILER_15_UP}
   // Backwards compatibility
   {$define DELPHI_2_UP}
@@ -643,7 +643,7 @@
   {$define COMPILER_10_UP}
   {$define COMPILER_11_UP}
   {$define COMPILER_12_UP}
-  {$define COMPILER_13_UP}
+  {$define COMPILER_14_UP}
   {$define COMPILER_15_UP}
   {$define COMPILER_16_UP}
   // Backwards compatibility

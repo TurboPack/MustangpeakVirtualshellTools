@@ -67,7 +67,7 @@ type
     { Private declarations }
   public
     { Public declarations }
-    Sorting: TSortDirection;
+    Sorting: VirtualTrees.TSortDirection;
     SortingColumn: Integer;
   end;
 

@@ -1,6 +1,7 @@
-package VirtualShellToolsD15D;
+package VirtualShellToolsD16D;
 
 {$R *.res}
+{$R *.otares}
 {$R '..\Design\VirtualShellToolsReg.dcr'}
 {$IFDEF IMPLICITBUILDING This IFDEF should not be used by users}
 {$ALIGN 8}
@@ -21,7 +22,7 @@ package VirtualShellToolsD15D;
 {$STACKFRAMES ON}
 {$TYPEDADDRESS OFF}
 {$VARSTRINGCHECKS ON}
-{$WRITEABLECONST ON}
+{$WRITEABLECONST OFF}
 {$MINENUMSIZE 1}
 {$IMAGEBASE $400000}
 {$DEFINE DEBUG}
@@ -36,7 +37,7 @@ requires
   designide,
   vclactnband,
   vclx,
-  VirtualShellToolsD15;
+  VirtualShellToolsD16;
 
 contains
   VirtualShellToolsReg in '..\Design\VirtualShellToolsReg.pas';
