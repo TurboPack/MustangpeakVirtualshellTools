@@ -127,6 +127,26 @@
   {$endif DELPHI.NET_1}
 {$endif CLR}
 
+{$ifdef Win64}
+
+  // BDS XE2 (BDS 9.0) DELPHI and BCB are no longer defined, only COMPILER
+  {$ifdef VER230}
+    {$define COMPILER_16}
+  {$endif VER230}
+
+
+  {$ifdef COMPILER_16}
+    {$define COMPILER_16_UP}
+  {$endif}
+
+  {$ifdef BCB}
+    {$define CPPB}
+  {$else}
+    {$define DELPHI}
+  {$endif} 
+
+{$endif}
+
 {$ifdef Win32}
 
 // Compiler defines not specific to a particlular platform.
