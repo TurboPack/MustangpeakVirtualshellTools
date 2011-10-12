@@ -6670,7 +6670,7 @@ begin
             Inc(j);  // Node exists move on
             Inc(i)
           end else
-          if Compare > 0 then
+          if Compare < 0 then
           begin
             // Must be a new node, don't Inc j
             Allow := True;
