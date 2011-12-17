@@ -4680,7 +4680,7 @@ begin
       if ThreadedExpandMarkEnabled then
       begin
         // PIDL is not valid until the mapped drive is logged into
-        if {not Data.Namespace.Browsable and} not Data.Namespace.Removable and Data.Namespace.Folder and not Data.Namespace.Link then // Vista Websites on MSDN is annoying and show a log in dialog, it is a Folder and a Link....
+        if {not Data.Namespace.Browsable and} not Data.Namespace.Removable {and Data.Namespace.Folder} and not Data.Namespace.Link then // Vista Websites on MSDN is annoying and show a log in dialog, it is a Folder and a Link....
         begin
           Include(InitStates, ivsHasChildren);
           //  In Vista all "+" are threaded
