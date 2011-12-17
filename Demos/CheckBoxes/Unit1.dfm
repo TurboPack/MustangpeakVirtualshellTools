@@ -1,10 +1,10 @@
 object Form1: TForm1
   Left = 267
   Top = 198
-  Width = 710
-  Height = 464
   ActiveControl = Button3
   Caption = 'Form1'
+  ClientHeight = 426
+  ClientWidth = 694
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -19,7 +19,7 @@ object Form1: TForm1
     Left = 0
     Top = 0
     Width = 289
-    Height = 281
+    Height = 277
     Active = False
     Align = alLeft
     ColumnDetails = cdUser
@@ -57,15 +57,15 @@ object Form1: TForm1
   end
   object Panel1: TPanel
     Left = 0
-    Top = 281
-    Width = 702
+    Top = 277
+    Width = 694
     Height = 149
     Align = alBottom
     TabOrder = 1
     object Panel2: TPanel
       Left = 193
       Top = 1
-      Width = 508
+      Width = 500
       Height = 147
       Align = alClient
       BevelOuter = bvLowered
@@ -74,7 +74,7 @@ object Form1: TForm1
       object Label2: TLabel
         Left = 6
         Top = 115
-        Width = 496
+        Width = 488
         Height = 26
         Align = alBottom
         Caption = 
@@ -82,11 +82,12 @@ object Form1: TForm1
           'e in some valid paths to folders on your system then press Set p' +
           'aths to check the appropriate nodes.'
         WordWrap = True
+        ExplicitWidth = 495
       end
       object Memo1: TMemo
         Left = 6
         Top = 6
-        Width = 496
+        Width = 488
         Height = 75
         Align = alTop
         ScrollBars = ssVertical
@@ -140,6 +141,7 @@ object Form1: TForm1
           'he checks will be written to disk.  Close the application, reope' +
           'n and press Read From File to restore the checks.'
         WordWrap = True
+        ExplicitWidth = 177
       end
       object Button4: TButton
         Left = 8
@@ -164,8 +166,8 @@ object Form1: TForm1
   object VET1: TVirtualExplorerTree
     Left = 402
     Top = 0
-    Width = 300
-    Height = 281
+    Width = 292
+    Height = 277
     Active = False
     Align = alClient
     ColumnDetails = cdUser
@@ -202,7 +204,7 @@ object Form1: TForm1
     Left = 289
     Top = 0
     Width = 113
-    Height = 281
+    Height = 277
     Align = alLeft
     TabOrder = 3
     object Button3: TButton
@@ -215,7 +217,7 @@ object Form1: TForm1
       OnClick = Button3Click
     end
     object ButtonHideUnchecked: TButton
-      Left = 4
+      Left = 2
       Top = 104
       Width = 105
       Height = 25

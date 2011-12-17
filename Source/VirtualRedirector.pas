@@ -132,6 +132,9 @@ type
     property Running: Boolean read FRunning;
   end;
 
+  {$IF CompilerVersion >= 23}
+  [ComponentPlatformsAttribute(pidWin32 or pidWin64)]
+  {$IFEND}
   TVirtualRedirector = class(TCustomVirtualRedirector)
   published
     property OnErrorInput;
@@ -142,6 +145,9 @@ type
   // ******************
   TRedirectorChangeDir = procedure(Sender: TObject; NewDir: WideString; var Allow: Boolean) of object;
 
+  {$IF CompilerVersion >= 23}
+  [ComponentPlatformsAttribute(pidWin32 or pidWin64)]
+  {$IFEND}
   TVirtualCommandLineRedirector = class(TCustomVirtualRedirector)
   private
     FCurrentDir: AnsiString;
@@ -576,7 +582,7 @@ begin
         begin
           Mem := AllocMem(AvailableBytes + 1);
           if ReadFile(PipeIn, Mem^, AvailableBytes, BytesRead, nil) then
-            PostMessage(TargetWnd, WM_NEWINPUT, Integer(Mem), 0);
+            PostMessage(TargetWnd, WM_NEWINPUT, LPARAM(Mem), 0);
         end
       end;
       if PeekNamedPipe(PipeErrorIn, nil, 0, nil, @AvailableBytes, nil) then
@@ -585,7 +591,7 @@ begin
         begin
           Mem := AllocMem(AvailableBytes + 1);
           if ReadFile(PipeErrorIn, Mem^, AvailableBytes, BytesRead, nil) then
-            PostMessage(TargetWnd, WM_ERRORINPUT, Integer(Mem), 0);
+            PostMessage(TargetWnd, WM_ERRORINPUT, LPARAM(Mem), 0);
         end
       end
     end

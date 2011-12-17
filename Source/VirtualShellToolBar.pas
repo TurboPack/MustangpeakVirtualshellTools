@@ -236,7 +236,7 @@ type
     FOnMouseEnter: TNotifyEvent;
     FThemeToolbar: HTheme;
     FTimer: THandle;
-    FTimerStub: Pointer;
+    FTimerStub: ICallbackStub;
     FState: TButtonStates;
     FDragging: Boolean;
     FImageListChangeLink: TChangeLink;
@@ -320,7 +320,7 @@ type
     property ThemeAware: Boolean read FThemeAware write SetThemeAware default True;
     property ThemeToolbar: HTheme read GetThemeToolbar;
     property Timer: THandle read FTimer;
-    property TimerStub: Pointer read FTimerStub;
+    property TimerStub: ICallbackStub read FTimerStub;
     property Transparent: Boolean read FTransparent write SetTransparent default False;
   public
     constructor Create(AOwner: TComponent); override;
@@ -339,6 +339,9 @@ type
     property Right: integer read GetRight;
   end;
 
+  {$IF CompilerVersion >= 23}
+  [ComponentPlatformsAttribute(pidWin32 or pidWin64)]
+  {$IFEND}
   TWideSpeedButton = class(TCustomWideSpeedButton)
     property Action;
     property AutoSize;
@@ -657,6 +660,9 @@ type
     procedure ChangeLinkFreeing(ChangeLink: IVETChangeLink); dynamic;
   end;
 
+  {$IF CompilerVersion >= 23}
+  [ComponentPlatformsAttribute(pidWin32 or pidWin64)]
+  {$IFEND}
   TVirtualShellToolbar = class(TCustomVirtualShellToolbar)
   published
     property Align;
@@ -707,6 +713,9 @@ type
     constructor Create(AOwner: TComponent); override;
   end;
 
+  {$IF CompilerVersion >= 23}
+  [ComponentPlatformsAttribute(pidWin32 or pidWin64)]
+  {$IFEND}
   TVirtualDriveToolbar = class(TCustomVirtualDriveToolbar)
   published
     property Align;
@@ -757,6 +766,9 @@ type
       write SetSpecialCommonFolders;
   end;
 
+  {$IF CompilerVersion >= 23}
+  [ComponentPlatformsAttribute(pidWin32 or pidWin64)]
+  {$IFEND}
   TVirtualSpecialFolderToolbar = class(TCustomVirtualSpecialFolderToolbar)
   published
     property Align;
@@ -1097,7 +1109,7 @@ begin
   Constraints.MinWidth := 23;
   FImageListChangeLink := TChangeLink.Create;
   FImageListChangeLink.OnChange := ImageListChange;
-  FTimerStub := CreateStub(Self, @TCustomWideSpeedButton.TimerStubProc);
+  FTimerStub := TCallbackStub.Create(Self, @TCustomWideSpeedButton.TimerStubProc, 4);
 end;
 
 procedure TCustomWideSpeedButton.DefineProperties(Filer: TFiler);
@@ -1114,8 +1126,6 @@ destructor TCustomWideSpeedButton.Destroy;
 begin
   Font.OnChange := FOldOnFontChange;
   FreeThemes;
-  if TimerStub <> nil then
-    DisposeStub(TimerStub);
   ImageListChangeLink.Free;
   inherited
 end;
@@ -1646,7 +1656,7 @@ begin
   // Set a timer to remove the Hot track if we miss the CM_MOUSELEAVE
   if (FTimer = 0) and (Flat or (bsThemesActive in State)) then
    // The timerID uses object address for a unique value
-    FTimer := SetTimer(Parent.Handle, ID_TIMER_HOTTRACKDELAY, HOTTRACKDELAY, TimerStub);
+    FTimer := SetTimer(Parent.Handle, ID_TIMER_HOTTRACKDELAY, HOTTRACKDELAY, TimerStub.StubPointer);
 end;
 
 procedure TCustomWideSpeedButton.TimerStubProc(Wnd: HWnd; uMsg, idEvent: UINT;
@@ -1733,9 +1743,9 @@ begin
         if LogicalPerformedDropEffect.LoadFromDataObject(DataObject) then
         begin
           if LogicalPerformedDropEffect.Action = effectMove then
-            PostMessage(Parent.Handle, WM_REMOVEBUTTON, integer(Self), 0);
+            PostMessage(Parent.Handle, WM_REMOVEBUTTON, WPARAM(Self), 0);
         end else
-          PostMessage(Parent.Handle, WM_REMOVEBUTTON, integer(Self), 0);
+          PostMessage(Parent.Handle, WM_REMOVEBUTTON, WPARAM(Self), 0);
     finally
       FDragging := False;
     end else

@@ -23,10 +23,10 @@ type
     CheckBox4: TCheckBox;
     procedure VirtualExplorerTree1GetVETText(
       Sender: TCustomVirtualExplorerTree; Column: TColumnIndex;
-      Node: PVirtualNode; Namespace: TNamespace; var Text: WideString);
+    Node: PVirtualNode; Namespace: TNamespace; var Text: string);
     procedure VirtualExplorerTree1BeforeCellPaint(Sender: TBaseVirtualTree;
       TargetCanvas: TCanvas; Node: PVirtualNode; Column: TColumnIndex;
-      CellRect: TRect);
+      CellPaintMode: TVTCellPaintMode; CellRect: TRect; var ContentRect: TRect);
     procedure VirtualExplorerTree1Expanded(Sender: TBaseVirtualTree;
       Node: PVirtualNode);
     procedure CheckBox1Click(Sender: TObject);
@@ -93,8 +93,8 @@ end;
 { Form }
 
 procedure TForm1.VirtualExplorerTree1GetVETText(
-  Sender: TCustomVirtualExplorerTree; Column: TColumnIndex;
-  Node: PVirtualNode; Namespace: TNamespace; var Text: WideString);
+      Sender: TCustomVirtualExplorerTree; Column: TColumnIndex;
+      Node: PVirtualNode; Namespace: TNamespace; var Text: string);
 begin
   if Column = 1 then
     if Namespace.Folder and Namespace.FileSystem and (Namespace.Tag > 0) then
@@ -105,7 +105,7 @@ end;
 
 procedure TForm1.VirtualExplorerTree1BeforeCellPaint(
   Sender: TBaseVirtualTree; TargetCanvas: TCanvas; Node: PVirtualNode;
-  Column: TColumnIndex; CellRect: TRect);
+  Column: TColumnIndex; CellPaintMode: TVTCellPaintMode; CellRect: TRect; var ContentRect: TRect);
 var
   NS: TNamespace;
   I, PercentageSize: integer;

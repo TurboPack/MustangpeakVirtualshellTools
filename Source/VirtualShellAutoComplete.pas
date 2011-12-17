@@ -102,6 +102,9 @@ type
     property Dirty: Boolean read FDirty write FDirty;
   end;
 
+  {$IF CompilerVersion >= 23}
+  [ComponentPlatformsAttribute(pidWin32 or pidWin64)]
+  {$IFEND}
   TVirtualShellAutoComplete = class(TCustomVirtualShellAutoComplete)
   public
     property Namespaces;

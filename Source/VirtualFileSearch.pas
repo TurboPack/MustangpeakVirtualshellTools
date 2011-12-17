@@ -117,6 +117,9 @@ type
     property SearchPaths: {$IFDEF TNTSUPPORT}TTntStringList{$ELSE}TStringList{$ENDIF} read FSearchPaths write FSearchPaths;
   end;
 
+  {$IF CompilerVersion >= 23}
+  [ComponentPlatformsAttribute(pidWin32 or pidWin64)]
+  {$IFEND}
   TVirtualFileSearch = class(TComponent)
   private
     FCaseSensitive: Boolean;

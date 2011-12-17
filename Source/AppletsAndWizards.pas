@@ -194,7 +194,7 @@ const
 
 type
   PRunFileDlgA = ^TNM_RunFileDlgA;
-  TNM_RunFileDlgA = packed record
+  TNM_RunFileDlgA = {$IFNDEF CPUX64}packed{$ENDIF} record
     Hdr: TNMHdr;
     lpFile: PAnsiChar;
     lpDirectory: PAnsiChar;
@@ -202,7 +202,7 @@ type
   end;
 
   PRunFileDlgW = ^TNM_RunFileDlgW;
-  TNM_RunFileDlgW = packed record
+  TNM_RunFileDlgW = {$IFNDEF CPUX64}packed{$ENDIF} record
     Hdr: TNMHdr;
     lpFile: PWideChar;
     lpDirectory: PWideChar;
@@ -332,6 +332,9 @@ type
 
   TOnRunFile = procedure(RunFile, WorkingDirectory: string; var Result: TRunFileResult) of object;
 
+  {$IF CompilerVersion >= 23}
+  [ComponentPlatformsAttribute(pidWin32 or pidWin64)]
+  {$IFEND}
   TVirtualRunFileDialog = class(TComponent)
   private
     FOptions: TVirtualRunFileDialogOptions;

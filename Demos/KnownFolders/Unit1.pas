@@ -42,14 +42,14 @@ begin
   Image1.Picture.Bitmap.Width := JumboSysImages.Width;
   Image1.Picture.Bitmap.Height := JumboSysImages.Height;
   Image1.Picture.Bitmap.Canvas.FillRect(Rect(0, 0, Image1.Picture.Bitmap.Width, Image1.Picture.Bitmap.Height));
-  NS := CreateKnownNamespace(FolderIDs[ListBox1.ItemIndex], False, False);
+  NS := CreateKnownFolderNamespace(FolderIDs[ListBox1.ItemIndex], False, False);
   CheckBoxExists.Checked := Assigned(NS);
   if Assigned(NS) then
   begin
     JumboSysImages.Draw(Image1.Picture.Bitmap.Canvas, 0, 0, NS.GetIconIndex(False, icLarge));
     EditAliasPath.Text := NS.NameForParsing;
     NS.Free;
-    NS := CreateKnownNamespace(FolderIDs[ListBox1.ItemIndex], False, True);
+    NS := CreateKnownFolderNamespace(FolderIDs[ListBox1.ItemIndex], False, True);
     if Assigned(NS) then
     begin
       EditFilePath.Text := NS.NameForParsing;

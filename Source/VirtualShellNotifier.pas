@@ -42,7 +42,7 @@ uses
   TntClasses,
   {$ENDIF}
   VirtualResources,
-  MPThreadManager;
+  MPThreadManager, MPCommonUtilities;
 
 
 const
@@ -127,7 +127,7 @@ type
     function GetMapVirtualFolders: Boolean;
     procedure LockNotifier;
     function NotifyWatchFolder(Control: TWinControl; WatchFolder: WideString): Boolean;
-    procedure PostShellNotifyEvent(NotifyType: Longword; PIDL1, PIDL2: PItemIDList);
+    procedure PostShellNotifyEvent(NotifyType: LPARAM; PIDL1, PIDL2: PItemIDList);
     function RegisterKernelChangeNotify(Control: TWinControl; NotifyEvents: TVirtualKernelNotifyEvents): Boolean;
     procedure RegisterKernelSpecialFolderWatch(SpecialFolder: Longword); // Use the SHGetSpecialFolder CSIDL_xxx constants
     function RegisterShellChangeNotify(Control: TWinControl): Boolean;
@@ -194,11 +194,13 @@ type
 
   TChangeNamespaceArray = array of TChangeNamespace;
 
-  TWMShellNotify = packed record    // Structure of the TMessage sent to the window that registered as  notification recipient.
+  // Structure of the TMessage sent to the window that registered as  notification recipient.
+  TWMShellNotify = {$IFNDEF CPUX64}packed{$ENDIF} record
     Msg: Cardinal;
+    {$IFDEF CPUX64}MsgFiller: TDWordFiller;{$ENDIF}
     ShellEventList: TVirtualShellEventList;
-    Unused: LongWord;
-    Result: Longint;
+    Unused: LPARAM;
+    Result: LRESULT;
   end;
 
   THandleArray = array of THandle;
@@ -325,7 +327,7 @@ type
   private
     FNotifyWindowHandle: hWnd;
     FChangeNotifier: TVirtualChangeNotifier;
-    FNotifyWndProcStub: Pointer;
+    FNotifyWndProcStub: ICallbackStub;
 
     procedure CreateNotifyWindow;
     procedure DestroyNotifyWindow;
@@ -340,7 +342,7 @@ type
 
     property MyDocsDeskPIDL: PItemIDList read FMyDocsDeskPIDL write FMyDocsDeskPIDL;
     property MyDocsPIDL: PItemIDList read FMyDocsPIDL write FMyDocsPIDL;
-    property NotifyWndProcStub: Pointer read FNotifyWndProcStub write FNotifyWndProcStub;
+    property NotifyWndProcStub: ICallbackStub read FNotifyWndProcStub write FNotifyWndProcStub;
     property ThreadPIDLMgr: TCommonPIDLManager read FThreadPIDLMgr write FThreadPIDLMgr;
   public
     constructor Create(CreateSuspended: Boolean; AChangeNotifier: TVirtualChangeNotifier); reintroduce; virtual;
@@ -447,7 +449,7 @@ type
     procedure AddEvent(ShellNotifyEvent: TVirtualShellNotifyEvent; PIDL1, PIDL2: PItemIdList; APIDLMgr: TCommonPIDLManager);
     procedure LockNotifier;
     function NotifyWatchFolder(Control: TWinControl; WatchFolder: WideString): Boolean;
-    procedure PostShellNotifyEvent(NotifyType: Longword; PIDL1, PIDL2: PItemIDList);
+    procedure PostShellNotifyEvent(NotifyType: LPARAM; PIDL1, PIDL2: PItemIDList);
     function RegisterKernelChangeNotify(Control: TWinControl; NotifyEvents: TVirtualKernelNotifyEvents): Boolean;
     procedure RegisterKernelSpecialFolderWatch(SpecialFolder: Longword); // Use the SHGetSpecialFolder CSIDL_xxx constants
     function RegisterShellChangeNotify(Control: TWinControl): Boolean;
@@ -472,7 +474,7 @@ type
   TShellNotifyManager = class
   private
     FEventList: TThreadList;
-    FStub: Pointer;
+    FStub: ICallbackStub;
     FTimerID: Integer;
     FExplorerWndList: TThreadList;
   protected
@@ -483,7 +485,7 @@ type
     procedure StartTimer;
     procedure Timer(HWnd: HWND; Msg: UINT; idEvent: UINT; dwTime: DWORD); stdcall;
     property ExplorerWndList: TThreadList read FExplorerWndList write FExplorerWndList;
-    property Stub: Pointer read FStub write FStub;
+    property Stub: ICallbackStub read FStub write FStub;
     property TimerID: Integer read FTimerID write FTimerID;
     property EventList: TThreadList read FEventList write FEventList;
   public
@@ -515,8 +517,7 @@ implementation
 
 uses
   MPShellTypes,
-  MPShellUtilities,
-  MPCommonUtilities;
+  MPShellUtilities;
 type
   TShellILIsEqual = function(PIDL1: PItemIDList; PIDL2: PItemIDList): LongBool; stdcall;
   TShellILIsParent = function(PIDL1: PItemIDList; PIDL2: PItemIDList; ImmediateParent: Boolean): LongBool; stdcall;
@@ -1104,7 +1105,7 @@ begin
             Control := TVirtualChangeControl(List[i]).Control;
             if Control.HandleAllocated then
             begin
-              if not PostMessage(Control.Handle, WM_SHELLNOTIFY, Longword(TempList), 0) then
+              if not PostMessage(Control.Handle, WM_SHELLNOTIFY, WPARAM(TempList), 0) then
                 TempList.Release
               end else
             TempList.Release;
@@ -1146,7 +1147,7 @@ begin
     Result := False;
 end;
 
-procedure TVirtualChangeNotifier.PostShellNotifyEvent(NotifyType: Longword; PIDL1, PIDL2: PItemIDList);
+procedure TVirtualChangeNotifier.PostShellNotifyEvent(NotifyType: LPARAM; PIDL1, PIDL2: PItemIDList);
 // NotifyType is one of the SHCNE_xxx constants from SHChangeNotify
 var
   SNR: PShellNotifyRec;
@@ -1156,7 +1157,7 @@ begin
     New(SNR);
     SNR.PIDL1 := PIDLMgr.CopyPIDL(PIDL1);
     SNR.PIDL2 := PIDLMgr.CopyPIDL(PIDL2);
-    PostMessage(FShellChangeThread.NotifyWindowHandle, WM_CHANGENOTIFY_CUSTOM, Integer(SNR), NotifyType);
+    PostMessage(FShellChangeThread.NotifyWindowHandle, WM_CHANGENOTIFY_CUSTOM, WPARAM(SNR), NotifyType);
   end
 end;
 
@@ -1860,8 +1861,8 @@ var
   ClassInfo: TWNDCLASS;
   ClassRegistered: Boolean;
 begin
-  NotifyWndProcStub := CreateStub(Self, @TVirtualShellChangeThread.NotifyWndProc);
-  if (NotifyWindowHandle = 0) and Assigned(NotifyWndProcStub) then
+  NotifyWndProcStub := TCallbackStub.Create(Self, @TVirtualShellChangeThread.NotifyWndProc, 4);
+  if (NotifyWindowHandle = 0) and Assigned(NotifyWndProcStub.StubPointer) then
   begin
     ClassRegistered := GetClassInfo(SysInit.HInstance, VirtualNotifyWndClass, ClassInfo);
     if not ClassRegistered then
@@ -1869,7 +1870,7 @@ begin
       with ClassInfo do
       begin
         Style := CS_VREDRAW or CS_HREDRAW;
-        lpfnWndProc := NotifyWndProcStub;
+        lpfnWndProc := NotifyWndProcStub.StubPointer;
         cbClsExtra := 0;
         cbWndExtra := 0;
         hInstance := SysInit.hInstance;
@@ -1899,8 +1900,6 @@ begin
   if NotifyWindowHandle <> 0 then
     DestroyWindow(NotifyWindowHandle);
   NotifyWindowHandle := 0;
-  if Assigned(NotifyWndProcStub) then
-    DisposeStub(NotifyWndProcStub);
   NotifyWndProcStub := nil;
   // DANGER DANGER DANGER:  The Stub is destroyed so the Class is still pointing
   // to it.  We MUST unregister the class or any new windows created will point
@@ -2633,7 +2632,7 @@ begin
   inherited;
   ExplorerWndList := TThreadList.Create;
   EventList := TThreadList.Create;
-  Stub := CreateStub(Self, @TShellNotifyManager.Timer);
+  Stub := TCallbackStub.Create(Self, @TShellNotifyManager.Timer, 4);
 end;
 
 destructor TShellNotifyManager.Destroy;
@@ -2641,7 +2640,6 @@ begin
   ClearEventList;
   ExplorerWndList.Free;
   EventList.Free;
-  DisposeStub(Stub);
   inherited;
 end;
 
@@ -2756,7 +2754,7 @@ end;
 procedure TShellNotifyManager.StartTimer;
 begin
   if TimerID = 0 then
-    TimerID := SetTimer(0, ID_TIMER_NOTIFY, ID_TIMER_SHELLNOTIFY, Stub);
+    TimerID := SetTimer(0, ID_TIMER_NOTIFY, ID_TIMER_SHELLNOTIFY, Stub.StubPointer);
 end;
 
 procedure TShellNotifyManager.Timer(HWnd: HWND; Msg: UINT; idEvent: UINT;

@@ -6,7 +6,7 @@ interface
 
 uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
-  StdCtrls, VirtualExplorerTree, ExtCtrls, VirtualTrees, TntClasses;
+  StdCtrls, VirtualExplorerTree, ExtCtrls, VirtualTrees;
 
 type
   TForm1 = class(TForm)

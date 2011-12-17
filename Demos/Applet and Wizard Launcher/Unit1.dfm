@@ -1,9 +1,9 @@
 object Form1: TForm1
   Left = 157
   Top = 127
-  Width = 685
-  Height = 573
   Caption = 'Form1'
+  ClientHeight = 535
+  ClientWidth = 669
   Color = clBtnFace
   Font.Charset = ANSI_CHARSET
   Font.Color = clWindowText
@@ -16,7 +16,7 @@ object Form1: TForm1
   object Label6: TLabel
     Left = 0
     Top = 0
-    Width = 677
+    Width = 669
     Height = 32
     Align = alTop
     Alignment = taCenter
@@ -31,14 +31,16 @@ object Form1: TForm1
     Font.Style = [fsBold]
     ParentFont = False
     WordWrap = True
+    ExplicitWidth = 643
   end
   object Bevel1: TBevel
     Left = 0
     Top = 32
-    Width = 677
+    Width = 669
     Height = 18
     Align = alTop
     Shape = bsTopLine
+    ExplicitWidth = 677
   end
   object RadioGroupAccessability: TRadioGroup
     Left = 8
@@ -95,7 +97,6 @@ object Form1: TForm1
       Width = 169
       Height = 65
       Active = True
-      BorderStyle = bsSingle
       ColumnDetails = cdUser
       ColumnMenuItemCount = 8
       DefaultNodeHeight = 17
@@ -105,7 +106,6 @@ object Form1: TForm1
       FileSizeFormat = fsfExplorer
       FileSort = fsFileType
       Header.AutoSizeIndex = 0
-      Header.Columns = <>
       Header.Font.Charset = DEFAULT_CHARSET
       Header.Font.Color = clWindowText
       Header.Font.Height = -11
@@ -113,10 +113,8 @@ object Form1: TForm1
       Header.Font.Style = []
       Header.MainColumn = -1
       Header.Options = [hoColumnResize, hoDrag]
-      Header.Style = hsThickButtons
       HintAnimation = hatNone
       HintMode = hmHint
-      IncrementalSearchDirection = sdForward
       ParentColor = False
       RootFolder = rfSystem
       ScrollBarOptions.ScrollBars = ssVertical

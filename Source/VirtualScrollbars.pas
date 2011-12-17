@@ -113,15 +113,17 @@ type
   TScrollOptions = set of TScrollOption;
 
 
+{$IFNDEF DELPHI_5_UP}
   // The next both message records are not declared in Delphi 5 and lower.
   TWMPrint = packed record
     Msg: Cardinal;
     DC: HDC;
-    Flags: Cardinal;
-    Result: Integer;
+    Flags: LPARAM;
+    Result: LRESULT;
   end;
 
   TWMPrintClient = TWMPrint;
+{$ENDIF}
 
 type
   TCustomOwnerDrawScrollbar = class;  // forward
@@ -806,10 +808,10 @@ begin
   begin
     Msg := WM_VSCROLL;
     // Send the Scrollbar message
-    SendMessage(OwnerControl.Handle, Msg, MakeLong(ScrollCode, NewPos), integer(Self));
+    SendMessage(OwnerControl.Handle, Msg, WPARAM(MakeLong(ScrollCode, NewPos)), LPARAM(Self));
     // All code message are followed by EndScroll except Thumbtrack
     if ScrollCode <> SB_THUMBTRACK then
-      SendMessage(OwnerControl.Handle, Msg, MakeLong(SB_ENDSCROLL, 0), integer(Self));
+      SendMessage(OwnerControl.Handle, Msg, WPARAM(MakeLong(SB_ENDSCROLL, 0)), LPARAM(Self));
     Result := True;
   end;
 end;

@@ -1,9 +1,9 @@
 object Form1: TForm1
   Left = 248
   Top = 118
-  Width = 770
-  Height = 592
   Caption = 'Form1'
+  ClientHeight = 554
+  ClientWidth = 754
   Color = clBtnFace
   Font.Charset = ANSI_CHARSET
   Font.Color = clWindowText
@@ -18,11 +18,12 @@ object Form1: TForm1
   object Splitter1: TSplitter
     Left = 266
     Top = 41
-    Height = 366
+    Height = 364
+    ExplicitHeight = 366
   end
   object Panel1: TPanel
     Left = 0
-    Top = 431
+    Top = 429
     Width = 754
     Height = 125
     Align = alBottom
@@ -170,7 +171,7 @@ object Form1: TForm1
     Left = 0
     Top = 41
     Width = 41
-    Height = 366
+    Height = 364
     Align = alLeft
     BkGndParent = Owner
     ButtonCaptionOptions = [coDriveLetterOnly]
@@ -192,7 +193,7 @@ object Form1: TForm1
     Left = 41
     Top = 41
     Width = 225
-    Height = 366
+    Height = 364
     Active = True
     Align = alLeft
     ColumnDetails = cdUser
@@ -232,7 +233,7 @@ object Form1: TForm1
     Left = 269
     Top = 41
     Width = 485
-    Height = 366
+    Height = 364
     Active = True
     Align = alClient
     ColumnDetails = cdShellColumns
@@ -272,7 +273,7 @@ object Form1: TForm1
   end
   object SpecialFolderToolbar1: TVirtualSpecialFolderToolbar
     Left = 0
-    Top = 407
+    Top = 405
     Width = 754
     Height = 24
     Align = alBottom

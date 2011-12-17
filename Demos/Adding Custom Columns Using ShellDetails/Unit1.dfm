@@ -1,9 +1,9 @@
 object Form1: TForm1
   Left = 534
   Top = 326
-  Width = 860
-  Height = 501
   Caption = 'Form1'
+  ClientHeight = 463
+  ClientWidth = 844
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -28,14 +28,10 @@ object Form1: TForm1
     FileSizeFormat = fsfExplorer
     FileSort = fsFileType
     Header.AutoSizeIndex = -1
-    Header.DefaultHeight = 17
-    Header.Font.Charset = DEFAULT_CHARSET
-    Header.Font.Color = clWindowText
-    Header.Font.Height = -11
-    Header.Font.Name = 'MS Sans Serif'
-    Header.Font.Style = []
     Header.Options = [hoColumnResize, hoDblClickResize, hoDrag, hoShowSortGlyphs, hoVisible]
+    Header.ParentFont = True
     Header.SortColumn = 0
+    Header.Style = hsFlatButtons
     HintMode = hmHint
     Indent = 0
     ParentColor = False
@@ -46,7 +42,7 @@ object Form1: TForm1
     TreeOptions.MiscOptions = [toAcceptOLEDrop, toEditable, toReportMode, toToggleOnDblClick]
     TreeOptions.PaintOptions = [toShowTreeLines, toUseBlendedImages, toGhostedIfUnfocused]
     TreeOptions.SelectionOptions = [toMultiSelect, toRightClickSelect, toSiblingSelectConstraint]
-    TreeOptions.VETFolderOptions = [toHideRootFolder]
+    TreeOptions.VETFolderOptions = [toHideRootFolder, toThreadedExpandMark]
     TreeOptions.VETShellOptions = [toRightAlignSizeColumn, toContextMenus, toShellColumnMenu]
     TreeOptions.VETSyncOptions = [toCollapseTargetFirst, toExpandTarget, toSelectTarget]
     TreeOptions.VETMiscOptions = [toBrowseExecuteFolder, toBrowseExecuteFolderShortcut, toBrowseExecuteZipFolder, toChangeNotifierThread, toExecuteOnDblClk]

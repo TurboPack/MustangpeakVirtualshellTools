@@ -1,9 +1,9 @@
 object Form1: TForm1
   Left = 264
   Top = 180
-  Width = 660
-  Height = 445
   Caption = 'Form1'
+  ClientHeight = 407
+  ClientWidth = 644
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -54,7 +54,6 @@ object Form1: TForm1
       FileSizeFormat = fsfExplorer
       FileSort = fsFileType
       Header.AutoSizeIndex = -1
-      Header.DefaultHeight = 17
       Header.Font.Charset = DEFAULT_CHARSET
       Header.Font.Color = clWindowText
       Header.Font.Height = -11
@@ -62,6 +61,7 @@ object Form1: TForm1
       Header.Font.Style = []
       Header.Options = [hoColumnResize, hoDblClickResize, hoDrag, hoShowSortGlyphs, hoVisible]
       Header.SortColumn = 0
+      Header.Style = hsPlates
       HintMode = hmTooltip
       Indent = 0
       ParentColor = False
@@ -72,7 +72,7 @@ object Form1: TForm1
       TabStop = True
       TreeOptions.AutoOptions = [toAutoScroll]
       TreeOptions.MiscOptions = [toAcceptOLEDrop, toEditable, toReportMode, toToggleOnDblClick]
-      TreeOptions.PaintOptions = [toShowTreeLines, toUseBlendedImages, toGhostedIfUnfocused]
+      TreeOptions.PaintOptions = [toHotTrack, toShowTreeLines, toThemeAware, toUseBlendedImages, toGhostedIfUnfocused, toUseBlendedSelection]
       TreeOptions.SelectionOptions = [toMultiSelect, toRightClickSelect, toSiblingSelectConstraint]
       TreeOptions.VETFolderOptions = [toHideRootFolder]
       TreeOptions.VETShellOptions = [toRightAlignSizeColumn, toContextMenus, toShellHints, toShellColumnMenu]
@@ -142,12 +142,12 @@ object Form1: TForm1
     OnMenuMergeTop = VirtualShellBackgroundContextMenu1MenuMergeTop
     OnNewItem = VirtualShellBackgroundContextMenu1NewItem
     OnShow = VirtualShellBackgroundContextMenu1Show
-    Left = 80
-    Top = 96
+    Left = 112
+    Top = 136
   end
   object PopupMenuTop: TPopupMenu
-    Left = 144
-    Top = 96
+    Left = 112
+    Top = 240
     object opItem11: TMenuItem
       Caption = 'Top Item 1'
       OnClick = MyItemClick
@@ -176,8 +176,8 @@ object Form1: TForm1
     end
   end
   object PopupMenuBottom: TPopupMenu
-    Left = 176
-    Top = 96
+    Left = 112
+    Top = 296
     object MyItemFirst1: TMenuItem
       Caption = 'My Item Last'
       OnClick = MyItemClick
@@ -185,7 +185,7 @@ object Form1: TForm1
   end
   object PopupMenuNormal: TPopupMenu
     Left = 112
-    Top = 96
+    Top = 184
     object MyItemNormal1: TMenuItem
       Caption = 'My Item Normal'
       OnClick = MyItemClick
@@ -199,8 +199,8 @@ object Form1: TForm1
     Top = 112
   end
   object PopupMenuViews: TPopupMenu
-    Left = 456
-    Top = 112
+    Left = 416
+    Top = 160
     object View1: TMenuItem
       Caption = 'View'
       object Icon1: TMenuItem

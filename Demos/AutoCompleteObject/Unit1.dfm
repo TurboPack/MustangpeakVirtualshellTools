@@ -1,9 +1,9 @@
 object Form1: TForm1
   Left = 320
   Top = 329
-  Width = 536
-  Height = 290
   Caption = 'Form1'
+  ClientHeight = 252
+  ClientWidth = 520
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -39,7 +39,6 @@ object Form1: TForm1
     FileSizeFormat = fsfExplorer
     FileSort = fsFileType
     Header.AutoSizeIndex = 0
-    Header.DefaultHeight = 17
     Header.Font.Charset = DEFAULT_CHARSET
     Header.Font.Color = clWindowText
     Header.Font.Height = -11
@@ -79,7 +78,6 @@ object Form1: TForm1
     FileSizeFormat = fsfExplorer
     FileSort = fsFileType
     Header.AutoSizeIndex = -1
-    Header.DefaultHeight = 17
     Header.Font.Charset = DEFAULT_CHARSET
     Header.Font.Color = clWindowText
     Header.Font.Height = -11

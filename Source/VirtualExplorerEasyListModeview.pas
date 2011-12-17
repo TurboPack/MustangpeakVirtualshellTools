@@ -562,6 +562,9 @@ type
     procedure UnLockRedraw;
   end;
 
+  {$IF CompilerVersion >= 23}
+  [ComponentPlatformsAttribute(pidWin32 or pidWin64)]
+  {$IFEND}
   TVirtualColumnModeView = class(TCustomVirtualColumnModeView)
   private
   public

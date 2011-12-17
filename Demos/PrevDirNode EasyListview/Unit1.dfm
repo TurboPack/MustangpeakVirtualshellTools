@@ -1,9 +1,9 @@
 object Form1: TForm1
   Left = 100
   Top = 89
-  Width = 757
-  Height = 387
   Caption = 'Form1'
+  ClientHeight = 349
+  ClientWidth = 741
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -17,22 +17,29 @@ object Form1: TForm1
     Left = 0
     Top = 56
     Width = 741
-    Height = 252
+    Height = 250
     Active = True
     Align = alClient
     BevelKind = bkTile
-    CellSizes.List.AutoSize = True
+    CompressedFile.Color = clRed
     CompressedFile.Font.Charset = DEFAULT_CHARSET
-    CompressedFile.Font.Color = clBlue
+    CompressedFile.Font.Color = clWindowText
     CompressedFile.Font.Height = -11
-    CompressedFile.Font.Name = 'Tahoma'
+    CompressedFile.Font.Name = 'MS Shell Dlg 2'
     CompressedFile.Font.Style = []
     DefaultSortColumn = 0
     EditManager.Font.Charset = DEFAULT_CHARSET
     EditManager.Font.Color = clWindowText
     EditManager.Font.Height = -11
-    EditManager.Font.Name = 'Tahoma'
+    EditManager.Font.Name = 'MS Shell Dlg 2'
     EditManager.Font.Style = []
+    EncryptedFile.Color = 32832
+    EncryptedFile.Font.Charset = DEFAULT_CHARSET
+    EncryptedFile.Font.Color = clWindowText
+    EncryptedFile.Font.Height = -11
+    EncryptedFile.Font.Name = 'MS Shell Dlg 2'
+    EncryptedFile.Font.Style = []
+    FileSizeFormat = vfsfDefault
     Font.Charset = DEFAULT_CHARSET
     Font.Color = clWindowText
     Font.Height = -11
@@ -53,10 +60,10 @@ object Form1: TForm1
     PaintInfoGroup.MarginBottom.CaptionIndent = 4
     PaintInfoGroup.MarginTop.Visible = False
     ParentFont = False
+    Sort.Algorithm = esaQuickSort
     Sort.AutoSort = True
     TabOrder = 0
     ThumbsManager.StorageFilename = 'Thumbnails.album'
-    View = elsIcon
     OnItemCompare = LVItemCompare
     OnItemGetCaption = LVItemGetCaption
     OnRootRebuild = LVRootRebuild
@@ -74,7 +81,6 @@ object Form1: TForm1
       Width = 145
       Height = 21
       Style = csDropDownList
-      ItemHeight = 13
       ItemIndex = 0
       TabOrder = 0
       Text = 'elsIcon'
@@ -92,7 +98,7 @@ object Form1: TForm1
   end
   object Memo1: TMemo
     Left = 0
-    Top = 308
+    Top = 306
     Width = 741
     Height = 43
     Align = alBottom

@@ -12,7 +12,7 @@ type
     VirtualExplorerListview1: TVirtualExplorerListview;
     procedure ExplorerListview1GetVETText(
       Sender: TCustomVirtualExplorerTree; Column: TColumnIndex;
-      Node: PVirtualNode; Namespace: TNamespace; var Text: WideString);
+      Node: PVirtualNode; Namespace: TNamespace; var Text: string);
     procedure ExplorerListview1HeaderRebuild(Sender: TCustomVirtualExplorerTree;
       Header: TVTHeader);
     procedure ExplorerListview1CustomColumnCompare(
@@ -34,7 +34,7 @@ implementation
 
 procedure TForm1.ExplorerListview1GetVETText(
   Sender: TCustomVirtualExplorerTree; Column: TColumnIndex; Node: PVirtualNode;
-  Namespace: TNamespace; var Text: WideString);
+  Namespace: TNamespace; var Text: string);
 var
   NS: TNamespace;
 begin    

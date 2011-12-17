@@ -1174,6 +1174,9 @@ type
     constructor Create(AOwner: TComponent); override;
   end;
 
+  {$IF CompilerVersion >= 23}
+  [ComponentPlatformsAttribute(pidWin32 or pidWin64)]
+  {$IFEND}
   TVirtualExplorerEasyListview = class(TCustomVirtualExplorerEasyListview)
   private
   public
@@ -1469,6 +1472,9 @@ type
     property OnRebuildingShellHeader;
   end;
 
+  {$IF CompilerVersion >= 23}
+  [ComponentPlatformsAttribute(pidWin32 or pidWin64)]
+  {$IFEND}
   TVirtualMultiPathExplorerEasyListview = class(TCustomVirtualMultiPathExplorerEasyListview)
   public
     property CategoryInfo;
@@ -1716,6 +1722,9 @@ type
     property OnViewChange;
   end;
 
+  {$IF CompilerVersion >= 23}
+  [ComponentPlatformsAttribute(pidWin32 or pidWin64)]
+  {$IFEND}
   TVirtualDropStack = class(TCustomVirtualDropStack)
     private
   public
@@ -5420,10 +5429,10 @@ begin
             else
               LargeIconSize := GetSystemMetrics(SM_CXICON);
             Reg.WriteString('Shell Icon Size', IntToStr(LargeIconSize + 1));
-            SendMessage(Handle, WM_SETTINGCHANGE, SPI_SETNONCLIENTMETRICS, Integer(PChar('WindowMetrics')));
+            SendMessage(Handle, WM_SETTINGCHANGE, SPI_SETNONCLIENTMETRICS, WPARAM(PChar('WindowMetrics')));
             FileIconInit(True); // Flush the cached Icons
             Reg.WriteString('Shell Icon Size', IntToStr(LargeIconSize));
-            SendMessage(Handle, WM_SETTINGCHANGE, SPI_SETNONCLIENTMETRICS, Integer(PChar('WindowMetrics')));
+            SendMessage(Handle, WM_SETTINGCHANGE, SPI_SETNONCLIENTMETRICS, WPARAM(PChar('WindowMetrics')));
             FileIconInit(True); // Flush the cached Icons
           end;
         except // Quiet failure

@@ -1,9 +1,9 @@
 object Form1: TForm1
   Left = 231
   Top = 136
-  Width = 696
-  Height = 462
   Caption = 'Form1'
+  ClientHeight = 424
+  ClientWidth = 680
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -16,9 +16,9 @@ object Form1: TForm1
   TextHeight = 13
   object VirtualExplorerListview1: TVirtualExplorerListview
     Left = 0
-    Top = 56
-    Width = 688
-    Height = 372
+    Top = 60
+    Width = 680
+    Height = 364
     Active = False
     Align = alClient
     ColumnDetails = cdShellColumns
@@ -55,38 +55,40 @@ object Form1: TForm1
     OnChange = VirtualExplorerListview1Change
     OnRootChange = VirtualExplorerListview1RootChange
     ColumnMenuItemCount = 8
+    ExplicitTop = 56
+    ExplicitHeight = 368
   end
   object ToolBar1: TToolBar
     Left = 0
     Top = 0
-    Width = 688
-    Height = 56
+    Width = 680
+    Height = 60
     AutoSize = True
-    ButtonHeight = 52
-    ButtonWidth = 85
+    ButtonHeight = 60
+    ButtonWidth = 91
     Caption = 'ToolBar1'
     Images = ImageList1
     ShowCaptions = True
     TabOrder = 1
     object ToolButton2: TToolButton
       Left = 0
-      Top = 2
+      Top = 0
       Caption = 'Up One Level'
       Enabled = False
       ImageIndex = 0
       OnClick = ToolButton2Click
     end
     object ToolButton3: TToolButton
-      Left = 85
-      Top = 2
+      Left = 91
+      Top = 0
       Caption = 'Down One Level'
       Enabled = False
       ImageIndex = 1
       OnClick = ToolButton3Click
     end
     object ToolButton1: TToolButton
-      Left = 170
-      Top = 2
+      Left = 182
+      Top = 0
       Caption = 'Send To Menu'
       DropdownMenu = VirtualSendToMenu1
       Enabled = False
@@ -105,7 +107,7 @@ object Form1: TForm1
     Left = 112
     Top = 80
     Bitmap = {
-      494C010103000400040020002000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
+      494C010103000400080020002000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000800000002000000001002000000000000040
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000

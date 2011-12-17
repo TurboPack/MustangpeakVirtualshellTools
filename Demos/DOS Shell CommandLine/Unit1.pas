@@ -21,9 +21,9 @@ type
     procedure VirtualCommandLineRedirector1ChildProcessEnd(
       Sender: TObject);
     procedure VirtualCommandLineRedirector1ErrorInput(Sender: TObject;
-      NewInput: String);
+      NewInput: AnsiString);
     procedure VirtualCommandLineRedirector1Input(Sender: TObject;
-      NewInput: String);
+      NewInput: AnsiString);
     procedure FormDestroy(Sender: TObject);
     procedure FormCloseQuery(Sender: TObject; var CanClose: Boolean);
   private
@@ -73,17 +73,17 @@ begin
       // Select any new data past the Data string we have stored
       CharRange.cpMin := Length(Data);
       CharRange.cpMax := SendMessage(RichEdit1.Handle, WM_GETTEXTLENGTH, 0, 0);
-      SendMessage(RichEdit1.Handle, EM_EXSETSEL, 0, Integer(@CharRange));
+      SendMessage(RichEdit1.Handle, EM_EXSETSEL, 0, LPARAM(@CharRange));
 
       // Copy the selected text to the bufffer
       SetLength(Buffer, CharRange.cpMax - CharRange.cpMin); // The null is automaticlly added
       FillChar(PChar(@Buffer[1])^, Length(Buffer), #0);
-      SendMessage(RichEdit1.Handle, EM_GETSELTEXT, 0, Integer(@Buffer[1]));
+      SendMessage(RichEdit1.Handle, EM_GETSELTEXT, 0, LPARAM(@Buffer[1]));
 
       // Unselect the copied string
       CharRange.cpMin := SendMessage(RichEdit1.Handle, WM_GETTEXTLENGTH, 0, 0);
       CharRange.cpMax := CharRange.cpMin;
-      SendMessage(RichEdit1.Handle, EM_EXSETSEL, 0, Integer(@CharRange));
+      SendMessage(RichEdit1.Handle, EM_EXSETSEL, 0, LPARAM(@CharRange));
 
       NewCommand := True;
       VirtualCommandLineRedirector1.Write(Buffer);
@@ -102,13 +102,13 @@ begin
 end;
 
 procedure TForm1.VirtualCommandLineRedirector1ErrorInput(Sender: TObject;
-  NewInput: String);
+  NewInput: AnsiString);
 begin
   beep;
 end;
 
 procedure TForm1.VirtualCommandLineRedirector1Input(Sender: TObject;
-  NewInput: String);
+  NewInput: AnsiString);
 var
   s: string;
   CharRange: TCharRange;
@@ -142,14 +142,14 @@ begin
     RichEdit1.SetFocus;
     OldScrollPos := GetScrollPos(RichEdit1.Handle, SB_VERT);
     SendMessage(RichEdit1.Handle, WM_SETREDRAW, 0, 0);
-    SendMessage(RichEdit1.Handle, WM_SETTEXT, 0, Integer(PChar(Data)));
-    SendMessage(RichEdit1.Handle, WM_VSCROLL, MakeLong(SB_THUMBPOSITION, OldScrollPos), 0);
+    SendMessage(RichEdit1.Handle, WM_SETTEXT, 0, LPARAM(PChar(Data)));
+    SendMessage(RichEdit1.Handle, WM_VSCROLL, WPARAM(MakeLong(SB_THUMBPOSITION, OldScrollPos)), 0);
     SendMessage(RichEdit1.Handle, WM_SETREDRAW, 1, 0);
     InvalidateRect(RichEdit1.Handle, nil, False);
     UpdateWindow(RichEdit1.Handle);
     CharRange.cpMin := Length(Data);
     CharRange.cpMax := Length(Data);
-    SendMessage(RichEdit1.Handle, EM_EXSETSEL, 0, Integer(@CharRange));
+    SendMessage(RichEdit1.Handle, EM_EXSETSEL, 0, LPARAM(@CharRange));
     SendMessage(RichEdit1.Handle, EM_SCROLLCARET, 0, 0);
 
     // Scroll down until we stop scrolling

@@ -1212,9 +1212,15 @@ type
   end;
 
 
+  {$IF CompilerVersion >= 23}
+  [ComponentPlatformsAttribute(pidWin32 or pidWin64)]
+  {$IFEND}
   TVirtualShellBackgroundContextMenu = class(TCommonShellBackgroundContextMenu)
   end;
 
+  {$IF CompilerVersion >= 23}
+  [ComponentPlatformsAttribute(pidWin32 or pidWin64)]
+  {$IFEND}
   TVirtualShellMultiParentContextMenu = class(TCommonShellMultiParentContextMenu)
   end;
 
@@ -1504,11 +1510,7 @@ type
     procedure DoUpdating(State: TVTUpdateState); override;
     function DragDrop(const DataObject: IDataObject; KeyState: Integer; Pt: TPoint;  var Effect: Integer): HResult; override;
     function DragEnter(KeyState: Integer; Pt: TPoint; var Effect: Integer): HResult; override;
-    {$IFDEF COMPILER_16_UP}
     procedure DragAndDrop(AllowedEffects: Integer; DataObject: IDataObject; var DragEffect: Integer); override;
-    {$ELSE}
-    procedure DragAndDrop(AllowedEffects: Integer; DataObject: IDataObject; DragEffect: Integer); override;
-    {$ENDIF}
     procedure DragLeave; override;
     function DragOver(Source: TObject; KeyState: Integer; DragState: TDragState; Pt: TPoint; var Effect: Integer): HResult; override;
     procedure DummyOnDragOver(Sender: TBaseVirtualTree; Source: TObject; Shift: TShiftState; State: TDragState; Pt: TPoint; Mode: TDropMode; var Effect: Integer; var Accept: Boolean);
@@ -1744,6 +1746,9 @@ type
 {*******************************************************************************}
 {  TVirtualExplorerTree                                                         }
 {*******************************************************************************}
+  {$IF CompilerVersion >= 23}
+  [ComponentPlatformsAttribute(pidWin32 or pidWin64)]
+  {$IFEND}
   TVirtualExplorerTree = class(TCustomVirtualExplorerTree)
   public
      property ColumnMenu;
@@ -2126,6 +2131,9 @@ type
 {*******************************************************************************}
 {  TCustomExplorerTreeview                                                      }
 {*******************************************************************************}
+  {$IF CompilerVersion >= 23}
+  [ComponentPlatformsAttribute(pidWin32 or pidWin64)]
+  {$IFEND}
   TVirtualExplorerTreeview = class(TVirtualExplorerViews)
   private
   {$IFDEF EXPLORERLISTVIEW_L}
@@ -2161,6 +2169,9 @@ type
 {*******************************************************************************}
 {  TCustomExplorerListview                                                      }
 {*******************************************************************************}
+  {$IF CompilerVersion >= 23}
+  [ComponentPlatformsAttribute(pidWin32 or pidWin64)]
+  {$IFEND}
   TVirtualExplorerListview = class(TVirtualExplorerViews)
   private
   {$IFDEF EXPLORERTREEVIEW_L}
@@ -2352,7 +2363,7 @@ type
     FOnRollUp: TOnPopupRollUp;
 
     { Scrolling support }
-    FAutoScrollTimerStub: Pointer;    // Stub for timer callback function (object method)
+    FAutoScrollTimerStub: ICallbackStub;    // Stub for timer callback function (object method)
     FAutoScrollTimer: integer;        // Timer Handle
     FAutoScrollSlowTime: integer;     // Scroll time when mouse is down and dragged a few pixels out of window
     FAutoScrollFastTime: integer;    // Scroll time when mouse is down and dragged > 20 pixels out of window
@@ -2890,6 +2901,9 @@ type
   end;
 
 
+  {$IF CompilerVersion >= 23}
+  [ComponentPlatformsAttribute(pidWin32 or pidWin64)]
+  {$IFEND}
   TVirtualExplorerCombobox = class(TCustomVirtualExplorerCombobox)
   public
     property AutoComplete;
@@ -4732,7 +4746,7 @@ begin
          ParentNode := Node.Parent;
          if Assigned(ParentNode) and (toAutoTristateTracking in TreeOptions.AutoOptions) then
            if ParentNode.CheckState = csUncheckedNormal then
-           while Assigned(ParentNode) do
+           while Assigned(ParentNode) and (ParentNode <> RootNode) do
            begin
              ParentNode.CheckState := csMixedNormal;
              ParentNode := ParentNode.Parent
@@ -5180,13 +5194,8 @@ begin
     Effect := DROPEFFECT_NONE
 end;
 
-{$IFDEF COMPILER_16_UP}
 procedure TCustomVirtualExplorerTree.DragAndDrop(AllowedEffects: Integer;
   DataObject: IDataObject; var DragEffect: Integer);
-{$ELSE}
-procedure TCustomVirtualExplorerTree.DragAndDrop(AllowedEffects: Integer;
-  DataObject: IDataObject; DragEffect: Integer);
-{$ENDIF}
 begin
   if (Win32Platform = VER_PLATFORM_WIN32_NT) and (Win32MajorVersion >= 6) and Assigned(SHDoDragDrop_MP) then
     SHDoDragDrop_MP(Handle, DataObject, nil, AllowedEffects, DragEffect)
@@ -5603,10 +5612,10 @@ begin
           else
             LargeIconSize := GetSystemMetrics(SM_CXICON);
           Reg.WriteString('Shell Icon Size', IntToStr(LargeIconSize + 1));
-          SendMessage(Handle, WM_SETTINGCHANGE, SPI_SETNONCLIENTMETRICS, Integer(PChar('WindowMetrics')));
+          SendMessage(Handle, WM_SETTINGCHANGE, SPI_SETNONCLIENTMETRICS, LPARAM(PChar('WindowMetrics')));
           FileIconInit(True); // Flush the cached Icons
           Reg.WriteString('Shell Icon Size', IntToStr(LargeIconSize));
-          SendMessage(Handle, WM_SETTINGCHANGE, SPI_SETNONCLIENTMETRICS, Integer(PChar('WindowMetrics')));
+          SendMessage(Handle, WM_SETTINGCHANGE, SPI_SETNONCLIENTMETRICS, LPARAM(PChar('WindowMetrics')));
           FileIconInit(True); // Flush the cached Icons
         end;
       except // Quiet failure
@@ -13750,7 +13759,7 @@ begin
   Grabber.Width := GetSystemMetrics(SM_CYVSCROLL);
   Grabber.Height := GetSystemMetrics(SM_CYVSCROLL);
   PopupOptions := [poThemeAware, poRespectSysAnimationFlag];
-  FAutoScrollTimerStub := CreateStub(Self, @TDropDownWnd.AutoScrollTimerCallback);
+  FAutoScrollTimerStub := TCallbackStub.Create(Self, @TDropDownWnd.AutoScrollTimerCallback, 4);
   AutoScrollSlowTime := 200;
   AutoScrollFastTime := 10;
   AnimationSpeed := 200;
@@ -13779,8 +13788,6 @@ end;
 destructor TDropDownWnd.Destroy;
 begin
   inherited;
-  if Assigned(FAutoScrollTimerStub) then
-    DisposeStub(FAutoScrollTimerStub);
 end;
 
 procedure TDropDownWnd.DoRollDown(var Allow: Boolean);
@@ -14146,12 +14153,12 @@ begin
   begin
     Include(FPopupStates, psFastScroll);
     Exclude(FPopupStates, psSlowScroll);
-    FAutoScrollTimer := SetTimer(Handle, ID_TIMER_AUTOSCROLL, AutoScrollFastTime, FAutoScrollTimerStub);
+    FAutoScrollTimer := SetTimer(Handle, ID_TIMER_AUTOSCROLL, AutoScrollFastTime, FAutoScrollTimerStub.StubPointer);
   end else
   begin
     Include(FPopupStates, psSlowScroll);
     Exclude(FPopupStates, psFastScroll);
-    FAutoScrollTimer := SetTimer(Handle, 100, AutoScrollSlowTime, FAutoScrollTimerStub);
+    FAutoScrollTimer := SetTimer(Handle, 100, AutoScrollSlowTime, FAutoScrollTimerStub.StubPointer);
   end
 end;
 
@@ -14801,7 +14808,7 @@ begin
   Indent := 0;
   Colors.DisabledColor := Colors.FocusedSelectionColor; // Make the disabled focus look like it is enabled
   Colors.DisabledColor := Colors.UnfocusedSelectionColor;
-  NodeDataSize := 4;
+  NodeDataSize := SizeOf(Pointer);
   AutoComplete := TVirtualShellAutoComplete.Create(Self);
   {$IFDEF TNTSUPPORT}
   Strings := TTntStringList.Create;
@@ -14827,10 +14834,10 @@ end;
 procedure TPopupAutoCompleteTree.DoGetText(Node: PVirtualNode;
   Column: TColumnIndex; TextType: TVSTTextType; var Text: UnicodeString);
 var
-  P: integer;
+  P: NativeInt;
 begin
   inherited;
-  P := integer( GetNodeData(Node)^);
+  P := NativeInt( GetNodeData(Node)^);
   Text := Strings[P];
 end;
 
@@ -14957,7 +14964,7 @@ end;
 procedure TPopupAutoCompleteTree.UpdateList(CurrentEditStr: WideString);
 var
   Handled: Boolean;
-  i: integer;
+  i: NativeInt;
   TestString: WideString;
 begin
   Handled := False;
@@ -15768,6 +15775,7 @@ finalization
   FreeAndNil(ExpandMarkThread)
 
 end.
+
 
 
 

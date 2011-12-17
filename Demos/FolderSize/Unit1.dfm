@@ -1,9 +1,9 @@
 object Form1: TForm1
   Left = 281
   Top = 212
-  Width = 649
-  Height = 463
   Caption = 'Form1'
+  ClientHeight = 425
+  ClientWidth = 633
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -17,8 +17,8 @@ object Form1: TForm1
   object VirtualExplorerTree1: TVirtualExplorerTree
     Left = 0
     Top = 129
-    Width = 641
-    Height = 300
+    Width = 633
+    Height = 296
     Active = True
     Align = alClient
     ButtonFillMode = fmShaded
@@ -37,7 +37,6 @@ object Form1: TForm1
     Header.Font.Name = 'MS Shell Dlg 2'
     Header.Font.Style = []
     Header.Options = [hoColumnResize, hoDrag, hoVisible]
-    Header.Style = hsXPStyle
     HintAnimation = hatNone
     HintMode = hmHint
     ParentColor = False
@@ -69,7 +68,7 @@ object Form1: TForm1
   object Panel1: TPanel
     Left = 0
     Top = 0
-    Width = 641
+    Width = 633
     Height = 33
     Align = alTop
     BevelInner = bvSpace
@@ -104,7 +103,6 @@ object Form1: TForm1
       Width = 81
       Height = 21
       Style = csDropDownList
-      ItemHeight = 13
       TabOrder = 1
       OnClick = ComboBox1Click
       Items.Strings = (
@@ -145,7 +143,7 @@ object Form1: TForm1
   object Memo1: TMemo
     Left = 0
     Top = 33
-    Width = 641
+    Width = 633
     Height = 96
     Align = alTop
     BorderStyle = bsNone

@@ -180,7 +180,7 @@ procedure TForm1.ButtonHideUncheckedClick(Sender: TObject);
 
 begin
   VET.BeginUpdate;
-  RunNodes(VET, VET.GetFirst);
+  RunNodes(VET, VET.GetFirst.FirstChild);
   VET.EndUpdate
 end;
 

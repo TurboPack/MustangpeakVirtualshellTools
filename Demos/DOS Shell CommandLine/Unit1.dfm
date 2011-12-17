@@ -1,9 +1,9 @@
 object Form1: TForm1
   Left = 275
   Top = 125
-  Width = 696
-  Height = 480
   Caption = 'Form1'
+  ClientHeight = 442
+  ClientWidth = 680
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -17,7 +17,7 @@ object Form1: TForm1
   TextHeight = 13
   object Panel1: TPanel
     Left = 0
-    Top = 390
+    Top = 388
     Width = 680
     Height = 54
     Align = alBottom
@@ -52,7 +52,7 @@ object Form1: TForm1
     Left = 0
     Top = 0
     Width = 680
-    Height = 390
+    Height = 388
     Align = alClient
     Caption = 'Panel2'
     TabOrder = 1
@@ -60,10 +60,10 @@ object Form1: TForm1
       Left = 1
       Top = 1
       Width = 678
-      Height = 388
+      Height = 386
       Align = alClient
       Color = clBlack
-      Font.Charset = OEM_CHARSET
+      Font.Charset = GREEK_CHARSET
       Font.Color = clWhite
       Font.Height = -13
       Font.Name = 'Courier New'
