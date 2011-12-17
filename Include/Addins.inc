@@ -166,8 +166,8 @@
 
 // Define USE_TOOLBAR_TB2K if you use Toolbar 2000, TBX or SpTBXLib
 //
-{$DEFINE USE_TOOLBAR_TB2K}
-{$DEFINE SpTBX}
+{.$DEFINE USE_TOOLBAR_TB2K}
+{.$DEFINE SpTBX}
 
 // -----------------------------------------------------------------------------
 //
