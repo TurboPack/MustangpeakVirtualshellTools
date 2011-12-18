@@ -1,7 +1,6 @@
 package VirtualShellToolsD16D;
 
 {$R *.res}
-{$R *.otares}
 {$R '..\Design\VirtualShellToolsReg.dcr'}
 {$IFDEF IMPLICITBUILDING This IFDEF should not be used by users}
 {$ALIGN 8}
@@ -29,7 +28,7 @@ package VirtualShellToolsD16D;
 {$ENDIF IMPLICITBUILDING}
 {$DESCRIPTION 'Virtual Shell Tools Designtime Package'}
 {$DESIGNONLY}
-{$IMPLICITBUILD ON}
+{$IMPLICITBUILD OFF}
 
 requires
   vcl,

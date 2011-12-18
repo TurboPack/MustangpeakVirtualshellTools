@@ -1,7 +1,6 @@
 package VirtualShellToolsD16;
 
 {$R *.res}
-{$R *.otares}
 {$IFDEF IMPLICITBUILDING This IFDEF should not be used by users}
 {$ALIGN 8}
 {$ASSERTIONS ON}
@@ -28,7 +27,7 @@ package VirtualShellToolsD16;
 {$ENDIF IMPLICITBUILDING}
 {$DESCRIPTION 'VirtualShellTools Runtime Package'}
 {$RUNONLY}
-{$IMPLICITBUILD ON}
+{$IMPLICITBUILD OFF}
 
 requires
   rtl,
