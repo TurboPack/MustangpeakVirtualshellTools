@@ -1510,7 +1510,7 @@ type
     procedure DoUpdating(State: TVTUpdateState); override;
     function DragDrop(const DataObject: IDataObject; KeyState: Integer; Pt: TPoint;  var Effect: Integer): HResult; override;
     function DragEnter(KeyState: Integer; Pt: TPoint; var Effect: Integer): HResult; override;
-    procedure DragAndDrop(AllowedEffects: Integer; DataObject: IDataObject; var DragEffect: Integer); override;
+    procedure DragAndDrop(AllowedEffects: dword; DataObject: IDataObject; var DragEffect: Integer); override;
     procedure DragLeave; override;
     function DragOver(Source: TObject; KeyState: Integer; DragState: TDragState; Pt: TPoint; var Effect: Integer): HResult; override;
     procedure DummyOnDragOver(Sender: TBaseVirtualTree; Source: TObject; Shift: TShiftState; State: TDragState; Pt: TPoint; Mode: TDropMode; var Effect: Integer; var Accept: Boolean);
@@ -5194,7 +5194,7 @@ begin
     Effect := DROPEFFECT_NONE
 end;
 
-procedure TCustomVirtualExplorerTree.DragAndDrop(AllowedEffects: Integer;
+procedure TCustomVirtualExplorerTree.DragAndDrop(AllowedEffects: dword;
   DataObject: IDataObject; var DragEffect: Integer);
 begin
   if (Win32Platform = VER_PLATFORM_WIN32_NT) and (Win32MajorVersion >= 6) and Assigned(SHDoDragDrop_MP) then
