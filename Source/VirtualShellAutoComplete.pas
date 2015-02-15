@@ -104,7 +104,7 @@ type
 
   {$IF CompilerVersion >= 23}
   [ComponentPlatformsAttribute(pidWin32 or pidWin64)]
-  {$IFEND}
+  {$ENDIF}
   TVirtualShellAutoComplete = class(TCustomVirtualShellAutoComplete)
   public
     property Namespaces;
@@ -241,7 +241,7 @@ begin
     vaLString, vaString:
       FCurrentDir := Reader.ReadString;
   else
-    FCurrentDir := Reader.ReadWideString;
+    FCurrentDir := Reader.ReadString;
   end;
 end;
 
@@ -269,7 +269,8 @@ end;
 
 procedure TCustomVirtualShellAutoComplete.WriteCurrentDir(Writer: TWriter);
 begin
-  Writer.WriteWideString(FCurrentDir);
+  Writer.WriteString(FCurrentDir);
 end;
+
 
 end.

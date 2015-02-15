@@ -1214,13 +1214,13 @@ type
 
   {$IF CompilerVersion >= 23}
   [ComponentPlatformsAttribute(pidWin32 or pidWin64)]
-  {$IFEND}
+  {$ENDIF}
   TVirtualShellBackgroundContextMenu = class(TCommonShellBackgroundContextMenu)
   end;
 
   {$IF CompilerVersion >= 23}
   [ComponentPlatformsAttribute(pidWin32 or pidWin64)]
-  {$IFEND}
+  {$ENDIF}
   TVirtualShellMultiParentContextMenu = class(TCommonShellMultiParentContextMenu)
   end;
 
@@ -1493,7 +1493,7 @@ type
     procedure DoHeaderClick(HitInfo: TVTHeaderHitInfo); override;
     procedure DoHeaderMouseUp(Button: TMouseButton; Shift: TShiftState; X, Y: Integer); override;
     procedure DoHeaderRebuild; virtual;
-    procedure DoInitChildren(Node: PVirtualNode; var ChildCount: Cardinal); override;
+    function DoInitChildren(Node: PVirtualNode; var ChildCount: Cardinal):boolean;  override;
     procedure DoInitNode(Parent, Node: PVirtualNode; var InitStates: TVirtualNodeInitStates); override;
     function DoKeyAction(var CharCode: Word; var Shift: TShiftState): Boolean; override;
     procedure DoNamespaceStructureChange(Node: PVirtualNode; NS: TNamespace; ChangeType: TNamespaceStructureChange); virtual;
@@ -1748,7 +1748,7 @@ type
 {*******************************************************************************}
   {$IF CompilerVersion >= 23}
   [ComponentPlatformsAttribute(pidWin32 or pidWin64)]
-  {$IFEND}
+  {$ENDIF}
   TVirtualExplorerTree = class(TCustomVirtualExplorerTree)
   public
      property ColumnMenu;
@@ -2133,7 +2133,7 @@ type
 {*******************************************************************************}
   {$IF CompilerVersion >= 23}
   [ComponentPlatformsAttribute(pidWin32 or pidWin64)]
-  {$IFEND}
+  {$ENDIF}
   TVirtualExplorerTreeview = class(TVirtualExplorerViews)
   private
   {$IFDEF EXPLORERLISTVIEW_L}
@@ -2171,7 +2171,7 @@ type
 {*******************************************************************************}
   {$IF CompilerVersion >= 23}
   [ComponentPlatformsAttribute(pidWin32 or pidWin64)]
-  {$IFEND}
+  {$ENDIF}
   TVirtualExplorerListview = class(TVirtualExplorerViews)
   private
   {$IFDEF EXPLORERTREEVIEW_L}
@@ -2903,7 +2903,7 @@ type
 
   {$IF CompilerVersion >= 23}
   [ComponentPlatformsAttribute(pidWin32 or pidWin64)]
-  {$IFEND}
+  {$ENDIF}
   TVirtualExplorerCombobox = class(TCustomVirtualExplorerCombobox)
   public
     property AutoComplete;
@@ -4066,8 +4066,7 @@ begin
     OnClipboardCopy(Self, Handled);
 end;
 
-procedure TCustomVirtualExplorerTree.DoClipboardCut(
-  var MarkSelectedCut: Boolean; var Handled: Boolean);
+procedure TCustomVirtualExplorerTree.DoClipboardCut(var MarkSelectedCut: Boolean; var Handled: Boolean);
 begin
   if Assigned(FOnClipboardCut) then
     OnClipboardCut(Self, MarkSelectedCut, Handled);
@@ -4617,8 +4616,7 @@ begin
   if Assigned(OnHeaderRebuild) then OnHeaderRebuild(Self, Header);
 end;
 
-procedure TCustomVirtualExplorerTree.DoInitChildren(Node: PVirtualNode;
-  var ChildCount: Cardinal);
+function TCustomVirtualExplorerTree.DoInitChildren(Node: PVirtualNode; var ChildCount: Cardinal):boolean; //override;
 var
   ChildNode: PVirtualNode;
 begin

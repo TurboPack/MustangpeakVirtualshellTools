@@ -1,11 +1,13 @@
-package VirtualShellToolsD18D;
+package VirtualShellToolsD19D;
 
-{$R '..\..\Design\VirtualShellToolsReg.dcr'}
+{$R *.res}
+{$R *.otares}
+{$R '..\Design\VirtualShellToolsReg.dcr'}
 {$IFDEF IMPLICITBUILDING This IFDEF should not be used by users}
 {$ALIGN 8}
 {$ASSERTIONS ON}
 {$BOOLEVAL OFF}
-{$DEBUGINFO ON}
+{$DEBUGINFO OFF}
 {$EXTENDEDSYNTAX ON}
 {$IMPORTEDDATA ON}
 {$IOCHECKS ON}
@@ -35,10 +37,10 @@ requires
   designide,
   vclactnband,
   vclx,
-  EasyListviewD18,
-  VirtualShellToolsD18;
+  EasyListviewD19,
+  VirtualShellToolsD19;
 
 contains
-  VirtualShellToolsReg in '..\..\Design\VirtualShellToolsReg.pas';
+  VirtualShellToolsReg in '..\Design\VirtualShellToolsReg.pas';
 
 end.
