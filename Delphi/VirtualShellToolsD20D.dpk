@@ -1,7 +1,6 @@
 package VirtualShellToolsD20D;
 
 {$R *.res}
-{$R *.otares}
 {$R '..\Design\VirtualShellToolsReg.dcr'}
 {$IFDEF IMPLICITBUILDING This IFDEF should not be used by users}
 {$ALIGN 8}

@@ -1490,14 +1490,14 @@ type
     procedure DoGetText(Node: PVirtualNode; Column: TColumnIndex; TextType: TVSTTextType; var Text: UnicodeString); override;
     procedure DoGetVETText(Column: TColumnIndex; Node: PVirtualNode; Namespace: TNamespace; var Text: UnicodeString);
     procedure DoInvalidRootNamespace; virtual;
-    procedure DoHeaderClick(HitInfo: TVTHeaderHitInfo); override;
+    procedure DoHeaderClick(const HitInfo: TVTHeaderHitInfo); override;
     procedure DoHeaderMouseUp(Button: TMouseButton; Shift: TShiftState; X, Y: Integer); override;
     procedure DoHeaderRebuild; virtual;
     function DoInitChildren(Node: PVirtualNode; var ChildCount: Cardinal):boolean;  override;
     procedure DoInitNode(Parent, Node: PVirtualNode; var InitStates: TVirtualNodeInitStates); override;
     function DoKeyAction(var CharCode: Word; var Shift: TShiftState): Boolean; override;
     procedure DoNamespaceStructureChange(Node: PVirtualNode; NS: TNamespace; ChangeType: TNamespaceStructureChange); virtual;
-    procedure DoNewText(Node: PVirtualNode; Column: TColumnIndex; Text: UnicodeString); override;
+    procedure DoNewText(Node: PVirtualNode; Column: TColumnIndex; const Text: UnicodeString); override;
     procedure DoPaintText(Node: PVirtualNode; const Canvas: TCanvas; Column: TColumnIndex; TextType: TVSTTextType); override;
     procedure DoPopupMenu(Node: PVirtualNode; Column: TColumnIndex; Position: TPoint); override;
     procedure DoRootChange; virtual;
@@ -1510,7 +1510,7 @@ type
     procedure DoUpdating(State: TVTUpdateState); override;
     function DragDrop(const DataObject: IDataObject; KeyState: Integer; Pt: TPoint;  var Effect: Integer): HResult; override;
     function DragEnter(KeyState: Integer; Pt: TPoint; var Effect: Integer): HResult; override;
-    procedure DragAndDrop(AllowedEffects: dword; DataObject: IDataObject; var DragEffect: Integer); override;
+    procedure DragAndDrop(AllowedEffects: dword; const DataObject: IDataObject; var DragEffect: Integer); override;
     procedure DragLeave; override;
     function DragOver(Source: TObject; KeyState: Integer; DragState: TDragState; Pt: TPoint; var Effect: Integer): HResult; override;
     procedure DummyOnDragOver(Sender: TBaseVirtualTree; Source: TObject; Shift: TShiftState; State: TDragState; Pt: TPoint; Mode: TDropMode; var Effect: Integer; var Accept: Boolean);
@@ -4550,7 +4550,7 @@ begin
     OnInvalidRootNamespace(Self)
 end;
 
-procedure TCustomVirtualExplorerTree.DoHeaderClick(HitInfo: TVTHeaderHitInfo);
+procedure TCustomVirtualExplorerTree.DoHeaderClick(const HitInfo: TVTHeaderHitInfo);
 var
   Node: PVirtualNode;
   CM: TColumnManager;
@@ -4927,7 +4927,7 @@ begin
 end;
 
 procedure TCustomVirtualExplorerTree.DoNewText(Node: PVirtualNode;
-  Column: TColumnIndex; Text: UnicodeString);
+  Column: TColumnIndex; const Text: UnicodeString);
 var
   NS: TNamespace;
   VETColumn: TVETColumn;
@@ -5193,7 +5193,7 @@ begin
 end;
 
 procedure TCustomVirtualExplorerTree.DragAndDrop(AllowedEffects: dword;
-  DataObject: IDataObject; var DragEffect: Integer);
+  const DataObject: IDataObject; var DragEffect: Integer);
 begin
   if (Win32Platform = VER_PLATFORM_WIN32_NT) and (Win32MajorVersion >= 6) and Assigned(SHDoDragDrop_MP) then
     SHDoDragDrop_MP(Handle, DataObject, nil, AllowedEffects, DragEffect)
