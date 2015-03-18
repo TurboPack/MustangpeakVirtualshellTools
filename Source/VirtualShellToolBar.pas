@@ -2233,11 +2233,14 @@ begin
       ImageList.Width := Bitmap.Width;
       ImageList.Height := Bitmap.Height;
 
-      ImageList.AddMasked(Bitmap, clFuchsia);
-      DC := GetDC(Handle);
-      if DC <> 0 then
-        ImageList_DrawEx(ImageList.Handle, 0, DC, R.Left, R.Top, ImageList.Width,
-         ImageList.Height, CLR_NONE, CLR_NONE, ILD_TRANSPARENT);
+      if Imagelist.HandleAllocated and(ImageList.Height > 0) and (ImageList.Width > 0) then
+      begin
+        ImageList.AddMasked(Bitmap, clFuchsia);
+        DC := GetDC(Handle);
+        if DC <> 0 then
+          ImageList_DrawEx(ImageList.Handle, 0, DC, R.Left, R.Top, ImageList.Width,
+           ImageList.Height, CLR_NONE, CLR_NONE, ILD_TRANSPARENT);
+      end;
 
       Include(FStates, tsInsertImageVisible);
     finally
