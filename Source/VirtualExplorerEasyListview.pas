@@ -4229,7 +4229,7 @@ begin
   if LockoutSort then
     Sort.LockoutSort := True;
   if Assigned(Group) then
-    Result := Groups[0].Items.InsertCustom(Groups[0].Items.Count, ItemClass) as TExplorerItem
+    Result := Group.Items.InsertCustom(Group.Items.Count, ItemClass) as TExplorerItem
   else begin
     if Grouped then
       Result := FindGroup(NS).Items.AddCustom(ItemClass, nil) as TExplorerItem
