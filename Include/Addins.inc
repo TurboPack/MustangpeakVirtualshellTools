@@ -1,6 +1,12 @@
 
 // The packages must be rebuilt to make the changes in this file active
 
+// Define to use with the branch V5_Stable of VirtualTreeView at 
+// https://github.com/Virtual-TreeView/Virtual-TreeView. Otherwise the Master 
+// branch (version 6 or greater) should be used used.
+
+{.$DEFINE VirtualTree_V5}
+
 // -----------------------------------------------------------------------------
 
 // All the VSTools units depends on short-circuit boolean evaluation
