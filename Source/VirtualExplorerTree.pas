@@ -190,6 +190,9 @@ uses
   TMSchema, // Windows XP themes support for D5-D6. Get these units from www.delphi-gems.com.
   {$ENDIF}
   UxTheme,
+  {$IFNDEF VirtualTree_V5}
+  VirtualTrees.StyleHooks,
+  {$ENDIF}
   EasyListview;  // Windows XP themes support for D5-D6. Get these units from www.delphi-gems.com.
 
 {*******************************************************************************}
@@ -15797,6 +15800,8 @@ initialization
   InitThemeLibrary;
   LoadWideFunctions;
   LoadShell32Functions;
+
+  TCustomStyleEngine.RegisterStyleHook(TVirtualExplorerTree, TVclStyleScrollBarsHook);
 
 finalization
   FreeAndNil(ViewManager);
