@@ -1487,10 +1487,10 @@ type
     function DoExpanding(Node: PVirtualNode): Boolean; override;
     procedure DoEnumThreadLengthyOperation(var ShowAnimation: Boolean);
     procedure DoFreeNode(Node: PVirtualNode); override;
-    function DoGetImageIndex(Node: PVirtualNode; Kind: TVTImageKind; Column: TColumnIndex; var Ghosted: Boolean; var Index: Integer): TCustomImageList; override;
+    function DoGetImageIndex(Node: PVirtualNode; Kind: TVTImageKind; Column: TColumnIndex; var Ghosted: Boolean; var Index: TImageIndex): TCustomImageList; override;
     function DoGetNodeHint(Node: PVirtualNode; Column: TColumnIndex; var LineBreakStyle: TVTTooltipLineBreakStyle): UnicodeString; override;
     function DoGetPopupMenu(Node: PVirtualNode; Column: TColumnIndex; Position: TPoint): TPopupMenu; override;
-    procedure DoGetText(Node: PVirtualNode; Column: TColumnIndex; TextType: TVSTTextType; var Text: UnicodeString); override;
+    procedure DoGetText(var pEventArgs: TVSTGetCellTextEventArgs); override;
     procedure DoGetVETText(Column: TColumnIndex; Node: PVirtualNode; Namespace: TNamespace; var Text: UnicodeString);
     procedure DoInvalidRootNamespace; virtual;
     {$IFDEF VirtualTree_V5}
@@ -2201,7 +2201,7 @@ type
     function ShowBkGndContextMenu(Point: TPoint): Integer; override;
     procedure CreateWnd; override;
     function DoGetImageIndex(Node: PVirtualNode; Kind: TVTImageKind; Column: TColumnIndex;
-      var Ghosted: Boolean; var Index: Integer): TCustomImageList; override;
+      var Ghosted: Boolean; var Index: TImageIndex): TCustomImageList; override;
     function DoKeyAction(var CharCode: Word; var Shift: TShiftState): Boolean; override;
     procedure DoShellExecute(Node: PVirtualNode); override;
     procedure LoadDefaultOptions; override;
@@ -2598,8 +2598,7 @@ type
     {$ENDIF}
   protected
     procedure CreateParams(var Params: TCreateParams); override;
-    procedure DoGetText(Node: PVirtualNode; Column: TColumnIndex; TextType: TVSTTextType;
-      var Text: UnicodeString); override;
+    procedure DoGetText(var pEventArgs: TVSTGetCellTextEventArgs); override;
     {$IFDEF TNTSUPPORT}
      procedure DoUpdateList(const CurrentEditContents: WideString;
       EnumList: TTntStringList; var Handled: Boolean);
@@ -4399,7 +4398,7 @@ begin
 end;
 
 function TCustomVirtualExplorerTree.DoGetImageIndex(Node: PVirtualNode; Kind: TVTImageKind; Column: TColumnIndex;
-      var Ghosted: Boolean; var Index: Integer): TCustomImageList;
+      var Ghosted: Boolean; var Index: TImageIndex): TCustomImageList;
 { Called by VT when it needs the image index for the node.                       }
 var
   NS: TNamespace;
@@ -4496,8 +4495,7 @@ begin
     Result.PopupComponent := Self
 end;
 
-procedure TCustomVirtualExplorerTree.DoGetText(Node: PVirtualNode;
-  Column: TColumnIndex; TextType: TVSTTextType; var Text: UnicodeString);
+procedure TCustomVirtualExplorerTree.DoGetText(var pEventArgs: TVSTGetCellTextEventArgs);
 // 7.2.02 changed method so that any columns text may be changed via the
 // OnGetVETText event.  This is a questionable practice in my opinion but it has
 // been asked for a lot.  The danger is you don't always know what column is the
@@ -4506,58 +4504,58 @@ procedure TCustomVirtualExplorerTree.DoGetText(Node: PVirtualNode;
 var
   NS: TNamespace;
   VETColumn: TVETColumn;
-begin     
-  if ValidateNamespace(Node, NS) then
+begin
+  if ValidateNamespace(pEventArgs.Node, NS) then
   begin
-    if Column > -1 then
+    if pEventArgs.Column > -1 then
     begin
-      VETColumn := TVETColumn( Header.Columns[Column]);
+      VETColumn := TVETColumn( Header.Columns[pEventArgs.Column]);
       if ColumnDetails = cdShellColumns then
       begin
-        if Column < ShellBaseColumnCount then
+        if pEventArgs.Column < ShellBaseColumnCount then
         begin
           { The IShellDetails and IShellFolder2 interfaces show // in front of    }
           { network resources and use things like Win_ObjectNew for the           }
           { 'Add Printer' text so use the usual way to get the object name.       }
-          if Column < 1 then
-            Text := NS.NameInFolder
+          if pEventArgs.Column < 1 then
+            pEventArgs.CellText := NS.NameInFolder
           else
-            Text := NS.DetailsOf(Column);
+            pEventArgs.CellText := NS.DetailsOf(pEventArgs.Column);
         end;
         // Allow the program to override any column text
-        DoGetVETText(Column, Node, NS, Text);
+        DoGetVETText(pEventArgs.Column, pEventArgs.Node, NS, pEventArgs.CellText);
       end else
       begin
         case VETColumn.ColumnDetails of
-          cdFileName: Text := NS.NameInFolder;
+          cdFileName: pEventArgs.CellText := NS.NameInFolder;
           cdSize:
             case FileSizeFormat of
-              fsfExplorer: Text := NS.SizeOfFileKB;
-              fsfActual: Text := NS.SizeOfFile;
-              fsfDiskUsage: Text := NS.SizeOfFileDiskUsage;
+              fsfExplorer: pEventArgs.CellText := NS.SizeOfFileKB;
+              fsfActual: pEventArgs.CellText := NS.SizeOfFile;
+              fsfDiskUsage: pEventArgs.CellText := NS.SizeOfFileDiskUsage;
             end;
-          cdType: Text := NS.FileType;
-          cdModified: Text := NS.LastWriteTime;
-          cdAccessed: Text := NS.LastAccessTime;
-          cdCreated: Text := NS.CreationTime;
-          cdAttributes: Text := NS.AttributesString;
-          cdPath: Text := NS.NameParseAddress;
-          cdDOSName: Text := NS.ShortFileName;
+          cdType: pEventArgs.CellText := NS.FileType;
+          cdModified: pEventArgs.CellText := NS.LastWriteTime;
+          cdAccessed: pEventArgs.CellText := NS.LastAccessTime;
+          cdCreated: pEventArgs.CellText := NS.CreationTime;
+          cdAttributes: pEventArgs.CellText := NS.AttributesString;
+          cdPath: pEventArgs.CellText := NS.NameParseAddress;
+          cdDOSName: pEventArgs.CellText := NS.ShortFileName;
          // cdCustom: DoGetVETText(Column, Node, NS, Text);
         end;
         // Allow the program to override any column text
-        DoGetVETText(Column, Node, NS, Text);
+        DoGetVETText(pEventArgs.Column, pEventArgs.Node, NS, pEventArgs.CellText);
       end
     end else
     begin
-      Text := NS.NameInFolder;
+      pEventArgs.CellText := NS.NameInFolder;
        // When the VET has no columns the Column param is -1 we should fire the event
-      DoGetVETText(Column, Node, NS, Text)
+      DoGetVETText(pEventArgs.Column, pEventArgs.Node, NS, pEventArgs.CellText)
     end
   end else
   begin
-    Text := '';
-    DoGetVETText(Column, Node, nil, Text);
+    pEventArgs.CellText := '';
+    DoGetVETText(pEventArgs.Column, pEventArgs.Node, nil, pEventArgs.CellText);
   end
 end;
 
@@ -5970,7 +5968,7 @@ end;
 
 function TCustomVirtualExplorerTree.InternalData(Node: PVirtualNode): Pointer;
 begin
-  Result := PAnsiChar(Node) + FInternalDataOffset;
+  Result := PByte(Node) + Self.NodeDataSize + FInternalDataOffset;
 end;
 
 function TCustomVirtualExplorerTree.InternalWalkPIDLToNode(PIDL: PItemIDList): PVirtualNode;
@@ -9961,7 +9959,7 @@ begin
 end;
 
 function TVirtualExplorerListview.DoGetImageIndex(Node: PVirtualNode; Kind: TVTImageKind; Column: TColumnIndex;
-      var Ghosted: Boolean; var Index: Integer): TCustomImageList;
+      var Ghosted: Boolean; var Index: TImageIndex): TCustomImageList;
 begin
   // Don't let the Listview use Open Folder images;
   if Kind = ikSelected then
@@ -14867,14 +14865,13 @@ begin
   inherited;
 end;
 
-procedure TPopupAutoCompleteTree.DoGetText(Node: PVirtualNode;
-  Column: TColumnIndex; TextType: TVSTTextType; var Text: UnicodeString);
+procedure TPopupAutoCompleteTree.DoGetText(var pEventArgs: TVSTGetCellTextEventArgs);
 var
   P: NativeInt;
 begin
   inherited;
-  P := NativeInt( GetNodeData(Node)^);
-  Text := Strings[P];
+  P := NativeInt( GetNodeData(pEventArgs.Node)^);
+  pEventArgs.CellText := Strings[P];
 end;
 
 {$IFDEF TNTSUPPORT}

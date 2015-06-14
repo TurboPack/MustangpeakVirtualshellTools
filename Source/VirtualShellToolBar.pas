@@ -4368,7 +4368,7 @@ var
   StgMedium: TStgMedium;
   Stream: IStream;
   BytesRead: LongInt;
-  NewPos: Largeint;
+  NewPos: uint64;
   LocalPIDLSize: integer;
   Malloc: IMalloc;
 begin
@@ -4392,7 +4392,7 @@ var
   StgMedium: TStgMedium;
   hMem: THandle;
   Stream: IStream;
-  NewPos: Largeint;
+  NewPos: uint64;
   Int: integer;
   BytesWritten: LongInt;
 begin
