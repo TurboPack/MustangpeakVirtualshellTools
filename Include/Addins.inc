@@ -5,23 +5,8 @@
 // https://github.com/Virtual-TreeView/Virtual-TreeView. Otherwise the Master 
 // branch (version 6 or greater) should be used used.
 
-
 // -----------------------------------------------------------------------------
 
-// 64 Bit Windows does not allow for code execution in anything other than virtual address space.
-// VSTools uses a stub allocation to make a object method a windows callback through assembly
-// code.  If using a replacement memory manager that does not use memory that is execuable in
-// 64 bit windows, or if future Delphi memory managers change and allocate memory that is not
-// executable in 64 bit Windows uncomment the following define.  This will force the stub
-// code to allocate virtual memory on it own.  The drawback is it allocates it in 64k blocks but
-// 64k in Win64 should be nothing.....
-
-{.$DEFINE VIRTUALMEMSTUB}
-
-
-
-
-// -----------------------------------------------------------------------------
 //
 //  GRAPHICEX SUPPORT
 //

@@ -329,11 +329,9 @@ procedure SpConvertJPGStreamToBitmap(MS: TMemoryStream; OutBitmap: TBitmap);
 implementation
 
 uses
-  {$IFDEF USEGRAPHICEX} GraphicEx, {$ELSE}
-    {$IFDEF USEIMAGEEN} ImageEnIo, ImageEnProc, hyieutils, {$ELSE}
-      {$IFDEF USEIMAGEMAGICK} MagickImage, ImageMagickAPI, {$ENDIF}
-    {$ENDIF}
-  {$ENDIF}
+{$IFDEF USEIMAGEEN} ImageEnIo, ImageEnProc, hyieutils, {$ELSE}
+  {$IFDEF USEIMAGEMAGICK} MagickImage, ImageMagickAPI, {$ENDIF}
+{$ENDIF}
   Types,
   {$IFDEF TNTSUPPORT}
   TntSysUtils,
@@ -490,18 +488,14 @@ begin
   Ext := WideLowercase(WideExtractFileExt(Filename));
   Delete(Ext, 1, 1);
 
-  {$IFDEF USEGRAPHICEX}
-  Result := GraphicEx.FileFormatList.GraphicFromExtension(Ext);
-  {$ELSE}
-    Result := nil;
-    if (Ext = 'jpg') or (Ext = 'jpeg') or (Ext = 'jif') then Result := TJpegImage
-    else if Ext = 'bmp' then Result := TBitmap
-    else if (Ext = 'wmf') or (Ext = 'emf') then Result := TMetafile
-    else if Ext = 'ico' then Result := TIcon;
-    {$IFDEF USEIMAGEMAGICK}
-    if Result = nil then
-      Result := MagickImage.MagickFileFormatList.GraphicFromExtension(Ext);
-    {$ENDIF}
+  Result := nil;
+  if (Ext = 'jpg') or (Ext = 'jpeg') or (Ext = 'jif') then Result := TJpegImage
+  else if Ext = 'bmp' then Result := TBitmap
+  else if (Ext = 'wmf') or (Ext = 'emf') then Result := TMetafile
+  else if Ext = 'ico' then Result := TIcon;
+  {$IFDEF USEIMAGEMAGICK}
+  if Result = nil then
+    Result := MagickImage.MagickFileFormatList.GraphicFromExtension(Ext);
   {$ENDIF}
 end;
 
@@ -2041,25 +2035,11 @@ procedure TCustomThumbsManager.FillImageFormats(FillColors: Boolean = True);
 var
   I: Integer;
   Ext: WideString;
-{$IFDEF USEGRAPHICEX}
+{$IFDEF USEIMAGEMAGICK}
   L: TStringList;
-{$ELSE}
-  {$IFDEF USEIMAGEMAGICK}
-     L: TStringList;
-  {$ENDIF}
 {$ENDIF}
 begin
   FValidImageFormats.Clear;
-  {$IFDEF USEGRAPHICEX}
-  L := TStringList.Create;
-  try
-    FileFormatList.GetExtensionList(L);
-    FValidImageFormats.DeleteString('ico'); // Don't add ico
-    FValidImageFormats.AddStrings(L);
-  finally
-    L.Free;
-  end;
-  {$ELSE}
   {$IFDEF USEIMAGEMAGICK}
   L := TStringList.Create;
   try
@@ -2095,7 +2075,6 @@ begin
     {$ENDIF}
     {$ENDIF}
   end;
-  {$ENDIF}
   {$ENDIF}
 
   if FillColors then begin
