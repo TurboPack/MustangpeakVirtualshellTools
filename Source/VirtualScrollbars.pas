@@ -30,22 +30,11 @@ interface
 {$include Compilers.inc}
 {$include ..\Include\AddIns.inc}
 
-{$ifdef COMPILER_12_UP}
-  {$WARN IMPLICIT_STRING_CAST       OFF}
- {$WARN IMPLICIT_STRING_CAST_LOSS  OFF}
-{$endif COMPILER_12_UP}
-
 uses
-  {$IFDEF COMPILER_9_UP}
   Types,
-  {$ENDIF}
   Windows,
   Messages, SysUtils, Classes, Graphics, Controls, Forms,
-  {$IFDEF COMPILER_7_UP}
   Themes,
-  {$ELSE}
-  TMSchema, // Windows XP themes support for D5-D6. Get these units from www.delphi-gems.com.
-  {$ENDIF}
   UxTheme;  // Windows XP themes support for D5-D6. Get these units from www.delphi-gems.com.
 
 
@@ -111,19 +100,6 @@ type
     soThemeAware       // If set and Themes are available the use Theme Drawing API
   );
   TScrollOptions = set of TScrollOption;
-
-
-{$IFNDEF DELPHI_5_UP}
-  // The next both message records are not declared in Delphi 5 and lower.
-  TWMPrint = packed record
-    Msg: Cardinal;
-    DC: HDC;
-    Flags: LPARAM;
-    Result: LRESULT;
-  end;
-
-  TWMPrintClient = TWMPrint;
-{$ENDIF}
 
 type
   TCustomOwnerDrawScrollbar = class;  // forward

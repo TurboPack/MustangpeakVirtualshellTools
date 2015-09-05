@@ -28,11 +28,6 @@ interface
 
 {$include ..\Include\AddIns.inc}
 
-{$ifdef COMPILER_12_UP}
-  {$WARN IMPLICIT_STRING_CAST       OFF}
- {$WARN IMPLICIT_STRING_CAST_LOSS  OFF}
-{$endif COMPILER_12_UP}
-
 uses
   // < FR added 11-28-05 >
   // To allow customization of check images at runtime in the column dialog

@@ -28,11 +28,6 @@ interface
 
 {$include Compilers.inc}
 
-{$ifdef COMPILER_12_UP}
- {$WARN IMPLICIT_STRING_CAST       OFF}
- {$WARN IMPLICIT_STRING_CAST_LOSS  OFF}
-{$endif COMPILER_12_UP}
-
 uses
   Windows, SysUtils, Classes, Controls, Forms,
   StdCtrls, ExtCtrls, VirtualTrees,
@@ -78,15 +73,9 @@ type
     procedure FormKeyPress(Sender: TObject; var Key: Char);
     procedure FormResize(Sender: TObject);
     procedure FormShow(Sender: TObject);
-    {$ifdef COMPILER_12_UP}
     procedure VSTColumnNamesGetText(Sender: TBaseVirtualTree;
       Node: PVirtualNode; Column: TColumnIndex; TextType: TVSTTextType;
       var CellText: string);
-    {$else}
-    procedure VSTColumnNamesGetText(Sender: TBaseVirtualTree;
-      Node: PVirtualNode; Column: TColumnIndex; TextType: TVSTTextType;
-      var CellText: WideString);
-    {$endif}
   private
     FDragNode: PVirtualNode;
     FOnVETUpdate: TVETUpdate;
@@ -305,7 +294,6 @@ begin
 end;
 // </ FR added 11-28-05 >
 
-{$ifdef COMPILER_12_UP}
 procedure TFormColumnSettings.VSTColumnNamesGetText(Sender: TBaseVirtualTree;
   Node: PVirtualNode; Column: TColumnIndex; TextType: TVSTTextType;
   var CellText: string);
@@ -315,16 +303,5 @@ begin
   ColData := PColumnData( Sender.GetNodeData(Node));
   CellText := ColData.Title
 end;
-{$else}
-procedure TFormColumnSettings.VSTColumnNamesGetText(Sender: TBaseVirtualTree;
-  Node: PVirtualNode; Column: TColumnIndex; TextType: TVSTTextType;
-  var CellText: WideString);
-var
-  ColData: PColumnData;
-begin
-  ColData := PColumnData( Sender.GetNodeData(Node));
-  CellText := ColData.Title
-end;
-{$endif}
 
 end.

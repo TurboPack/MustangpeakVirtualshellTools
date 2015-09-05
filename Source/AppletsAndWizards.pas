@@ -23,11 +23,6 @@ interface
 
 {$include Compilers.inc}
 
-{$ifdef COMPILER_12_UP}
-  {$WARN IMPLICIT_STRING_CAST       OFF}
- {$WARN IMPLICIT_STRING_CAST_LOSS  OFF}
-{$endif COMPILER_12_UP}
-
 //  Version 1.0.1
 //
 { Jim Kueneman                                                          01.01.02 }
@@ -298,7 +293,8 @@ type
     FCmdShow: TCmdShow;
     FShowErrorCodes: Boolean;
   protected
-    function Launch(S: AnsiString): Boolean;
+    function Launch(S: AnsiString): Boolean; overload;
+    function Launch(const S: string): Boolean; overload;
     function DecodeCmdShow(ACmdShow: TCmdShow): Longword;
     function EncodeCmdShow(SW_CODE: Longword): TCmdShow;
     function SelectPage(Command: string; Page: integer): Boolean;
@@ -522,11 +518,12 @@ function TAppletsAndWizards.Launch(S: AnsiString): Boolean;
 begin
   Result := WinExec(PAnsiChar(S), DecodeCmdShow(CmdShow)) > 31;
   if not Result and ShowErrorCodes then
-    {$ifdef COMPILER_6_UP}
     RaiseLastOSError;
-    {$else}
-    RaiseLastWin32Error;
-   {$endif};
+end;
+
+function TAppletsAndWizards.Launch(const s: string): Boolean;
+begin
+  Result := Launch(AnsiString(S));
 end;
 
 function TAppletsAndWizards.MicrosoftApps(App: TMicrosoftApp): Boolean;
@@ -671,7 +668,7 @@ begin
     OldLen := Length(FileName);
     if Win32Platform = VER_PLATFORM_WIN32_WINDOWS then
     begin
-      s := FileName;
+      s := AnsiString(FileName);
       SetLength(s, MAX_PATH);
       s[OldLen + 1] := #0;
     end else
@@ -687,7 +684,7 @@ begin
     begin
       Result := PickIconDlg(Application.Handle, PAnsiChar(s), MAX_PATH, IconIndex);
       SetLength(s, lstrLenA(PAnsiChar(s)));
-      FileName := s
+      FileName := string(s)
     end
   end else
     Result := False;
@@ -727,9 +724,9 @@ begin
         PWideChar(Description), Flags);
     end else
     begin
-      WorkingPathA := WorkingPath;
-      CaptionA := Caption;
-      DescriptionA := Description;
+      WorkingPathA := AnsiString(WorkingPath);
+      CaptionA := AnsiString(Caption);
+      DescriptionA := AnsiString(Description);
       RunFileDlg(Window, Icon, PAnsiChar(WorkingPathA), PAnsiChar(CaptionA),
         PAnsiChar(DescriptionA), Flags);
     end
@@ -777,10 +774,10 @@ const
   SizeFlag = SWP_NOACTIVATE or SWP_NOZORDER or SWP_NOSIZE;
 begin
   Assert(WorkingPath <> '', 'WorkingPath not set for TVirtualRunFileDialog.Run');
-  HiddenWnd := {$ifdef COMPILER_6_UP}Classes.{$endif}AllocateHWnd(WindowProc);
+  HiddenWnd := Classes.AllocateHWnd(WindowProc);
   SetWindowPos(HiddenWnd, 0, Position.x, Position.y, 0, 0, SizeFlag);
   Applets.SHRunFileDialog(HiddenWnd, Icon.Handle, WorkingPath, Caption, Description, Options);
-  {$ifdef COMPILER_6_UP}Classes.{$endif}DeallocateHWnd(HiddenWnd);
+  Classes.DeallocateHWnd(HiddenWnd);
 end;
 
 procedure TVirtualRunFileDialog.SetIcon(const Value: TIcon);
@@ -821,7 +818,7 @@ begin
              SetLength(TempWorkingDirA, lstrlenA(RunFileDlgA.lpDirectory));
              lstrcpyA(PAnsiChar(TempWorkingDirA), RunFileDlgA.lpDirectory);
              RunResult := frOk;
-             DoRunFile(TempFilePathA, TempWorkingDirA, RunResult);
+             DoRunFile(string(TempFilePathA), string(TempWorkingDirA), RunResult);
            end;
          end;
          case RunResult of

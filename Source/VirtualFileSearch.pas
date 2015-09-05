@@ -26,19 +26,6 @@ interface
 {$include Compilers.inc}
 {$include ..\Include\AddIns.inc}
 
-{$ifdef COMPILER_12_UP}
-  {$WARN IMPLICIT_STRING_CAST       OFF}
-  {$WARN IMPLICIT_STRING_CAST_LOSS  OFF}
-{$endif COMPILER_12_UP}
-
-{$IFDEF COMPILER_12_UP}
-  {$DEFINE UNICODE}
-{$ELSE}
-  {$IFDEF TNTSUPPORT}
-    {$DEFINE UNICODE}
-  {$ENDIF}
-{$ENDIF}
-
 uses
   Windows,
   Messages,
@@ -52,11 +39,7 @@ uses
   MPCommonUtilities,
   MPThreadManager,
   {$IFDEF TNTSUPPORT}
-    {$IFDEF COMPILER_9_UP}
-    WideStrUtils,
-    {$ELSE}
-    TntWideStrUtils,
-    {$ENDIF}
+  WideStrUtils,
   TntClasses,
   TntSysUtils,
   TntWindows,
@@ -140,17 +123,15 @@ type
     {$ENDIF}
     FSearchResults: TCommonPIDLList;
     FSubFolders: Boolean;
+{$WARN SYMBOL_PLATFORM OFF}
     FThreadPriority: TThreadPriority;
+{$WARN SYMBOL_PLATFORM ON}
     FTimer: TTimer;
     FUpdateRate: Integer;
   protected
     function BuildMask: Integer;
     procedure DoProgress(Results: TCommonPIDLList; var Handled: Boolean; var FreePIDLs: Boolean); virtual;
-    {$IFDEF UNICODE}
     procedure DoSearchCompare(const FilePath: WideString; FindFileData: TWIN32FindDataW; var UseFile: Boolean);
-    {$ELSE}
-    procedure DoSearchCompare(const FilePath: WideString; FindFileData: TWIN32FindDataA; var UseFile: Boolean);
-    {$ENDIF}
     procedure DoSearchEnd(Results: TCommonPIDLList);
     procedure TimerTick(Sender: TObject);
     property FileFindThread: TVirtualFileSearchThread read FFileFindThread write FFileFindThread;
@@ -179,7 +160,9 @@ type
     property OnSearchEnd: TFileSearchFinishedEvent read FOnSearchEnd write FOnSearchEnd;
     property SearchAttribs: TVirtualSearchAttribs read FSearchAttribs write FSearchAttribs default [vsaArchive, vsaCompressed, vsaEncrypted, vsaHidden, vsaNormal, vsaOffline, vsaReadOnly, vsaSystem, vsaTemporary];
     property SubFolders: Boolean read FSubFolders write FSubFolders default False;
+{$WARN SYMBOL_PLATFORM OFF}
     property ThreadPriority: TThreadPriority read FThreadPriority write FThreadPriority default tpNormal;
+{$WARN SYMBOL_PLATFORM ON}
     property UpdateRate: Integer read FUpdateRate write FUpdateRate default 500;
   end;
 
@@ -214,18 +197,9 @@ procedure TVirtualFileSearchThread.BuildFolderList(const Path: WideString; Folde
 //
 var
   FindHandle: THandle;
-  {$IFDEF UNICODE}
   FindFileDataW: TWIN32FindDataW;
-  {$ELSE}
-  FindFileDataA: TWIN32FindDataA;
-  {$ENDIF}
 begin
-  {$IFDEF UNICODE}
-    {$IFDEF COMPILER_12_UP}
     FindHandle := FindFirstFileW(PWideChar(WideString( Path + '\*.*')), FindFileDataW);
-    {$ELSE}
-    FindHandle := Tnt_FindFirstFileW(PWideChar(WideString( Path + '\*.*')), FindFileDataW);
-    {$ENDIF}
     if FindHandle <> INVALID_HANDLE_VALUE then
     begin
       repeat
@@ -252,45 +226,9 @@ begin
             end
           end
         end
-      {$IFDEF COMPILER_12_UP}
        until Terminated or not FindNextFileW(FindHandle, FindFileDataW);
-      {$ELSE}
-       until Terminated or not Tnt_FindNextFileW(FindHandle, FindFileDataW);
-      {$ENDIF}
       Windows.FindClose(FindHandle);
     end
-  {$ELSE}   // Ansi
-    FindHandle := FindFirstFileA(PAnsiChar(AnsiString( Path + '\*.*')), FindFileDataA);
-    if FindHandle <> INVALID_HANDLE_VALUE then
-    begin
-      repeat
-        // Recurse SubFolder if desired, don't get into an endless loop with ReparsePoints
-        if not Terminated and ((FFileMask and FILE_ATTRIBUTE_DIRECTORY <> 0) and (FindFileDataA.dwFileAttributes and FILE_ATTRIBUTE_DIRECTORY <> 0) and (FindFileDataA.dwFileAttributes and FILE_ATTRIBUTE_REPARSE_POINT = 0)) then
-        begin
-          // This is very ugly but it saves from testing filename lengths
-          if FindFileDataA.cFileName[0] <> #0 then
-          begin
-            if FindFileDataA.cFileName[1] = #0 then
-            begin
-              // One character long name, if '.' then skip it
-              if FindFileDataA.cFileName[0] <> '.' then
-                FolderList.Add(Path + '\' + FindFileDataA.cFileName)
-            end else
-            begin
-              if FindFileDataA.cFileName[2] = #0 then
-              begin
-                // Two character long name, if '..' then skip it
-                if not ((FindFileDataA.cFileName[0] = '.') and (FindFileDataA.cFileName[1] = '.')) then
-                  FolderList.Add(Path + '\' + FindFileDataA.cFileName)
-              end else
-                FolderList.Add(Path + '\' + FindFileDataA.cFileName)
-            end
-          end
-        end
-      until Terminated or not FindNextFileA(FindHandle, FindFileDataA);
-      Windows.FindClose(FindHandle);
-    end
-  {$ENDIF}
 end;
 
 procedure TVirtualFileSearchThread.Execute;
@@ -321,14 +259,10 @@ end;
 
 procedure TVirtualFileSearchThread.ProcessFiles(Path: WideString; Masks: {$IFDEF TNTSUPPORT}TTntStringList{$ELSE}TStringList{$ENDIF}; PIDLList: TCommonPIDLList);
 var
-  {$IFDEF UNICODE}
-    FindFileDataW: TWIN32FindDataW;
-      {$IFDEF TNTSUPPORT}
-        FindFileDataA: TWIN32FindDataA;
-      {$ENDIF}
-  {$ELSE}
-    FindFileDataA: TWIN32FindDataA;
-  {$ENDIF}
+  FindFileDataW: TWIN32FindDataW;
+{$IFDEF TNTSUPPORT}
+  FindFileDataA: TWIN32FindDataA;
+{$ENDIF}
   FolderList: {$IFDEF TNTSUPPORT}TTntStringList{$ELSE}TStringList{$ENDIF};
   FindHandle: THandle;
   i, j: Integer;
@@ -349,28 +283,22 @@ begin
       // Find all files in the folder
       CurrentPathSpec := Path + '\*.*';
 
-      {$IFDEF UNICODE}
-        {$IFDEF TNTSUPPORT}
-          if IsUnicode then
-            FindHandle := Tnt_FindFirstFileW(PWideChar( CurrentPathSpec), FindFileDataW)
-          else begin
-            FindHandle := FindFirstFileA(PAnsiChar(AnsiString( CurrentPathSpec)), FindFileDataA);
-            CopyMemory(@FindFileDataW, @FindFileDataA, Integer(@FindFileDataW.cFileName) - Integer(@FindFileDataW));
-            WStrPCopy(FindFileDataW.cFileName, FindFileDataA.cFileName);
-            WStrPCopy(FindFileDataW.cAlternateFileName, FindFileDataA.cAlternateFileName);
-          end;
-        {$ELSE}
-          FindHandle := FindFirstFileW(PWideChar( CurrentPathSpec), FindFileDataW);
-        {$ENDIF}
+      {$IFDEF TNTSUPPORT}
+        if IsUnicode then
+          FindHandle := Tnt_FindFirstFileW(PWideChar( CurrentPathSpec), FindFileDataW)
+        else begin
+          FindHandle := FindFirstFileA(PAnsiChar(AnsiString( CurrentPathSpec)), FindFileDataA);
+          CopyMemory(@FindFileDataW, @FindFileDataA, Integer(@FindFileDataW.cFileName) - Integer(@FindFileDataW));
+          WStrPCopy(FindFileDataW.cFileName, FindFileDataA.cFileName);
+          WStrPCopy(FindFileDataW.cAlternateFileName, FindFileDataA.cAlternateFileName);
+        end;
       {$ELSE}
-        FindHandle := FindFirstFileA(PAnsiChar(AnsiString( CurrentPathSpec)), FindFileDataA);
+        FindHandle := FindFirstFileW(PWideChar( CurrentPathSpec), FindFileDataW);
       {$ENDIF}
-
 
       if (FindHandle <> INVALID_HANDLE_VALUE) then
       begin
         repeat
-          {$IFDEF UNICODE}
             // .............  ANSII or UNICODE .......................
 
             // We filled in the FileFileDataW above even if on Win9x
@@ -412,66 +340,7 @@ begin
             if (i = 0) and (FindFileDataW.dwFileAttributes and FILE_ATTRIBUTE_DIRECTORY <> 0) and not(IsDotPath or IsDotDotPath) then
               FolderList.Add(CurrentPath);
 
-            {$IFDEF COMPILER_12_UP}
               Done := not FindNextFileW(FindHandle, FindFileDataW)
-            {$ELSE}
-              // Get the next file
-              if IsUnicode then
-                Done := not Tnt_FindNextFileW(FindHandle, FindFileDataW)
-              else begin
-                Done := not FindNextFileA(FindHandle, FindFileDataA);
-                CopyMemory(@FindFileDataW, @FindFileDataA, Integer(@FindFileDataW.cFileName) - Integer(@FindFileDataW));
-                WStrPCopy(FindFileDataW.cFileName, FindFileDataA.cFileName);
-                WStrPCopy(FindFileDataW.cAlternateFileName, FindFileDataA.cAlternateFileName);
-              end;
-            {$ENDIF}
-
-          {$ELSE}
-
-            // .............  ANSII Only .......................
-            CurrentPath := Path + '\' + FindFileDataA.cFileName;
-            IsDotPath := (lstrcmpiA(@FindFileDataA.cFileName, '.') = 0);
-            IsDotDotPath := (lstrcmpiA(@FindFileDataA.cFileName, '..') = 0);
-
-            if not(IsDotPath or IsDotDotPath) then
-            begin
-
-              // Decide if we use the file or not
-              UseFile := FileMask and FindFileDataA.dwFileAttributes <> 0;
-              if WidePathMatchSpecExists then
-                UseFile := UseFile and WidePathMatchSpec(FindFileDataA.cFileName, Masks[i]);
-
-              // Let the program override us
-              if UseFile then
-                SearchManager.DoSearchCompare(Path, FindFileDataA, UseFile);
-
-              // Using the file
-              if UseFile then
-              begin
-                PIDL := PathToPIDL(CurrentPath);
-                PIDLList.Add(PIDL);
-
-                // Cut down on the number of thread locks we use, they are expensive
-                if PIDLList.Count > 100 then
-                begin
-                  LockThread;
-                  for j := 0 to PIDLList.Count - 1 do
-                    SearchResultsLocal.Add(PIDLList[j]);
-                  PIDLList.Clear;
-                  UnlockThread;
-                end
-              end;
-            end;
-
-            // Add the folders if we are recursing the folder, but only on the first runthrough
-            if (i = 0) and (FindFileDataA.dwFileAttributes and FILE_ATTRIBUTE_DIRECTORY <> 0) and not(IsDotPath or IsDotDotPath) then
-              FolderList.Add(CurrentPath);
-
-            // Get the next file
-            Done := not FindNextFileA(FindHandle, FindFileDataA)
-
-          {$ENDIF}
-
         until Terminated or Done;
         Windows.FindClose(FindHandle);
       end;
@@ -550,22 +419,12 @@ begin
     OnProgress(Self, Results, Handled, FreePIDLs)
 end;
 
-{$IFDEF UNICODE}
 procedure TVirtualFileSearch.DoSearchCompare(const FilePath: WideString; FindFileData: TWIN32FindDataW; var UseFile: Boolean);
 begin
   // WARNING CALLED IN CONTEXT OF THREAD
   if Assigned(OnSearchCompare) then
     OnSearchCompare(Self, FilePath, FindFileData, UseFile)
 end;
-{$ELSE}
-procedure TVirtualFileSearch.DoSearchCompare(const FilePath: WideString; FindFileData: TWIN32FindDataA; var UseFile: Boolean);
-begin
-  // WARNING CALLED IN CONTEXT OF THREAD
-  if Assigned(OnSearchCompare) then
-    OnSearchCompare(Self, FilePath, FindFileData, UseFile)
-end;
-{$ENDIF}
-
 
 procedure TVirtualFileSearch.DoSearchEnd(Results: TCommonPIDLList);
 begin

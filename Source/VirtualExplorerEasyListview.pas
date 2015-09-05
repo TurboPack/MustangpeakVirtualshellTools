@@ -50,11 +50,6 @@ interface
 {$I ..\Include\AddIns.inc}
 {$include Compilers.inc}
 
-{$ifdef COMPILER_12_UP}
-  {$WARN IMPLICIT_STRING_CAST OFF}
- {$WARN IMPLICIT_STRING_CAST_LOSS  OFF}
-{$endif COMPILER_12_UP}
-
 {$IFDEF GXDEBUG_SHELLNOTIFY}
   {$DEFINE GX_DEBUG}
 {$ENDIF}
@@ -113,11 +108,7 @@ uses
   TntSysUtils,
   TntClasses,
   TntMenus,
-    {$IFDEF COMPILER_10_UP}
     WideStrings,
-    {$ELSE}
-    TntWideStrings,
-    {$ENDIF}
   {$ENDIF}
   VirtualExplorerTree;
 
@@ -1248,7 +1239,7 @@ type
     property PaintInfoGroup;
     property PaintInfoItem;
     property ParentBiDiMode;
-    {$IFDEF COMPILER_7_UP}property ParentBackground;{$ENDIF}
+    property ParentBackground;
     property ParentColor;
     property ParentCtl3D;
     property ParentFont;
@@ -1285,7 +1276,7 @@ type
     property OnClipboardCut;
     property OnClipboardPaste;
     property OnConstrainedResize;
-    {$IFDEF COMPILER_5_UP} property OnContextPopup; {$ENDIF}
+    property OnContextPopup;
     property OnColumnCheckChanged;
     property OnColumnCheckChanging;
     property OnColumnClick;
@@ -1539,7 +1530,7 @@ type
     property PaintInfoGroup;
     property PaintInfoItem;
     property ParentBiDiMode;
-    {$IFDEF COMPILER_7_UP}property ParentBackground;{$ENDIF}
+    property ParentBackground;
     property ParentColor;
     property ParentCtl3D;
     property ParentFont;
@@ -1569,7 +1560,7 @@ type
     property OnClick;
     property OnClipboardChange;
     property OnConstrainedResize;
-    {$IFDEF COMPILER_5_UP} property OnContextPopup; {$ENDIF}
+    property OnContextPopup;
     property OnColumnCheckChanged;
     property OnColumnCheckChanging;
     property OnColumnClick;
@@ -1757,7 +1748,7 @@ type
     property IncrementalSearch;
     property PaintInfoItem;
     property ParentBiDiMode;
-    {$IFDEF COMPILER_7_UP}property ParentBackground;{$ENDIF}
+    property ParentBackground;
     property ParentColor;
     property ParentCtl3D;
     property ParentFont;
@@ -1781,7 +1772,7 @@ type
     property OnCanResize;
     property OnClick;
     property OnConstrainedResize;
-    {$IFDEF COMPILER_5_UP} property OnContextPopup; {$ENDIF}
+    property OnContextPopup;
     property OnContextMenu;
     property OnDblClick;
     property OnDragDrop;
@@ -1885,7 +1876,7 @@ procedure LoadListviewWithColumnArray(Listview: TCustomVirtualExplorerEasyListvi
 implementation
 
 uses
-  TypInfo, Dialogs;
+  TypInfo, Dialogs, AnsiStrings;
 
 type
   TEasySelectionManagerHack = class(TEasySelectionManager);
@@ -4471,8 +4462,8 @@ begin
       i := 0;
       while not Done and (i < GetMenuItemCount(Menu)) do
       begin
-        S := Namespace.ContextMenuVerb(GetMenuItemID(Menu, i));
-        if StrComp(PAnsiChar(S), 'link') = 0 then
+        S := AnsiString(Namespace.ContextMenuVerb(GetMenuItemID(Menu, i)));
+        if AnsiStrings.StrComp(PAnsiChar(S), 'link') = 0 then
         begin
           DeleteMenu(Menu, i, MF_BYPOSITION);
           if IndexIsSeparator(i - 1) then
@@ -5416,9 +5407,7 @@ begin
       try
         try
           { This depends on the user having enough access rights under NT}
-          {$ifdef COMPILER_5_UP}
           Reg.Access := KEY_READ or KEY_WRITE;
-          {$endif}
           Reg.RootKey := HKEY_CURRENT_USER;
           if Reg.OpenKey('\Control Panel\Desktop\WindowMetrics', False) then
           begin

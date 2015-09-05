@@ -24,22 +24,13 @@ interface
 {$include Compilers.inc}
 {$include ..\Include\AddIns.inc}
 
-{$ifdef COMPILER_12_UP}
-  {$WARN IMPLICIT_STRING_CAST       OFF}
- {$WARN IMPLICIT_STRING_CAST_LOSS  OFF}
-{$endif COMPILER_12_UP}
-
 uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, 
   Buttons, ShellAPI, CommCtrl, ShlObj, ActiveX,
   Imglist, VirtualExplorerTree, ToolWin, MPDataObject,
   MPShellTypes, MPShellUtilities, VirtualResources, MPCommonObjects,
   MPCommonUtilities, MPThreadManager,
-  {$IFDEF COMPILER_7_UP}
   Themes,
-  {$ELSE}
-  TMSchema, // Windows XP themes support for D5-D6. Get these units from www.delphi-gems.com.
-  {$ENDIF}
   UxTheme;  // Windows XP themes support for D5-D6. Get these units from www.delphi-gems.com.
 
 const
@@ -909,7 +900,7 @@ begin
       DrawTextW_MP(DC, PWideChar(Caption), Length(Caption), TextBounds,
         DT_CALCRECT or BiDiFlags)
     else begin
-      CaptionANSI := Caption;
+      CaptionANSI := AnsiString(Caption);
       DrawTextA(DC, PAnsiChar(CaptionANSI), Length(CaptionANSI), TextBounds,
         DT_CALCRECT or BiDiFlags)
     end;
@@ -1196,12 +1187,12 @@ begin
       DrawTextW_MP(DC, PWideChar(Caption), Length(Caption), TextBounds, Flags);
   end else
   begin
-    CaptionANSI := Caption;
+    CaptionANSI := AnsiString(Caption);
     if not Enabled then
     begin
       OffsetRect(TextBounds, 1, 1);
       OldColor := SetTextColor(DC, ColorToRGB(clBtnHighlight));
-      DrawText(DC, PAnsiChar(CaptionANSI), Length(Caption), TextBounds, Flags);
+      DrawText(DC, Caption, Length(Caption), TextBounds, Flags);
       OffsetRect(TextBounds, -1, -1);
       SetTextColor(DC, ColorToRGB(clBtnShadow));
       DrawTextA(DC, PAnsiChar(CaptionANSI), Length(Caption), TextBounds, Flags);
@@ -1525,12 +1516,7 @@ procedure TCustomWideSpeedButton.ReadCaption(Reader: TReader);
 // The Read procedure for the DefineProperty "WideText"
 
 begin
-  case Reader.NextValue of
-    vaLString, vaString:
-      Caption := Reader.ReadString;
-  else
-    Caption := Reader.ReadWideString;
-  end;
+  Caption := Reader.ReadString;
 end;
 
 procedure TCustomWideSpeedButton.RebuildButton;
@@ -1806,7 +1792,7 @@ procedure TCustomWideSpeedButton.WriteCaption(Writer: TWriter);
 // The Write procedure for the DefineProperty "WideText"
 
 begin
-  Writer.WriteWideString(Caption);
+  Writer.WriteString(Caption);
 end;
 
 { TCustomVirtualToolbar }
@@ -2557,12 +2543,7 @@ end;
 
 procedure TCustomVirtualToolbar.ReadCaption(Reader: TReader);
 begin
-  case Reader.NextValue of
-    vaLString, vaString:
-      Caption := Reader.ReadString;
-  else
-    Caption := Reader.ReadWideString;
-  end;
+  Caption := Reader.ReadString;
 end;
 
 procedure TCustomVirtualToolbar.RebuildToolbar;
@@ -3026,7 +3007,7 @@ end;
 
 procedure TCustomVirtualToolbar.WriteCaption(Writer: TWriter);
 begin
-  Writer.WriteWideString(Caption);
+  Writer.WriteString(Caption);
 end;
 
 //------------------------------------------------------------------------------
@@ -3554,7 +3535,6 @@ procedure TCaptionButton.PaintButton(DC: HDC; ForDragImage: Boolean = False);
 var
   BiDiFlags: Longword;
   TextBounds, R: TRect;
-  CaptionANSI: AnsiString;
   OldMode: integer;
   PartType, PartState, dwTextFlags1, dwTextFlags2: Longword;
 begin
@@ -3584,8 +3564,7 @@ begin
         DrawTextW_MP(DC, PWideChar(Caption), Length(Caption), TextBounds,
           dwTextFlags1 or BiDiFlags)
       else begin
-        CaptionANSI := Caption;
-        DrawText(DC, PAnsiChar(CaptionANSI), Length(CaptionANSI), TextBounds,
+        DrawText(DC, Caption, Length(Caption), TextBounds,
           dwTextFlags1 or BiDiFlags)
       end;
       SetBkMode(DC, OldMode)

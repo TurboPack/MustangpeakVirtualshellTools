@@ -24,16 +24,8 @@ interface
 {$include Compilers.inc}
 {$include ..\Include\AddIns.inc}
 
-{$ifdef COMPILER_12_UP}
-  {$WARN IMPLICIT_STRING_CAST       OFF}
- {$WARN IMPLICIT_STRING_CAST_LOSS  OFF}
-{$endif COMPILER_12_UP}
-
 uses
   Windows, Messages, Classes, MPShellTypes,
-  {$IFNDEF COMPILER_6_UP}
-  Forms,
-  {$ENDIF}
   MPCommonUtilities,
   MPThreadManager;
 
@@ -160,6 +152,7 @@ type
     procedure ChangeDir(NewDir: AnsiString);
     function FormatData(Data: AnsiString): AnsiString;
     procedure Write(Command: AnsiString); override;
+    procedure WriteUni(const Command: string);
     property CurrentDir: AnsiString read FCurrentDir write SetCurrentDir;
   published
     property OnChildProcessEnd;
@@ -171,7 +164,7 @@ type
 implementation
 
 uses
-  SysUtils;
+  SysUtils, AnsiStrings;
 
 { TCustomVirtualRedirector }
 
@@ -195,11 +188,7 @@ end;
 constructor TCustomVirtualRedirector.Create(AOwner: TComponent);
 begin
   inherited;
-  {$IFNDEF COMPILER_6_UP}
-  HelperWnd :=Forms.AllocateHWnd(HelperWndProc);
-  {$else}
   HelperWnd :=Classes.AllocateHWnd(HelperWndProc);
-  {$ENDIF}
 end;
 
 destructor TCustomVirtualRedirector.Destroy;
@@ -209,11 +198,7 @@ begin
     Kill;
     KillThreads;
   end;
-  {$IFNDEF COMPILER_6_UP}
-  Forms.DeAllocateHWnd(HelperWnd);
-  {$else}
   Classes.DeAllocateHWnd(HelperWnd);
-  {$ENDIF}
   inherited;
 end;
 
@@ -406,9 +391,9 @@ begin
           StartupInfoA.wShowWindow := StartupInfoW.wShowWindow;
           StartupInfoA.dwFlags := StartupInfoW.dwFlags;
 
-          InitialDirectoryA := InitialDirectory;
-          ParametersA := Parameters;
-          FileNameA := FileName;
+          InitialDirectoryA := AnsiString(InitialDirectory);
+          ParametersA := AnsiString(Parameters);
+          FileNameA := AnsiString(FileName);
 
           if InitialDirectoryA = '' then
             szDirectoryA := nil
@@ -492,19 +477,19 @@ var
   Allow: Boolean;
 begin
   Allow := True;
-  DoChangeDir(NewDir, Allow);
+  DoChangeDir(string(NewDir), Allow);
   if Allow then
   begin
     // Are we on a different drive?
-    if WideLowerCase(WideExtractFileDrive(FCurrentDir)) <> WideLowerCase(WideExtractFileDrive(NewDir)) then
+    if WideLowerCase(WideExtractFileDrive(string(FCurrentDir))) <> WideLowerCase(WideExtractFileDrive(string(NewDir))) then
     begin
       // Different drive, change drives first
-      Write(WideStripTrailingBackslash(WideExtractFileDrive(NewDir) + ' /d', True));  // Need switch for across network drives
+      WriteUni(WideStripTrailingBackslash(WideExtractFileDrive(string(NewDir)) + ' /d', True));  // Need switch for across network drives
       // If not the root drive then change the directory
-      if not WideIsDrive(NewDir) then
-        Write('cd ' + ShortFileName(NewDir));
+      if not WideIsDrive(string(NewDir)) then
+        WriteUni('cd ' + ShortFileName(string(NewDir)));
     end else
-      Write('cd ' + ShortFileName(NewDir));
+      WriteUni('cd ' + ShortFileName(string(NewDir)));
     FCurrentDir := NewDir;
   end;
 end;
@@ -521,8 +506,8 @@ begin
   begin
     // The ANSI convert will be the same size buffer
     OEMToCharA(PAnsiChar( Data), PAnsiChar(Data));
-    Trim( AnsiString(Data));
-    Result := AdjustLineBreaks( AnsiString(Data));
+    AnsiStrings.Trim( AnsiString(Data));
+    Result := AnsiString(AdjustLineBreaks(string(Data)));
   end else
     Result := ''
 end;
@@ -535,7 +520,7 @@ end;
 procedure TVirtualCommandLineRedirector.Write(Command: AnsiString);
 begin
   // We need watch for some special commands that we must handle differently
-  if Pos('xcopy', LowerCase(Command)) > 0 then
+  if AnsiStrings.AnsiPos('xcopy', LowerCase(Command)) > 0 then
   begin
   // xcopy is a separate executable that the command shell will launch.  The
   // redirection doess not work well with child new processes launched from our
@@ -543,6 +528,11 @@ begin
     raise Exception.Create(STR_XCOPYRUNERROR);
   end else
     inherited Write(Command);
+end;
+
+procedure TVirtualCommandLineRedirector.WriteUni(const Command: string);
+begin
+  Write(AnsiString(Command));
 end;
 
 { TProcessTeminateThread }

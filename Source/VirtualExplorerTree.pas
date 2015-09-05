@@ -124,19 +124,11 @@ interface
 {.$DEFINE DELAY_THREADED_ENUM}
 {.$DEFINE GXDEBUG_ADDRESSBAR}
 
-{$ifdef COMPILER_12_UP}
-  {$WARN IMPLICIT_STRING_CAST       OFF}
- {$WARN IMPLICIT_STRING_CAST_LOSS  OFF}
-{$endif COMPILER_12_UP}
-
 {$IFDEF GXDEBUG_ADDRESSBAR}
   {$DEFINE GXDEBUG}
 {$ENDIF}
 
 uses
-  {$IFDEF COMPILER_9_UP}
-  Types,
-  {$ENDIF}
   {$IFDEF GXDEBUG}
   DbugIntf,
   {$ENDIF}
@@ -165,11 +157,7 @@ uses
   TntStdCtrls,
   TntClasses,
   TntSysUtils,
-    {$IFDEF COMPILER_10_UP}
-    WideStrings,
-    {$ELSE}
-    TntWideStrings,
-    {$ENDIF}
+  WideStrings,
   {$ENDIF}
   Registry,
   VirtualTrees,
@@ -184,15 +172,11 @@ uses
   MPResources,
   MPShellTypes,
   MPDataObject,
-  {$IFDEF COMPILER_7_UP}
   Themes,
-  {$ELSE}
-  TMSchema, // Windows XP themes support for D5-D6. Get these units from www.delphi-gems.com.
-  {$ENDIF}
+  Types,
+  UITypes,
   UxTheme,
-  {$IFNDEF VirtualTree_V5}
   VirtualTrees.StyleHooks,
-  {$ENDIF}
   EasyListview;  // Windows XP themes support for D5-D6. Get these units from www.delphi-gems.com.
 
 {*******************************************************************************}
@@ -240,11 +224,6 @@ type
     NS: TNamespace;
   end;
   TNodeSearchArray = array of TNodeSearchRec;
-
-{$ifndef COMPILER_12_UP}
-type
-  UnicodeString = WideString;
-{$endif}
 
 type
 
@@ -4661,7 +4640,7 @@ begin
     end
   end;
   // This allows uses to override the count in case custom namespace are being used
-  inherited;
+  Result := inherited DoInitChildren(Node, ChildCount);
 end;
 
 procedure TCustomVirtualExplorerTree.DoInitNode(Parent, Node: PVirtualNode;
@@ -5633,9 +5612,7 @@ begin
     try
       try
         { This depends on the user having enough access rights under NT}
-        {$ifdef COMPILER_5_UP}
         Reg.Access := KEY_READ or KEY_WRITE;
-        {$endif}
         Reg.RootKey := HKEY_CURRENT_USER;
         if Reg.OpenKey('\Control Panel\Desktop\WindowMetrics', False) then
         begin
@@ -10320,14 +10297,7 @@ var
   ColState: TSHColumnStates;
   NeedsMore: Boolean;
 begin
-  {$ifdef COMPILER_4}
-  // Items notify their parent so they are removed from the list automaticlly
-  for i := Items.Count - 1 downto 0 do
-    Items[i].Free;
-  {$endif}
-  {$ifdef COMPILER_5_UP}
   Items.Clear;
-  {$endif}
   if VET.ColumnDetails = cdShellColumns then
   begin
     NeedsMore := False;
@@ -10941,7 +10911,7 @@ begin
       SetLength(Str, Size);
       S.read(PAnsiChar(Str)^, Size);
       // Find it in the registered classes
-      UserClass := FindClass(Str);
+      UserClass := FindClass(string(Str));
       // Create an instance of it and load it
       Storage.UserData := TUserDataStorage( UserClass.Create);
       Storage.UserData.LoadFromStream(S, Version, ReadVerFromStream);
@@ -11020,7 +10990,7 @@ begin
       // Save the Classname so we can construct a class of this type later
       Size := Length(Storage.UserData.ClassName);
       S.write(Size, SizeOf(Size));
-      Str := Storage.UserData.ClassName;
+      Str := AnsiString(Storage.UserData.ClassName);
       S.write(PAnsiChar(Str)^, Size);
       Storage.UserData.SaveToStream(S, Version, WriteVerToStream);
     end
@@ -11337,21 +11307,14 @@ function TRootNodeStorage.GetResolvedFileNames: TWideStrings;
 
     function HasAsParentFolder(Parent, Child: string): Boolean;
     begin
-      {$ifdef COMPILER_6_UP}
       Parent := IncludeTrailingPathDelimiter(Parent);
-      {$else}
-      if Parent[Length(Parent)] <> '\' then
-        Parent := Parent + '\';
-      {$endif}
       Result := (Length(Parent) < Length(Child)) and (Pos(Parent, Child) = 1);
     end;
 var
   i: Integer;
 begin
   FResolvedFileNames.Assign(CheckedFileNames);
-  {$ifdef COMPILER_6_UP}
-    TStringList(FResolvedFileNames).CaseSensitive := false;
-  {$endif}
+  TStringList(FResolvedFileNames).CaseSensitive := false;
   { D5 is case insensitive anyway }
   TStringList(FResolvedFileNames).Sort;
   i := 1;
@@ -11367,21 +11330,14 @@ function TRootNodeStorage.GetResolvedFileNames: TStrings;
 
     function HasAsParentFolder(Parent, Child: string): Boolean;
     begin
-      {$ifdef COMPILER_6_UP}
       Parent := IncludeTrailingPathDelimiter(Parent);
-      {$else}
-      if Parent[Length(Parent)] <> '\' then
-        Parent := Parent + '\';
-      {$endif}
       Result := (Length(Parent) < Length(Child)) and (Pos(Parent, Child) = 1);
     end;
 var
   i: Integer;
 begin
   FResolvedFileNames.Assign(CheckedFileNames);
-  {$ifdef COMPILER_6_UP}
     TStringList(FResolvedFileNames).CaseSensitive := false;
-  {$endif}
   { D5 is case insensitive anyway }
   TStringList(FResolvedFileNames).Sort;
   i := 1;

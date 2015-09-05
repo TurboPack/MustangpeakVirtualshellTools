@@ -41,20 +41,12 @@ uses
   VirtualExplorerEasyListview, VirtualFileSearch,
   VirtualExplorerEasyListModeview,
   {VirtualBreadCrumbBar}
-  {$IFNDEF COMPILER_7_UP}
-  Exptintf,
-  {$ENDIF}
-  {$IFDEF COMPILER_6_UP}
-    DesignIntf, DesignEditors
-  {$ELSE}
-    DsgnIntf
-  {$ENDIF};
+    DesignIntf, DesignEditors;
 
 procedure Register;
 
 implementation
 
-{$IFDEF COMPILER_6_UP}
 const
   sELVEnumerationCategory = 'Enumeration';
   sELVStorageCategory = 'Storage';
@@ -62,7 +54,6 @@ const
   sELVRootCategory = 'Root Namespace';
   sELVShellCategory = 'Shell';
   sELVCustomClassesCategory = 'Custom Object Classes';
-{$ENDIF COMPILER_6_UP}
 
 procedure Register;
 begin
@@ -95,7 +86,6 @@ begin
   RegisterComponents('VirtualShellTools', [TVirtualExplorerEasyListview,
    TVirtualMultiPathExplorerEasyListview, TVirtualColumnModeView]);
 
-{$IFDEF COMPILER_6_UP}
   RegisterPropertiesInCategory(sELVEnumerationCategory, TCustomVirtualExplorerEasyListview,
     ['OnEnum*'] );
 
@@ -114,7 +104,6 @@ begin
 
   RegisterPropertiesInCategory(sELVCustomClassesCategory, TCustomVirtualExplorerEasyListview,
     ['On*Class'] );
-{$ENDIF COMPILER_6_UP} 
 end;
 
 end.

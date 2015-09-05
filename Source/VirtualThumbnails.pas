@@ -50,11 +50,6 @@ interface
 {$include ..\Include\Addins.inc}
 {$BOOLEVAL OFF} // Unit depends on short-circuit boolean evaluation
 
-{$ifdef COMPILER_12_UP}
-  {$WARN IMPLICIT_STRING_CAST       OFF}
- {$WARN IMPLICIT_STRING_CAST_LOSS  OFF}
-{$endif COMPILER_12_UP}
-
 uses
   Windows,
   Messages,
@@ -313,11 +308,7 @@ function SpCreateThumbInfoFromFile(NS: TNamespace; ThumbW, ThumbH: Integer;
 {$IFDEF TNTSUPPORT}
 function SpReadExifThumbnail(FileName: WideString; Exif: TTntStringList): TJpegImage;
 {$ELSE}
-  {$IFDEF COMPILER_7_UP}
   function SpReadExifThumbnail(FileName: WideString; Exif: TStringList): TJpegImage;
-  {$ELSE}
-  function SpReadExifThumbnail(FileName: WideString; Exif: TStringListEx): TJpegImage;
-  {$ENDIF}
 {$ENDIF}
 
 
@@ -344,9 +335,7 @@ uses
       {$IFDEF USEIMAGEMAGICK} MagickImage, ImageMagickAPI, {$ENDIF}
     {$ENDIF}
   {$ENDIF}
-  {$IFDEF COMPILER_6_UP}
   Types,
-  {$ENDIF}
   {$IFDEF TNTSUPPORT}
   TntSysUtils,
   {$ENDIF}
@@ -863,11 +852,7 @@ var
   Exif: TTntStringList;
   {$ELSE}
     // Delphi 5-6 doesn't have ValueFromIndex, use TStringListEx instead of TStringList
-    {$IFDEF COMPILER_7_UP}
     Exif: TStringList;
-    {$ELSE}
-    Exif: TStringListEx;
-    {$ENDIF}
   {$ENDIF}
   HasExifThumb: Boolean;
   I, Orientation: Integer;
@@ -887,11 +872,7 @@ begin
       Exif := TTntStringList.Create;
       {$ELSE}
         // Delphi 5-6 doesn't have ValueFromIndex, use TStringListEx instead of TStringList
-        {$IFDEF COMPILER_7_UP}
         Exif := TStringList.Create;
-        {$ELSE}
-        Exif := TStringListEx.Create;
-        {$ENDIF}
       {$ENDIF}
       try
         J := SpReadExifThumbnail(Filename, Exif);
@@ -1067,11 +1048,7 @@ end;
 function SpReadExif(F: TVirtualFileStream; Exif: TTntStringList; var Ofs: LongWord): Boolean;
 {$ELSE}
   // Delphi 5-6 doesn't have ValueFromIndex, use TStringListEx instead of TStringList
-  {$IFDEF COMPILER_7_UP}
   function SpReadExif(F: TVirtualFileStream; Exif: TStringList; var Ofs: LongWord): Boolean;
-  {$ELSE}
-  function SpReadExif(F: TVirtualFileStream; Exif: TStringListEx; var Ofs: LongWord): Boolean;
-  {$ENDIF}
 {$ENDIF}
 var
   W: Word;
@@ -1125,7 +1102,7 @@ var
     Offset := Offset + 12; // 12 is the "tag record size"
     if Offset >= F.Size then Exit;
 
-    F.Seek(Offset, soFromBeginning);
+    F.Seek(Offset, soBeginning);
 
     readit(Count); // Number of entries
     if Count > 128 then
@@ -1146,9 +1123,9 @@ var
           2: // ASCII
             begin
               if MyCount <= 4 then
-                F.Seek(MyPos + 8, soFromBeginning)
+                F.Seek(MyPos + 8, soBeginning)
               else
-                F.Seek(ExifMarker_Offset + MyValue, soFromBeginning);
+                F.Seek(ExifMarker_Offset + MyValue, soBeginning);
               S := ReadString(MyCount);
             end;
           3: // Short
@@ -1158,13 +1135,13 @@ var
               // in this section they are stored in the
               // Value/Offset area
               if MyCount <= 2 Then
-                F.Seek(MyPos + 8, soFromBeginning)
+                F.Seek(MyPos + 8, soBeginning)
               else
-                F.Seek(ExifMarker_Offset + MyValue, soFromBeginning);
+                F.Seek(ExifMarker_Offset + MyValue, soBeginning);
               for Cnt2 := 1 To MyCount do begin
                 if S <> '' then S := S + ',';
                 readit(W);
-                S := S + IntToStr(W);
+                S := S + AnsiString(IntToStr(W));
               end;
             end;
           4: // Long
@@ -1174,13 +1151,13 @@ var
               // in this section they are stored in the
               // Value/Offset area
               if MyCount <= 1 Then
-                S := IntToStr(MyValue)
+                S := AnsiString(IntToStr(MyValue))
               else begin
-                F.Seek(ExifMarker_Offset + MyValue, soFromBeginning);
+                F.Seek(ExifMarker_Offset + MyValue, soBeginning);
                 for Cnt2 := 1 To MyCount do begin
                   if S <> '' Then S := S + ',';
                   readit(L);
-                  S := S + IntToStr(L);
+                  S := S + AnsiString(IntToStr(L));
                 end;
               end;
             end;
@@ -1189,7 +1166,7 @@ var
         Exif.Add(Format('$%x=%s', [MyTag, S]))
       end;
 
-      F.Seek(MyPos + 12, soFromBeginning); // The 12 is the "tag record size"
+      F.Seek(MyPos + 12, soBeginning); // The 12 is the "tag record size"
     end;
   end;
 
@@ -1221,7 +1198,7 @@ begin
     end;
 
     readit(W);
-    S := ReadString(4);
+    S := string(ReadString(4));
     if S <> 'Exif' then Exit;
     readit(W);
     if W <> $0000 then Exit;
@@ -1254,11 +1231,7 @@ end;
 function SpReadExifThumbnail(FileName: WideString; Exif: TTntStringList): TJpegImage;
 {$ELSE}
   // Delphi 5-6 doesn't have ValueFromIndex, use TStringListEx instead of TStringList
-  {$IFDEF COMPILER_7_UP}
   function SpReadExifThumbnail(FileName: WideString; Exif: TStringList): TJpegImage;
-  {$ELSE}
-  function SpReadExifThumbnail(FileName: WideString; Exif: TStringListEx): TJpegImage;
-  {$ENDIF}
 {$ENDIF}
 
   function CorrectThumbnailBuffer(ThumbBuffer: String): String;
@@ -1340,7 +1313,7 @@ begin
     end;
 
     if (ThumbOffset > 0) and (ThumbSize > 0) then begin
-      F.Seek(Ofs + ThumbOffset + 12, soFromBeginning);
+      F.Seek(Ofs + ThumbOffset + 12, soBeginning);
       StringStream := TStringStream.Create('');
       try
         StringStream.CopyFrom(F, ThumbSize);

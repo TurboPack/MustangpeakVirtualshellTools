@@ -24,11 +24,6 @@ interface
 {$include Compilers.inc}
 {$include ..\Include\AddIns.inc}
 
-{$ifdef COMPILER_12_UP}
-  {$WARN IMPLICIT_STRING_CAST       OFF}
- {$WARN IMPLICIT_STRING_CAST_LOSS  OFF}
-{$endif COMPILER_12_UP}
-
 uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms,
   Menus, Registry, ShlObj, ShellAPI, ActiveX, MPShellUtilities, ImgList,
@@ -226,20 +221,12 @@ procedure TVirtualSendToMenu.Populate(MenuItem: TMenuItem);
 var
   NS: TNamespace;
   OldErrorMode: Integer;
-  {$IFNDEF COMPILER_5_UP}
-  i: Integer;
-  {$ENDIF}
 begin
   OldErrorMode := SetErrorMode(SEM_FAILCRITICALERRORS or SEM_NOOPENFILEERRORBOX);
   try
     SendToItems.Clear;
-    {$IFDEF COMPILER_5_UP}
     MenuItem.Clear;
     MenuItem.SubMenuImages := SmallSysImages;
-    {$ELSE}
-    for i := 0 to MenuItem.Count - 1 do
-      MenuItem.Items[i].Free;
-    {$ENDIF}   
 
     // Fill the shell send-to items.
     NS := CreateSpecialNamespace(CSIDL_SENDTO);
@@ -312,11 +299,7 @@ end;
 procedure TVirtualSendToMenu.Popup(X, Y: Integer);
 begin
   Images := SmallSysImages;
-  {$IFNDEF COMPILER_5_UP}
-  ClearMenuItems(Self);
-  {$ELSE}
   Items.Clear;
-  {$ENDIF COMPILER_5_UP}
   Populate(Items);
   inherited;
 end;

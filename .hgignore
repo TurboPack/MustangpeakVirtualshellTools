@@ -1,0 +1,13 @@
+syntax: glob
+*.local
+*.dsk
+*identcache
+*.~dsk
+*.tvsconfig
+__history
+__recovery
+*.stat
+*.dcu
+*.obj
+*.pch
+*.#00
