@@ -5,14 +5,6 @@
 // https://github.com/Virtual-TreeView/Virtual-TreeView. Otherwise the Master 
 // branch (version 6 or greater) should be used used.
 
-{.$DEFINE VirtualTree_V5}
-
-// -----------------------------------------------------------------------------
-
-// All the VSTools units depends on short-circuit boolean evaluation
-
-{$BOOLEVAL OFF} 
-
 
 // -----------------------------------------------------------------------------
 

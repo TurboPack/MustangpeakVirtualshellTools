@@ -1471,22 +1471,14 @@ type
     procedure DoGetText(var pEventArgs: TVSTGetCellTextEventArgs); override;
     procedure DoGetVETText(Column: TColumnIndex; Node: PVirtualNode; Namespace: TNamespace; var Text: UnicodeString);
     procedure DoInvalidRootNamespace; virtual;
-    {$IFDEF VirtualTree_V5}
-    procedure DoHeaderClick(HitInfo: TVTHeaderHitInfo); override;
-    {$ELSE}
     procedure DoHeaderClick(const HitInfo: TVTHeaderHitInfo); override;
-    {$ENDIF}
     procedure DoHeaderMouseUp(Button: TMouseButton; Shift: TShiftState; X, Y: Integer); override;
     procedure DoHeaderRebuild; virtual;
     function DoInitChildren(Node: PVirtualNode; var ChildCount: Cardinal):boolean;  override;
     procedure DoInitNode(Parent, Node: PVirtualNode; var InitStates: TVirtualNodeInitStates); override;
     function DoKeyAction(var CharCode: Word; var Shift: TShiftState): Boolean; override;
     procedure DoNamespaceStructureChange(Node: PVirtualNode; NS: TNamespace; ChangeType: TNamespaceStructureChange); virtual;
-    {$IFDEF VirtualTree_V5}
-    procedure DoNewText(Node: PVirtualNode; Column: TColumnIndex; Text: UnicodeString); override;
-    {$ELSE}
     procedure DoNewText(Node: PVirtualNode; Column: TColumnIndex; const Text: UnicodeString); override;
-    {$ENDIF}
     procedure DoPaintText(Node: PVirtualNode; const Canvas: TCanvas; Column: TColumnIndex; TextType: TVSTTextType); override;
     procedure DoPopupMenu(Node: PVirtualNode; Column: TColumnIndex; Position: TPoint); override;
     procedure DoRootChange; virtual;
@@ -1499,11 +1491,7 @@ type
     procedure DoUpdating(State: TVTUpdateState); override;
     function DragDrop(const DataObject: IDataObject; KeyState: Integer; Pt: TPoint;  var Effect: Integer): HResult; override;
     function DragEnter(KeyState: Integer; Pt: TPoint; var Effect: Integer): HResult; override;
-    {$IFDEF VirtualTree_V5}
-    procedure DragAndDrop(AllowedEffects: dword; DataObject: IDataObject; var DragEffect: Integer); override;
-    {$ELSE}
     procedure DragAndDrop(AllowedEffects: dword; const DataObject: IDataObject; var DragEffect: Integer); override;
-    {$ENDIF}
     procedure DragLeave; override;
     function DragOver(Source: TObject; KeyState: Integer; DragState: TDragState; Pt: TPoint; var Effect: Integer): HResult; override;
     procedure DummyOnDragOver(Sender: TBaseVirtualTree; Source: TObject; Shift: TShiftState; State: TDragState; Pt: TPoint; Mode: TDropMode; var Effect: Integer; var Accept: Boolean);
@@ -3703,10 +3691,8 @@ constructor TCustomVirtualExplorerTree.Create(AOwner: TComponent);
 var
   CF: VirtualTrees.TClipboardFormats;
 begin
-  {$IFNDEF VirtualTree_V5}
   FInternalDataOffset := AllocateInternalDataArea( SizeOf(TNodeData)
       + SizeOf(Cardinal)) + SizeOf(Cardinal);
-  {$ENDIF}
   inherited;
   InitializeCriticalSection(FEnumLock);
   ContextMenuManager := TContextMenuManager.Create(Self);
@@ -3751,12 +3737,6 @@ begin
   RebuildRootNamespaceBeginUpdate;
   LoadDefaultOptions;
   RebuildRootNamespaceEndUpdate;
-  {$IFDEF VirtualTree_V5}
-  FInternalDataOffset := AllocateInternalDataArea( SizeOf(TNodeData));
-//  {$ELSE}
-//  FInternalDataOffset := AllocateInternalDataArea( SizeOf(TNodeData)
-//      + SizeOf(Cardinal)) + SizeOf(Cardinal);
-  {$ENDIF}
   FSortHelper := TShellSortHelper.Create;
   ControlState := ControlState - [csCreating];
   SHGetMalloc(FMalloc);
@@ -3896,7 +3876,7 @@ begin
     if FocusedNode <> nil then
       Selected[FocusedNode] := true;
   end;
-  inherited DeleteNode(Node, Reindex {$IFNDEF VirtualTree_V5}, False {$ENDIF});
+  inherited DeleteNode(Node, Reindex, False);
 
 {  if Selected[Node] and ValidateNamespace(Node, NS) then
   begin
@@ -4550,11 +4530,7 @@ begin
     OnInvalidRootNamespace(Self)
 end;
 
-{$IFDEF VirtualTree_V5}
-procedure TCustomVirtualExplorerTree.DoHeaderClick(HitInfo: TVTHeaderHitInfo);
-{$ELSE}
 procedure TCustomVirtualExplorerTree.DoHeaderClick(const HitInfo: TVTHeaderHitInfo);
-{$ENDIF}
 var
   Node: PVirtualNode;
   CM: TColumnManager;
@@ -4930,13 +4906,8 @@ begin
     end;
 end;
 
-{$IFDEF VirtualTree_V5}
-procedure TCustomVirtualExplorerTree.DoNewText(Node: PVirtualNode;
-  Column: TColumnIndex; Text: UnicodeString);
-{$ELSE}
 procedure TCustomVirtualExplorerTree.DoNewText(Node: PVirtualNode;
   Column: TColumnIndex; const Text: UnicodeString);
-{$ENDIF}
 var
   NS: TNamespace;
   VETColumn: TVETColumn;
@@ -5201,13 +5172,8 @@ begin
     Effect := DROPEFFECT_NONE
 end;
 
-{$IFDEF VirtualTree_V5}
-procedure TCustomVirtualExplorerTree.DragAndDrop(AllowedEffects: dword;
-  DataObject: IDataObject; var DragEffect: Integer);
-{$ELSE}
 procedure TCustomVirtualExplorerTree.DragAndDrop(AllowedEffects: dword;
   const DataObject: IDataObject; var DragEffect: Integer);
-{$ENDIF}
 begin
   if (Win32Platform = VER_PLATFORM_WIN32_NT) and (Win32MajorVersion >= 6) and Assigned(SHDoDragDrop_MP) then
     SHDoDragDrop_MP(Handle, DataObject, nil, AllowedEffects, DragEffect)
