@@ -24,7 +24,6 @@ interface
 {.$UNDEF USE_TOOLBAR_TB2K}
 
 {$I ..\Include\AddIns.inc}
-{$I Compilers.inc}
 {$B-}
 
 

@@ -21,8 +21,6 @@ unit AppletsAndWizards;
 
 interface
 
-{$include Compilers.inc}
-
 //  Version 1.0.1
 //
 { Jim Kueneman                                                          01.01.02 }

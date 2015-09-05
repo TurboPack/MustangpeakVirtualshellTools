@@ -21,7 +21,6 @@ unit VirtualShellAutoComplete;
 
 interface
 
-{$include Compilers.inc}
 {$include ..\Include\AddIns.inc}
 
 uses

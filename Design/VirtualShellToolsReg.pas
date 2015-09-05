@@ -22,7 +22,6 @@ unit VirtualShellToolsReg;
 
 interface
 
-{$include Compilers.inc}
 {$include ..\Include\AddIns.inc}
 
 // If you are upgrading from VSTools 0.9.xx or earlier uncomment the conditional

@@ -46,7 +46,6 @@ History:
 
 interface
 
-{$include Compilers.inc}
 {$include ..\Include\Addins.inc}
 {$BOOLEVAL OFF} // Unit depends on short-circuit boolean evaluation
 

@@ -47,7 +47,6 @@ uses
   // </ FR added 11-28-05 >
   Messages;
 
-{$include Compilers.inc}
 {$include ..\Include\AddIns.inc}
 
 const

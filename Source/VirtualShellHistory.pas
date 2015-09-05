@@ -80,7 +80,6 @@ History:
 interface
 
 {$include ..\Include\AddIns.inc}
-{$include Compilers.inc}
 
 uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls,

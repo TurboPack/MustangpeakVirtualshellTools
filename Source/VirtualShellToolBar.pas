@@ -21,7 +21,6 @@ unit VirtualShellToolBar;
 
 interface
 
-{$include Compilers.inc}
 {$include ..\Include\AddIns.inc}
 
 uses

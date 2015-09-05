@@ -116,7 +116,6 @@ interface
 //  an you are done.
   {$ENDIF}
 
-{$include Compilers.inc}
 {$include ..\Include\AddIns.inc}
 {$B-}
 {.$DEFINE GXDEBUG}

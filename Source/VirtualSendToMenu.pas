@@ -21,7 +21,6 @@ unit VirtualSendToMenu;
 
 interface
 
-{$include Compilers.inc}
 {$include ..\Include\AddIns.inc}
 
 uses

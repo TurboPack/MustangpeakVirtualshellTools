@@ -23,7 +23,6 @@ interface
 
 {$B+}
 
-{$include Compilers.inc}
 {$include ..\Include\AddIns.inc}
 
 uses

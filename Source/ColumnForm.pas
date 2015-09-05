@@ -26,8 +26,6 @@ unit ColumnForm;
 
 interface
 
-{$include Compilers.inc}
-
 uses
   Windows, SysUtils, Classes, Controls, Forms,
   StdCtrls, ExtCtrls, VirtualTrees,

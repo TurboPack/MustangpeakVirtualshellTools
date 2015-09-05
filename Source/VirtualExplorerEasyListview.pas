@@ -48,7 +48,6 @@ interface
 
 
 {$I ..\Include\AddIns.inc}
-{$include Compilers.inc}
 
 {$IFDEF GXDEBUG_SHELLNOTIFY}
   {$DEFINE GX_DEBUG}

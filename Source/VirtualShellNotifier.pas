@@ -23,7 +23,6 @@ interface
 
 //{$DEFINE VIRTUALNOTIFYDEBUG}
 
-{$include Compilers.inc}
 {$include ..\Include\AddIns.inc}
 
 uses
