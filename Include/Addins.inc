@@ -1,46 +1,6 @@
 
 // The packages must be rebuilt to make the changes in this file active
 
-// Define to use with the branch V5_Stable of VirtualTreeView at 
-// https://github.com/Virtual-TreeView/Virtual-TreeView. Otherwise the Master 
-// branch (version 6 or greater) should be used used.
-
-// -----------------------------------------------------------------------------
-
-//
-//  GRAPHICEX SUPPORT
-//
-// If you are using Mike Lischke's GraphicEx package to extend the thumbnails
-// In VirtualExplorerListviewEx then uncomment this line to automatically link
-// GraphicEx into the VirtualExplorerListviewEx
-
-//{$DEFINE USEGRAPHICEX}
-
-
-// The following are the registerable types supported by GraphicEx, see the
-// GraphicConfiguration.inc file in GraphicEx to enable or disable types.
-//  NOTE:
-//      To enable GIF you must change
-//          {.$define UseLZW}
-//      to
-//          {$define UseLZW}
-// in GraphicConfiguration.inc
-//
-//        TargaGraphic                  // *.win, *.vst, *.vda, *.tga, *.icb
-//        TIFFGraphic                   // *.tiff, *.tif, *.fax
-//        EPSGraphic                    // *.eps
-//        PCXGraphic                    // *.pcx, *.pcc, *.scr
-//        RLAGraphic                    // *.rpf, *.rla
-//        SGIGraphic                    // *.sgi, *.rgba, *.rgb, *.bw
-//        PhotoshopGraphic              // *.psd, *.pdd
-//        PortableMapGraphic            // *.ppm, *.pgm, *.pbm
-//        AutodeskGraphic               // *.cel, *.pic
-//        PCDGraphic                    // *.pcd, *.pic
-//        GIFGraphic                    // *.gif
-//        CUTGraphic                    // *.cut
-//        PaintshopProGraphic           // *.psp
-//        PortableNetworkGraphic        // *.png
-
 // -----------------------------------------------------------------------------
 //
 //  ImageEn SUPPORT
