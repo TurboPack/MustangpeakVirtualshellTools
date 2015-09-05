@@ -1865,12 +1865,6 @@ begin
   {$ELSE}
   with FValidImageFormats do begin
     CommaText := '.jpg, .jpeg, .jif, .bmp, .emf, .wmf';
-    {$IFDEF USEENVISION}
-      //version 1.1
-      CommaText := CommaText + ', .png, .pcx, .pcc, .tif, .tiff, .dcx, .tga, .vst, .afi';
-      //version 2.0, eps (Encapsulated Postscript) and jp2 (JPEG2000 version)
-      //CommaText := CommaText + ', .eps, .jp2'; <<<<<<< still in beta
-    {$ENDIF}
   end;
   {$ENDIF}
 

@@ -3,26 +3,6 @@
 
 // -----------------------------------------------------------------------------
 //
-//  ImageEn SUPPORT
-//
-// If you are using HiComponents ImageEn package to extend the thumbnails
-// in VirtualExplorerListviewEx then uncomment this line to automatically link
-// ImageEn into the VirtualExplorerListviewEx.
-// WARNING. You will need an LZW patent license from Unisys in order to provide
-// end-user GIF support legally in your application.
-// To support GIF and TIFF images you'll have to add GifLZW and TIFLZW units in
-// your application, and set a few global variables in your Form.OnCreate event:
-// DefGIF_LZWDECOMPFUNC := GIFLZWDecompress;
-// DefGIF_LZWCOMPFUNC := GIFLZWCompress;
-// DefTIFF_LZWDECOMPFUNC := TIFFLZWDecompress;
-// DefTIFF_LZWCOMPFUNC := TIFFLZWCompress;
-// For more information read the ImageEn help file.
-
-//{$DEFINE USEIMAGEEN}
-
-
-// -----------------------------------------------------------------------------
-//
 //  ENVISION IMAGE LIBRARY SUPPORT
 //
 // If you are using Interval Software Envision Image Library package to extend the thumbnails
