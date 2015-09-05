@@ -92,22 +92,12 @@ uses
     {$IFDEF TBX}
     ColumnFormTBX,
     {$ELSE}
-      {$IFDEF TNTSUPPORT}
-      ColumnFormTNT,
-      {$ELSE}
       ColumnForm,
-      {$ENDIF}
     {$ENDIF}
   {$ENDIF}
   EasyListview,
   {$IFDEF USE_TOOLBAR_TB2K}
   TB2Item,
-  {$ENDIF}
-  {$IFDEF TNTSUPPORT}
-  TntSysUtils,
-  TntClasses,
-  TntMenus,
-    WideStrings,
   {$ENDIF}
   VirtualExplorerTree;
 
@@ -429,11 +419,7 @@ type
     FBold: Boolean;
     FColor: TColor;
     FEnabled: Boolean;
-    {$IFDEF TNTSUPPORT}
-    FExtension: TTntStringList;
-    {$ELSE}
     FExtension: TStringList;
-    {$ENDIF}
     FFExtensionMask: WideString;
     FItalic: Boolean;
     FUnderLine: Boolean;
@@ -450,12 +436,7 @@ type
     property Color: TColor read FColor write FColor;
     property Enabled: Boolean read FEnabled write FEnabled;
     property ExtensionMask: WideString read GetExtensionMask write SetExtensionMask;
-    {$IFDEF TNTSUPPORT}
-    property Extensions: TTntStringList read FExtension write FExtension;
-    {$ELSE}
     property Extensions: TStringList read FExtension write FExtension;
-    {$ENDIF}
-
     property Italic: Boolean read FItalic write FItalic;
     property UnderLine: Boolean read FUnderLine write FUnderLine;
   end;
@@ -754,13 +735,8 @@ type
     FRootFolderCustomPath: WideString;
     FRootFolderCustomPIDL: PItemIDList;
     FRootFolderNamespace: TNamespace;
-    {$IFDEF TNTSUPPORT}
-    FSelectedFiles: TWideStrings;
-    FSelectedPaths: TWideStrings;
-    {$ELSE}
     FSelectedFiles: TStrings;
     FSelectedPaths: TStrings;
-    {$ENDIF}
     FShellNotifySuspended: Boolean;
     FSortFolderFirstAlways: Boolean;
     FStorage: TRootNodeStorage;         // A tree structure that store the per instance state of the listview in each folder
@@ -779,13 +755,8 @@ type
     function GetPaintInfoGroup: TEasyPaintInfoGroup;
     function GetPaintInfoItem: TEasyPaintInfoItem;
     function GetSelectedFile: WideString;
-    {$IFDEF TNTSUPPORT}
-    function GetSelectedFiles:TWideStrings;
-    function GetSelectedPaths: TWideStrings;
-    {$ELSE}
     function GetSelectedFiles: TStrings;
     function GetSelectedPaths: TStrings;
-    {$ENDIF}
     function GetSelectedPath: WideString;
     function GetSelection: TEasyVirtualSelectionManager;
     function GetStorage: TRootNodeStorage;
@@ -1106,13 +1077,8 @@ type
     property QuickFiltered: Boolean read FQuickFiltered write SetQuickFiltered;
     property QuickFilterMask: WideString read FQuickFilterMask write SetQuickFilterMask;
     property SelectedFile: WideString read GetSelectedFile;
-    {$IFDEF TNTSUPPORT}
-    property SelectedFiles: TWideStrings read GetSelectedFiles;
-    property SelectedPaths: TWideStrings read GetSelectedPaths;
-    {$ELSE}
     property SelectedFiles: TStrings read GetSelectedFiles;
     property SelectedPaths: TStrings read GetSelectedPaths;
-    {$ENDIF}
     property SelectedPath: WideString read GetSelectedPath;
     property ShellNotifySuspended: Boolean read FShellNotifySuspended write FShellNotifySuspended;
     property Storage: TRootNodeStorage read GetStorage write SetStorage;
@@ -2274,13 +2240,8 @@ begin
   FCategoryInfo := TCategories.Create;
   Selection := TEasyVirtualSelectionManager.Create(Self);
   FColumnHeaderMenu := TVirtualPopupMenu.Create(Self);
-  {$IFDEF TNTSUPPORT}
-  FSelectedFiles := TTntStringList.Create;
-  FSelectedPaths := TTntStringList.Create;
-  {$ELSE}
   FSelectedFiles := TStringList.Create;
   FSelectedPaths := TStringList.Create;
-  {$ENDIF}
   FExtensionColorCodeList := TExtensionColorCodeList.Create;
   InitializeCriticalSection(FLock);
   RootFolder := rfDesktop;
@@ -2583,17 +2544,10 @@ begin
           if IsFolder1 and IsFolder2 then
             Result := NS2.ComparePIDL(NS1.RelativePIDL, False, ColumnIndex)
           else begin
-            {$IFDEF TNTSUPPORT}
-            if (ColumnIndex = 2) and IsWinVista then
-              Result := WideCompareText(WideString(NS1.DetailsOf(2)), WideString( NS2.DetailsOf(2)))
-            else
-              Result := NS2.ComparePIDL(NS1.RelativePIDL, False, ColumnIndex);
-            {$ELSE}
             if (ColumnIndex = 2) and IsWinVista then
               Result := CompareText(WideString(NS1.DetailsOf(2)), WideString( NS2.DetailsOf(2)))
             else
               Result := NS2.ComparePIDL(NS1.RelativePIDL, False, ColumnIndex);
-            {$ENDIF}
           end;
           // Secondary level of sorting is on the Name
           if (Result = 0) and (ColumnIndex > 0) then
@@ -2959,21 +2913,6 @@ begin
     Result := (Selection.First as TExplorerItem).Namespace.NameForParsingInFolder
 end;
 
-{$IFDEF TNTSUPPORT}
-function TCustomVirtualExplorerEasyListview.GetSelectedFiles: TWideStrings;
-var
-  Item: TExplorerItem;
-begin
-  Result := FSelectedFiles;
-  FSelectedFiles.Clear;
-  Item := Selection.First as TExplorerItem;
-  while Assigned(Item) do
-  begin
-    FSelectedFiles.Add( Item.Namespace.NameForParsingInFolder);
-    Item := Selection.Next(Item) as TExplorerItem
-  end;
-end;
-{$ELSE}
 function TCustomVirtualExplorerEasyListview.GetSelectedFiles: TStrings;
 var
   Item: TExplorerItem;
@@ -2987,7 +2926,6 @@ begin
     Item := Selection.Next(Item) as TExplorerItem
   end;
 end;
-{$ENDIF}
 
 function TCustomVirtualExplorerEasyListview.GetSelectedPath: WideString;
 begin
@@ -2996,21 +2934,6 @@ begin
     Result := (Selection.First as TExplorerItem).Namespace.NameForParsing
 end;
 
-{$IFDEF TNTSUPPORT}
-function TCustomVirtualExplorerEasyListview.GetSelectedPaths: TWideStrings;
-var
-  Item: TExplorerItem;
-begin
-  Result := FSelectedPaths;
-  FSelectedPaths.Clear;
-  Item := Selection.First as TExplorerItem;
-  while Assigned(Item) do
-  begin
-    FSelectedPaths.Add( Item.Namespace.NameForParsing);
-    Item := Selection.Next(Item) as TExplorerItem
-  end
-end;
-{$ELSE}
 function TCustomVirtualExplorerEasyListview.GetSelectedPaths: TStrings;
 var
   Item: TExplorerItem;
@@ -3024,8 +2947,6 @@ begin
     Item := Selection.Next(Item) as TExplorerItem
   end
 end;
-{$ENDIF}
-
 
 function TCustomVirtualExplorerEasyListview.GetSelection: TEasyVirtualSelectionManager;
 begin
@@ -8158,9 +8079,6 @@ var
   i: Integer;
   DataObj: TEasyDataObjectManager;
   HDrop: TCommonHDrop;
-  {$IFDEF TNTSUPPORT}
-  FileListW: TTntStringList;
-  {$ENDIF}
   FileListA: TStringList;
 begin
   if Selection.Count > 0 then
@@ -8168,9 +8086,6 @@ begin
     APIDLList := TCommonPIDLList.Create;
     ShellIDList := TCommonShellIDList.Create;
     HDrop := TCommonHDrop.Create;
-    {$IFDEF TNTSUPPORT}
-    FileListW := TTntStringList.Create;
-    {$ENDIF}
     FileListA := TStringList.Create;
     try
       APIDLList.CopyAdd(DesktopFolder.AbsolutePIDL);
@@ -8184,26 +8099,12 @@ begin
           APIDLList.Add(ShellIDList.AbsolutePIDL(i));
         for i := 0 to HDrop.FileCount - 1 do
         begin
-          {$IFDEF TNTSUPPORT}
-           if IsUnicode then
-            FileListW.Add(HDrop.FileName(i))
-          else
-            FileListA.Add(HDrop.FileName(i));
-          {$ELSE}
           FileListA.Add(HDrop.FileName(i))
-          {$ENDIF}
         end;
         Item := Selection.Next(Item) as TVirtualDropStackItem;
       end;
       ShellIDList.AssignPIDLs(APIDLList);
-      {$IFDEF TNTSUPPORT}
-      if IsUnicode then
-        HDrop.AssignFilesW(FileListW)
-      else
-         HDrop.AssignFilesA(FileListA);
-      {$ELSE}
       HDrop.AssignFilesA(FileListA);
-      {$ENDIF}
       DataObj := TEasyDataObjectManager.Create;
       DataObject := DataObj as IDataObject;
       DataObj.Listview := Self;
@@ -8212,9 +8113,6 @@ begin
     finally
       ShellIDList.Free;
       HDrop.Free;
-      {$IFDEF TNTSUPPORT}
-      FileListW.Free;
-      {$ENDIF}
       FileListA.Free;
       APIDLList.Free
     end
@@ -8416,18 +8314,10 @@ begin
   Result := nil;
   if NS.Link then
   begin
-    {$IFDEF TNTSUPPORT}
-    TargetExt := WideLowerCase(WideExtractFileExt(NS.ShellLink.TargetPath));
-    {$ELSE}
     TargetExt := WideLowerCase(ExtractFileExt(NS.ShellLink.TargetPath));
-    {$ENDIF}    
   end else
   begin
-    {$IFDEF TNTSUPPORT}
-    TargetExt := WideLowerCase(WideExtractFileExt(NS.FileName));
-    {$ELSE}
     TargetExt := WideLowerCase(ExtractFileExt(NS.FileName));
-    {$ENDIF}
   end;
   if TargetExt <> '' then
   begin
@@ -8437,11 +8327,7 @@ begin
       j := 0;
       while not Assigned(Result) and (j < Items[i].Extensions.Count) do
       begin
-        {$IFDEF TNTSUPPORT}
-        if WideStrIComp(PWideChar( Items[i].Extensions[j]), PWideChar( TargetExt)) = 0 then
-        {$ELSE}
         if WideStrIComp(PWideChar( WideString((Items[i].Extensions[j]))), PWideChar( TargetExt)) = 0 then
-        {$ENDIF}
           Result := Items[i];
         Inc(j)
       end;
@@ -8489,12 +8375,8 @@ var
 //  Ext: WideString;
 begin
   Result := nil;
- (* {$IFDEF TNTSUPPORT}
-  Ext := WideExtractFileExt(FileName);
-  {$ELSE}
-  Ext := ExtractFileExt(FileName);
-  {$ENDIF}   *)
-  i := 0;
+  // Ext := ExtractFileExt(FileName);
+   i := 0;
   // Do exhaustive search until decide it is a bottleneck then do binary search
   while not Assigned(Result) and (i < ItemList.Count) do
   begin
@@ -8539,11 +8421,7 @@ end;
 constructor TExtensionColorCode.Create;
 begin
   inherited Create;
-  {$IFDEF TNTSUPPORT}
-  Extensions := TTntStringList.Create;
-  {$ELSE}
   Extensions := TStringList.Create;
-  {$ENDIF}
 end;
 
 destructor TExtensionColorCode.Destroy;

@@ -54,10 +54,6 @@ uses
   SpTBXItem,
   TB2Item,
   {$ENDIF}
-  {$IFDEF TNTSUPPORT}
-  TntStdCtrls,
-  TntForms,
-  {$ENDIF}
   Themes,
   UxTheme,
   EasyListview,

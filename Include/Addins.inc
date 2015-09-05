@@ -1,27 +1,6 @@
 
 // The packages must be rebuilt to make the changes in this file active
 
-// -----------------------------------------------------------------------------
-//
-//  ENVISION IMAGE LIBRARY SUPPORT
-//
-// If you are using Interval Software Envision Image Library package to extend the thumbnails
-// in VirtualExplorerListviewEx then uncomment this line to automatically link
-// Envision Image Library into the VirtualExplorerListviewEx.
-
-//{$DEFINE USEENVISION}
-
-
-// -----------------------------------------------------------------------------
-//
-//  IMAGEMAGICK
-//
-// If you are using ImageMagick to extend the thumbnails
-// in VirtualExplorerListviewEx then uncomment this line to automatically link
-// ImageMagick into the VirtualExplorerListviewEx.
-
-//{$DEFINE USEIMAGEMAGICK}
-
 
 // -----------------------------------------------------------------------------
 //

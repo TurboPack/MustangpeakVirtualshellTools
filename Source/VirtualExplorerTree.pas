@@ -97,25 +97,6 @@ unit VirtualExplorerTree;
 
 interface
 
-  {$IFDEF TNTSUPPORT}
-//   IMPORTANT - PLEASE READ then comment this line out.
-//  If using TNT you MUST include the TNT package for your specific compiler in the
-//  Requires section of this package.  It may be possible to compile without doing
-//  this but you WILL eventually have strange crashes in your application that will
-//  be difficult to understand.  The best way to do this in my opinion is to create
-//  a new folder in the package install directory called "Delphi_TNT" (or CBuilder_TNT)
-//  and copy all the files from the Delphi (or CBuilder) folder into it.  Now open the
-//  VirtualShellToolsDx.dpk (or bpk) file in the "Delphi_TNT" (or CBuilder_TNT) based on your compiler
-//  version in a text editor.  In the "Requires" section add "TNTUnicodeVcl_Rx0", where
-//  the "x" is the version of Delphi you are using.  Open the dpk (bpk) file in your
-//  IDE. Select the menu option Projects>Options>Directories/Conditionals>Conditional
-//  and enter TNTSUPPORT. Compile the package, then open the VirtualShellToolsDxD.dpk (or bpk)
-//  and compile and press the Install button.
-//  Now when you update the packages you won't have to redo all this.  Just install
-//  the update then compile the packages in the "Delphi_TNT" (or CBuilder_TNT) folders
-//  an you are done.
-  {$ENDIF}
-
 {$include ..\Include\AddIns.inc}
 {$B-}
 {.$DEFINE GXDEBUG}
@@ -152,12 +133,6 @@ uses
   SpTBXSkins,
   SpTBXEditors,
   {$ENDIF SpTBX}
-  {$IFDEF TNTSUPPORT}
-  TntStdCtrls,
-  TntClasses,
-  TntSysUtils,
-  WideStrings,
-  {$ENDIF}
   Registry,
   VirtualTrees,
   MPShellUtilities,
@@ -761,26 +736,15 @@ type
   TRootNodeStorage = class(TNodeStorage)
   private
     FCacheNode: TNodeStorage;
-    {$IFDEF TNTSUPPORT}
-    FCheckedFileNames: TTntStringList;
-    FResolvedFileNames: TTntStringList;
-    {$ELSE}
     FCheckedFileNames: TStringList;
     FResolvedFileNames: TStringList;
-    {$ENDIF}
     FCheckedPIDLs: TCommonPIDLList;
     FStored: Boolean;     // True if the RootNode has something stored in it
     function GetCheckedPIDLs: TCommonPIDLList;
     procedure SetCheckedPIDLs(const Value: TCommonPIDLList);
-    {$IFDEF TNTSUPPORT}
-    function GetCheckedFileNames: TWideStrings;
-    procedure SetCheckFileNames(const Value: TWideStrings);
-    function GetResolvedFileNames: TWideStrings;
-    {$ELSE}
     function GetCheckedFileNames: TStrings;
     procedure SetCheckFileNames(const Value: TStrings);
     function GetResolvedFileNames: TStrings;
-    {$ENDIF}
   protected
     function ProcessNode(RelativePIDL: PItemIDList; CurrentNode: TNodeStorage; Force, MarkCheckMixed: Boolean): TNodeStorage;
     function WalkPIDLToStorageNode(PIDL: PItemIDList; Force: Boolean): TNodeStorage;
@@ -801,13 +765,8 @@ type
     // Warning Setting the checked filenames assumes a checktype of ctTriStateCheckBox
     // To set a node checked for an arbitrary checkbox style use SetFileChecked and SetPIDLChecked;
     procedure LoadFromStream(S: TStream; Version: integer = 0; ReadVerFromStream: Boolean = False); override;
-    {$IFDEF TNTSUPPORT}
-    property CheckedFileNames: TWideStrings read GetCheckedFileNames write SetCheckFileNames;
-    property ResolvedFileNames: TWideStrings read GetResolvedFileNames;
-    {$ELSE}
     property CheckedFileNames: TStrings read GetCheckedFileNames write SetCheckFileNames;
     property ResolvedFileNames: TStrings read GetResolvedFileNames;
-    {$ENDIF}
     property CheckedPIDLs: TCommonPIDLList read GetCheckedPIDLs write SetCheckedPIDLs;
     property Stored: Boolean read FStored write FStored;
   end;
@@ -1254,11 +1213,7 @@ type
   TOnPopupRollDown = procedure(Sender: TObject; var Allow: Boolean) of object;
   TOnPopupRollUp = procedure(Sender: TObject; Selected: Boolean) of object;
   TVETOnComboInvalidEntry = procedure(Sender: TCustomVirtualExplorerCombobox; EnteredText: WideString) of object;
-  {$IFDEF TNTSUPPORT}
-  TOnAutoCompleteUpdateList = procedure(Sender: TObject; const CurrentEditContents: WideString; EnumList: TTntStringList; var Handled: Boolean) of object;
-  {$ELSE}
   TOnAutoCompleteUpdateList = procedure(Sender: TObject; const CurrentEditContents: WideString; EnumList: TStringList; var Handled: Boolean) of object;
-  {$ENDIF}
   TVETComboBoxDecodeSpecialVariableEvent = procedure(Sender: TCustomVirtualExplorerCombobox; Variable: WideString; var NS: TNamespace) of object;
   TOnComboPathChange = procedure(Sender: TCustomVirtualExplorerCombobox; SelectedNamespace: TNamespace) of object;
   TOnComboPathChanging = procedure(Sender: TCustomVirtualExplorerCombobox; PrevNamespace: TNamespace; var Allow: Boolean) of object;
@@ -1348,13 +1303,8 @@ type
   {$ENDIF}
 
     { General Property Support }
-    {$IFDEF TNTSUPPORT}
-    FSelectedPaths: TWideStrings;
-    FSelectedFiles: TWideStrings;
-    {$ELSE}
     FSelectedPaths: TStrings;
     FSelectedFiles: TStrings;
-    {$ENDIF}
     { Event Support }
     FOnClipboardCopy: TVETOnClipboardCopy;
     FOnClipboardCut: TVETOnClipboardCut;
@@ -1395,13 +1345,8 @@ type
     function GetOptions: TVirtualExplorerTreeOptions;
     function GetRecycleBinNode: PVirtualNode;
     function GetSelectedFile: WideString;
-    {$IFDEF TNTSUPPORT}
-    function GetSelectedFiles: TWideStrings;
-    function GetSelectedPaths: TWideStrings;
-    {$ELSE}
     function GetSelectedFiles: TStrings;
     function GetSelectedPaths: TStrings;
-    {$ENDIF}
     function GetSelectedPath: WideString;
     function GetSelectedPIDL: PItemIDList;
     function GetThreadedExpandMarkEnabled: Boolean;
@@ -1708,13 +1653,8 @@ type
     property RootFolderCustomPIDL: PItemIDList read FRootFolderCustomPIDL write SetRootFolderCustomPIDL;
     property RootFolderNamespace: TNamespace read FRootFolderNamespace;
     property SelectedFile: WideString read GetSelectedFile;
-    {$IFDEF TNTSUPPORT}
-    property SelectedFiles: TWideStrings read GetSelectedFiles;
-    property SelectedPaths: TWideStrings read GetSelectedPaths;
-    {$ELSE}
     property SelectedFiles: TStrings read GetSelectedFiles;
     property SelectedPaths: TStrings read GetSelectedPaths;
-    {$ENDIF}
     property SelectedPath: WideString read GetSelectedPath;
     property SelectedPIDL: PItemIDList read GetSelectedPIDL;
     property ShellNotifySuspended: Boolean read FShellNotifySuspended write FShellNotifySuspended default False;
@@ -2557,21 +2497,12 @@ type
     FPopupAutoCompleteDropDown: TPopupAutoCompleteDropDown;
     FAutoScrollLastMousePos: TPoint;
     FAutoComplete: TVirtualShellAutoComplete;
-    {$IFDEF TNTSUPPORT}
-    FStrings: TTntStringList;
-    {$ELSE}
     FStrings: TStringList;
-    {$ENDIF}
   protected
     procedure CreateParams(var Params: TCreateParams); override;
     procedure DoGetText(var pEventArgs: TVSTGetCellTextEventArgs); override;
-    {$IFDEF TNTSUPPORT}
-     procedure DoUpdateList(const CurrentEditContents: WideString;
-      EnumList: TTntStringList; var Handled: Boolean);
-    {$ELSE}
     procedure DoUpdateList(const CurrentEditContents: WideString;
       EnumList: TStringList; var Handled: Boolean);
-    {$ENDIF}
     procedure MouseMove(Shift: TShiftState; X, Y: Integer); override;
     procedure Paint; override;
     procedure UpdateList(CurrentEditStr: WideString);
@@ -2583,11 +2514,7 @@ type
 
     property AutoComplete: TVirtualShellAutoComplete read FAutoComplete write FAutoComplete;
     property AutoScrollLastMousePos: TPoint read FAutoScrollLastMousePos write FAutoScrollLastMousePos;
-    {$IFDEF TNTSUPPORT}
-    property Strings: TTntStringList read FStrings write FStrings;
-    {$ELSE}
     property Strings: TStringList read FStrings write FStrings;
-    {$ENDIF}
   public
     constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
@@ -3004,11 +2931,7 @@ uses
     {$IFDEF TBX}
     ColumnFormTBX,
     {$ELSE}
-      {$IFDEF TNTSUPPORT}
-      ColumnFormTNT,
-      {$ELSE}
       ColumnForm,
-      {$ENDIF}
     {$ENDIF}
   {$ENDIF}
   Imm;
@@ -3716,13 +3639,8 @@ begin
   FViewManager := TViewManager.Create;
   FVETPersistent := TVETPersistent.Create;
   VETColors := TVETColors.Create(Self);
-  {$IFDEF TNTSUPPORT}
-  FSelectedPaths := TTntStringList.Create;
-  FSelectedFiles := TtntStringList.Create;
-  {$ELSE}
   FSelectedPaths := TStringList.Create;
   FSelectedFiles := TStringList.Create;
-  {$ENDIF}
 
   { Remove any weird clipboard formats.  The IDataObject will handle that.      }
   { Still need the virtual tree internal formats though.                        }
@@ -5656,24 +5574,6 @@ begin
       Result := NS.NameParseAddressInFolder
 end;
 
-{$IFDEF TNTSUPPORT}
-function TCustomVirtualExplorerTree.GetSelectedFiles: TWideStrings;
-var
-  NS: TNamespace;
-  Node: PVirtualNode;
-begin
-  FSelectedFiles.Clear;
-  Node := GetFirstSelected;
-  while Assigned(Node) do
-  begin
-    if ValidateNamespace(Node, NS) then
-      if NS.FileSystem then
-        FSelectedFiles.Add(NS.NameParseAddressInFolder);
-    Node := GetNextSelected(Node)
-  end;
-  Result := FSelectedFiles;
-end;
-{$ELSE}
 function TCustomVirtualExplorerTree.GetSelectedFiles: TStrings;
 var
   NS: TNamespace;
@@ -5690,7 +5590,6 @@ begin
   end;
   Result := FSelectedFiles;
 end;
-{$ENDIF}
 
 function TCustomVirtualExplorerTree.GetSelectedPath: WideString;
 var
@@ -5703,24 +5602,6 @@ begin
 end;
 
 
-{$IFDEF TNTSUPPORT}
-function TCustomVirtualExplorerTree.GetSelectedPaths: TWideStrings;
-var
-  NS: TNamespace;
-  Node: PVirtualNode;
-begin
-  FSelectedPaths.Clear;
-  Node := GetFirstSelected;
-  while Assigned(Node) do
-  begin
-    if ValidateNamespace(Node, NS) then
-      if NS.FileSystem then
-        FSelectedPaths.Add(NS.NameForParsing);
-    Node := GetNextSelected(Node)
-  end;
-  Result := FSelectedPaths;
-end;
-{$ELSE}
 function TCustomVirtualExplorerTree.GetSelectedPaths: TStrings;
 var
   NS: TNamespace;
@@ -5737,7 +5618,6 @@ begin
   end;
   Result := FSelectedPaths;
 end;
-{$ENDIF}
 
 function TCustomVirtualExplorerTree.HasPopupMenu(Node: PVirtualNode;
   Column: TColumnIndex; Pos: TPoint): Boolean;
@@ -11095,13 +10975,8 @@ begin
   inherited Create(PIDL, nil);
   ChildNodeList := TNodeStorageList.Create;
   FCheckedPIDLs := TCommonPIDLList.Create;
-  {$IFDEF TNTSUPPORT}
-  FCheckedFileNames := TTntStringList.Create;
-  FResolvedFileNames := TTntStringList.Create;
-  {$ELSE}
   FCheckedFileNames := TStringList.Create;
   FResolvedFileNames := TStringList.Create;
-  {$ENDIF}
 end;
 
 procedure TRootNodeStorage.Delete(APIDL: PItemIDList; StorageTypes: TStorageTypes;
@@ -11174,43 +11049,6 @@ begin
     StorageNode := nil
 end;
 
-{$IFDEF TNTSUPPORT}
-function TRootNodeStorage.GetCheckedFileNames: TWideStrings;
-
-  procedure RecurseStorage(S: TNodeStorage; Strings: TWideStrings);
-  var
-    NS: TNamespace;
-    i: integer;
-    Str: string;
-  begin
-    NS := TNamespace.Create(S.AbsolutePIDL, nil);
-    NS.FreePIDLOnDestroy := False;
-    // Need to do this to get the real path to special folders
-    Str := NS.NameForParsing;
-    { The items must - be in the file system, a valid file or directory, have a }
-    { full check (not mixed)    }
-    if NS.FileSystem and (FileExistsW(Str) or WideDirectoryExists(Str) or WideIsDrive(Str)) and
-      (S.Storage.Check.CheckState = csCheckedNormal) then
-      Strings.Add(Str);
-    if Assigned(S.ChildNodeList) then
-      for i := 0 to S.ChildNodeList.Count - 1 do
-        RecurseStorage(S.ChildNodeList[i], Strings);
-    NS.Free;
-  end;
-
-var
-  OldErrorMode: integer;
-begin
-  OldErrorMode := SetErrorMode(SEM_FAILCRITICALERRORS or SEM_NOOPENFILEERRORBOX);
-  try
-    FCheckedFileNames.Clear;
-    RecurseStorage(Self, FCheckedFileNames);
-  finally
-    Result := FCheckedFileNames;
-    SetErrorMode(OldErrorMode)
-  end
-end;
-{$ELSE}
 function TRootNodeStorage.GetCheckedFileNames: TStrings;
 
   procedure RecurseStorage(S: TNodeStorage; Strings: TStrings);
@@ -11246,7 +11084,6 @@ begin
     SetErrorMode(OldErrorMode)
   end
 end;
-{$ENDIF}
 
 function TRootNodeStorage.GetCheckedPIDLs: TCommonPIDLList;
 
@@ -11267,30 +11104,6 @@ begin
   Result := FCheckedPIDLs;
 end;
 
-{$IFDEF TNTSUPPORT}
-function TRootNodeStorage.GetResolvedFileNames: TWideStrings;
-
-    function HasAsParentFolder(Parent, Child: string): Boolean;
-    begin
-      Parent := IncludeTrailingPathDelimiter(Parent);
-      Result := (Length(Parent) < Length(Child)) and (Pos(Parent, Child) = 1);
-    end;
-var
-  i: Integer;
-begin
-  FResolvedFileNames.Assign(CheckedFileNames);
-  TStringList(FResolvedFileNames).CaseSensitive := false;
-  { D5 is case insensitive anyway }
-  TStringList(FResolvedFileNames).Sort;
-  i := 1;
-  while i < FResolvedFileNames.Count do
-    if HasAsParentFolder(FResolvedFileNames[i - 1], FResolvedFileNames[i]) then
-      FResolvedFileNames.Delete(i)
-    else
-      Inc(i);
-  Result := FResolvedFileNames
-end;
-{$ELSE}
 function TRootNodeStorage.GetResolvedFileNames: TStrings;
 
     function HasAsParentFolder(Parent, Child: string): Boolean;
@@ -11313,7 +11126,6 @@ begin
       Inc(i);
   Result := FResolvedFileNames
 end;
-{$ENDIF}
 
 function TRootNodeStorage.ProcessNode(RelativePIDL: PItemIDList; CurrentNode: TNodeStorage; Force,
   MarkCheckMixed: Boolean): TNodeStorage;
@@ -11384,35 +11196,6 @@ begin
   end;
 end;
 
-{$IFDEF TNTSUPPORT}
-procedure TRootNodeStorage.SetCheckFileNames(const Value: TWideStrings);
-var
-  Desktop: IShellFolder;
-  i: integer;
-  WS: WideString;
-  pchEaten, pdwAttributes: LongWord;
-  PIDL: PItemIdList;
-  Storage: TNodeStorage;
-begin
-  Clear;
-  SHGetDesktopfolder(Desktop);
-  pdwAttributes := 0;
-  for i := 0 to Value.Count - 1 do
-  begin
-    WS := Value[i];
-    if Succeeded(Desktop.ParseDisplayName(Application.Handle, nil, PWideChar(WS), pchEaten, PIDL, pdwAttributes)) then
-    begin
-      Storage := Store(PIDL, [stChecks]);
-      if Assigned(Storage) then
-      begin
-        Storage.Storage.Check.CheckState := csCheckedNormal;
-        Storage.Storage.Check.CheckType := ctTriStateCheckBox;
-      end;
-      PIDLMgr.FreePIDL(PIDL);
-    end
-  end;
-end;
-{$ELSE}
 procedure TRootNodeStorage.SetCheckFileNames(const Value: TStrings);
 var
   Desktop: IShellFolder;
@@ -11440,7 +11223,6 @@ begin
     end
   end;
 end;
-{$ENDIF}
 
 function TRootNodeStorage.SetFileChecked(FileName: WideString;
   CheckBoxType: TCheckType): Boolean;
@@ -14765,11 +14547,7 @@ begin
   Colors.DisabledColor := Colors.UnfocusedSelectionColor;
   NodeDataSize := SizeOf(Pointer);
   AutoComplete := TVirtualShellAutoComplete.Create(Self);
-  {$IFDEF TNTSUPPORT}
-  Strings := TTntStringList.Create;
-  {$ELSE}
   Strings := TStringList.Create;
-  {$ENDIF}
 end;
 
 procedure TPopupAutoCompleteTree.CreateParams(var Params: TCreateParams);
@@ -14795,15 +14573,6 @@ begin
   pEventArgs.CellText := Strings[P];
 end;
 
-{$IFDEF TNTSUPPORT}
-procedure TPopupAutoCompleteTree.DoUpdateList(const CurrentEditContents:
-  WideString; EnumList: TTntStringList; var Handled: Boolean);
-begin
-  if Assigned(PopupAutoCompleteDropDown.OnAutoCompleteUpdateList) then
-    PopupAutoCompleteDropDown.OnAutoCompleteUpdateList(
-      PopupAutoCompleteDropDown.ExplorerCombobox, CurrentEditContents, EnumList, Handled);
-end;
-{$ELSE}
 procedure TPopupAutoCompleteTree.DoUpdateList(const CurrentEditContents:
   WideString; EnumList: TStringList; var Handled: Boolean);
 begin
@@ -14811,7 +14580,6 @@ begin
     PopupAutoCompleteDropDown.OnAutoCompleteUpdateList(
       PopupAutoCompleteDropDown.ExplorerCombobox, CurrentEditContents, EnumList, Handled);
 end;
-{$ENDIF}
 
 procedure TPopupAutoCompleteTree.MouseMove(Shift: TShiftState; X, Y: Integer);
 var

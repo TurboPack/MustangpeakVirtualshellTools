@@ -33,17 +33,9 @@ uses
   // To allow customization of check images at runtime in the column dialog
   VirtualTrees,
   Forms,
-  {$IFDEF TNTSUPPORT}
-  TntStdCtrls,
-  TntClasses,
-  TntSysUtils,
-  TntMenus,
-  TntForms,
-  {$ELSE}
   StdCtrls,
   Classes,
   Menus,
-  {$ENDIF}
   // </ FR added 11-28-05 >
   Messages;
 
@@ -70,19 +62,11 @@ const
 // and all this kind of stuff remain unmodified.
 
 type
-  {$IFDEF TNTSUPPORT}
-  TVirtualCustomEdit = TTntCustomEdit;
-  TVirtualPopupMenu = TTntPopupMenu;
-  TVirtualMenuItem = TTntMenuItem;
-  TVirtualFileStream = TTntFileStream;
-  TVirtualScrollBox = TTntScrollbox;
-  {$ELSE}
   TVirtualCustomEdit = TCustomEdit;
   TVirtualPopupMenu = TPopupMenu;
   TVirtualMenuItem = TMenuItem;
   TVirtualFileStream = TFileStream;
   TVirtualScrollBox = TScrollbox;
-  {$ENDIF}
 
 var
    S_WARNING: WideString = 'Warning';

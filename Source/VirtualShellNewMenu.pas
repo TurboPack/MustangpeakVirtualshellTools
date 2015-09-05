@@ -49,9 +49,6 @@ uses
   Menus, Registry, ShlObj, ShellAPI, ImgList, VirtualResources,
   MPShellUtilities, MPCommonObjects,
   MPCommonUtilities,
-  {$IFDEF TNTSUPPORT}
-  TntSysUtils,
-  {$ENDIF}
   {$IFDEF USE_TOOLBAR_TB2K}
   TB2Item,
   {$ENDIF}
@@ -263,11 +260,7 @@ begin
       case NewShellKind of
         nmk_Null:
           begin
-            {$IFDEF TNTSUPPORT}
-            Handle := WideFileCreate(NewFileTargetPath);
-            {$ELSE}
             Handle := FileCreate(NewFileTargetPath);
-            {$ENDIF}
             if Handle <> INVALID_HANDLE_VALUE then
             begin
               if IsUnicode then
@@ -316,11 +309,7 @@ begin
           end;
         nmk_Data:
           begin
-            {$IFDEF TNTSUPPORT}
-            Handle := WideFileCreate(NewFileTargetPath);
-            {$ELSE}
             Handle := FileCreate(NewFileTargetPath);
-            {$ENDIF}
 
             if Handle <> INVALID_HANDLE_VALUE then
             try
@@ -394,11 +383,7 @@ begin
         nmk_Shortcut:
           begin
             NewFileTargetPath := WideIncludeTrailingBackslash( WideExtractFilePath(NewFileTargetPath)) + S_NEW + S_SHORTCUT + '.lnk';
-            {$IFDEF TNTSUPPORT}
-            Handle := WideFileCreate(NewFileTargetPath);
-            {$ELSE}
             Handle := FileCreate(NewFileTargetPath);
-            {$ENDIF}
             if Handle <> INVALID_HANDLE_VALUE then
             begin
               if IsUnicode then

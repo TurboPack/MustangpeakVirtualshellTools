@@ -29,9 +29,6 @@ uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls,
   ShlObj, ShellAPI, ActiveX, ComObj,
   MPCommonObjects,
-  {$IFDEF TNTSUPPORT}
-  TntClasses,
-  {$ENDIF}
   VirtualResources,
   MPThreadManager, MPCommonUtilities;
 
@@ -351,7 +348,7 @@ type
     FChangeNotifier: TVirtualChangeNotifier;
     FSpecialFolderVirtualPIDLs: TCommonPIDLList;
     FSpecialFolderPhysicalPIDL: TCommonPIDLList;
-    FSpecialFolderPhysicalPath: {$IFDEF TNTSUPPORT}TTntStringList{$ELSE}TStringList{$ENDIF};
+    FSpecialFolderPhysicalPath: TStringList;
 
   protected
     function ChangeInSpecialFolder(PIDL: PItemIDList): Integer;
@@ -361,7 +358,7 @@ type
 
     property SpecialFolderVirtualPIDLs: TCommonPIDLList read FSpecialFolderVirtualPIDLs write FSpecialFolderVirtualPIDLs;
     property SpecialFolderPhysicalPIDL: TCommonPIDLList read FSpecialFolderPhysicalPIDL write FSpecialFolderPhysicalPIDL;
-    property SpecialFolderPhysicalPath: {$IFDEF TNTSUPPORT}TTntStringList{$ELSE}TStringList{$ENDIF} read FSpecialFolderPhysicalPath write FSpecialFolderPhysicalPath;
+    property SpecialFolderPhysicalPath: TStringList read FSpecialFolderPhysicalPath write FSpecialFolderPhysicalPath;
   public
     constructor Create(CreateSuspended: Boolean; AChangeNotifier: TVirtualChangeNotifier); reintroduce; virtual;
     destructor Destroy; override;
@@ -1552,11 +1549,7 @@ begin
   KernelChangeEvent := CreateEvent(nil, True, False, nil);
   SpecialFolderVirtualPIDLs := TCommonPIDLList.Create;
   SpecialFolderPhysicalPIDL := TCommonPIDLList.Create;
-  {$IFDEF TNTSUPPORT}
-  SpecialFolderPhysicalPath := TTntStringList.Create;
-  {$ELSE}
   SpecialFolderPhysicalPath := TStringList.Create;
-  {$ENDIF}
 end;
 
 destructor TVirtualKernelChangeThread.Destroy;
@@ -1601,13 +1594,8 @@ procedure TVirtualKernelChangeThread.Execute;
           for i := 0 to SpecialFolderPhysicalPath.Count - 1 do
           begin
             if Win32Platform = VER_PLATFORM_WIN32_NT then
-              {$IFDEF TNTSUPPORT}
-              Result.Handles[HandleIndex] := FindFirstChangeNotificationW_MP(
-                PWideChar(SpecialFolderPhysicalPath[i]), False, Special)
-              {$ELSE}
               Result.Handles[HandleIndex] := FindFirstChangeNotificationW_MP(
                 PWideChar(WideString(SpecialFolderPhysicalPath[i])), False, Special)
-              {$ENDIF}
             else begin
               S := AnsiString(SpecialFolderPhysicalPath[i]);
               Result.Handles[HandleIndex] := FindFirstChangeNotificationA(PAnsiChar(S), False, Special)

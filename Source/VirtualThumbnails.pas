@@ -62,9 +62,6 @@ uses
   Forms,
   Jpeg,
   MPShellUtilities,
-  {$IFDEF TNTSUPPORT}
-  TntClasses,
-  {$ENDIF}
   VirtualResources,
   MPShellTypes,
   MPCommonObjects,
@@ -150,18 +147,10 @@ type
     FInvalidCount: Integer;
     FThumbWidth: Integer;
     FThumbHeight: Integer;
-    {$IFDEF TNTSUPPORT}
-    FComments:  TTntStringList;
-    {$ELSE}
     FComments:  TStringList;
-    {$ENDIF}
     function GetCount: Integer;
   protected
-    {$IFDEF TNTSUPPORT}
-    FHeaderFilelist: TTntStringList; // OwnsObjects
-    {$ELSE}
     FHeaderFilelist: TStringList; // OwnsObjects
-    {$ENDIF}
     function DefaultStreamVersion: Integer; virtual;
   public
     constructor Create; virtual;
@@ -175,20 +164,12 @@ type
     function Read(Index: Integer; var OutThumbInfo: TThumbInfo): Boolean; overload;
     function Read(Index: Integer; OutBitmap: TBitmap): Boolean; overload;
     procedure LoadFromFile(const Filename: WideString); overload;
-    {$IFDEF TNTSUPPORT}
-    procedure LoadFromFile(const Filename: WideString; InvalidFiles: TTntStringList); overload;
-    {$ELSE}
     procedure LoadFromFile(const Filename: WideString; InvalidFiles: TStringList); overload;
-    {$ENDIF}
     procedure SaveToFile(const Filename: WideString);
     property Directory: WideString read FDirectory write FDirectory;
     property ThumbWidth: Integer read FThumbWidth write FThumbWidth;
     property ThumbHeight: Integer read FThumbHeight write FThumbHeight;
-    {$IFDEF TNTSUPPORT}
-    property Comments: TTntStringList read FComments;
-    {$ELSE}
     property Comments: TStringList read FComments;
-    {$ENDIF}
     property Count: Integer read GetCount;  // Count includes the deleted thumbs, ValidCount = Count - InvalidCount
     property InvalidCount: Integer read FInvalidCount;
     property LoadedFromFile: Boolean read FLoadedFromFile write FLoadedFromFile;
@@ -227,11 +208,7 @@ type
     procedure BeginUpdate;
     procedure EndUpdate;
     procedure DoOptionsChanged(ResetThread, Invalidate: Boolean); virtual;
-    {$IFDEF TNTSUPPORT}
-    function GetAlbumList(L: TTntStringList): Boolean;
-    {$ELSE}
     function GetAlbumList(L: TStringList): Boolean;
-    {$ENDIF}
     function GetAlbumFileToLoad(Dir: WideString): WideString;
     function GetAlbumFileToSave(Dir: WideString; AppendToAlbumList: Boolean): WideString;
     procedure FillImageFormats(FillColors: Boolean = True); virtual;
@@ -300,12 +277,7 @@ function SpMakeThumbFromFile(Filename: WideString; OutBitmap: TBitmap; ThumbW,
 function SpCreateThumbInfoFromFile(NS: TNamespace; ThumbW, ThumbH: Integer;
   UseSubsampling, UseShellExtraction, UseExifThumbnail, UseExifOrientation: Boolean;
   BackgroundColor: TColor): TThumbInfo;
-{$IFDEF TNTSUPPORT}
-function SpReadExifThumbnail(FileName: WideString; Exif: TTntStringList): TJpegImage;
-{$ELSE}
   function SpReadExifThumbnail(FileName: WideString; Exif: TStringList): TJpegImage;
-{$ENDIF}
-
 
 { Stream helpers }
 function SpReadDateTimeFromStream(ST: TStream): TDateTime;
@@ -325,11 +297,7 @@ procedure SpConvertJPGStreamToBitmap(MS: TMemoryStream; OutBitmap: TBitmap);
 implementation
 
 uses
-  {$IFDEF USEIMAGEMAGICK} MagickImage, ImageMagickAPI, {$ENDIF}
   Types,
-  {$IFDEF TNTSUPPORT}
-  TntSysUtils,
-  {$ENDIF}
   Math;
 
 //WMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWM
@@ -487,10 +455,6 @@ begin
   else if Ext = 'bmp' then Result := TBitmap
   else if (Ext = 'wmf') or (Ext = 'emf') then Result := TMetafile
   else if Ext = 'ico' then Result := TIcon;
-  {$IFDEF USEIMAGEMAGICK}
-  if Result = nil then
-    Result := MagickImage.MagickFileFormatList.GraphicFromExtension(Ext);
-  {$ENDIF}
 end;
 
 // Bug in Delphi 5:
@@ -652,12 +616,7 @@ var
   WMFScale: Single;
   DestR: TRect;
   Ext, S: string;
-  {$IFDEF TNTSUPPORT}
-  Exif: TTntStringList;
-  {$ELSE}
-    // Delphi 5-6 doesn't have ValueFromIndex, use TStringListEx instead of TStringList
-    Exif: TStringList;
-  {$ENDIF}
+  Exif: TStringList;
   HasExifThumb: Boolean;
   I, Orientation: Integer;
 begin
@@ -672,12 +631,7 @@ begin
   try
     // Try to load the EXIF thumbnail
     if ExifThumbnail and ((Ext = '.jpg') or (Ext = '.jpeg') or (Ext = '.jif')) or (Ext = '.jpe') then begin
-      {$IFDEF TNTSUPPORT}
-      Exif := TTntStringList.Create;
-      {$ELSE}
-        // Delphi 5-6 doesn't have ValueFromIndex, use TStringListEx instead of TStringList
         Exif := TStringList.Create;
-      {$ENDIF}
       try
         J := SpReadExifThumbnail(Filename, Exif);
 
@@ -841,12 +795,7 @@ begin
   end;
 end;
 
-{$IFDEF TNTSUPPORT}
-function SpReadExif(F: TVirtualFileStream; Exif: TTntStringList; var Ofs: LongWord): Boolean;
-{$ELSE}
-  // Delphi 5-6 doesn't have ValueFromIndex, use TStringListEx instead of TStringList
-  function SpReadExif(F: TVirtualFileStream; Exif: TStringList; var Ofs: LongWord): Boolean;
-{$ENDIF}
+function SpReadExif(F: TVirtualFileStream; Exif: TStringList; var Ofs: LongWord): Boolean;
 var
   W: Word;
   L, ExifMarker_Offset, IFD1_Offset, IFD_Exif_Offset, dummy: LongWord;
@@ -904,7 +853,7 @@ var
     readit(Count); // Number of entries
     if Count > 128 then
       Exit;
-    
+
     for I := 0 to Count - 1 do begin
       MyPos := F.Position;
       readit(MyTag);   // Tag
@@ -1024,12 +973,7 @@ begin
   end;
 end;
 
-{$IFDEF TNTSUPPORT}
-function SpReadExifThumbnail(FileName: WideString; Exif: TTntStringList): TJpegImage;
-{$ELSE}
-  // Delphi 5-6 doesn't have ValueFromIndex, use TStringListEx instead of TStringList
-  function SpReadExifThumbnail(FileName: WideString; Exif: TStringList): TJpegImage;
-{$ENDIF}
+function SpReadExifThumbnail(FileName: WideString; Exif: TStringList): TJpegImage;
 
   function CorrectThumbnailBuffer(ThumbBuffer: String): String;
   var
@@ -1519,13 +1463,8 @@ end;
 
 constructor TThumbAlbum.Create;
 begin
-  {$IFDEF TNTSUPPORT}
-  FHeaderFilelist := TTntStringList.Create;  // OwnsObjects
-  FComments := TTntStringList.Create;
-  {$ELSE}
   FHeaderFilelist := TStringList.Create;  // OwnsObjects
   FComments := TStringList.Create;
-  {$ENDIF}
 
   Clear;
 end;
@@ -1660,11 +1599,7 @@ begin
   end;
 end;
 
-{$IFDEF TNTSUPPORT}
-procedure TThumbAlbum.LoadFromFile(const Filename: WideString; InvalidFiles: TTntStringList);
-{$ELSE}
 procedure TThumbAlbum.LoadFromFile(const Filename: WideString; InvalidFiles: TStringList);
-{$ENDIF}
 var
   AuxThumbAlbum: TThumbAlbum;
   T, TCopy: TThumbInfo;
@@ -1839,34 +1774,11 @@ procedure TCustomThumbsManager.FillImageFormats(FillColors: Boolean = True);
 var
   I: Integer;
   Ext: WideString;
-{$IFDEF USEIMAGEMAGICK}
-  L: TStringList;
-{$ENDIF}
 begin
   FValidImageFormats.Clear;
-  {$IFDEF USEIMAGEMAGICK}
-  L := TStringList.Create;
-  try
-    if Assigned(MagickFileFormatList) then begin
-      MagickFileFormatList.GetExtensionList(L);
-      FExtensionsList.AddStrings(L);
-      FValidImageExtensions.DeleteString('ico'); // Don't add ico
-      FExtensionsList.DeleteString('pdf'); // TODO -cImageMagick : Stack overflow exception in TMagickImage.LoadFromStream, MagickImage.pas line 744
-      FExtensionsList.DeleteString('txt'); // TODO -cImageMagick : 'Stream size must be defined' exception in TMagickImage.LoadFromStream (ASize <= 0), line 728
-      FExtensionsList.DeleteString('avi'); // TODO -cImageMagick : infinite loop in BlobToImage: Trace: TMagickImage.LoadFromStream -> StreamToImage -> BlobToImage.
-      FExtensionsList.DeleteString('mpg'); // TODO -cImageMagick : 'Stream size must be defined' exception in TMagickImage.LoadFromStream (ASize <= 0), line 728
-      FExtensionsList.DeleteString('mpeg'); // TODO -cImageMagick : 'Stream size must be defined' exception in TMagickImage.LoadFromStream (ASize <= 0), line 728
-      FExtensionsList.DeleteString('htm'); // TODO -cImageMagick : delegate not supported
-      FExtensionsList.DeleteString('html'); // TODO -cImageMagick : delegate not supported
-    end;
-  finally
-    L.Free;
-  end;
-  {$ELSE}
   with FValidImageFormats do begin
     CommaText := '.jpg, .jpeg, .jif, .bmp, .emf, .wmf';
   end;
-  {$ENDIF}
 
   if FillColors then begin
     for I := 0 to FValidImageFormats.Count - 1 do begin
@@ -1910,11 +1822,7 @@ begin
   end;
 end;
 
-{$IFDEF TNTSUPPORT}
-function TCustomThumbsManager.GetAlbumList(L: TTntStringList): Boolean;
-{$ELSE}
 function TCustomThumbsManager.GetAlbumList(L: TStringList): Boolean;
-{$ENDIF}
 var
   S: WideString;
 begin
@@ -1934,11 +1842,7 @@ end;
 
 function TCustomThumbsManager.GetAlbumFileToLoad(Dir: WideString): WideString;
 var
-  {$IFDEF TNTSUPPORT}
-  L: TTntStringList;
-  {$ELSE}
   L: TStringList;
-  {$ENDIF}
 begin
   Result := '';
   if Dir <> '' then begin
@@ -1949,11 +1853,7 @@ begin
           Result := Dir + FStorageFilename;
       tasRepository:
         if FStorageRepositoryFolder <> '' then begin
-          {$IFDEF TNTSUPPORT}
-          L := TTntStringList.Create;
-          {$ELSE}
           L := TStringList.Create;
-          {$ENDIF}
           try
             if GetAlbumList(L) then begin
               Result := L.Values[Dir];
@@ -1972,11 +1872,7 @@ function TCustomThumbsManager.GetAlbumFileToSave(Dir: WideString; AppendToAlbumL
 var
   F: WideString;
   I: Integer;
-  {$IFDEF TNTSUPPORT}
-  L: TTntStringList;
-  {$ELSE}
   L: TStringList;
-  {$ENDIF}
 begin
   Result := '';
   if Dir <> '' then begin
@@ -1987,11 +1883,7 @@ begin
           Result := Dir + FStorageFilename;
       tasRepository:
         if (FStorageRepositoryFolder <> '') and (WideDirectoryExists(FStorageRepositoryFolder) or WideCreateDir(FStorageRepositoryFolder)) then begin
-          {$IFDEF TNTSUPPORT}
-          L := TTntStringList.Create;
-          {$ELSE}
           L := TStringList.Create;
-          {$ENDIF}
           try
             if GetAlbumList(L) then
               Result := L.Values[Dir];

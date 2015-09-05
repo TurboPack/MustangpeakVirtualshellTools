@@ -312,9 +312,6 @@ uses
   TypInfo,
   {$ENDIF}
   Forms,
-  {$IFDEF TNTSUPPORT}
-  TntClasses, TntSysUtils,
-  {$ENDIF}
   VirtualTrees;
 
 {$IFDEF USE_TOOLBAR_TB2K}

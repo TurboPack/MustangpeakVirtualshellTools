@@ -818,10 +818,6 @@ implementation
 
 uses
   ActnList, Forms,
-  {$IFDEF TNTSUPPORT}
-  TntSysUtils,
-  TntClasses,
-  {$ENDIF} 
   VirtualShellNotifier;
 
 function RectWidth(ARect: TRect): integer;

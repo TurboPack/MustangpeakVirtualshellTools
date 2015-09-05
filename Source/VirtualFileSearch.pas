@@ -37,12 +37,6 @@ uses
   ShlObj,
   MPCommonUtilities,
   MPThreadManager,
-  {$IFDEF TNTSUPPORT}
-  WideStrUtils,
-  TntClasses,
-  TntSysUtils,
-  TntWindows,
-  {$ENDIF}
   MPShellTypes,
   ExtCtrls,
   MPShellUtilities,
@@ -76,27 +70,27 @@ type
   private
     FCaseSensitive: Boolean;
     FFileMask: DWORD;      // The mask of attributes of a file to use in the search
-//    FSearchCriteriaContent: {$IFDEF TNTSUPPORT}TTntStringList{$ELSE}TStringList{$ENDIF};
-    FSearchCriteriaFileName: {$IFDEF TNTSUPPORT}TTntStringList{$ELSE}TStringList{$ENDIF};
-    FSearchPaths: {$IFDEF TNTSUPPORT}TTntStringList{$ELSE}TStringList{$ENDIF};
+//    FSearchCriteriaContent: TStringList;
+    FSearchCriteriaFileName: TStringList;
+    FSearchPaths: TStringList;
     FSearchManager: TVirtualFileSearch;
     FSearchResultsLocal: TCommonPIDLList;
     FTemporary: Boolean;
   protected
     procedure Execute; override;
-    procedure ProcessFiles(Path: WideString; Masks: {$IFDEF TNTSUPPORT}TTntStringList{$ELSE}TStringList{$ENDIF}; PIDLList: TCommonPIDLList);
+    procedure ProcessFiles(Path: WideString; Masks: TStringList; PIDLList: TCommonPIDLList);
     property SearchManager: TVirtualFileSearch read FSearchManager write FSearchManager;
     property SearchResultsLocal: TCommonPIDLList read FSearchResultsLocal write FSearchResultsLocal;
     property Temporary: Boolean read FTemporary write FTemporary;
   public
     constructor Create(CreateSuspended: Boolean); override;
     destructor Destroy; override;
-    procedure BuildFolderList(const Path: WideString; FolderList: {$IFDEF TNTSUPPORT}TTntStringList{$ELSE}TStringList{$ENDIF});
+    procedure BuildFolderList(const Path: WideString; FolderList: TStringList);
     property CaseSensitive: Boolean read FCaseSensitive write FCaseSensitive;
     property FileMask: DWORD read FFileMask write FFileMask;
-//    property SearchCriteriaContent: {$IFDEF TNTSUPPORT}TTntStringList{$ELSE}TStringList{$ENDIF} read FSearchCriteriaContent write FSearchCriteriaContent;
-    property SearchCriteriaFileName: {$IFDEF TNTSUPPORT}TTntStringList{$ELSE}TStringList{$ENDIF} read FSearchCriteriaFileName write FSearchCriteriaFileName;
-    property SearchPaths: {$IFDEF TNTSUPPORT}TTntStringList{$ELSE}TStringList{$ENDIF} read FSearchPaths write FSearchPaths;
+//    property SearchCriteriaContent: TStringList read FSearchCriteriaContent write FSearchCriteriaContent;
+    property SearchCriteriaFileName: TStringList read FSearchCriteriaFileName write FSearchCriteriaFileName;
+    property SearchPaths: TStringList read FSearchPaths write FSearchPaths;
   end;
 
   {$IF CompilerVersion >= 23}
@@ -111,15 +105,9 @@ type
     FOnSearchCompare: TFileSearchCompareEvent;  // WARNING CALLED IN CONTEXT OF THREAD
     FOnSearchEnd: TFileSearchFinishedEvent;
     FSearchAttribs: TVirtualSearchAttribs;
-    {$IFDEF TNTSUPPORT}
-  //  FSearchCriteriaContent: TTntStringList;
-    FSearchCriteriaFilename: TTntStringList;
-    FSearchPath: TTntStringList;
-    {$ELSE}
 //    FSearchCriteriaContent: TStringList;
     FSearchCriteriaFilename: TStringList;
     FSearchPath: TStringList;
-    {$ENDIF}
     FSearchResults: TCommonPIDLList;
     FSubFolders: Boolean;
 {$WARN SYMBOL_PLATFORM OFF}
@@ -141,15 +129,9 @@ type
     function Run: Boolean; virtual;
     procedure Stop; virtual;
     property Finished: Boolean read FFinished;
-    {$IFDEF TNTSUPPORT}
-//    property SearchCriteriaContent: TTntStringList read FSearchCriteriaContent write FSearchCriteriaContent;
-    property SearchCriteriaFilename: TTntStringList read FSearchCriteriaFilename write FSearchCriteriaFilename;
-    property SearchPaths: TTntStringList read FSearchPath write FSearchPath;
-    {$ELSE}
 //    property SearchCriteriaContent: TStringList read FSearchCriteriaContent write FSearchCriteriaContent;
     property SearchCriteriaFilename: TStringList read FSearchCriteriaFilename write FSearchCriteriaFilename;
     property SearchPaths: TStringList read FSearchPath write FSearchPath;
-    {$ENDIF}
     property SearchResults: TCommonPIDLList read FSearchResults write FSearchResults;
   published
     property CaseSensitive: Boolean read FCaseSensitive write FCaseSensitive default False;
@@ -171,15 +153,9 @@ implementation
 constructor TVirtualFileSearchThread.Create(CreateSuspended: Boolean);
 begin
   inherited Create(CreateSuspended);
-  {$IFDEF TNTSUPPORT}
-  SearchPaths := TTntStringList.Create;
-  SearchCriteriaFileName := TTntStringList.Create;
-//  SearchCriteriaContent := TTntStringList.Create;
-  {$ELSE}
   SearchPaths := TStringList.Create;
   SearchCriteriaFileName := TStringList.Create;
 //  SearchCriteriaContent := TStringList.Create;
-  {$ENDIF}
 end;
 
 destructor TVirtualFileSearchThread.Destroy;
@@ -190,7 +166,7 @@ begin
   inherited Destroy;
 end;
 
-procedure TVirtualFileSearchThread.BuildFolderList(const Path: WideString; FolderList: {$IFDEF TNTSUPPORT}TTntStringList{$ELSE}TStringList{$ENDIF});
+procedure TVirtualFileSearchThread.BuildFolderList(const Path: WideString; FolderList: TStringList);
 //
 // Builds a list of folders that are contained in the Path
 //
@@ -256,13 +232,10 @@ begin
   end;
 end;
 
-procedure TVirtualFileSearchThread.ProcessFiles(Path: WideString; Masks: {$IFDEF TNTSUPPORT}TTntStringList{$ELSE}TStringList{$ENDIF}; PIDLList: TCommonPIDLList);
+procedure TVirtualFileSearchThread.ProcessFiles(Path: WideString; Masks: TStringList; PIDLList: TCommonPIDLList);
 var
   FindFileDataW: TWIN32FindDataW;
-{$IFDEF TNTSUPPORT}
-  FindFileDataA: TWIN32FindDataA;
-{$ENDIF}
-  FolderList: {$IFDEF TNTSUPPORT}TTntStringList{$ELSE}TStringList{$ENDIF};
+  FolderList: TStringList;
   FindHandle: THandle;
   i, j: Integer;
   UseFile, Done: Boolean;
@@ -271,29 +244,13 @@ var
   IsDotPath, IsDotDotPath: Boolean;
 begin
   i := 0;
-  {$IFDEF TNTSUPPORT}
-  FolderList := TTntStringList.Create;
-  {$ELSE}
   FolderList := TStringList.Create;
-  {$ENDIF}
   try
     while not Terminated and (i < Masks.Count) do
     begin
       // Find all files in the folder
       CurrentPathSpec := Path + '\*.*';
-
-      {$IFDEF TNTSUPPORT}
-        if IsUnicode then
-          FindHandle := Tnt_FindFirstFileW(PWideChar( CurrentPathSpec), FindFileDataW)
-        else begin
-          FindHandle := FindFirstFileA(PAnsiChar(AnsiString( CurrentPathSpec)), FindFileDataA);
-          CopyMemory(@FindFileDataW, @FindFileDataA, Integer(@FindFileDataW.cFileName) - Integer(@FindFileDataW));
-          WStrPCopy(FindFileDataW.cFileName, FindFileDataA.cFileName);
-          WStrPCopy(FindFileDataW.cAlternateFileName, FindFileDataA.cAlternateFileName);
-        end;
-      {$ELSE}
-        FindHandle := FindFirstFileW(PWideChar( CurrentPathSpec), FindFileDataW);
-      {$ENDIF}
+      FindHandle := FindFirstFileW(PWideChar( CurrentPathSpec), FindFileDataW);
 
       if (FindHandle <> INVALID_HANDLE_VALUE) then
       begin
@@ -363,15 +320,9 @@ begin
   SearchResults := TCommonPIDLList.Create;
   Timer := TTimer.Create(Self);
   Timer.OnTimer := TimerTick;
-  {$IFDEF TNTSUPPORT}
-  SearchPaths := TTntStringList.Create;
-  SearchCriteriaFilename := TTntStringList.Create;
- // SearchCriteriaContent := TTntStringList.Create;
-  {$ELSE}
   SearchPaths := TStringList.Create;
   SearchCriteriaFilename := TStringList.Create;
  // SearchCriteriaContent := TStringList.Create;
-  {$ENDIF}
   FUpdateRate := 1000;
   FThreadPriority := tpLower;
   SearchAttribs := [vsaArchive, vsaCompressed, vsaEncrypted, vsaHidden, vsaNormal, vsaOffline, vsaReadOnly, vsaSystem, vsaTemporary]
