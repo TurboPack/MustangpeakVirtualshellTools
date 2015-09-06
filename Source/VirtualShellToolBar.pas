@@ -817,8 +817,7 @@ var
 implementation
 
 uses
-  ActnList, Forms,
-  VirtualShellNotifier;
+  System.Types, ActnList, Forms, VirtualShellNotifier;
 
 function RectWidth(ARect: TRect): integer;
 begin

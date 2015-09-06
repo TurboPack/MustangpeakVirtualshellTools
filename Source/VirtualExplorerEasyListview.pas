@@ -1841,7 +1841,7 @@ procedure LoadListviewWithColumnArray(Listview: TCustomVirtualExplorerEasyListvi
 implementation
 
 uses
-  TypInfo, Dialogs, AnsiStrings;
+  TypInfo, System.Types, System.UITypes, Dialogs, AnsiStrings;
 
 type
   TEasySelectionManagerHack = class(TEasySelectionManager);

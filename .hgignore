@@ -11,3 +11,4 @@ __recovery
 *.obj
 *.pch
 *.#00
+*.o

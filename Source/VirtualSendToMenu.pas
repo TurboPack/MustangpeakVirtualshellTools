@@ -89,10 +89,10 @@ type
 
 implementation
 
-{$IFDEF USE_TOOLBAR_TB2K}
 uses
-  TypInfo;
+  TypInfo, System.Types;
 
+{$IFDEF USE_TOOLBAR_TB2K}
 procedure SetTBItemCaption(Item: TTBCustomItem; Caption: WideString);
 // Set the unicode caption to the Item if it has a valid
 // WideString Caption property.

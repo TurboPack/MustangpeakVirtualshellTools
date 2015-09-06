@@ -1,0 +1,48 @@
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <PropertyGroup>
+        <ProjectGuid>{08E512AA-B6C7-4392-B232-FE72BB50BC69}</ProjectGuid>
+    </PropertyGroup>
+    <ItemGroup>
+        <Projects Include="VirtualShellToolsC.cbproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="VirtualShellToolsCD.cbproj">
+            <Dependencies/>
+        </Projects>
+    </ItemGroup>
+    <ProjectExtensions>
+        <Borland.Personality>Default.Personality.12</Borland.Personality>
+        <Borland.ProjectType/>
+        <BorlandProject>
+            <Default.Personality/>
+        </BorlandProject>
+    </ProjectExtensions>
+    <Target Name="VirtualShellToolsC">
+        <MSBuild Projects="VirtualShellToolsC.cbproj"/>
+    </Target>
+    <Target Name="VirtualShellToolsC:Clean">
+        <MSBuild Projects="VirtualShellToolsC.cbproj" Targets="Clean"/>
+    </Target>
+    <Target Name="VirtualShellToolsC:Make">
+        <MSBuild Projects="VirtualShellToolsC.cbproj" Targets="Make"/>
+    </Target>
+    <Target Name="VirtualShellToolsCD">
+        <MSBuild Projects="VirtualShellToolsCD.cbproj"/>
+    </Target>
+    <Target Name="VirtualShellToolsCD:Clean">
+        <MSBuild Projects="VirtualShellToolsCD.cbproj" Targets="Clean"/>
+    </Target>
+    <Target Name="VirtualShellToolsCD:Make">
+        <MSBuild Projects="VirtualShellToolsCD.cbproj" Targets="Make"/>
+    </Target>
+    <Target Name="Build">
+        <CallTarget Targets="VirtualShellToolsC;VirtualShellToolsCD"/>
+    </Target>
+    <Target Name="Clean">
+        <CallTarget Targets="VirtualShellToolsC:Clean;VirtualShellToolsCD:Clean"/>
+    </Target>
+    <Target Name="Make">
+        <CallTarget Targets="VirtualShellToolsC:Make;VirtualShellToolsCD:Make"/>
+    </Target>
+    <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
+</Project>

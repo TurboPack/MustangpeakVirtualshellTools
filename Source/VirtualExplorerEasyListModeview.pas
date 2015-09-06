@@ -612,6 +612,9 @@ type
 
 implementation
 
+uses
+  System.Types, System.UITypes;
+
 type
   TEasyListviewHack = class(TCustomEasyListview);
   TEasySelectionManagerHack = class(TEasySelectionManager);
