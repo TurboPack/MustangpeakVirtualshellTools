@@ -137,9 +137,7 @@ type
   TOnCreateNewFile = procedure(Sender: TMenu; const NewMenuItem: TVirtualShellNewItem; var Path, FileName: WideString; var Allow: Boolean) of object;
   TOnAfterFileCreate = procedure(Sender: TMenu; const NewMenuItem: TVirtualShellNewItem; const FileName: WideString) of object;
 
-  {$IF CompilerVersion >= 23}
   [ComponentPlatformsAttribute(pidWin32 or pidWin64)]
-  {$IFEND}
   TVirtualShellNewMenu = class(TPopupMenu)
   private
     FShellNewItems: TVirtualShellNewItemList;

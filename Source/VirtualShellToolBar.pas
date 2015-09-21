@@ -329,9 +329,7 @@ type
     property Right: integer read GetRight;
   end;
 
-  {$IF CompilerVersion >= 23}
   [ComponentPlatformsAttribute(pidWin32 or pidWin64)]
-  {$IFEND}
   TWideSpeedButton = class(TCustomWideSpeedButton)
     property Action;
     property AutoSize;
@@ -650,9 +648,7 @@ type
     procedure ChangeLinkFreeing(ChangeLink: IVETChangeLink); dynamic;
   end;
 
-  {$IF CompilerVersion >= 23}
   [ComponentPlatformsAttribute(pidWin32 or pidWin64)]
-  {$IFEND}
   TVirtualShellToolbar = class(TCustomVirtualShellToolbar)
   published
     property Align;
@@ -703,9 +699,7 @@ type
     constructor Create(AOwner: TComponent); override;
   end;
 
-  {$IF CompilerVersion >= 23}
   [ComponentPlatformsAttribute(pidWin32 or pidWin64)]
-  {$IFEND}
   TVirtualDriveToolbar = class(TCustomVirtualDriveToolbar)
   published
     property Align;
@@ -756,9 +750,7 @@ type
       write SetSpecialCommonFolders;
   end;
 
-  {$IF CompilerVersion >= 23}
   [ComponentPlatformsAttribute(pidWin32 or pidWin64)]
-  {$IFEND}
   TVirtualSpecialFolderToolbar = class(TCustomVirtualSpecialFolderToolbar)
   published
     property Align;

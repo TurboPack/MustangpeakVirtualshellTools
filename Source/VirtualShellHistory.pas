@@ -249,9 +249,7 @@ type
     property SmallSysImages;
   end;
 
-  {$IF CompilerVersion >= 23}
   [ComponentPlatformsAttribute(pidWin32 or pidWin64)]
-  {$IFEND}
   TVirtualShellMRU = class(TCustomVirtualShellMRU)
   published
     property Count;
@@ -284,9 +282,7 @@ type
     property SmallSysImages;
   end;
 
-  {$IF CompilerVersion >= 23}
   [ComponentPlatformsAttribute(pidWin32 or pidWin64)]
-  {$IFEND}
   TVirtualShellHistory = class(TCustomVirtualShellHistory)
   published
     property Count;

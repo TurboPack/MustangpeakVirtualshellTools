@@ -61,11 +61,7 @@ type
   TFileSearchProgressEvent = procedure(Sender: TObject; Results: TCommonPIDLList; var Handled: Boolean; var FreePIDLs: Boolean) of object;
   TFileSearchFinishedEvent = procedure(Sender: TObject; Results: TCommonPIDLList) of object;
    // WARNING CALLED IN CONTEXT OF THREAD
-  {$IFDEF UNICODE}
   TFileSearchCompareEvent = procedure(Sender: TObject; const FilePath: WideString; FindFileData: TWIN32FindDataW; var UseFile: Boolean) of object;
-  {$ELSE}
-  TFileSearchCompareEvent = procedure(Sender: TObject; const FilePath: WideString; FindFileData: TWIN32FindDataA; var UseFile: Boolean) of object;
-  {$ENDIF}
   TVirtualFileSearchThread = class(TCommonThread)
   private
     FCaseSensitive: Boolean;
@@ -93,9 +89,7 @@ type
     property SearchPaths: TStringList read FSearchPaths write FSearchPaths;
   end;
 
-  {$IF CompilerVersion >= 23}
   [ComponentPlatformsAttribute(pidWin32 or pidWin64)]
-  {$IFEND}
   TVirtualFileSearch = class(TComponent)
   private
     FCaseSensitive: Boolean;
