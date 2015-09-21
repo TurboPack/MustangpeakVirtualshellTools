@@ -1152,15 +1152,11 @@ type
   end;
 
 
-  {$IF CompilerVersion >= 23}
   [ComponentPlatformsAttribute(pidWin32 or pidWin64)]
-  {$ENDIF}
   TVirtualShellBackgroundContextMenu = class(TCommonShellBackgroundContextMenu)
   end;
 
-  {$IF CompilerVersion >= 23}
   [ComponentPlatformsAttribute(pidWin32 or pidWin64)]
-  {$ENDIF}
   TVirtualShellMultiParentContextMenu = class(TCommonShellMultiParentContextMenu)
   end;
 
@@ -1168,7 +1164,7 @@ type
 {  Data that Virtual Treeview stores                                            }
 {*******************************************************************************}
   PNodeData = ^TNodeData;
-  TNodeData = packed record
+  TNodeData = record
     Namespace: TNamespace;
     ColumnManager: TColumnManager;
   end;
@@ -1455,7 +1451,7 @@ type
     function GetOptionsClass: TTreeOptionsClass; override;
     function HasPopupMenu(Node: PVirtualNode; Column: TColumnIndex; Pos: TPoint): Boolean; override;
     function InternalCreateNewFolder(TargetPIDL: PItemIDList; SuggestedFolderName: WideString): WideString; virtual;
-    function InternalData(Node: PVirtualNode): Pointer; reintroduce;
+    function InternalData(Node: PVirtualNode): PNodeData; reintroduce;
     procedure HideAnimateFolderWnd;
     procedure InvalidateChildNamespaces(Node: PVirtualNode; RefreshIcon: Boolean);
     procedure InvalidateImageByIndex(ImageIndex: integer);
@@ -1667,9 +1663,7 @@ type
 {*******************************************************************************}
 {  TVirtualExplorerTree                                                         }
 {*******************************************************************************}
-  {$IF CompilerVersion >= 23}
   [ComponentPlatformsAttribute(pidWin32 or pidWin64)]
-  {$ENDIF}
   TVirtualExplorerTree = class(TCustomVirtualExplorerTree)
   public
      property ColumnMenu;
@@ -2052,9 +2046,7 @@ type
 {*******************************************************************************}
 {  TCustomExplorerTreeview                                                      }
 {*******************************************************************************}
-  {$IF CompilerVersion >= 23}
   [ComponentPlatformsAttribute(pidWin32 or pidWin64)]
-  {$ENDIF}
   TVirtualExplorerTreeview = class(TVirtualExplorerViews)
   private
   {$IFDEF EXPLORERLISTVIEW_L}
@@ -2090,9 +2082,7 @@ type
 {*******************************************************************************}
 {  TCustomExplorerListview                                                      }
 {*******************************************************************************}
-  {$IF CompilerVersion >= 23}
   [ComponentPlatformsAttribute(pidWin32 or pidWin64)]
-  {$ENDIF}
   TVirtualExplorerListview = class(TVirtualExplorerViews)
   private
   {$IFDEF EXPLORERTREEVIEW_L}
@@ -2808,9 +2798,7 @@ type
   end;
 
 
-  {$IF CompilerVersion >= 23}
   [ComponentPlatformsAttribute(pidWin32 or pidWin64)]
-  {$ENDIF}
   TVirtualExplorerCombobox = class(TCustomVirtualExplorerCombobox)
   public
     property AutoComplete;
@@ -3617,6 +3605,7 @@ begin
   FInternalDataOffset := AllocateInternalDataArea( SizeOf(TNodeData)
       + SizeOf(Cardinal)) + SizeOf(Cardinal);
   inherited;
+  NodeDataSize := SizeOf(TNodeData);
   InitializeCriticalSection(FEnumLock);
   ContextMenuManager := TContextMenuManager.Create(Self);
   ShellNotifyManager.RegisterExplorerWnd(Self);
@@ -3838,6 +3827,8 @@ begin
 end;
 
 destructor TCustomVirtualExplorerTree.Destroy;
+var
+  NewNodeData: PNodeData;
 begin
   // Clear the Tree in case the app accesses any of the helper objects
   ShellNotifyManager.UnRegisterExplorerWnd(Self);
@@ -3859,7 +3850,9 @@ begin
   FreeAndNil(FSelectedFiles);
   FreeAndNil(FShellNotifyQueue);
   { In case we were using the hidden root node with toHideRootNode }
-  FreeAndNil(PNodeData(InternalData(RootNode))^.Namespace);
+  NewNodeData := InternalData(RootNode);
+  if NewNodeData <> nil then
+    FreeAndNil(NewNodeData.Namespace);
   // Support Halt( );
   if Assigned(VETChangeDispatch) then
     VETChangeDispatch.UnRegisterChangeLink(Self, Self, utAll);
@@ -4014,6 +4007,7 @@ function TCustomVirtualExplorerTree.DoCompare(Node1, Node2: PVirtualNode;
 { sort them.                                                                    }
 var
   NS1, NS2: TNamespace;
+  NewNodeData: PNodeData;
 begin
   Result := 0;
   if toUserSort in TreeOptions.VETMiscOptions then
@@ -4022,8 +4016,14 @@ begin
     SortHelper.FileSort := FileSort;
     if Assigned(Node1) and Assigned(Node2) then
     begin
-      NS1 := PNodeData( InternalData(Node1)).Namespace;
-      NS2 := PNodeData( InternalData(Node2)).Namespace;
+      NewNodeData := InternalData(Node1);
+      NS1 := nil;
+      NS2 := nil;
+      if NewNodeData <> nil then
+        NS1 := NewNodeData.Namespace;
+      NewNodeData := InternalData(Node2);
+      if NewNodeData <> nil then
+        NS2 := NewNodeData.Namespace;
       if Assigned(NS1) and Assigned(NS2) then
       begin
         if Column > -1 then
@@ -5788,9 +5788,12 @@ begin
   end;
 end;
 
-function TCustomVirtualExplorerTree.InternalData(Node: PVirtualNode): Pointer;
+function TCustomVirtualExplorerTree.InternalData(Node: PVirtualNode): PNodeData;
 begin
-  Result := PByte(Node) + Self.NodeDataSize + FInternalDataOffset;
+  if Node = nil then
+    Result := nil
+  else
+    Result := GetNodeData(Node);
 end;
 
 function TCustomVirtualExplorerTree.InternalWalkPIDLToNode(PIDL: PItemIDList): PVirtualNode;
@@ -5859,8 +5862,9 @@ begin
             while Assigned(Child) and not Found  do
             begin
               NewNodeData := InternalData(Child);
-              NS := NewNodeData.Namespace;
-              if ILIsEqual(NS.AbsolutePIDL, PIDL) then
+              if NewNodeData <> nil then
+                NS := NewNodeData.Namespace;
+              if (NS <> nil) and ILIsEqual(NS.AbsolutePIDL, PIDL) then
                 Found := True
               else
                 Child := Child.NextSibling
@@ -6162,6 +6166,7 @@ procedure TCustomVirtualExplorerTree.ReadChildNodes(Node: PVirtualNode; var ANod
 var
   Child: PVirtualNode;
   NS: TNamespace;
+  NewNodeData: PNodeData;
 begin
   ValidNodesRead := 0;
   if Assigned(Node) then
@@ -6171,7 +6176,9 @@ begin
     Child := Node.FirstChild;
     while Assigned(Child) do
     begin
-      NS := PNodeData(InternalData(Child)).Namespace;
+      NewNodeData := InternalData(Child);
+      if NewNodeData <> nil then
+        NS := NewNodeData.Namespace;
       ANodeArray[ValidNodesRead].Node := Child;
       ANodeArray[ValidNodesRead].NS := NS;
       Inc(ValidNodesRead);
@@ -6219,7 +6226,8 @@ begin
           if not(toHideRootFolder in TreeOptions.VETFolderOptions) then
           begin
             NewNodeData := InternalData(RootNode);
-            FreeAndNil(NewNodeData.Namespace);
+            if NewNodeData <> nil then
+              FreeAndNil(NewNodeData.Namespace);
             RootNodeCount := 1;
           end else
           begin
@@ -7110,7 +7118,8 @@ begin
         if toHideRootFolder in TreeOptions.VETFolderOptions then
         begin
           NewNodeData := InternalData(RootNode);
-          FreeAndNil(NewNodeData.Namespace);
+          if NewNodeData <> nil then
+            FreeAndNil(NewNodeData.Namespace);
         end;
           { TempRootNamespace was created in the property setters for the custom  }
           { path and pidl selections.                                             }
@@ -15490,6 +15499,8 @@ initialization
   TCustomStyleEngine.RegisterStyleHook(TVirtualExplorerTree, TVclStyleScrollBarsHook);
 
 finalization
+  TCustomStyleEngine.UnRegisterStyleHook(TVirtualExplorerTree, TVclStyleScrollBarsHook);
+
   FreeAndNil(ViewManager);
   FreeThemeLibrary;
   FreeAndNil(VETChangeDispatch);
