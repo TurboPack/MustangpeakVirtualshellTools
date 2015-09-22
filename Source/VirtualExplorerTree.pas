@@ -4016,14 +4016,16 @@ begin
     SortHelper.FileSort := FileSort;
     if Assigned(Node1) and Assigned(Node2) then
     begin
-      NewNodeData := InternalData(Node1);
       NS1 := nil;
-      NS2 := nil;
+      NewNodeData := InternalData(Node1);
       if NewNodeData <> nil then
         NS1 := NewNodeData.Namespace;
+
+      NS2 := nil;
       NewNodeData := InternalData(Node2);
       if NewNodeData <> nil then
         NS2 := NewNodeData.Namespace;
+
       if Assigned(NS1) and Assigned(NS2) then
       begin
         if Column > -1 then

@@ -271,6 +271,10 @@ function SpGetGraphicClass(Filename: WideString): TGraphicClass;
 function SpLoadGraphicFile(Filename: WideString; outP: TPicture; CatchIncompleteJPGErrors: Boolean = True): Boolean;
 procedure SpPixelRotate(InOutB: TBitmap; Angle: Integer);
 procedure SpStretchDraw(G: TGraphic; ACanvas: TCanvas; DestR: TRect; UseSubsampling: Boolean);
+{$IFDEF USEIMAGEEN}
+function SpMakeThumbFromFileImageEn(Filename: WideString; OutBitmap: TBitmap; ThumbW, ThumbH: Integer;
+  BgColor: TColor; Subsampling, ExifThumbnail, ExifOrientation: Boolean; var ImageWidth, ImageHeight: Integer): Boolean;
+{$ENDIF}
 function SpMakeThumbFromFile(Filename: WideString; OutBitmap: TBitmap; ThumbW,
   ThumbH: Integer; BgColor: TColor; SubSampling, ExifThumbnail, ExifOrientation: Boolean;
   var ImageWidth, ImageHeight: Integer): Boolean;
@@ -297,6 +301,7 @@ procedure SpConvertJPGStreamToBitmap(MS: TMemoryStream; OutBitmap: TBitmap);
 implementation
 
 uses
+  {$IFDEF USEIMAGEEN} ImageEnIo, ImageEnProc, hyieutils,{$ENDIF}
   Types,
   Math;
 
@@ -607,6 +612,189 @@ begin
   end;
 end;
 
+{$IFDEF USEIMAGEEN}
+function SpMakeThumbFromFileImageEn(Filename: WideString; OutBitmap: TBitmap;
+  ThumbW, ThumbH: Integer; BgColor: TColor; Subsampling, ExifThumbnail, ExifOrientation: Boolean;
+  var ImageWidth, ImageHeight: Integer): Boolean;
+var
+  AttachedIEBitmap: TIEBitmap;
+  ImageEnIO: TImageEnIO;
+  ImageEnProc: TImageEnProc;
+  TempBitmap: TBitmap;
+  F: TVirtualFileStream;
+  DestR: TRect;
+  Ext: string;
+  IsRaw: Boolean;
+  Orientation: Integer;
+  dcraw: THandle;
+begin
+  Result := False;
+  ImageWidth := 0;
+  ImageHeight := 0;
+  Orientation := 0;
+  dcraw := GetModuleHandle('dcrawlib.dll');
+  if not Assigned(OutBitmap) then Exit;
+  Ext := WideLowerCase(WideExtractFileExt(Filename));
+
+  IsRaw := (ext = '.cr2') or (ext = '.crw') or (ext = '.dng')
+        or (ext = '.nef') or (ext = '.mrw') or (ext = '.orf')
+        or (ext = '.pef') or (ext ='.x3f') or (ext = '.kdc')
+        or (ext = '.srw') or (ext = '.arw') or (ext = '.bay')
+        or (ext = '.raw') or (ext = '.dcr') or (ext = '.mef')
+        or (ext = '.3fr') or (ext = '.k25') or (ext = '.cam')
+        or (ext = '.erf') or (ext = '.srf') or (ext = '.sr2')
+        or (ext = '.nrw') or (ext = '.mos') or (ext = '.dc2')
+        or (ext = '.raf') or (ext = '.rw2') or (ext = '.rwl');
+
+  TempBitmap := TBitmap.Create;
+  TempBitmap.Canvas.Lock;
+  try
+    AttachedIEBitmap := TIEBitmap.Create;
+    ImageEnIO := TImageEnIO.Create(nil);
+    ImageEnProc := TImageEnProc.Create(Nil);
+    try
+      ImageEnIO.AttachedIEBitmap := AttachedIEBitmap;
+      ImageEnProc.AttachedIEBitmap := AttachedIEBitmap;
+      ImageEnIO.Params.Width := ThumbW;
+      ImageEnIO.Params.Height := ThumbH;
+      ImageEnIO.Params.JPEG_Scale := ioJPEG_AUTOCALC;
+      ImageEnIO.Params.JPEG_DCTMethod := ioJPEG_IFAST;
+      if (dcraw <> 0) then
+        // Automatically adjust orientation of all files that contain EXIF info
+        ImageEnIO.Params.EnableAdjustOrientation := ExifOrientation;
+      // ImageEn bug: TImageEnIO.LoadFromStream doesn't work with wmf/emf/sun files
+      if (Ext = '.wmf') or (Ext = '.emf') or (Ext = '.sun') then
+      begin
+        ImageEnIO.LoadFromFile(Filename);
+        ImageWidth := ImageEnIO.Params.Width;
+        ImageHeight := ImageEnIO.Params.Height;
+        AttachedIEBitmap.CopyToTBitmap(TempBitmap);
+      end
+      else
+      begin
+        F := TVirtualFileStream.Create(Filename, fmOpenRead or fmShareDenyNone);
+        try
+          // If dcrawlib.dll is used
+          if IsRaw AND (dcraw <> 0) then
+          begin
+            ImageEnIO.Params.RAW_GetExifThumbnail := False;
+            // Do not load small thumbnails from file. They usually have black borders.
+            // Use the large size EXIF preview images instead, if they are available.
+            ImageEnIO.Params.RAW_ExtraParams := '-e';
+            // ImageEnBug: LoadFromStream doesn't work well on RAW files,
+            // it doesn't load the Exif thumbnails, use LoadFromStreamRAW instead
+            ImageEnIO.LoadFromStreamRAW(F);
+            // If no large size EXIF preview images are embedded, use the small thumbs instead
+            if (AttachedIEBitmap.Width = 0) OR (AttachedIEBitmap.Height = 0) then
+            begin
+              ImageEnIO.Params.RAW_GetExifThumbnail := True;
+              ImageEnIO.Params.RAW_ExtraParams := '';
+              ImageEnIO.LoadFromStreamRAW(F);
+            end;
+            if ExifOrientation then
+              if (ext = '.crw') then
+                Orientation := GetCrwOrientation(F) // CRW doesn't have Exif, read the CIFF data
+              else
+                Orientation := ImageEnIO.Params.EXIF_Orientation;
+            if (Orientation = 6) or (Orientation = 8) then
+              IEAdjustEXIFOrientation(AttachedIEBitmap, Orientation);
+            ImageWidth := AttachedIEBitmap.Width;
+            ImageHeight := AttachedIEBitmap.Height;
+          end
+          else
+          // If dcrawlib.dll is not used
+          if IsRaw AND (dcraw = 0) then
+          begin
+            ImageEnIO.Params.RAW_GetExifThumbnail := True;
+            ImageEnIO.LoadFromStreamRAW(F);
+            if ExifOrientation then
+              if (ext = '.crw') then
+                Orientation := GetCrwOrientation(F) // CRW doesn't have Exif, read the CIFF data
+              else
+                Orientation := ImageEnIO.Params.EXIF_Orientation;
+            if (Orientation = 6) or (Orientation = 8) then
+              IEAdjustEXIFOrientation(AttachedIEBitmap, Orientation);
+            ImageWidth := AttachedIEBitmap.Width;
+            ImageHeight := AttachedIEBitmap.Height;
+          end
+          else
+          // If it's not a digital camera RAW file
+          begin
+            ImageEnIO.Params.EnableAdjustOrientation := False;
+            ImageEnIO.Params.GetThumbnail := ExifThumbnail;
+            ImageEnIO.LoadFromStream(F);
+            Orientation := ImageEnIO.Params.EXIF_Orientation;
+            if (ExifOrientation = False) then
+            begin
+              case Orientation of
+                6: ImageEnProc.Rotate(90, false);
+                8: ImageEnProc.Rotate(270, false);
+              end;
+              if ImageEnIO.Params.JPEG_Scale_Used > 1 then
+              begin
+                ImageWidth := ImageEnIO.Params.JPEG_OriginalWidth;
+                ImageHeight := ImageEnIO.Params.JPEG_OriginalHeight;
+              end
+              else
+              begin
+                ImageWidth := ImageEnIO.Params.Width;
+                ImageHeight := ImageEnIO.Params.Height;
+              end;
+            end
+            else
+            begin
+              if ImageEnIO.Params.JPEG_Scale_Used > 1 then
+              begin
+                if (Orientation = 6) OR (Orientation = 8) then
+                begin
+                  // Width and Height of the EXIF thumbnail have been mixed up
+                  // somewhere. We need to correct this.
+                  ImageWidth := ImageEnIO.Params.JPEG_OriginalHeight;
+                  ImageHeight := ImageEnIO.Params.JPEG_OriginalWidth;
+                end
+                else
+                begin
+                  ImageWidth := ImageEnIO.Params.JPEG_OriginalWidth;
+                  ImageHeight := ImageEnIO.Params.JPEG_OriginalHeight;
+                end;
+              end
+              else
+              begin
+                ImageWidth := ImageEnIO.Params.Width;
+                ImageHeight := ImageEnIO.Params.Height;
+              end;
+            end;
+          end;
+          AttachedIEBitmap.CopyToTBitmap(TempBitmap);
+        finally
+          F.Free;
+        end;
+      end;
+    finally
+      ImageEnIO.Free;
+      ImageEnProc.Free;
+      AttachedIEBitmap.Free;
+    end;
+    // Resize the thumb
+    // Need to lock/unlock the canvas here
+    OutBitmap.Canvas.Lock;
+    try
+      DestR := SpRectAspectRatio(ImageWidth, ImageHeight, ThumbW, ThumbH, talNone, True);
+      SpInitBitmap(OutBitmap, DestR.Right, DestR.Bottom, BgColor);
+      // StretchDraw is NOT THREADSAFE!!! Use SpStretchDraw instead
+      SpStretchDraw(TempBitmap, OutBitmap.Canvas, DestR, Subsampling);
+      Result := True;
+    finally
+      OutBitmap.Canvas.UnLock;
+    end;
+    Result := True;
+  finally
+    TempBitmap.Canvas.Unlock;
+    TempBitmap.Free;
+  end;
+end;
+{$ENDIF}
+
 function SpMakeThumbFromFile(Filename: WideString; OutBitmap: TBitmap; ThumbW,
   ThumbH: Integer; BgColor: TColor; SubSampling, ExifThumbnail, ExifOrientation: Boolean;
   var ImageWidth, ImageHeight: Integer): Boolean;
@@ -769,16 +957,23 @@ begin
   begin
     ThumbnailExtracted := False;
     B := TBitmap.Create;
+    {$IFNDEF USEIMAGEEN}
     B.PixelFormat := pf32Bit; // Jim:  This needs to be done for images that use the Alpha Channel for Transparency
+    {$ENDIF}
     B.Canvas.Lock;
     try
       try
+        {$IFDEF USEIMAGEEN}
+        ThumbnailExtracted := SpMakeThumbFromFileImageEn(NS.NameForParsing, B, ThumbW, ThumbH,
+          clRed, UseSubsampling, UseExifThumbnail, UseExifOrientation, W, H);
+        {$ELSE}
         // Jim: Changed the Background so images that use the Alpha Channel for Transparency work correctly
         ThumbnailExtracted := SpMakeThumbFromFile(NS.NameForParsing, B, ThumbW, ThumbH,
           BackgroundColor, UseSubsampling, UseExifThumbnail, UseExifOrientation, W, H);
         // Jim:  This needs to be done for images that use the Alpha Channel for Transparency
         if ThumbnailExtracted and UsesAlphaChannel(B) then
           ConvertBitmapEx(B, B, BackgroundColor);
+        {$ENDIF}
       except
         // Don't raise any image errors
       end;
@@ -1778,6 +1973,19 @@ begin
   FValidImageFormats.Clear;
   with FValidImageFormats do begin
     CommaText := '.jpg, .jpeg, .jif, .bmp, .emf, .wmf';
+    {$IFDEF USEIMAGEEN}
+    CommaText := CommaText + ', .png, .pcx, .dcx, .tif, .tiff, .fax, .g3n, .g3f, .gif, .dib, .rle' +
+      ', .tga, .targa, .vda, .icb, .vst, .pix, .jp2, .j2k, .jpc, .j2c' +
+      ', .crw, .cr2, .nef, .raw, .pef, .raf, .x3f, .bay, .orf, .srf, .mrw, .dcr' +
+      ', .avi, .mpeg, .mpg, .wmv';
+    {$ELSE}
+    {$IFDEF USEENVISION}
+      //version 1.1
+      CommaText := CommaText + ', .png, .pcx, .pcc, .tif, .tiff, .dcx, .tga, .vst, .afi';
+      //version 2.0, eps (Encapsulated Postscript) and jp2 (JPEG2000 version)
+      //CommaText := CommaText + ', .eps, .jp2'; <<<<<<< still in beta
+    {$ENDIF}
+    {$ENDIF}
   end;
 
   if FillColors then begin
@@ -1814,7 +2022,7 @@ begin
   if Assigned(NS) then begin
     Ext := WideExtractFileExt(NS.NameForParsing);
     if FInvalidImageFormats.IndexOf(Ext) = -1 then
-      if (FValidImageFormats.IndexOf(Ext) > -1) then
+      if (FValidImageFormats.IndexOf(Ext) > -1) {$IFDEF USEIMAGEEN}or IsKnownFormat(Ext){$ENDIF} then
         Result := vffValid
       else
         if UseShellExtraction or (UseFoldersShellExtraction and NS.Folder) then
