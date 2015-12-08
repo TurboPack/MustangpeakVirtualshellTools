@@ -107,7 +107,7 @@ type
     FImageWidth: Integer;
     FImageHeight: Integer;
     FStreamSignature: WideString;
-    FTag: Integer;
+    FTag: NativeInt;
     FThumbBitmapStream: TMemoryStream;
     FUseCompression: Boolean;
     function GetThumbSize: TPoint;
@@ -132,7 +132,7 @@ type
     property ImageWidth: Integer read FImageWidth write FImageWidth;
     property ImageHeight: Integer read FImageHeight write FImageHeight;
     property StreamSignature: WideString read FStreamSignature;
-    property Tag: Integer read FTag write FTag;
+    property Tag: NativeInt read FTag write FTag;
     property ThumbBitmapStream: TMemoryStream read FThumbBitmapStream write FThumbBitmapStream;
     property ThumbSize: TPoint read GetThumbSize;
     property UseCompression: Boolean read FUseCompression write FUseCompression;

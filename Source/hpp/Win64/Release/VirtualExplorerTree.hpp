@@ -445,7 +445,7 @@ public:
 	TUserDataStorage* UserData;
 	TGroupStorage Grouping;
 	TThumbnailStorage Thumbnails;
-	int Tag;
+	NativeInt Tag;
 };
 #pragma pack(pop)
 
@@ -1032,12 +1032,15 @@ public:
 
 typedef TNodeData *PNodeData;
 
+#pragma pack(push,1)
 struct DECLSPEC_DRECORD TNodeData
 {
 public:
+	int ReservedForTCustomVirtualStringTree;
 	Mpshellutilities::TNamespace* Namespace;
 	TColumnManager* ColumnManager;
 };
+#pragma pack(pop)
 
 
 typedef void __fastcall (__closure *TVETOnCustomColumnCompare)(TCustomVirtualExplorerTree* Sender, Virtualtrees::TColumnIndex Column, Virtualtrees::PVirtualNode Node1, Virtualtrees::PVirtualNode Node2, int &Result);
@@ -1142,7 +1145,6 @@ private:
 	TVETColors* FVETColors;
 	TColumnDetailType FColumnDetails;
 	int FWaitCursorRef;
-	unsigned FInternalDataOffset;
 	TColumnMenu* FColumnMenu;
 	int FColumnMenuItemCount;
 	TContextMenuManager* FContextMenuManager;
@@ -1297,7 +1299,6 @@ protected:
 	virtual Virtualtrees::TTreeOptionsClass __fastcall GetOptionsClass(void);
 	virtual bool __fastcall HasPopupMenu(Virtualtrees::PVirtualNode Node, Virtualtrees::TColumnIndex Column, System::Types::TPoint Pos);
 	virtual System::WideString __fastcall InternalCreateNewFolder(Winapi::Shlobj::PItemIDList TargetPIDL, System::WideString SuggestedFolderName);
-	HIDESBASE PNodeData __fastcall InternalData(Virtualtrees::PVirtualNode Node);
 	void __fastcall HideAnimateFolderWnd(void);
 	void __fastcall InvalidateChildNamespaces(Virtualtrees::PVirtualNode Node, bool RefreshIcon);
 	void __fastcall InvalidateImageByIndex(int ImageIndex);

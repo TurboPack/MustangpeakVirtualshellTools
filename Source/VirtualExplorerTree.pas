@@ -699,7 +699,7 @@ type
     UserData: TUserDataStorage; // Defines the Users Data based on TUserDataStorage
     Grouping: TGroupStorage;    // Defines the grouping state for the current folder (if it is a folder) // Added Stream Version 4
     Thumbnails: TThumbnailStorage;  // Defines the thumbnail state for the current folder (if it is a folder) // Added Stream Version 6
-    Tag: Integer;
+    Tag: NativeInt;
   end;
 
   TNodeStorageList = class;                 // forward

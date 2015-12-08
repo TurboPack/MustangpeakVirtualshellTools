@@ -3817,7 +3817,7 @@ begin
             Request.Window := Parent;
             Request.PIDL := PIDLMgr.CopyPIDL(Namespace.AbsolutePIDL);
             Request.Priority := 0;
-            Request.Tag := Integer(Self);
+            Request.Tag := NativeInt(Self);
             GlobalThreadManager.AddRequest(Request, True);
             Result := 0
           end else

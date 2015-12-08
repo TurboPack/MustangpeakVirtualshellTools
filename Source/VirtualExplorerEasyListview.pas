@@ -7163,7 +7163,7 @@ begin
         UseSubsampling, UseShellExtraction, UseExifThumbnail, UseExifOrientation, BackgroundColor);
 
       if Assigned(FInternalThumbInfo) then
-        Tag := Integer(FInternalThumbInfo);
+        Tag := NativeInt(FInternalThumbInfo);
     except
       try
         FreeAndNil(FInternalThumbInfo);

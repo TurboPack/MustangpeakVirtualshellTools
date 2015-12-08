@@ -83,7 +83,7 @@ private:
 	int FImageWidth;
 	int FImageHeight;
 	System::WideString FStreamSignature;
-	int FTag;
+	NativeInt FTag;
 	System::Classes::TMemoryStream* FThumbBitmapStream;
 	bool FUseCompression;
 	System::Types::TPoint __fastcall GetThumbSize(void);
@@ -108,7 +108,7 @@ public:
 	__property int ImageWidth = {read=FImageWidth, write=FImageWidth, nodefault};
 	__property int ImageHeight = {read=FImageHeight, write=FImageHeight, nodefault};
 	__property System::WideString StreamSignature = {read=FStreamSignature};
-	__property int Tag = {read=FTag, write=FTag, nodefault};
+	__property NativeInt Tag = {read=FTag, write=FTag};
 	__property System::Classes::TMemoryStream* ThumbBitmapStream = {read=FThumbBitmapStream, write=FThumbBitmapStream};
 	__property System::Types::TPoint ThumbSize = {read=GetThumbSize};
 	__property bool UseCompression = {read=FUseCompression, write=FUseCompression, nodefault};
