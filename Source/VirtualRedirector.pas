@@ -123,7 +123,9 @@ type
     property Running: Boolean read FRunning;
   end;
 
+  {$IF CompilerVersion >= 23}
   [ComponentPlatformsAttribute(pidWin32 or pidWin64)]
+  {$IFEND}
   TVirtualRedirector = class(TCustomVirtualRedirector)
   published
     property OnErrorInput;
@@ -134,7 +136,9 @@ type
   // ******************
   TRedirectorChangeDir = procedure(Sender: TObject; NewDir: WideString; var Allow: Boolean) of object;
 
+  {$IF CompilerVersion >= 23}
   [ComponentPlatformsAttribute(pidWin32 or pidWin64)]
+  {$IFEND}
   TVirtualCommandLineRedirector = class(TCustomVirtualRedirector)
   private
     FCurrentDir: AnsiString;

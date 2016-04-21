@@ -1,8 +1,8 @@
 ﻿// CodeGear C++Builder
-// Copyright (c) 1995, 2015 by Embarcadero Technologies, Inc.
+// Copyright (c) 1995, 2016 by Embarcadero Technologies, Inc.
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'VirtualShellHistory.pas' rev: 30.00 (Windows)
+// (DO NOT EDIT: machine generated header) 'VirtualShellHistory.pas' rev: 31.00 (Windows)
 
 #ifndef VirtualshellhistoryHPP
 #define VirtualshellhistoryHPP
@@ -91,7 +91,7 @@ class PASCALIMPLEMENTATION TBaseVirtualShellPersistent : public System::Classes:
 	typedef System::Classes::TComponent inherited;
 	
 public:
-	Mpshellutilities::TNamespace* operator[](int Index) { return Items[Index]; }
+	Mpshellutilities::TNamespace* operator[](int Index) { return this->Items[Index]; }
 	
 private:
 	TVSPChangeEvent FOnChange;

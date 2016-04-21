@@ -1130,7 +1130,9 @@ type
     constructor Create(AOwner: TComponent); override;
   end;
 
+  {$IF CompilerVersion >= 23}
   [ComponentPlatformsAttribute(pidWin32 or pidWin64)]
+  {$IFEND}
   TVirtualExplorerEasyListview = class(TCustomVirtualExplorerEasyListview)
   private
   public
@@ -1426,7 +1428,9 @@ type
     property OnRebuildingShellHeader;
   end;
 
+  {$IF CompilerVersion >= 23}
   [ComponentPlatformsAttribute(pidWin32 or pidWin64)]
+  {$IFEND}
   TVirtualMultiPathExplorerEasyListview = class(TCustomVirtualMultiPathExplorerEasyListview)
   public
     property CategoryInfo;
@@ -1674,7 +1678,9 @@ type
     property OnViewChange;
   end;
 
+  {$IF CompilerVersion >= 23}
   [ComponentPlatformsAttribute(pidWin32 or pidWin64)]
+  {$IFEND}
   TVirtualDropStack = class(TCustomVirtualDropStack)
     private
   public
@@ -7163,7 +7169,7 @@ begin
         UseSubsampling, UseShellExtraction, UseExifThumbnail, UseExifOrientation, BackgroundColor);
 
       if Assigned(FInternalThumbInfo) then
-        Tag := NativeInt(FInternalThumbInfo);
+        Tag := Integer(FInternalThumbInfo);
     except
       try
         FreeAndNil(FInternalThumbInfo);

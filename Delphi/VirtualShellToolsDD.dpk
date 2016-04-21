@@ -27,7 +27,7 @@ package VirtualShellToolsDD;
 {$DEFINE DEBUG}
 {$ENDIF IMPLICITBUILDING}
 {$DESCRIPTION 'Virtual Shell Tools Delphi Designtime Package'}
-{$LIBSUFFIX '230'}
+{$LIBSUFFIX '240'}
 {$DESIGNONLY}
 {$IMPLICITBUILD OFF}
 

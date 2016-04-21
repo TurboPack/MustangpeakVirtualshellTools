@@ -1,8 +1,8 @@
 ﻿// CodeGear C++Builder
-// Copyright (c) 1995, 2015 by Embarcadero Technologies, Inc.
+// Copyright (c) 1995, 2016 by Embarcadero Technologies, Inc.
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'VirtualExplorerEasyListview.pas' rev: 30.00 (Windows)
+// (DO NOT EDIT: machine generated header) 'VirtualExplorerEasyListview.pas' rev: 31.00 (Windows)
 
 #ifndef VirtualexplorereasylistviewHPP
 #define VirtualexplorereasylistviewHPP
@@ -370,7 +370,7 @@ class PASCALIMPLEMENTATION TExtensionColorCodeList : public Mpshellutilities::TS
 	typedef Mpshellutilities::TStreamableClass inherited;
 	
 public:
-	TExtensionColorCode* operator[](int Index) { return Items[Index]; }
+	TExtensionColorCode* operator[](int Index) { return this->Items[Index]; }
 	
 private:
 	System::Classes::TList* FItemList;
@@ -560,7 +560,7 @@ class PASCALIMPLEMENTATION TCategories : public System::TObject
 	typedef System::TObject inherited;
 	
 public:
-	TCategory* operator[](int Index) { return Categories[Index]; }
+	TCategory* operator[](int Index) { return this->Categories[Index]; }
 	
 private:
 	System::Classes::TList* FCategoryList;

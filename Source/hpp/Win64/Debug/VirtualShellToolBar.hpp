@@ -1,8 +1,8 @@
 ﻿// CodeGear C++Builder
-// Copyright (c) 1995, 2015 by Embarcadero Technologies, Inc.
+// Copyright (c) 1995, 2016 by Embarcadero Technologies, Inc.
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'VirtualShellToolBar.pas' rev: 30.00 (Windows)
+// (DO NOT EDIT: machine generated header) 'VirtualShellToolBar.pas' rev: 31.00 (Windows)
 
 #ifndef VirtualshelltoolbarHPP
 #define VirtualshelltoolbarHPP
@@ -116,7 +116,7 @@ class PASCALIMPLEMENTATION TVirtualButtonList : public System::Classes::TList
 	typedef System::Classes::TList inherited;
 	
 public:
-	TCustomWideSpeedButton* operator[](int Index) { return Items[Index]; }
+	TCustomWideSpeedButton* operator[](int Index) { return this->Items[Index]; }
 	
 private:
 	TCustomVirtualToolbar* FToolbar;
@@ -149,7 +149,7 @@ class PASCALIMPLEMENTATION TVirtualShellButtonList : public TVirtualButtonList
 	typedef TVirtualButtonList inherited;
 	
 public:
-	TShellToolButton* operator[](int Index) { return Items[Index]; }
+	TShellToolButton* operator[](int Index) { return this->Items[Index]; }
 	
 private:
 	HIDESBASE TShellToolButton* __fastcall GetItems(int Index);

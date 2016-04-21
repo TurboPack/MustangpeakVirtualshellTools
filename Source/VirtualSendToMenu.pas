@@ -57,7 +57,9 @@ type
   TVirtualSendToGetImageEvent = procedure(Sender: TVirtualSendToMenu;
     NS: TNamespace; var ImageList: TImageList; var ImageIndex: Integer) of object;
 
+  {$IF CompilerVersion >= 23}
   [ComponentPlatformsAttribute(pidWin32 or pidWin64)]
+  {$IFEND}
   TVirtualSendToMenu = class(TPopupMenu)
   private
     FSendToItems: TVirtualNameSpaceList;

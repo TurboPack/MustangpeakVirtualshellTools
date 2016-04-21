@@ -1,8 +1,8 @@
 ﻿// CodeGear C++Builder
-// Copyright (c) 1995, 2015 by Embarcadero Technologies, Inc.
+// Copyright (c) 1995, 2016 by Embarcadero Technologies, Inc.
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'VirtualShellNewMenu.pas' rev: 30.00 (Windows)
+// (DO NOT EDIT: machine generated header) 'VirtualShellNewMenu.pas' rev: 31.00 (Windows)
 
 #ifndef VirtualshellnewmenuHPP
 #define VirtualshellnewmenuHPP
@@ -106,7 +106,7 @@ class PASCALIMPLEMENTATION TVirtualShellNewItemList : public System::Contnrs::TO
 	typedef System::Contnrs::TObjectList inherited;
 	
 public:
-	TVirtualShellNewItem* operator[](int Index) { return Items[Index]; }
+	TVirtualShellNewItem* operator[](int Index) { return this->Items[Index]; }
 	
 private:
 	TVirtualShellNewItem* __fastcall GetItems(int Index);

@@ -1,8 +1,8 @@
 ﻿// CodeGear C++Builder
-// Copyright (c) 1995, 2015 by Embarcadero Technologies, Inc.
+// Copyright (c) 1995, 2016 by Embarcadero Technologies, Inc.
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'VirtualExplorerTree.pas' rev: 30.00 (Windows)
+// (DO NOT EDIT: machine generated header) 'VirtualExplorerTree.pas' rev: 31.00 (Windows)
 
 #ifndef VirtualexplorertreeHPP
 #define VirtualexplorertreeHPP
@@ -451,7 +451,7 @@ public:
 	TUserDataStorage* UserData;
 	TGroupStorage Grouping;
 	TThumbnailStorage Thumbnails;
-	NativeInt Tag;
+	int Tag;
 };
 #pragma pack(pop)
 
@@ -538,7 +538,7 @@ class PASCALIMPLEMENTATION TNodeStorageList : public Mpshellutilities::TStreamab
 	typedef Mpshellutilities::TStreamableList inherited;
 	
 public:
-	TNodeStorage* operator[](int Index) { return Items[Index]; }
+	TNodeStorage* operator[](int Index) { return this->Items[Index]; }
 	
 protected:
 	TNodeStorage* __fastcall GetItems(int Index);
@@ -593,7 +593,7 @@ class PASCALIMPLEMENTATION TLeafNodeList : public Mpshellutilities::TStreamableL
 	typedef Mpshellutilities::TStreamableList inherited;
 	
 public:
-	TLeafNode* operator[](int Index) { return Items[Index]; }
+	TLeafNode* operator[](int Index) { return this->Items[Index]; }
 	
 private:
 	bool FShareNodes;
@@ -1080,7 +1080,6 @@ typedef TNodeData *PNodeData;
 struct DECLSPEC_DRECORD TNodeData
 {
 public:
-	int ReservedForTCustomVirtualStringTree;
 	Mpshellutilities::TNamespace* Namespace;
 	TColumnManager* ColumnManager;
 };
@@ -1189,6 +1188,7 @@ private:
 	TVETColors* FVETColors;
 	TColumnDetailType FColumnDetails;
 	int FWaitCursorRef;
+	unsigned FInternalDataOffset;
 	TColumnMenu* FColumnMenu;
 	int FColumnMenuItemCount;
 	TContextMenuManager* FContextMenuManager;
@@ -1343,6 +1343,7 @@ protected:
 	virtual Virtualtrees::TTreeOptionsClass __fastcall GetOptionsClass(void);
 	virtual bool __fastcall HasPopupMenu(Virtualtrees::PVirtualNode Node, Virtualtrees::TColumnIndex Column, const System::Types::TPoint &Pos);
 	virtual System::WideString __fastcall InternalCreateNewFolder(Winapi::Shlobj::PItemIDList TargetPIDL, System::WideString SuggestedFolderName);
+	HIDESBASE void * __fastcall InternalData(Virtualtrees::PVirtualNode Node);
 	void __fastcall HideAnimateFolderWnd(void);
 	void __fastcall InvalidateChildNamespaces(Virtualtrees::PVirtualNode Node, bool RefreshIcon);
 	void __fastcall InvalidateImageByIndex(int ImageIndex);
@@ -2863,12 +2864,12 @@ static const System::Word WM_VETCOMBO_SELECTALL = System::Word(0x8038);
 #define DefaultExplorerListVETSyncOptions (System::Set<TVETSyncOption, TVETSyncOption::toCollapseTargetFirst, TVETSyncOption::toSelectTarget>() << TVETSyncOption::toCollapseTargetFirst << TVETSyncOption::toExpandTarget << TVETSyncOption::toSelectTarget )
 #define DefaultExplorerListHeaderOptions (System::Set<Virtualtrees::TVTHeaderOption, Virtualtrees::TVTHeaderOption::hoAutoResize, Virtualtrees::TVTHeaderOption::hoAutoColumnPopupMenu>() << Virtualtrees::TVTHeaderOption::hoColumnResize << Virtualtrees::TVTHeaderOption::hoDblClickResize << Virtualtrees::TVTHeaderOption::hoDrag << Virtualtrees::TVTHeaderOption::hoShowSortGlyphs )
 #define DefaultExplorerComboFileObjects (System::Set<Mpshellutilities::Mpshellutilities__5, Mpshellutilities::Mpshellutilities__5::foFolders, Mpshellutilities::Mpshellutilities__5::foIncludeSuperHidden>() << Mpshellutilities::Mpshellutilities__5::foFolders << Mpshellutilities::Mpshellutilities__5::foHidden )
-#define DefaultPopupMiscOptions EMPTYSET
+#define DefaultPopupMiscOptions System::Set<System::Byte>()
 #define DefaultPopupPaintOptions (System::Set<Virtualtrees::TVTPaintOption, Virtualtrees::TVTPaintOption::toHideFocusRect, Virtualtrees::TVTPaintOption::toShowFilteredNodes>() << Virtualtrees::TVTPaintOption::toHideFocusRect << Virtualtrees::TVTPaintOption::toPopupMode << Virtualtrees::TVTPaintOption::toShowBackground << Virtualtrees::TVTPaintOption::toUseBlendedImages )
 #define DefaultPopupAutoOptions (System::Set<Virtualtrees::TVTAutoOption, Virtualtrees::TVTAutoOption::toAutoDropExpand, Virtualtrees::TVTAutoOption::toAutoBidiColumnOrdering>() << Virtualtrees::TVTAutoOption::toAutoScroll << Virtualtrees::TVTAutoOption::toAutoScrollOnExpand )
 #define DefaultPopupSelectionOptions (System::Set<Virtualtrees::TVTSelectionOption, Virtualtrees::TVTSelectionOption::toDisableDrawSelection, Virtualtrees::TVTSelectionOption::toRestoreSelection>() << Virtualtrees::TVTSelectionOption::toDisableDrawSelection )
 #define DefaultExplorerComboVETFolderOptions (System::Set<TVETFolderOption, TVETFolderOption::toFoldersExpandable, TVETFolderOption::toThreadedExpandMark>() << TVETFolderOption::toFoldersExpandable )
-#define DefaultExplorerComboVETShellOptions EMPTYSET
+#define DefaultExplorerComboVETShellOptions System::Set<System::Byte>()
 #define DefaultExplorerComboVETMiscOptions (System::Set<TVETMiscOption, TVETMiscOption::toBrowseExecuteFolder, TVETMiscOption::toPersistListviewColumnSort>() << TVETMiscOption::toBrowseExecuteFolder << TVETMiscOption::toBrowseExecuteZipFolder )
 #define DefaultExplorerComboVETImageOptions (System::Set<TVETImageOption, TVETImageOption::toHideOverlay, TVETImageOption::toMarkCutAndCopy>() << TVETImageOption::toImages )
 #define DefaultExplorerComboVETSyncOptions (System::Set<TVETSyncOption, TVETSyncOption::toCollapseTargetFirst, TVETSyncOption::toSelectTarget>() << TVETSyncOption::toCollapseTargetFirst << TVETSyncOption::toSelectTarget )

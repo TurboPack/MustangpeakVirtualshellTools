@@ -326,7 +326,9 @@ type
 
   TOnRunFile = procedure(RunFile, WorkingDirectory: string; var Result: TRunFileResult) of object;
 
+  {$IF CompilerVersion >= 23}
   [ComponentPlatformsAttribute(pidWin32 or pidWin64)]
+  {$IFEND}
   TVirtualRunFileDialog = class(TComponent)
   private
     FOptions: TVirtualRunFileDialogOptions;

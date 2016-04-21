@@ -1,8 +1,8 @@
 ﻿// CodeGear C++Builder
-// Copyright (c) 1995, 2015 by Embarcadero Technologies, Inc.
+// Copyright (c) 1995, 2016 by Embarcadero Technologies, Inc.
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'VirtualThumbnails.pas' rev: 30.00 (Windows)
+// (DO NOT EDIT: machine generated header) 'VirtualThumbnails.pas' rev: 31.00 (Windows)
 
 #ifndef VirtualthumbnailsHPP
 #define VirtualthumbnailsHPP
@@ -83,7 +83,7 @@ private:
 	int FImageWidth;
 	int FImageHeight;
 	System::WideString FStreamSignature;
-	NativeInt FTag;
+	int FTag;
 	System::Classes::TMemoryStream* FThumbBitmapStream;
 	bool FUseCompression;
 	System::Types::TPoint __fastcall GetThumbSize(void);
@@ -108,7 +108,7 @@ public:
 	__property int ImageWidth = {read=FImageWidth, write=FImageWidth, nodefault};
 	__property int ImageHeight = {read=FImageHeight, write=FImageHeight, nodefault};
 	__property System::WideString StreamSignature = {read=FStreamSignature};
-	__property NativeInt Tag = {read=FTag, write=FTag, nodefault};
+	__property int Tag = {read=FTag, write=FTag, nodefault};
 	__property System::Classes::TMemoryStream* ThumbBitmapStream = {read=FThumbBitmapStream, write=FThumbBitmapStream};
 	__property System::Types::TPoint ThumbSize = {read=GetThumbSize};
 	__property bool UseCompression = {read=FUseCompression, write=FUseCompression, nodefault};

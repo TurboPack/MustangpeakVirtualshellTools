@@ -1,8 +1,8 @@
 ﻿// CodeGear C++Builder
-// Copyright (c) 1995, 2015 by Embarcadero Technologies, Inc.
+// Copyright (c) 1995, 2016 by Embarcadero Technologies, Inc.
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'VirtualExplorerEasyListModeview.pas' rev: 30.00 (Windows)
+// (DO NOT EDIT: machine generated header) 'VirtualExplorerEasyListModeview.pas' rev: 31.00 (Windows)
 
 #ifndef VirtualexplorereasylistmodeviewHPP
 #define VirtualexplorereasylistmodeviewHPP
@@ -335,7 +335,7 @@ class PASCALIMPLEMENTATION TCustomVirtualColumnModeView : public Vcl::Forms::TSc
 	typedef Vcl::Forms::TScrollBox inherited;
 	
 public:
-	TColumnModeEasyListview* operator[](int Index) { return Views[Index]; }
+	TColumnModeEasyListview* operator[](int Index) { return this->Views[Index]; }
 	
 private:
 	bool FActive;
