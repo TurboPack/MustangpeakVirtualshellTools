@@ -1169,6 +1169,7 @@ type
 {*******************************************************************************}
   PNodeData = ^TNodeData;
   TNodeData = packed record
+    ReservedForTCustomVirtualStringTree: Int32;
     Namespace: TNamespace;
     ColumnManager: TColumnManager;
   end;
@@ -1280,9 +1281,6 @@ type
     FColumnDetails: TColumnDetailType;  // Defines User defined columns (through the Header > Columns properties, Standard VET Columns or Shell Based Columns
 
     FWaitCursorRef: integer;            // Reference count of WaitCursor calls
-
-    { Necessary VT decendent support }
-    FInternalDataOffset: Longword;      // How many bytes of internal storage per node VET needs
 
     { Right Click Menu support }
     FColumnMenu: TColumnMenu;           // Right click menu to select column options
@@ -1455,7 +1453,6 @@ type
     function GetOptionsClass: TTreeOptionsClass; override;
     function HasPopupMenu(Node: PVirtualNode; Column: TColumnIndex; Pos: TPoint): Boolean; override;
     function InternalCreateNewFolder(TargetPIDL: PItemIDList; SuggestedFolderName: WideString): WideString; virtual;
-    function InternalData(Node: PVirtualNode): Pointer; reintroduce;
     procedure HideAnimateFolderWnd;
     procedure InvalidateChildNamespaces(Node: PVirtualNode; RefreshIcon: Boolean);
     procedure InvalidateImageByIndex(ImageIndex: integer);
@@ -3614,9 +3611,8 @@ constructor TCustomVirtualExplorerTree.Create(AOwner: TComponent);
 var
   CF: VirtualTrees.TClipboardFormats;
 begin
-  FInternalDataOffset := AllocateInternalDataArea( SizeOf(TNodeData)
-      + SizeOf(Cardinal)) + SizeOf(Cardinal);
   inherited;
+  AllocateInternalDataArea(SizeOf(TNodeData));
   InitializeCriticalSection(FEnumLock);
   ContextMenuManager := TContextMenuManager.Create(Self);
   ShellNotifyManager.RegisterExplorerWnd(Self);
@@ -5786,11 +5782,6 @@ begin
       end
     end
   end;
-end;
-
-function TCustomVirtualExplorerTree.InternalData(Node: PVirtualNode): Pointer;
-begin
-  Result := PByte(Node) + Self.NodeDataSize + FInternalDataOffset;
 end;
 
 function TCustomVirtualExplorerTree.InternalWalkPIDLToNode(PIDL: PItemIDList): PVirtualNode;

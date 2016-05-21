@@ -1080,6 +1080,7 @@ typedef TNodeData *PNodeData;
 struct DECLSPEC_DRECORD TNodeData
 {
 public:
+	int ReservedForTCustomVirtualStringTree;
 	Mpshellutilities::TNamespace* Namespace;
 	TColumnManager* ColumnManager;
 };
@@ -1188,7 +1189,6 @@ private:
 	TVETColors* FVETColors;
 	TColumnDetailType FColumnDetails;
 	int FWaitCursorRef;
-	unsigned FInternalDataOffset;
 	TColumnMenu* FColumnMenu;
 	int FColumnMenuItemCount;
 	TContextMenuManager* FContextMenuManager;
@@ -1343,7 +1343,6 @@ protected:
 	virtual Virtualtrees::TTreeOptionsClass __fastcall GetOptionsClass(void);
 	virtual bool __fastcall HasPopupMenu(Virtualtrees::PVirtualNode Node, Virtualtrees::TColumnIndex Column, const System::Types::TPoint &Pos);
 	virtual System::WideString __fastcall InternalCreateNewFolder(Winapi::Shlobj::PItemIDList TargetPIDL, System::WideString SuggestedFolderName);
-	HIDESBASE void * __fastcall InternalData(Virtualtrees::PVirtualNode Node);
 	void __fastcall HideAnimateFolderWnd(void);
 	void __fastcall InvalidateChildNamespaces(Virtualtrees::PVirtualNode Node, bool RefreshIcon);
 	void __fastcall InvalidateImageByIndex(int ImageIndex);
