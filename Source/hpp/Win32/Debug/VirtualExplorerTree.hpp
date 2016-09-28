@@ -1598,7 +1598,7 @@ __published:
 	__property ButtonFillMode = {default=0};
 	__property ButtonStyle = {default=0};
 	__property ChangeDelay = {default=0};
-	__property CheckImageKind = {default=8};
+	__property CheckImageKind = {default=1};
 	__property Color = {default=-16777211};
 	__property Colors;
 	__property ColumnDetails;
@@ -1792,7 +1792,7 @@ __published:
 	__property ButtonFillMode = {default=0};
 	__property ButtonStyle = {default=0};
 	__property ChangeDelay = {default=0};
-	__property CheckImageKind = {default=8};
+	__property CheckImageKind = {default=1};
 	__property Color = {default=-16777211};
 	__property Colors;
 	__property ColumnDetails;
