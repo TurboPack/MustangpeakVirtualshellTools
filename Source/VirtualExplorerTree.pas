@@ -4280,11 +4280,10 @@ begin
 
   if ValidateNamespace(Node, NS) then
   begin
-    if not Assigned(Result) and (Column = Header.MainColumn) then
+    if (Result = nil) and (Column = Header.MainColumn) then
     begin
-      if not NS.ThreadedIconLoaded and ThreadedImagesEnabled
-        and not (csDesigning in ComponentState)
-      then begin
+      if not NS.ThreadedIconLoaded and ThreadedImagesEnabled and not (csDesigning in ComponentState) then
+      begin
         if (Kind = ikNormal) or (Kind = ikSelected) then
         begin
           if not NS.ThreadIconLoading then
@@ -4301,39 +4300,41 @@ begin
           end;
           if NS.IconCache > -1 then
             Index := NS.IconCache
-          else begin
+          else
+          begin
             if NS.Folder and NS.FileSystem then
               Index := UnknownFolderIconIndex
             else
               Index := UnknownFileIconIndex
           end
-        end else
+        end
+        else
           Index := -1
-      end else
+      end
+      else
       begin
         Ghosted := NS.Ghosted and not(toDisableGhostedFolders in TreeOptions.VETFolderOptions);
         if Kind = ikOverlay then
         begin
           if not (toHideOverlay in TreeOptions.VETImageOptions) and Assigned(NS.ShellIconOverlayInterface) then
             Index := NS.OverlayIndex - 1
-          else begin
+          else
+          begin
             if NS.Link then
               Index := 1
             else
             if NS.Share then
               Index := 0
           end
-        end else
-        if Kind = ikNormal then
+        end
+        else if Kind = ikNormal then
           Index := NS.GetIconIndex(Expanded[Node], icSmall, False)
-        else
-        if Kind = ikSelected then
-          Index := NS.GetIconIndex(
-            (toShowOpenIconOnSelect in TreeOptions.VETFolderOptions) or
-            (Expanded[Node]), icSmall, False);
+        else if Kind = ikSelected then
+          Index := NS.GetIconIndex((toShowOpenIconOnSelect in TreeOptions.VETFolderOptions) or (Expanded[Node]), icSmall, False);
       end;
     end;
   end
+
 end;
 
 function TCustomVirtualExplorerTree.DoGetNodeHint(Node: PVirtualNode;
