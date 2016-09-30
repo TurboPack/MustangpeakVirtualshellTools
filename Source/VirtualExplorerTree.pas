@@ -4282,7 +4282,9 @@ begin
   begin
     if (Result = nil) and (Column = Header.MainColumn) then
     begin
-      Result := SmallSysImages;
+      Result := Images;
+      if Result = nil then
+        Result := SmallSysImages;
       if not NS.ThreadedIconLoaded and ThreadedImagesEnabled and not (csDesigning in ComponentState) then
       begin
         if (Kind = ikNormal) or (Kind = ikSelected) then
