@@ -4280,7 +4280,7 @@ begin
 
   if ValidateNamespace(Node, NS) then
   begin
-    if (Result = nil) and (Column = Header.MainColumn) then
+    if Column = Header.MainColumn then
     begin
       Result := Images;
       if Result = nil then
