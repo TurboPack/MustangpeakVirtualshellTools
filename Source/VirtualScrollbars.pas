@@ -642,7 +642,6 @@ var
   Percent: Single;
   Temp: integer;
 begin
-  Result := 0;
   case Dimension of
     sbVArrowWidth  : Result := GetSystemMetrics(SM_CXVSCROLL);
     sbVArrowHeight :

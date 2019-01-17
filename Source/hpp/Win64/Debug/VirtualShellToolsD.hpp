@@ -2,7 +2,7 @@
 // Copyright (c) 1995, 2016 by Embarcadero Technologies, Inc.
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'VirtualShellToolsD.dpk' rev: 31.00 (Windows)
+// (DO NOT EDIT: machine generated header) 'VirtualShellToolsD.dpk' rev: 32.00 (Windows)
 
 #ifndef VirtualshelltoolsdHPP
 #define VirtualshelltoolsdHPP
@@ -140,8 +140,8 @@
 #include <VirtualTrees.WorkerThread.hpp>	// (VirtualTreesDR)
 #include <VirtualTrees.ClipBoard.hpp>	// (VirtualTreesDR)
 #include <VirtualTrees.Utils.hpp>	// (VirtualTreesDR)
-#include <VTHeaderPopup.hpp>	// (VirtualTreesDR)
 #include <VirtualTrees.Export.hpp>	// (VirtualTreesDR)
+#include <VTHeaderPopup.hpp>	// (VirtualTreesDR)
 #include <VirtualTrees.hpp>	// (VirtualTreesDR)
 #include <EasyLVResources.hpp>	// (EasyListviewD)
 #include <EasyTaskPanelForm.hpp>	// (EasyListviewD)
@@ -149,6 +149,11 @@
 #include <EasyListview.hpp>	// (EasyListviewD)
 #include <Vcl.Imaging.JConsts.hpp>	// (vclimg)
 #include <Vcl.Imaging.jpeg.hpp>	// (vclimg)
+// SO_SFX: 250
+// PRG_EXT: .bpl
+// BPI_DIR: C:\Users\Public\Documents\Embarcadero\Studio\19.0\Dcp\Win64
+// OBJ_DIR: C:\Users\Public\Documents\Embarcadero\Studio\19.0\Dcp\Win64
+// OBJ_EXT: .o
 
 //-- user supplied -----------------------------------------------------------
 

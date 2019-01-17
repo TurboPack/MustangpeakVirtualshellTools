@@ -5259,7 +5259,7 @@ begin
             while UpdateCount > 0 do
               EndUpdate;
 
-            Result := NS.EnumerateFolderEx(Handle, FileObjects, EnumerateFolderCallback, Node, AfterValidEnumIDList);
+            NS.EnumerateFolderEx(Handle, FileObjects, EnumerateFolderCallback, Node, AfterValidEnumIDList);
 
             DoCustomNamespace(Node);
             { Sort calls InitChildren which can lead to endless recursion problems if }
