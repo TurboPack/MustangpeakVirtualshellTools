@@ -3,3 +3,6 @@
 *.local
 *.stat
 __history
+Win32
+*.tmp
+*.hpp
