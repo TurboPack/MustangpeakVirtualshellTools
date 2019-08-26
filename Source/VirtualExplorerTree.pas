@@ -1720,7 +1720,6 @@ type
     property FileSort;
     property Font;
     property Header;
-    property HintAnimation;
     property HintMode;
     property HotCursor;
     property IncrementalSearch;
@@ -1906,7 +1905,6 @@ type
     property FileSort;
     property Font;
     property Header;
-    property HintAnimation;
     property HintMode;
     property HotCursor;
     property IncrementalSearch;

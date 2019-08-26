@@ -672,6 +672,8 @@ begin
         else
           Result := 0
       end;
+  else
+    Result := 0;
   end;
 end;
 

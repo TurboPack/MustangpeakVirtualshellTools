@@ -6,3 +6,5 @@ __history
 Win32
 *.tmp
 *.hpp
+*.tvsconfig
+*.identcache
