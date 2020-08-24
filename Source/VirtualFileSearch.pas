@@ -61,11 +61,7 @@ type
   TFileSearchProgressEvent = procedure(Sender: TObject; Results: TCommonPIDLList; var Handled: Boolean; var FreePIDLs: Boolean) of object;
   TFileSearchFinishedEvent = procedure(Sender: TObject; Results: TCommonPIDLList) of object;
    // WARNING CALLED IN CONTEXT OF THREAD
-  {$IFDEF UNICODE}
-  TFileSearchCompareEvent = procedure(Sender: TObject; const FilePath: WideString; FindFileData: TWIN32FindDataW; var UseFile: Boolean) of object;
-  {$ELSE}
-  TFileSearchCompareEvent = procedure(Sender: TObject; const FilePath: WideString; FindFileData: TWIN32FindDataA; var UseFile: Boolean) of object;
-  {$ENDIF}
+  TFileSearchCompareEvent = procedure(Sender: TObject; const FilePath: string; FindFileData: TWIN32FindDataW; var UseFile: Boolean) of object;
   TVirtualFileSearchThread = class(TCommonThread)
   private
     FCaseSensitive: Boolean;
@@ -78,14 +74,14 @@ type
     FTemporary: Boolean;
   protected
     procedure Execute; override;
-    procedure ProcessFiles(Path: WideString; Masks: TStringList; PIDLList: TCommonPIDLList);
+    procedure ProcessFiles(Path: string; Masks: TStringList; PIDLList: TCommonPIDLList);
     property SearchManager: TVirtualFileSearch read FSearchManager write FSearchManager;
     property SearchResultsLocal: TCommonPIDLList read FSearchResultsLocal write FSearchResultsLocal;
     property Temporary: Boolean read FTemporary write FTemporary;
   public
     constructor Create(CreateSuspended: Boolean); override;
     destructor Destroy; override;
-    procedure BuildFolderList(const Path: WideString; FolderList: TStringList);
+    procedure BuildFolderList(const Path: string; FolderList: TStringList);
     property CaseSensitive: Boolean read FCaseSensitive write FCaseSensitive;
     property FileMask: DWORD read FFileMask write FFileMask;
 //    property SearchCriteriaContent: TStringList read FSearchCriteriaContent write FSearchCriteriaContent;
@@ -118,7 +114,7 @@ type
   protected
     function BuildMask: Integer;
     procedure DoProgress(Results: TCommonPIDLList; var Handled: Boolean; var FreePIDLs: Boolean); virtual;
-    procedure DoSearchCompare(const FilePath: WideString; FindFileData: TWIN32FindDataW; var UseFile: Boolean);
+    procedure DoSearchCompare(const FilePath: string; FindFileData: TWIN32FindDataW; var UseFile: Boolean);
     procedure DoSearchEnd(Results: TCommonPIDLList);
     procedure TimerTick(Sender: TObject);
     property FileFindThread: TVirtualFileSearchThread read FFileFindThread write FFileFindThread;
@@ -166,7 +162,7 @@ begin
   inherited Destroy;
 end;
 
-procedure TVirtualFileSearchThread.BuildFolderList(const Path: WideString; FolderList: TStringList);
+procedure TVirtualFileSearchThread.BuildFolderList(const Path: string; FolderList: TStringList);
 //
 // Builds a list of folders that are contained in the Path
 //
@@ -174,7 +170,7 @@ var
   FindHandle: THandle;
   FindFileDataW: TWIN32FindDataW;
 begin
-    FindHandle := FindFirstFileW(PWideChar(WideString( Path + '\*.*')), FindFileDataW);
+    FindHandle := FindFirstFileW(PWideChar(string( Path + '\*.*')), FindFileDataW);
     if FindHandle <> INVALID_HANDLE_VALUE then
     begin
       repeat
@@ -216,8 +212,8 @@ begin
   i := 0;
   while not Terminated and (i < SearchPaths.Count) do
   begin
-    if WideDirectoryExists(SearchPaths[i]) then
-      ProcessFiles(WideExcludeTrailingBackslash( SearchPaths[i]), SearchCriteriaFileName, PIDLList);
+    if DirectoryExists(SearchPaths[i]) then
+      ProcessFiles(ExcludeTrailingPathDelimiter( SearchPaths[i]), SearchCriteriaFileName, PIDLList);
     Inc(i)
   end;
   // Clean out the PIDL List
@@ -232,7 +228,7 @@ begin
   end;
 end;
 
-procedure TVirtualFileSearchThread.ProcessFiles(Path: WideString; Masks: TStringList; PIDLList: TCommonPIDLList);
+procedure TVirtualFileSearchThread.ProcessFiles(Path: string; Masks: TStringList; PIDLList: TCommonPIDLList);
 var
   FindFileDataW: TWIN32FindDataW;
   FolderList: TStringList;
@@ -240,7 +236,7 @@ var
   i, j: Integer;
   UseFile, Done: Boolean;
   PIDL: PItemIDList;
-  CurrentPath, CurrentPathSpec: WideString;
+  CurrentPath, CurrentPathSpec: string;
   IsDotPath, IsDotDotPath: Boolean;
 begin
   i := 0;
@@ -319,6 +315,7 @@ begin
   inherited Create(AOwner);
   SearchResults := TCommonPIDLList.Create;
   Timer := TTimer.Create(Self);
+  Timer.Enabled := False;
   Timer.OnTimer := TimerTick;
   SearchPaths := TStringList.Create;
   SearchCriteriaFilename := TStringList.Create;
@@ -369,7 +366,7 @@ begin
     OnProgress(Self, Results, Handled, FreePIDLs)
 end;
 
-procedure TVirtualFileSearch.DoSearchCompare(const FilePath: WideString; FindFileData: TWIN32FindDataW; var UseFile: Boolean);
+procedure TVirtualFileSearch.DoSearchCompare(const FilePath: string; FindFileData: TWIN32FindDataW; var UseFile: Boolean);
 begin
   // WARNING CALLED IN CONTEXT OF THREAD
   if Assigned(OnSearchCompare) then

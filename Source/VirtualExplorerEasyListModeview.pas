@@ -85,7 +85,7 @@ type
 
   PDetailInfo = ^TDetailInfo;
   TDetailInfo = record
-    Title, Detail: WideString;
+    Title, Detail: string;
     TitleRect, DetailRect: TRect;
   end;
 
@@ -93,7 +93,7 @@ type
 
   //
   //  Forwards
-  //                
+  //
   TVirtualColumnModeView = class;
   TCustomVirtualColumnModeView = class;
   {$IFNDEF SpTBX}TVirtualSplitter = class;{$ENDIF}
@@ -114,9 +114,9 @@ type
     FArrowSize: TSize;
   public
     constructor Create(AnOwner: TEasyGroup); override;
-    procedure ItemRectArray(Item: TEasyItem; Column: TEasyColumn; ACanvas: TCanvas; const Caption: WideString; var RectArray: TEasyRectArrayObject); override;
-    procedure PaintBefore(Item: TEasyItem; Column: TEasyColumn; const Caption: WideString; ACanvas: TCanvas; RectArray: TEasyRectArrayObject; var Handled: Boolean); override;
-    procedure PaintText(Item: TEasyItem; Column: TEasyColumn; const Caption: WideString; RectArray: TEasyRectArrayObject; ACanvas: TCanvas; LinesToDraw: Integer); override;
+    procedure ItemRectArray(Item: TEasyItem; Column: TEasyColumn; ACanvas: TCanvas; const Caption: string; var RectArray: TEasyRectArrayObject); override;
+    procedure PaintBefore(Item: TEasyItem; Column: TEasyColumn; const Caption: string; ACanvas: TCanvas; RectArray: TEasyRectArrayObject; var Handled: Boolean); override;
+    procedure PaintText(Item: TEasyItem; Column: TEasyColumn; const Caption: string; RectArray: TEasyRectArrayObject; ACanvas: TCanvas; LinesToDraw: Integer); override;
     property ArrowSize: TSize read FArrowSize write FArrowSize;
   end;
 
@@ -172,8 +172,8 @@ type
     procedure OnDetailsPaint(Sender: TObject);
     procedure ResizeLabels(NewClientW, NewClientH: Integer);
     procedure ShellExecuteNamespace;
-    procedure SplitCaption(ACaption: Widestring; var ATitle: WideString; var ADetail: WideString);
-    procedure BuildDetailInfo(Details: TCommonWideStringDynArray);
+    procedure SplitCaption(ACaption: string; var ATitle: string; var ADetail: string);
+    procedure BuildDetailInfo(Details: TCommonStringDynArray);
     procedure WMEraseBkgnd(var Msg: TWMEraseBkgnd); message WM_ERASEBKGND;
     procedure WMMouseActivate(var Msg: TWMMouseActivate); message WM_MOUSEACTIVATE;
     procedure WindowProcHook(var Msg: TMessage);
@@ -286,7 +286,7 @@ type
   TListviewContextMenuEvent = procedure(Sender: TCustomVirtualColumnModeView; Listview: TCustomEasyListview; MousePt: TPoint; var Handled: Boolean) of object;
   TListviewContextMenu2MessageEvent = procedure(Sender: TCustomVirtualColumnModeView; Listview: TCustomVirtualExplorerEasyListview; var Msg: TMessage) of object;
   TListviewDblClickEvent = procedure(Sender: TCustomVirtualColumnModeView; Listview: TCustomEasyListview; Button: TCommonMouseButton; MousePos: TPoint; ShiftState: TShiftState) of object;
-  TListviewMouseGestureEvent = procedure(Sender: TCustomVirtualColumnModeView; Listview: TCustomEasyListview; Button: TCommonMouseButton; KeyState: TCommonKeyStates; Gesture: WideString; var DoDefaultMouseAction: Boolean) of object;
+  TListviewMouseGestureEvent = procedure(Sender: TCustomVirtualColumnModeView; Listview: TCustomEasyListview; Button: TCommonMouseButton; KeyState: TCommonKeyStates; Gesture: string; var DoDefaultMouseAction: Boolean) of object;
   TListviewRootChangeLMVEvent = procedure(Sender: TCustomVirtualColumnModeView; Listview: TCustomVirtualExplorerEasyListview) of object;
   TColumnModeRebuildEvent = procedure(Sender: TCustomVirtualColumnModeView) of object;
   TColumnModeViewRebuildingEvent = procedure(Sender: TCustomVirtualColumnModeView) of object;
@@ -410,7 +410,7 @@ type
     procedure DoListviewItemMouseDown(Sender: TCustomEasyListview; Item: TEasyItem; Button: TCommonMouseButton; var DoDefault: Boolean); virtual;
     procedure DoListviewItemMouseUp(Sender: TCustomEasyListview; Item: TEasyItem; Button: TCommonMouseButton; var DoDefault: Boolean); virtual;
     procedure DoListviewMouseDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Integer); virtual;
-    procedure DoListviewMouseGesture(Sender: TCustomEasyListview; Button: TCommonMouseButton; KeyState: TCommonKeyStates; Gesture: WideString; var DoDefaultMouseAction: Boolean); virtual;
+    procedure DoListviewMouseGesture(Sender: TCustomEasyListview; Button: TCommonMouseButton; KeyState: TCommonKeyStates; Gesture: string; var DoDefaultMouseAction: Boolean); virtual;
     procedure DoListviewMouseUp(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Integer); virtual;
     procedure DoListviewRootChange(Listview: TCustomVirtualExplorerEasyListview); virtual;
     procedure DoPathChanged(NewPath: TNamespace); virtual;
@@ -437,7 +437,7 @@ type
     procedure ListviewItemMouseDown(Sender: TCustomEasyListview; Item: TEasyItem; Button: TCommonMouseButton; var DoDefault: Boolean); virtual;
     procedure ListviewItemMouseUp(Sender: TCustomEasyListview; Item: TEasyItem; Button: TCommonMouseButton; var DoDefault: Boolean); virtual;
     procedure ListviewMouseDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
-    procedure ListviewMouseGesture(Sender: TCustomEasyListview; Button: TCommonMouseButton; KeyState: TCommonKeyStates; Gesture: WideString; var DoDefaultMouseAction: Boolean);
+    procedure ListviewMouseGesture(Sender: TCustomEasyListview; Button: TCommonMouseButton; KeyState: TCommonKeyStates; Gesture: string; var DoDefaultMouseAction: Boolean);
     procedure ListviewResize(Sender: TObject);
     procedure ListviewMouseUp(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
     procedure ListviewRootChange(Sender: TCustomVirtualExplorerEasyListview);
@@ -447,7 +447,7 @@ type
     procedure ScrollLeft;
     procedure ScrollRight;
     procedure SelectionChangeTimerEvent(Sender: TObject);
-    procedure ShellExecute(Sender: TCustomVirtualExplorerEasyListview; Namespace: TNamespace; var WorkingDir: WideString; var CmdLineArgument: WideString; var Allow: Boolean);
+    procedure ShellExecute(Sender: TCustomVirtualExplorerEasyListview; Namespace: TNamespace; var WorkingDir: string; var CmdLineArgument: string; var Allow: Boolean);
     procedure TestForRebuild(Sender: TObject);
     procedure WMDestroy(var Msg: TMessage); message WM_DESTROY;
     procedure WMEraseBkgnd(var Msg: TWMEraseBkgnd); message WM_ERASEBKGND;
@@ -1174,7 +1174,7 @@ begin
 end;
 
 procedure TCustomVirtualColumnModeView.DoListviewMouseGesture(Sender: TCustomEasyListview; Button: TCommonMouseButton;
-  KeyState: TCommonKeyStates; Gesture: WideString; var DoDefaultMouseAction: Boolean);
+  KeyState: TCommonKeyStates; Gesture: string; var DoDefaultMouseAction: Boolean);
 begin
   if Assigned(OnListviewMouseGesture) then
     OnListviewMouseGesture(Self, Sender, Button, KeyState, Gesture, DoDefaultMouseAction)
@@ -1493,7 +1493,7 @@ begin
 end;
 
 procedure TCustomVirtualColumnModeView.ListviewMouseGesture(Sender: TCustomEasyListview;
-  Button: TCommonMouseButton; KeyState: TCommonKeyStates; Gesture: WideString; var DoDefaultMouseAction: Boolean);
+  Button: TCommonMouseButton; KeyState: TCommonKeyStates; Gesture: string; var DoDefaultMouseAction: Boolean);
 begin
   DoListviewMouseGesture(Sender, Button, KeyState, Gesture, DoDefaultMouseAction)
 end;
@@ -1501,7 +1501,7 @@ end;
 procedure TCustomVirtualColumnModeView.ListviewResize(Sender: TObject);
 begin
   HeaderBar.Invalidate;
-  HeaderBar.Update 
+  HeaderBar.Update
 end;
 
 function TCustomVirtualColumnModeView.ViewNamespace(Index: Integer): TNamespace;
@@ -1607,7 +1607,7 @@ begin
     else
       OldPath := nil;
     LockRedraw;
-    try    
+    try
       Path := nil;
       for i := 0 to ViewCount - 1 do
         Views[i].FileObjects := FFileObjects
@@ -1756,7 +1756,7 @@ begin
 end;
 
 procedure TCustomVirtualColumnModeView.ItemFocusChange(Sender: TCustomEasyListview; Item: TEasyItem);
-begin  
+begin
   if not (lmvsHilightingPath in State) then
   begin
     if not (lmvsHilightingPath in State) then
@@ -1839,7 +1839,7 @@ begin
   end
 end;
 
-procedure TCustomVirtualColumnModeView.ShellExecute(Sender: TCustomVirtualExplorerEasyListview; Namespace: TNamespace; var WorkingDir: WideString; var CmdLineArgument: WideString; var Allow: Boolean);
+procedure TCustomVirtualColumnModeView.ShellExecute(Sender: TCustomVirtualExplorerEasyListview; Namespace: TNamespace; var WorkingDir: string; var CmdLineArgument: string; var Allow: Boolean);
 begin
   Allow := not Namespace.Folder
 end;
@@ -1928,7 +1928,7 @@ procedure TCustomVirtualColumnModeView.RebuildView;
     // Make sure we always have 2 columns, one for desktop and one for details
     if ViewCount < 2 then
       InsertViews(2 - ViewCount)
-  end;   
+  end;
 
   procedure DeleteViews(Count: Integer);
   var
@@ -2371,7 +2371,7 @@ procedure TCustomVirtualColumnModeView.WMMouseActivate(var Msg: TWMMouseActivate
 begin
   inherited;
   Msg.Result := MA_NOACTIVATE; // Never let the window gain the focus
-  
+
  // Why was I doing this?  Removed Dec 2008 when working on UE 3.0
 //  ActivateTopLevelWindow(Handle)
 end;
@@ -2608,7 +2608,7 @@ begin
         if CharCode = VK_LEFT then
           (Parent as TCustomVirtualColumnModeView).ScrollLeft
         else
-        
+
         if CharCode = VK_RIGHT then
           (Parent as TCustomVirtualColumnModeView).ScrollRight
       end else
@@ -2742,12 +2742,10 @@ begin
           CurrentSkin.PaintBackground(BackBits.Canvas, R, skncHeader, sknsNormal, True, True);
         end else
        {$ENDIF SpTBX}
-       {$IFDEF USETHEMES}
         if Themed then
         begin
           DrawThemeBackground(Themes.HeaderTheme, BackBits.Canvas.Handle, HP_HEADERITEM, HIS_NORMAL, R, nil);
         end else
-        {$ENDIF USETHEMES}
         begin
           BackBits.Canvas.Brush.Color := Attribs.Color;
           BackBits.Canvas.FillRect(R);
@@ -2761,30 +2759,25 @@ begin
 
           BackBits.Canvas.Brush.Style := bsClear;
           NS := ColumnModeView.ViewNamespace(i);
-          {$IFDEF USETHEMES}
-            {$IFDEF SpTBX}
-            if not Themed or (SkinManager.CurrentSkinName <> 'Default') then
-            {$ELSE}
-            if not Themed then
-            {$ENDIF SpTBX}
-            begin
-              if ColumnModeView.Views[i] = ColumnModeView.FocusedView then
-              begin
-                R.Right := R.Right + ColumnModeView.ViewSplitter(i).Width;
-                {$IFDEF SpTBX}
-                CurrentSkin.PaintBackground(BackBits.Canvas, R, skncHeader, sknsHotTrack, True, False);
-                 {$ENDIF SpTBX}
-                R.Right := R.Right - ColumnModeView.ViewSplitter(i).Width;
-              end;
-
-              BackBits.Canvas.Brush.Style := bsClear;
-              if Assigned(NS) and ColumnModeView.Views[i].Active then
-                DrawTextWEx(BackBits.Canvas.Handle, NS.NameNormal, R, DrawTextFlags, 1);
-            end;
+          {$IFDEF SpTBX}
+          if not Themed or (SkinManager.CurrentSkinName <> 'Default') then
           {$ELSE}
-          if Assigned(NS) and ColumnModeView.Views[i].Active then
-            DrawTextWEx(BackBits.Canvas.Handle, NS.NameNormal, R, DrawTextFlags, 1);
-          {$ENDIF USETHEMES}
+          if not Themed then
+          {$ENDIF SpTBX}
+          begin
+            if ColumnModeView.Views[i] = ColumnModeView.FocusedView then
+            begin
+              R.Right := R.Right + ColumnModeView.ViewSplitter(i).Width;
+              {$IFDEF SpTBX}
+              CurrentSkin.PaintBackground(BackBits.Canvas, R, skncHeader, sknsHotTrack, True, False);
+               {$ENDIF SpTBX}
+              R.Right := R.Right - ColumnModeView.ViewSplitter(i).Width;
+            end;
+
+            BackBits.Canvas.Brush.Style := bsClear;
+            if Assigned(NS) and ColumnModeView.Views[i].Active then
+              DrawTextWEx(BackBits.Canvas.Handle, NS.NameNormal, R, DrawTextFlags, 1);
+          end;
 
           R.Right := R.Right + ColumnModeView.ViewSplitter(i).Width;
           {$IFDEF SpTBX}
@@ -2801,7 +2794,6 @@ begin
             CurrentSkin.PaintBackground(BackBits.Canvas, R, skncSeparator, sknsNormal, True, True)
           else
           {$ENDIF}
-          {$IFDEF USETHEMES}
           if Themed then
           begin
             R.Left := R.Right - ColumnModeView.Views[i].Width - ColumnModeView.ViewSplitter(i).Width;
@@ -2813,7 +2805,6 @@ begin
             if Assigned(NS) and ColumnModeView.Views[i].Active then
               DrawThemeText(Themes.HeaderTheme, BackBits.Canvas.Handle, HP_HEADERITEM, HIS_NORMAL, PWideChar( NS.NameNormal), -1, DT_CENTER or DT_VCENTER or DT_SINGLELINE or DT_END_ELLIPSIS, 0, R);
           end else
-          {$ENDIF USETHEMES}
           begin
             if Attribs.Flat then
               DrawEdge(BackBits.Canvas.Handle, R, EDGE_ETCHED, BF_RECT)
@@ -3096,30 +3087,30 @@ begin
       TCustomVirtualExplorerEasyListviewHack(ExplorerListview).DoShellExecute(ExplorerListview.Selection.First);
 end;
 
-procedure TListModeDetails.SplitCaption(ACaption: Widestring;
-  var ATitle: WideString; var ADetail: WideString);
+procedure TListModeDetails.SplitCaption(ACaption: string;
+  var ATitle: string; var ADetail: string);
 var
   W: PWideChar;
 begin
   ATitle := '';
   ADetail := '';
-  W := WideStrPos(PWideChar( ACaption), ':');
+  W := SysUtils.StrPos(PWideChar( ACaption), ':');
   if Assigned(W) then
   begin
     W^ := WideNull;
     ATitle := ACaption;
     SetLength(ATitle, lstrlenW(PWideChar( ATitle)));
-    ATitle := ATitle + WideString(':');
+    ATitle := ATitle + string(':');
     Inc(W, 1);
-    // Calls the wrong Trim if not typecast to a WideString
-    ADetail := Trim(WideString( W));
+    // Calls the wrong Trim if not typecast to a string
+    ADetail := Trim(string( W));
     SetLength(ADetail, lstrLenW(PWideChar( ADetail)));
     Dec(W, 1);
     W^ := WideChar(':');
   end
 end;
 
-procedure TListModeDetails.BuildDetailInfo(Details: TCommonWideStringDynArray);
+procedure TListModeDetails.BuildDetailInfo(Details: TCommonStringDynArray);
 var
   i: Integer;
   Info: PDetailInfo;
@@ -3172,7 +3163,7 @@ begin
   ArrowSize := TextExtentW('4', MarlettFont)
 end;
 
-procedure TColumnModeViewReportItem.ItemRectArray(Item: TEasyItem; Column: TEasyColumn; ACanvas: TCanvas; const Caption: WideString; var RectArray: TEasyRectArrayObject);
+procedure TColumnModeViewReportItem.ItemRectArray(Item: TEasyItem; Column: TEasyColumn; ACanvas: TCanvas; const Caption: string; var RectArray: TEasyRectArrayObject);
 begin
   inherited ItemRectArray(Item, Column, ACanvas, Caption, RectArray);
   if (RectWidth(RectArray.TextRect) > ArrowSize.cx) then
@@ -3182,7 +3173,7 @@ begin
   end
 end;
 
-procedure TColumnModeViewReportItem.PaintBefore(Item: TEasyItem; Column: TEasyColumn; const Caption: WideString; ACanvas: TCanvas; RectArray: TEasyRectArrayObject; var Handled: Boolean);
+procedure TColumnModeViewReportItem.PaintBefore(Item: TEasyItem; Column: TEasyColumn; const Caption: string; ACanvas: TCanvas; RectArray: TEasyRectArrayObject; var Handled: Boolean);
 var
  R: TRect;
  Bits: TBitmap;
@@ -3219,7 +3210,7 @@ begin
   end
 end;
 
-procedure TColumnModeViewReportItem.PaintText(Item: TEasyItem; Column: TEasyColumn; const Caption: WideString; RectArray: TEasyRectArrayObject; ACanvas: TCanvas; LinesToDraw: Integer);
+procedure TColumnModeViewReportItem.PaintText(Item: TEasyItem; Column: TEasyColumn; const Caption: string; RectArray: TEasyRectArrayObject; ACanvas: TCanvas; LinesToDraw: Integer);
 begin
   inherited PaintText(Item, Column, Caption, RectArray, ACanvas, LinesToDraw);
   if (Item as TExplorerItem).Namespace.Folder then

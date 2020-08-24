@@ -57,7 +57,7 @@ const
   WM_VTSETTHREADMARK = WM_VETBASE + 11;
 
 // <FR changes 2005-11-09>
-// Const were changed to var of WideString type, to allow customization
+// Const were changed to var of string type, to allow customization
 // at runtime. Please not that const necessary to launch control panel applets
 // and all this kind of stuff remain unmodified.
 
@@ -69,46 +69,46 @@ type
   TVirtualScrollBox = TScrollbox;
 
 var
-   S_WARNING: WideString = 'Warning';
-   S_OPEN: WideString = 'Open';
+   S_WARNING: string = 'Warning';
+   S_OPEN: string = 'Open';
 
-  STR_GROUPMODIFIEDHOUR: WideString = 'Last hour';
-  STR_GROUPMODIFIEDTODAY: WideString = 'Last twenty-four hours';
-  STR_GROUPMODIFIEDTHISWEEK: WideString = 'This week';
-  STR_GROUPMODIFIEDTWOWEEKS: WideString = 'Two weeks ago';
-  STR_GROUPMODIFIEDTHREEWEEKS: WideString = 'Three weeks ago';
-  STR_GROUPMODIFIEDMONTH: WideString = 'A month ago';
-  STR_GROUPMODIFIEDTWOMONTHS: WideString = 'Two months ago';
-  STR_GROUPMODIFIEDTHREEMONTHS: WideString = 'Three months ago';
-  STR_GROUPMODIFIEDFOURMONTHS: WideString = 'Four months ago';
-  STR_GROUPMODIFIEDFIVEMONTHS: WideString = 'Five months ago';
-  STR_GROUPMODIFIEDSIXMONTHS: WideString = 'Six months ago';
-  STR_GROUPMODIFIEDEARLIERTHISYEAR: WideString = 'Earlier this year' ;
-  STR_GROUPMODIFIEDLONGTIMEAGO: WideString = 'A long time ago';
+  STR_GROUPMODIFIEDHOUR: string = 'Last hour';
+  STR_GROUPMODIFIEDTODAY: string = 'Last twenty-four hours';
+  STR_GROUPMODIFIEDTHISWEEK: string = 'This week';
+  STR_GROUPMODIFIEDTWOWEEKS: string = 'Two weeks ago';
+  STR_GROUPMODIFIEDTHREEWEEKS: string = 'Three weeks ago';
+  STR_GROUPMODIFIEDMONTH: string = 'A month ago';
+  STR_GROUPMODIFIEDTWOMONTHS: string = 'Two months ago';
+  STR_GROUPMODIFIEDTHREEMONTHS: string = 'Three months ago';
+  STR_GROUPMODIFIEDFOURMONTHS: string = 'Four months ago';
+  STR_GROUPMODIFIEDFIVEMONTHS: string = 'Five months ago';
+  STR_GROUPMODIFIEDSIXMONTHS: string = 'Six months ago';
+  STR_GROUPMODIFIEDEARLIERTHISYEAR: string = 'Earlier this year' ;
+  STR_GROUPMODIFIEDLONGTIMEAGO: string = 'A long time ago';
 
-  STR_GROUPSIZEZERO: WideString = 'Zero';
-  STR_GROUPSIZETINY: WideString = 'Tiny';
-  STR_GROUPSIZESMALL: WideString = 'Small';
-  STR_GROUPSIZEMEDIUM: WideString = 'Medium';
-  STR_GROUPSIZELARGE: WideString = 'Large';
-  STR_GROUPSIZEGIGANTIC: WideString = 'Gigantic';
-  STR_GROUPSIZESYSFOLDER: WideString = 'System Folders';
-  STR_GROUPSIZEFOLDER: WideString =  'Folders';
+  STR_GROUPSIZEZERO: string = 'Zero';
+  STR_GROUPSIZETINY: string = 'Tiny';
+  STR_GROUPSIZESMALL: string = 'Small';
+  STR_GROUPSIZEMEDIUM: string = 'Medium';
+  STR_GROUPSIZELARGE: string = 'Large';
+  STR_GROUPSIZEGIGANTIC: string = 'Gigantic';
+  STR_GROUPSIZESYSFOLDER: string = 'System Folders';
+  STR_GROUPSIZEFOLDER: string =  'Folders';
 
-  STR_HEADERMENUMORE: WideString = 'More...';
+  STR_HEADERMENUMORE: string = 'More...';
 
   // < FR added 11-28-05>
   // These variables are used to customize at runtime the column dialog.
   // They are loaded in the corresponding components in the OnShow event
   // of the column dialog.
-  STR_COLUMNDLG_CAPTION : WideString = 'Column settings';
-  STR_COLUMNDLG_LABEL1  : WideString = 'Check the columns you would like ' +
+  STR_COLUMNDLG_CAPTION : string = 'Column settings';
+  STR_COLUMNDLG_LABEL1  : string = 'Check the columns you would like ' +
     'to make visible in this Folder.  Drag and Drop to reorder the columns. ';
-  STR_COLUMNDLG_LABEL2  : WideString = 'The selected column should be ';
-  STR_COLUMNDLG_LABEL3  : WideString = 'pixels wide';
-  STR_COLUMNDLG_CHECKBOXLIVEUPDATE : WideString = 'LiveUpdate';
-  STR_COLUMNDLG_BUTTONOK     : WideString = 'OK';
-  STR_COLUMNDLG_BUTTONCANCEL : WideString = 'Cancel';
+  STR_COLUMNDLG_LABEL2  : string = 'The selected column should be ';
+  STR_COLUMNDLG_LABEL3  : string = 'pixels wide';
+  STR_COLUMNDLG_CHECKBOXLIVEUPDATE : string = 'LiveUpdate';
+  STR_COLUMNDLG_BUTTONOK     : string = 'OK';
+  STR_COLUMNDLG_BUTTONCANCEL : string = 'Cancel';
   // The following is not a string, but I find useful to be able to change
   // the checkboxes style, so I've added another variable to manage it.
   COLUMNDLG_CHKSTYLE : TCheckImageKind = ckSystemDefault;
@@ -116,19 +116,19 @@ var
 
     // Error given when the root of VET is set to a path that does not exist.  The
   // end user should never see this message.
-  STR_ERR_INVALID_CUSTOMPATH: WideString = 'Invalid pathname for Custom Root Path';
+  STR_ERR_INVALID_CUSTOMPATH: string = 'Invalid pathname for Custom Root Path';
 
   // Menu item text shown when the column popup menu has more than a specified
   // number of items or the column has told VET it should not be shown in the
   // menu but only show it in the dialog box.
-  STR_COLUMNMENU_MORE: WideString = 'More ...';
+  STR_COLUMNMENU_MORE: string = 'More ...';
 
     // --------------------------------------------------------------------------
   // TExplorerComboBox messages
   // --------------------------------------------------------------------------
 
-  S_PATH_ERROR: WideString = 'Invalid Path';
-  S_COMBOEDIT_DEFAULT_ERROR1: WideString = ' can not be found by Windows. Please check the spelling and try again.';
+  S_PATH_ERROR: string = 'Invalid Path';
+  S_COMBOEDIT_DEFAULT_ERROR1: string = ' can not be found by Windows. Please check the spelling and try again.';
   // --------------------------------------------------------------------------
 
     // --------------------------------------------------------------------------
@@ -137,14 +137,14 @@ var
   // The string used as a prefix to the new file being created based on the file type
   // of the extension.  For example a Notepad TXT file will create a new file named
   // New Text Document.txt, where the "New " string is this constant.
-  S_NEW: WideString = 'New ';
+  S_NEW: string = 'New ';
   // These are the strings that will be appended to New when the additional menu
   // item "New Folder" and "New ShortCut" are requested in the menu.
-  S_FOLDER: WideString = 'Folder';
-  S_SHORTCUT: WideString = 'Shortcut';
+  S_FOLDER: string = 'Folder';
+  S_SHORTCUT: string = 'Shortcut';
   // This is the string that is shown in the Messagebox if the new file will
   // overwrite an existing file.
-  S_OVERWRITE_EXISTING_FILE: WideString = 'File exists.  Overwrite existing file?';
+  S_OVERWRITE_EXISTING_FILE: string = 'File exists.  Overwrite existing file?';
 
 // FR added 2005-11-09. This allow to preserve the following as constants.
 const
@@ -169,7 +169,7 @@ const
   // Literal translations of TShellNotifyEvent type.  Useful when using the
   // OnShellNotify event to print out what event occured.  VirtualShellUtilities.pas
   // has a helper function ShellNotifyEventToStr that uses these.
-  VET_NOTIFY_EVENTS: array[0..19] of WideString = (
+  VET_NOTIFY_EVENTS: array[0..19] of string = (
     'Assocciation Changed',
     'Attributes',
     'Item Create',
@@ -196,26 +196,26 @@ const
 var
   // The verb sent to the context menu notification events if the selected context
   // menu item is a non standard verb.
-  STR_UNKNOWNCOMMAN: WideString = 'Unknown Command';
+  STR_UNKNOWNCOMMAN: string = 'Unknown Command';
 
 
-  STR_DRIVELETTER_A: WideString = 'a';
+  STR_DRIVELETTER_A: string = 'a';
 
   // --------------------------------------------------------------------------
   // Common strings
   // --------------------------------------------------------------------------
 
-  S_PRINT: WideString = 'print';
-  S_PROPERTIES: WideString = 'properties';
+  S_PRINT: string = 'print';
+  S_PROPERTIES: string = 'properties';
 
   // --------------------------------------------------------------------------
 
 
   // ASSERT Strings
-  S_KERNELNOTIFERREGISTERED: WideString = 'A KernelChangeNotifier is still registered with a Control';
-  S_SHELLNOTIFERREGISTERED: WideString = 'A ShellChangeThread is still registered with a Control';
-  S_SHELLNOTIFERDISPATCHTHREAD: WideString = 'ChangeDispatchThread is still registered';
-  S_KERNELSPECIALFOLDERWATCH: WideString = 'A control must be registered with ' +
+  S_KERNELNOTIFERREGISTERED: string = 'A KernelChangeNotifier is still registered with a Control';
+  S_SHELLNOTIFERREGISTERED: string = 'A ShellChangeThread is still registered with a Control';
+  S_SHELLNOTIFERDISPATCHTHREAD: string = 'ChangeDispatchThread is still registered';
+  S_KERNELSPECIALFOLDERWATCH: string = 'A control must be registered with ' +
      'the VirtualChangeNotifier using RegisterShellChangeNotify before this ' +
      'method may be used.';
 

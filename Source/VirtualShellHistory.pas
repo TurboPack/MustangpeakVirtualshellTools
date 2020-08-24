@@ -226,15 +226,15 @@ type
     procedure Clear; virtual;
     procedure Delete(Index: integer);
     procedure FillPopupMenu(Popupmenu: TPopupMenu; FillDirection: TFillPopupDirection;
-      ClearItemText: WideString = ''); virtual;
+      ClearItemText: string = ''); virtual;
     {$IFDEF USE_TOOLBAR_TB2K}
     procedure FillPopupMenu_TB2000(PopupMenu: TTBCustomItem; ItemClass: TTBCustomItemClass;
-      FillDirection: TFillPopupDirection; ClearItemText: WideString = ''); virtual;
+      FillDirection: TFillPopupDirection; ClearItemText: string = ''); virtual;
     {$ENDIF}
-    procedure LoadFromFile(FileName: WideString);
+    procedure LoadFromFile(FileName: string);
     procedure LoadFromStream(S: TStream); virtual;
     procedure LoadFromRegistry(RootKey: DWORD; SubKey: string);
-    procedure SaveToFile(FileName: WideString);
+    procedure SaveToFile(FileName: string);
     procedure SaveToStream(S: TStream; ForceSaveAllPaths: Boolean = False); virtual;
     procedure SaveToRegistry(RootKey: DWORD; SubKey: string);
 
@@ -315,9 +315,9 @@ uses
   VirtualTrees;
 
 {$IFDEF USE_TOOLBAR_TB2K}
-procedure SetTBItemCaption(Item: TTBCustomItem; Caption: WideString);
+procedure SetTBItemCaption(Item: TTBCustomItem; Caption: string);
 // Set the unicode caption to the Item if it has a valid
-// WideString Caption property.
+// string Caption property.
 var
   PropInfo: PPropInfo;
 begin
@@ -560,7 +560,7 @@ begin
 end;
 
 procedure TBaseVirtualShellPersistent.FillPopupMenu(Popupmenu: TPopupMenu;
-  FillDirection: TFillPopupDirection; ClearItemText: WideString = '');
+  FillDirection: TFillPopupDirection; ClearItemText: string = '');
 //Fills a TPopupMenu to mimic the Explorer's Back and Next Buttons PopupMenu.
 //Depending on the value of the BackPopup boolean the PopupMenu is filled with
 //the corresponding Back or Next Namespaces folder names.
@@ -638,7 +638,7 @@ end;
 
 {$IFDEF USE_TOOLBAR_TB2K}
 procedure TBaseVirtualShellPersistent.FillPopupMenu_TB2000(PopupMenu: TTBCustomItem;
-  ItemClass: TTBCustomItemClass; FillDirection: TFillPopupDirection; ClearItemText: WideString = '');
+  ItemClass: TTBCustomItemClass; FillDirection: TFillPopupDirection; ClearItemText: string = '');
 // Fills a TTBCustomItem to mimic the Explorer's Back and Next Buttons TBX Item.
 // Depending on the value of the PopupType the PopupMenu is filled with
 // the corresponding Back, Next or All Namespaces folder names.
@@ -749,7 +749,7 @@ begin
   Result := MPCommonObjects.SmallSysImages;
 end;
 
-procedure TBaseVirtualShellPersistent.LoadFromFile(FileName: WideString);
+procedure TBaseVirtualShellPersistent.LoadFromFile(FileName: string);
 var
   S: TVirtualFileStream;
 begin
@@ -802,7 +802,7 @@ begin
       NS := TNamespace.Create(PIDLMgr.LoadFromStream(S), nil);
       if NS.FileSystem and NS.Folder then
       begin
-        if WideDirectoryExists(NS.NameForParsing) then
+        if DirectoryExists(NS.NameForParsing) then
           Add(NS, True)
       end else
       if NS.Valid then
@@ -836,8 +836,7 @@ end;
 procedure TBaseVirtualShellPersistent.OnMenuItemDraw(Sender: TObject;
   ACanvas: TCanvas; ARect: TRect; Selected: Boolean);
 var
-  WS: WideString;
-  S: AnsiString;
+  WS: string;
   i, Border: integer;
   ImageRect: TRect;
   TargetImageIndex: Integer;
@@ -926,12 +925,7 @@ begin
     // Remove the & chars
     i := Pos('&', WS);
     System.Delete(WS, i, 1);
-    if IsUnicode then
-      DrawTextW_MP(ACanvas.handle, PWideChar(WS), lstrlenW(PWideChar(WS)), ARect, DT_SINGLELINE or DT_VCENTER)
-    else begin
-      S := AnsiString(WS);
-      DrawTextA(ACanvas.handle, PAnsiChar(S), Length(S), ARect, DT_SINGLELINE or DT_VCENTER)
-    end;
+    DrawText(ACanvas.handle, PWideChar(WS), lstrlenW(PWideChar(WS)), ARect, DT_SINGLELINE or DT_VCENTER);
     SetBkMode(ACanvas.Handle, OldMode);
     //Note: it seems that DrawTextW doesn't draw the prefix.
   end;
@@ -940,7 +934,7 @@ end;
 procedure TBaseVirtualShellPersistent.OnMenuItemMeasure(Sender: TObject;
   ACanvas: TCanvas; var Width, Height: Integer);
 var
-  WS: WideString;
+  WS: string;
   i: integer;
   Border: Integer;
 begin
@@ -985,7 +979,7 @@ begin
     Width := Screen.Width - 12  // Purely imperical value seen on XP for the unaccessable borders
 end;
 
-procedure TBaseVirtualShellPersistent.SaveToFile(FileName: WideString);
+procedure TBaseVirtualShellPersistent.SaveToFile(FileName: string);
 var
   S: TVirtualFileStream;
 begin
@@ -1076,7 +1070,7 @@ begin
       begin
         NS := Items[FItemIndex];
         // Delete the item if it's invalid
-        if Assigned(NS) and NS.FileSystem and (WideStrIComp(PWideChar(NS.Extension), '.zip') <> 0) and not WideDirectoryExists(NS.NameForParsing) then
+        if Assigned(NS) and NS.FileSystem and (WideStrIComp(PWideChar(NS.Extension), '.zip') <> 0) and not DirectoryExists(NS.NameForParsing) then
         begin
           Delete(FItemIndex);
           if PrevItemIndex > Count - 1 then PrevItemIndex := Count - 1;

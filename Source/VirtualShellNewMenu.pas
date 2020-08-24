@@ -84,14 +84,14 @@ type
   private
     FData: Pointer;                // If the file is created using Data in the registry
     FDataSize: integer;            // Size of the Data
-    FExtension: WideString;        // Extension of the file
-    FFileType: WideString;         // String used for the Menu Text
+    FExtension: string;        // Extension of the file
+    FFileType: string;         // String used for the Menu Text
     FNewShellKind: TNewShellKind;  // The method to create the new file
     FSystemImageIndex: integer;    // Index of the associated icon in the system imagelist
-    FNewShellKindStr: WideString;  // The string associate with the create method, depends on FNewShellKind
+    FNewShellKindStr: string;  // The string associate with the create method, depends on FNewShellKind
     FOwner: TVirtualShellNewMenuItem;
   public
-    procedure CreateNewDocument(PopupMenu: TVirtualShellNewMenu; NewFileTargetPath, FileName: WideString);
+    procedure CreateNewDocument(PopupMenu: TVirtualShellNewMenu; NewFileTargetPath, FileName: string);
     procedure FreeData;
     function IsBriefcase: Boolean;
     function IsCreateLink: Boolean;
@@ -99,10 +99,10 @@ type
     property Data: Pointer read FData write FData;
     property DataSize: integer read FDataSize write FDataSize;
     destructor Destroy; override;
-    property Extension: WideString read FExtension write FExtension;
-    property FileType: WideString read FFileType write FFileType;
+    property Extension: string read FExtension write FExtension;
+    property FileType: string read FFileType write FFileType;
     property NewShellKind: TNewShellKind read FNewShellKind write FNewShellKind;
-    property NewShellKindStr: WideString read FNewShellKindStr write FNewShellKindStr;
+    property NewShellKindStr: string read FNewShellKindStr write FNewShellKindStr;
     property Owner: TVirtualShellNewMenuItem read FOwner write FOwner;
     property SystemImageIndex: integer read FSystemImageIndex write FSystemImageIndex;
   end;
@@ -134,8 +134,8 @@ type
   end;
 
   TOnAddMenuItem = procedure(Sender: TPopupMenu; const NewMenuItem: TVirtualShellNewItem; var Allow: Boolean) of object;
-  TOnCreateNewFile = procedure(Sender: TMenu; const NewMenuItem: TVirtualShellNewItem; var Path, FileName: WideString; var Allow: Boolean) of object;
-  TOnAfterFileCreate = procedure(Sender: TMenu; const NewMenuItem: TVirtualShellNewItem; const FileName: WideString) of object;
+  TOnCreateNewFile = procedure(Sender: TMenu; const NewMenuItem: TVirtualShellNewItem; var Path, FileName: string; var Allow: Boolean) of object;
+  TOnAfterFileCreate = procedure(Sender: TMenu; const NewMenuItem: TVirtualShellNewItem; const FileName: string) of object;
 
   {$IF CompilerVersion >= 23}
   [ComponentPlatformsAttribute(pidWin32 or pidWin64)]
@@ -169,8 +169,8 @@ type
     { Protected declarations }
     procedure CreateMenuItems(ParentItem: TMenuItem);
     procedure DoAddMenuItem(NewMenuItem: TVirtualShellNewItem; var Allow: Boolean); dynamic;
-    procedure DoAfterFileCreate(NewMenuItem: TVirtualShellNewItem; FileName: WideString); dynamic;
-    procedure DoCreateNewFile(NewMenuItem: TVirtualShellNewItem; var Path, FileName: WideString; var Allow: Boolean);
+    procedure DoAfterFileCreate(NewMenuItem: TVirtualShellNewItem; FileName: string); dynamic;
+    procedure DoCreateNewFile(NewMenuItem: TVirtualShellNewItem; var Path, FileName: string; var Allow: Boolean);
 
     property ShellNewItems: TVirtualShellNewItemList read FShellNewItems;
     property SystemImages: TImageList read FSystemImages write FSystemImages;
@@ -202,39 +202,20 @@ type
 
 implementation
 
-uses
-  TypInfo, AnsiStrings;
-
-{$IFDEF USE_TOOLBAR_TB2K}
-
-procedure SetTBItemCaption(Item: TTBCustomItem; Caption: WideString);
-// Set the unicode caption to the Item if it has a valid
-// WideString Caption property.
-var
-  PropInfo: PPropInfo;
-begin
-  PropInfo := GetPropInfo(Item, 'Caption', [tkWString]);
-  if PropInfo = nil then
-    Item.Caption := Caption
-  else
-    SetWideStrProp(Item, PropInfo, Caption);
-end;
-{$ENDIF}
-
 { TVirtualShellNewItem }
 
-procedure TVirtualShellNewItem.CreateNewDocument(PopupMenu: TVirtualShellNewMenu; NewFileTargetPath, FileName: WideString);
+procedure TVirtualShellNewItem.CreateNewDocument(PopupMenu: TVirtualShellNewMenu; NewFileTargetPath, FileName: string);
 var
   Handle: THandle;
   TemplateFound: Boolean;
   Skip: Boolean;
-  Path, ShellCmd, Params, NewFileSourcePath: WideString;
+  Path, ShellCmd, Params, NewFileSourcePath: string;
   Tail: PWideChar;
   OldChar: WideChar;
 begin
-  if WideDirectoryExists(NewFileTargetPath) then
+  if DirectoryExists(NewFileTargetPath) then
   begin
-    NewFileTargetPath := WideIncludeTrailingBackslash(NewFileTargetPath);
+    NewFileTargetPath := IncludeTrailingPathDelimiter(NewFileTargetPath);
     if FileName = '' then
     begin
       if NewShellKind <> nmk_Folder then
@@ -252,8 +233,9 @@ begin
     Skip := False;
     if PopupMenu.WarnOnOverwrite then
     begin
-      if FileExistsW(NewFileTargetPath) then
-        Skip := WideMessageBox(Application.Handle, S_WARNING, S_OVERWRITE_EXISTING_FILE, MB_OKCANCEL or MB_ICONWARNING) = IDCANCEL
+      if FileExists(NewFileTargetPath) then
+        Skip := MessageBox(Application.Handle, PWideChar(S_WARNING),
+          PWideChar(S_OVERWRITE_EXISTING_FILE), MB_OKCANCEL or MB_ICONWARNING) = IDCANCEL
     end;
     if not Skip then
     begin
@@ -263,10 +245,7 @@ begin
             Handle := FileCreate(NewFileTargetPath);
             if Handle <> INVALID_HANDLE_VALUE then
             begin
-              if IsUnicode then
-                SHChangeNotify(SHCNE_CREATE, SHCNF_PATHW, PWideChar(NewFileTargetPath), nil)
-              else
-                SHChangeNotify(SHCNE_CREATE, SHCNF_PATHA, PAnsiChar( AnsiString( NewFileTargetPath)), nil);
+              SHChangeNotify(SHCNE_CREATE, SHCNF_PATHW, PWideChar(NewFileTargetPath), nil);
               FileClose(Handle);
             end;
           end;
@@ -277,7 +256,7 @@ begin
             if Assigned(TemplatesFolder) then
             begin
               NewFileSourcePath := TemplatesFolder.NameParseAddress + '\' + NewShellKindStr;
-              TemplateFound := FileExistsW(NewFileSourcePath);
+              TemplateFound := FileExists(NewFileSourcePath);
             end;
 
             {NEW: Some Programs like WinRAR store the templates elsewhere (like in their own programdirectory)}
@@ -285,7 +264,7 @@ begin
             if not TemplateFound then
             begin
               NewFileSourcePath := NewShellKindStr;
-              TemplateFound := FileExistsW(NewFileSourcePath);
+              TemplateFound := FileExists(NewFileSourcePath);
             end;
 
             { Microsoft can't seem to even get its applications to follow the rules   }
@@ -293,18 +272,12 @@ begin
             if not TemplateFound then
             begin
               NewFileSourcePath := WindowsDirectory + '\ShellNew\' + NewShellKindStr;
-              TemplateFound := FileExistsW(NewFileSourcePath);
+              TemplateFound := FileExists(NewFileSourcePath);
             end;
             if TemplateFound then
             begin
-              if Assigned(CopyFileW_MP) then
-                CopyFileW_MP(PWideChar( NewFileSourcePath), PWideChar( NewFileTargetPath), True)
-              else
-                CopyFileA(PAnsiChar( AnsiString( NewFileSourcePath)), PAnsiChar( AnsiString( NewFileTargetPath)), True);
-              if IsUnicode then
-                SHChangeNotify(SHCNE_CREATE, SHCNF_PATHW, PWideChar(NewFileTargetPath), nil)
-              else
-                SHChangeNotify(SHCNE_CREATE, SHCNF_PATHA, PAnsiChar( AnsiString( NewFileTargetPath)), nil);
+              CopyFile(PWideChar( NewFileSourcePath), PWideChar( NewFileTargetPath), True);
+              SHChangeNotify(SHCNE_CREATE, SHCNF_PATHW, PWideChar(NewFileTargetPath), nil);
             end;
           end;
         nmk_Data:
@@ -317,10 +290,7 @@ begin
               FileWrite(Handle, Data^, DataSize)
             finally
               FileClose(Handle);
-              if IsUnicode then
-                SHChangeNotify(SHCNE_CREATE, SHCNF_PATHW, PWideChar(NewFileTargetPath), nil)
-              else
-                SHChangeNotify(SHCNE_CREATE, SHCNF_PATHA, PAnsiChar( AnsiString( NewFileTargetPath)), nil);
+              SHChangeNotify(SHCNE_CREATE, SHCNF_PATHW, PWideChar(NewFileTargetPath), nil);
             end
           end;
         nmk_Command:
@@ -341,7 +311,7 @@ begin
               { In this OS it is not necessary to change the %1 to 1? Oh well     }
               { Undocumented Shell fun at its best.                               }
               Path := SystemDirectory + S_RUNDLL32;
-              if not FileExistsW(Path) then
+              if not FileExists(Path) then
                 Path := WindowsDirectory + S_RUNDLL32;
               WideShellExecute(Application.Handle, S_OPEN, Path,
                 S_BRIEFCASE_HACK_STRING + NewFileTargetPath, '')
@@ -353,9 +323,9 @@ begin
                 if NewShellKindStr[1] = '"' then
                 begin
                   Tail := @NewShellKindStr[2];
-                  while (Tail^ <> WideString('"')) and (Tail^ <> WideNull) do
+                  while (Tail^ <> string('"')) and (Tail^ <> WideNull) do
                     Inc(Tail, 1);
-                  if Tail^ = WideString('"') then
+                  if Tail^ = string('"') then
                   begin
                     Inc(Tail, 1);
                     OldChar := Tail^;
@@ -371,25 +341,22 @@ begin
                   end;
                 end;  
               end;
-              Params := WideStringReplace(Params, '%1', WideExtractFilePath(NewFileTargetPath), [rfReplaceAll, rfIgnoreCase]);
+              Params := StringReplace(Params, '%1', ExtractFilePath(NewFileTargetPath), [rfReplaceAll, rfIgnoreCase]);
               SpecialVariableReplacePath(ShellCmd);
               WideShellExecute(Application.Handle, S_OPEN, ShellCmd, Params, '')
             end
           end;
         nmk_Folder:
           begin
-            WideCreateDir(NewFileTargetPath);
+            CreateDir(NewFileTargetPath);
           end;
         nmk_Shortcut:
           begin
-            NewFileTargetPath := WideIncludeTrailingBackslash( WideExtractFilePath(NewFileTargetPath)) + S_NEW + S_SHORTCUT + '.lnk';
+            NewFileTargetPath := IncludeTrailingPathDelimiter( ExtractFilePath(NewFileTargetPath)) + S_NEW + S_SHORTCUT + '.lnk';
             Handle := FileCreate(NewFileTargetPath);
             if Handle <> INVALID_HANDLE_VALUE then
             begin
-              if IsUnicode then
-                SHChangeNotify(SHCNE_CREATE, SHCNF_PATHW, PWideChar(NewFileTargetPath), nil)
-              else
-                SHChangeNotify(SHCNE_CREATE, SHCNF_PATHA, PAnsiChar( AnsiString( NewFileTargetPath)), nil);
+              SHChangeNotify(SHCNE_CREATE, SHCNF_PATHW, PWideChar(NewFileTargetPath), nil);
               FileClose(Handle);
             end;
             WideShellExecute(Application.Handle, 'open', 'rundll32.exe', 'appwiz.cpl,NewLinkHere ' + NewFileTargetPath, '')
@@ -418,12 +385,12 @@ end;
 
 function TVirtualShellNewItem.IsBriefcase: Boolean;
 begin
-  Result := (AnsiPos(S_BRIEFCASE_IDENTIFIER, NewShellKindStr) > 0)
+  Result := (Pos(S_BRIEFCASE_IDENTIFIER, NewShellKindStr) > 0)
 end;
 
 function TVirtualShellNewItem.IsCreateLink: Boolean;
 begin
-  Result := (AnsiPos(S_CREATELINK_IDENTIFIER, NewShellKindStr) > 0)
+  Result := (Pos(S_CREATELINK_IDENTIFIER, NewShellKindStr) > 0)
 end;
 
 { TVirtualShellNewItemList }
@@ -431,12 +398,12 @@ end;
 procedure TVirtualShellNewItemList.BuildList;
 
     { Only handle the first level extension keys, except for the lnk files }
-    function IsValidExtKey(Key: AnsiString): Boolean;
+    function IsValidExtKey(Key: string): Boolean;
     begin
       Result := False;
       if Length(Key) > 0 then
         Result := ((Key[1] = '.') or (Key[1] = '*')) and
-          (System.AnsiStrings.AnsiStrIComp(PAnsiChar(Key), '.lnk') <> 0)
+          (WideStrIComp(PWideChar(Key), '.lnk') <> 0)
     end;
 
 var
@@ -446,7 +413,6 @@ var
   MenuText, DefaultKey, FileCreateType, ShellNewKeyPath: string;
   OldCursor: hCursor;
   NewShellNewItem: TVirtualShellNewItem;
-  FileInfoA: TSHFileInfoA;
   FileInfoW: TSHFileInfoW;
   NewShellLink: TNewShellKind;
   DataSize: integer;
@@ -468,7 +434,7 @@ begin
       RegList.Sorted := True;
       for i := 0 to RegList.Count - 1  do
         { Only work on extension keys not the extention type keys }
-        if IsValidExtKey(AnsiString(RegList[i])) then
+        if IsValidExtKey(RegList[i]) then
         begin
           { Open the extension key }
           ShellNewKeyPath := RegList[i];
@@ -547,29 +513,15 @@ begin
                   NewShellNewItem.NewShellKindStr := FileCreateType;
                   NewShellNewItem.Data := Data;
                   NewShellNewItem.DataSize := DataSize;
-                  if Assigned(SHGetFileInfoW_MP) then
-                  begin
-                    if SHGetFileInfoW_MP(PWideChar(NewShellNewItem.Extension),
-                                     FILE_ATTRIBUTE_NORMAL,
-                                     FileInfoW,
-                                     SizeOf( FileInfoW),
-                                     SHGFI_USEFILEATTRIBUTES or
-                                     SHGFI_SHELLICONSIZE or
-                                     SHGFI_ICON or
-                                     SHGFI_SYSICONINDEX) > 0 then
-                      NewShellNewItem.SystemImageIndex := FileInfoW.iIcon;
-                  end else
-                  begin
-                    if SHGetFileInfoA(PAnsiChar( AnsiString( NewShellNewItem.Extension)),
+                  if SHGetFileInfo(PWideChar(NewShellNewItem.Extension),
                                    FILE_ATTRIBUTE_NORMAL,
-                                   FileInfoA,
-                                   SizeOf( FileInfoA),
+                                   FileInfoW,
+                                   SizeOf( FileInfoW),
                                    SHGFI_USEFILEATTRIBUTES or
                                    SHGFI_SHELLICONSIZE or
                                    SHGFI_ICON or
                                    SHGFI_SYSICONINDEX) > 0 then
-                    NewShellNewItem.SystemImageIndex := FileInfoA.iIcon;
-                  end;
+                    NewShellNewItem.SystemImageIndex := FileInfoW.iIcon;
                   Add(NewShellNewItem);
                 end;
                 Reg.CloseKey;
@@ -636,7 +588,7 @@ end;
 
 procedure TVirtualShellNewMenuItem.Click;
 var
-  Path, FileName: WideString;
+  Path, FileName: string;
   Allow: Boolean;
 begin
   inherited;
@@ -753,14 +705,14 @@ begin
 end;
 
 procedure TVirtualShellNewMenu.DoAfterFileCreate(
-  NewMenuItem: TVirtualShellNewItem; FileName: WideString);
+  NewMenuItem: TVirtualShellNewItem; FileName: string);
 begin
   if Assigned(OnAfterFileCreate) then
     OnAfterFileCreate(Self, NewMenuItem, FileName);
 end;
 
 procedure TVirtualShellNewMenu.DoCreateNewFile(NewMenuItem: TVirtualShellNewItem;
-  var Path, FileName: WideString; var Allow: Boolean);
+  var Path, FileName: string; var Allow: Boolean);
 begin
   Path := '';
   FileName := '';
@@ -807,7 +759,7 @@ begin
   for I := 0 to Items.Count - 1 do begin
     if Items[I].Caption <> '-' then begin
       M := ItemClass.Create(nil);
-      SetTBItemCaption(M, Items[I].Caption);
+      M.Caption := Items[I].Caption;
       M.Tag := I;
       M.ImageIndex := Items[I].ImageIndex;
       M.OnClick := OnTB2KMenuItemClick;

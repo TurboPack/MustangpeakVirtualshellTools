@@ -301,13 +301,13 @@ type
     function AccessabilityDialog(Page: integer): Boolean;
     function AddRemoveProgramsDialog(Page: integer): Boolean;
     function ControlPanel(Item: TControlPanel): Boolean;
-    function CreateNewShortcut(Path: WideString): Boolean;
+    function CreateNewShortcut(Path: string): Boolean;
     function DisplayPropertiesDialog(Page: integer): Boolean;
     function SHFindComputer: Boolean;
     function SHFindFiles(Root, FilterSample: TNamespace): Boolean;
     function SHFormatDrive(DriveLetter: Char): TSHFormatDriveCode;
-    function SHPickIconDialog(var FileName: WideString; var IconIndex: LongWord): Boolean;
-    procedure SHRunFileDialog(Window: HWnd; Icon: HIcon; WorkingPath, Caption, Description: WideString; Options: TVirtualRunFileDialogOptions);
+    function SHPickIconDialog(var FileName: string; var IconIndex: LongWord): Boolean;
+    procedure SHRunFileDialog(Window: HWnd; Icon: HIcon; WorkingPath, Caption, Description: string; Options: TVirtualRunFileDialogOptions);
     function InstallScreenSaver(ScreenSaver: string): Boolean;
     function InternetSettingsDialog(Page: integer): Boolean;
     function MicrosoftApps(App: TMicrosoftApp): Boolean;
@@ -403,44 +403,23 @@ begin
     ciSound:
         Result := Launch(S_CONTROLPANEL + S_SOUND);
     ciNetworkConfig:
-        if Win32Platform = VER_PLATFORM_WIN32_NT then
-          Result := Launch(S_CONTROLPANEL + S_NETWORKCONFIG_NT)
-        else
-          Result := Launch(S_CONTROLPANEL + S_NETWORKCONFIG_9X);
+        Result := Launch(S_CONTROLPANEL + S_NETWORKCONFIG_NT);
     ciODBCAdmin:
         Result := Launch(S_CONTROLPANEL + S_ODBCADMINISTRATOR);
     ciChangePassword:
-        if Win32Platform = VER_PLATFORM_WIN32_NT then
-           Result := False
-         else
-           Result := Launch(S_CONTROLPANEL + S_CHANGEPASSWORD);
+        Result := False;
     ciComPorts:
-        if Win32Platform = VER_PLATFORM_WIN32_NT then
-           Result := Launch(S_CONTROLPANEL + S_COMPORTS)
-         else
-           Result := False;
+        Result := Launch(S_CONTROLPANEL + S_COMPORTS);
     ciServerProperties:
-        if Win32Platform = VER_PLATFORM_WIN32_NT then
-          Result := Launch(S_CONTROLPANEL + S_SERVERPROPERTIES)
-         else
-           Result := False;
+        Result := Launch(S_CONTROLPANEL + S_SERVERPROPERTIES);
     ciAddNewHardware:
-        if Win32Platform = VER_PLATFORM_WIN32_NT then
-           Result := False
-         else
-           Result := Launch(S_CONTROLPANEL + S_ADDNEWHARDWARE);
+        Result := False;
     ciAddNewPrinter:
-        if Win32Platform = VER_PLATFORM_WIN32_NT then
-           Result := False
-         else
-           Result := Launch(S_ADDNEWPRINTER);
+        Result := False;
     ciThemeProperties:
         Result := Launch(S_CONTROLPANEL + S_THEMEPROPERTIES);
     ciUPS_PowerOptions:
-        if Win32Platform = VER_PLATFORM_WIN32_NT then
-          Result := Launch(S_CONTROLPANEL + S_UPS_POWEROPTIONS)
-         else
-           Result := False;
+        Result := Launch(S_CONTROLPANEL + S_UPS_POWEROPTIONS);
     ciTweakUI:
       Result := Launch(S_CONTROLPANEL + S_TWEAKUI)
   else
@@ -454,7 +433,7 @@ begin
   FShowErrorCodes := True;
 end;
 
-function TAppletsAndWizards.CreateNewShortcut(Path: WideString): Boolean;
+function TAppletsAndWizards.CreateNewShortcut(Path: string): Boolean;
 begin
   Result := Launch(S_CREATESHORTCUT + Path);
 end;
@@ -652,7 +631,7 @@ begin
     Result := fdError;
 end;
 
-function TAppletsAndWizards.SHPickIconDialog(var FileName: WideString;
+function TAppletsAndWizards.SHPickIconDialog(var FileName: string;
   var IconIndex: LongWord): Boolean;
 { Returns False if User Canceled                                                }
 { The user may browse to a different file so check the filename on return       }
@@ -689,7 +668,7 @@ begin
 end;
 
 procedure TAppletsAndWizards.SHRunFileDialog(Window: HWnd; Icon: HIcon; WorkingPath, Caption,
-  Description: WideString; Options: TVirtualRunFileDialogOptions);
+  Description: string; Options: TVirtualRunFileDialogOptions);
 
 { To monitor what file is being run and to cancel or force a retry use the      }
 { TPickIconDlg component with the OnRunFile event.                              }
@@ -788,7 +767,7 @@ var
   RunFileDlgA: PRunFileDlgA;
   RunFileDlgW: PRunFileDlgW;
   TempFilePathA, TempWorkingDirA: AnsiString;
-  TempFilePathW, TempWorkingDirW: WideString;
+  TempFilePathW, TempWorkingDirW: string;
   RunResult: TRunFileResult;   
 begin
   case message.Msg of

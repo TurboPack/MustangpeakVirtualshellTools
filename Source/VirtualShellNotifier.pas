@@ -39,7 +39,7 @@ const
   // Literal translations of TVirtualShellNotifyEvent type.  Useful when using the
   // OnShellNotify event to print out what event occured.  VirtualShellUtilities.pas
   // has a helper function ShellNotifyEventToStr that uses these.
-  SHELL_NOTIFY_EVENTS: array[0..19] of WideString = (
+  SHELL_NOTIFY_EVENTS: array[0..19] of string = (
     'Assocciation Changed',
     'Attributes',
     'Item Create',
@@ -114,7 +114,7 @@ type
     function GetFilterEvents: Boolean;
     function GetMapVirtualFolders: Boolean;
     procedure LockNotifier;
-    function NotifyWatchFolder(Control: TWinControl; WatchFolder: WideString): Boolean;
+    function NotifyWatchFolder(Control: TWinControl; WatchFolder: string): Boolean;
     procedure PostShellNotifyEvent(NotifyType: LPARAM; PIDL1, PIDL2: PItemIDList);
     function RegisterKernelChangeNotify(Control: TWinControl; NotifyEvents: TVirtualKernelNotifyEvents): Boolean;
     procedure RegisterKernelSpecialFolderWatch(SpecialFolder: Longword); // Use the SHGetSpecialFolder CSIDL_xxx constants
@@ -354,7 +354,7 @@ type
     function ChangeInSpecialFolder(PIDL: PItemIDList): Integer;
     procedure Execute; override;
     function GenerateVirtualFolderPathPIDL(PhysicalPIDL: PItemIdList; RegisteredSpecialFolderIndex: Integer; APIDLMgr: TCommonPIDLManager): PItemIDList;
-    function PathToPIDL(APath: WideString): PItemIDList;
+    function PathToPIDL(APath: string): PItemIDList;
 
     property SpecialFolderVirtualPIDLs: TCommonPIDLList read FSpecialFolderVirtualPIDLs write FSpecialFolderVirtualPIDLs;
     property SpecialFolderPhysicalPIDL: TCommonPIDLList read FSpecialFolderPhysicalPIDL write FSpecialFolderPhysicalPIDL;
@@ -377,9 +377,9 @@ type
     FShellChangeRegistered: Boolean;
     FKernelChangeRegistered: Boolean;
     FControl: TWinControl;
-    FWatchFolder: WideString; // The folder that the Kernel Notification system is watching for a change
+    FWatchFolder: string; // The folder that the Kernel Notification system is watching for a change
     FNotifyEvents: TVirtualKernelNotifyEvents; // Events that the Kernel Notification will trigger on
-    procedure SetWatchFolder(const Value: WideString);
+    procedure SetWatchFolder(const Value: string);
     function GetIsRegistered: Boolean;
   public
     function MapNotifyEvents: Longword;  // Maps the TVirtualKernelNotifyEvents to the API Flags
@@ -389,7 +389,7 @@ type
     property KernelChangeRegistered: Boolean read FKernelChangeRegistered write FKernelChangeRegistered;
     property NotifyEvents: TVirtualKernelNotifyEvents read FNotifyEvents write FNotifyEvents;
     property ShellChangeRegistered: Boolean read FShellChangeRegistered write FShellChangeRegistered;
-    property WatchFolder: WideString read FWatchFolder write SetWatchFolder;
+    property WatchFolder: string read FWatchFolder write SetWatchFolder;
   end;
 
   TVirtualChangeNotifier = class(TInterfacedObject, IVirtualChangeNotifier)
@@ -436,7 +436,7 @@ type
 
     procedure AddEvent(ShellNotifyEvent: TVirtualShellNotifyEvent; PIDL1, PIDL2: PItemIdList; APIDLMgr: TCommonPIDLManager);
     procedure LockNotifier;
-    function NotifyWatchFolder(Control: TWinControl; WatchFolder: WideString): Boolean;
+    function NotifyWatchFolder(Control: TWinControl; WatchFolder: string): Boolean;
     procedure PostShellNotifyEvent(NotifyType: LPARAM; PIDL1, PIDL2: PItemIDList);
     function RegisterKernelChangeNotify(Control: TWinControl; NotifyEvents: TVirtualKernelNotifyEvents): Boolean;
     procedure RegisterKernelSpecialFolderWatch(SpecialFolder: Longword); // Use the SHGetSpecialFolder CSIDL_xxx constants
@@ -488,7 +488,7 @@ type
 
 
 
-function VirtualShellNotifyEventToStr(ShellNotifyEvent: TVirtualShellNotifyEvent): WideString;
+function VirtualShellNotifyEventToStr(ShellNotifyEvent: TVirtualShellNotifyEvent): string;
 function FreeSpaceNotifyToDrive(dwWord: DWORD): WideChar;
 function ShellEventSort(Item1, Item2: Pointer): Integer;
 
@@ -545,7 +545,7 @@ begin
     Result := ' ';
 end;
 
-function VirtualShellNotifyEventToStr(ShellNotifyEvent: TVirtualShellNotifyEvent): WideString;
+function VirtualShellNotifyEventToStr(ShellNotifyEvent: TVirtualShellNotifyEvent): string;
 begin
   case ShellNotifyEvent of
     vsneAssoccChanged: Result := SHELL_NOTIFY_EVENTS[0];
@@ -1110,7 +1110,7 @@ begin
 end;
 
 function TVirtualChangeNotifier.NotifyWatchFolder(Control: TWinControl;
-  WatchFolder: WideString): Boolean;
+  WatchFolder: string): Boolean;
 var
   ChangeControl: TVirtualChangeControl;
 begin
@@ -1205,7 +1205,7 @@ end;
 procedure TVirtualChangeNotifier.RegisterKernelSpecialFolderWatch(SpecialFolder: Longword);
 var
   DeskPIDL, ParentPIDL, PIDL: PItemIDList;
-  WS: WideString;
+  WS: string;
   Desktop, Folder, DeskFolder: IShellFolder;
   PIDLMgr: TCommonPIDLManager;
   StrRet: TStrRet;
@@ -1500,19 +1500,15 @@ begin
   if vkneLastWrite in NotifyEvents then
     Result := Result or FILE_NOTIFY_CHANGE_LAST_WRITE;
 
-  // Windows 95 can't deal with these. Need to check Win98/ME
-  if Win32Platform = VER_PLATFORM_WIN32_NT then
-  begin
-    if vkneLastAccess in NotifyEvents then
-      Result := Result or FILE_NOTIFY_CHANGE_LAST_ACCESS;
-    if vkneCreation in NotifyEvents then
-      Result := Result or FILE_NOTIFY_CHANGE_CREATION;
-    if vkneSecurity in NotifyEvents then
-      Result := Result or FILE_NOTIFY_CHANGE_SECURITY;
-  end
+  if vkneLastAccess in NotifyEvents then
+    Result := Result or FILE_NOTIFY_CHANGE_LAST_ACCESS;
+  if vkneCreation in NotifyEvents then
+    Result := Result or FILE_NOTIFY_CHANGE_CREATION;
+  if vkneSecurity in NotifyEvents then
+    Result := Result or FILE_NOTIFY_CHANGE_SECURITY;
 end;
 
-procedure TVirtualChangeControl.SetWatchFolder(const Value: WideString);
+procedure TVirtualChangeControl.SetWatchFolder(const Value: string);
 begin
   Assert(KernelChangeRegistered, 'Attempting to change WatchFolder with out registering a Kernel notifier in TVirtualChangeNotifier class');
   if KernelChangeRegistered then
@@ -1573,7 +1569,6 @@ procedure TVirtualKernelChangeThread.Execute;
       List: TList;
       i: integer;
       ChangeControl: TVirtualChangeControl;
-      S: AnsiString;
       HandleIndex: integer;
       PIDL: PItemIDList;
     begin
@@ -1593,13 +1588,8 @@ procedure TVirtualKernelChangeThread.Execute;
           // These are the special folders that are difficult to watch
           for i := 0 to SpecialFolderPhysicalPath.Count - 1 do
           begin
-            if Win32Platform = VER_PLATFORM_WIN32_NT then
-              Result.Handles[HandleIndex] := FindFirstChangeNotificationW_MP(
-                PWideChar(WideString(SpecialFolderPhysicalPath[i])), False, Special)
-            else begin
-              S := AnsiString(SpecialFolderPhysicalPath[i]);
-              Result.Handles[HandleIndex] := FindFirstChangeNotificationA(PAnsiChar(S), False, Special)
-            end;
+            Result.Handles[HandleIndex] := FindFirstChangeNotification(
+              PWideChar(SpecialFolderPhysicalPath[i]), False, Special);
             if Result.Handles[HandleIndex] <> INVALID_HANDLE_VALUE then
             begin
               Result.NSs[HandleIndex] := TChangeNamespace.Create(SpecialFolderPhysicalPIDL[i]);
@@ -1618,13 +1608,8 @@ procedure TVirtualKernelChangeThread.Execute;
             begin
               if (ChangeControl.WatchFolder <> '') then
               begin
-                if Win32Platform = VER_PLATFORM_WIN32_NT then
-                  Result.Handles[HandleIndex] := FindFirstChangeNotificationW_MP(PWideChar(ChangeControl.WatchFolder),
-                    False, ChangeControl.MapNotifyEvents)
-                else begin
-                  S := AnsiString(ChangeControl.WatchFolder);
-                  Result.Handles[HandleIndex] := FindFirstChangeNotificationA(PAnsiChar(S), False, ChangeControl.MapNotifyEvents)
-                end;
+                Result.Handles[HandleIndex] := FindFirstChangeNotification(PWideChar(ChangeControl.WatchFolder),
+                  False, ChangeControl.MapNotifyEvents);
                 if Result.Handles[HandleIndex] <> INVALID_HANDLE_VALUE then
                 begin
                   PIDL := PathToPIDL(ChangeControl.WatchFolder);
@@ -1775,7 +1760,7 @@ begin
   end
 end;
 
-function TVirtualKernelChangeThread.PathToPIDL(APath: WideString): PItemIDList;
+function TVirtualKernelChangeThread.PathToPIDL(APath: string): PItemIDList;
 var
   Desktop: IShellFolder;
   pchEaten, dwAttributes: ULONG;
@@ -2090,9 +2075,8 @@ begin
     NR.bWatchSubTree := True;
     Flags := SHCNF_ACCEPT_INTERRUPTS or SHCNF_ACCEPT_NON_INTERRUPTS;
     Msg := WM_CHANGENOTIFY;
-    if (Win32Platform = VER_PLATFORM_WIN32_NT) and
-      Assigned(SHChangeNotificationLock) and
-      Assigned(SHChangeNotificationUnlock)
+    if Assigned(SHChangeNotificationLock) and
+       Assigned(SHChangeNotificationUnlock)
     then begin
       Flags := Flags or SHCNF_NO_PROXY;
       Msg := WM_CHANGENOTIFY_NT
@@ -2305,7 +2289,7 @@ var
   Drives, ParsedCount, Attribs: LongWord;
   i: integer;
   Drive: string;
-  DriveW, RecycleFolder: Widestring;
+  DriveW, RecycleFolder: string;
 begin
   // The first one in the list is the Virtual Recycle Bin
   SHGetSpecialFolderLocation(0, CSIDL_BITBUCKET, PIDL);
@@ -2587,7 +2571,7 @@ begin
   Exit;
   
 
-  // Does not work on floppy drives and such
+//  // Does not work on floppy drives and such
 //  if Assigned(ParentShellFolder) then
 //  begin
 //    rgfInOut := SFGAO_VALIDATE;
@@ -2779,8 +2763,8 @@ begin
 end;
 
 initialization
-  { Don't see a point in making this all WideString compatible }
-  ShellDLL := GetModuleHandleA(PAnsiChar(AnsiString(Shell32)));
+  { Don't see a point in making this all string compatible }
+  ShellDLL := GetModuleHandle(Shell32);
   if ShellDll <> 0 then
   begin
     ShellILIsEqual := GetProcAddress(ShellDLL, PAnsiChar(21));

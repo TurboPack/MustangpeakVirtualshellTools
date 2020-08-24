@@ -26,32 +26,20 @@ unit ColumnFormSpTBX;
 
 interface
 
-{$include Compilers.inc}
 {$include ..\Include\AddIns.inc}
 
-{$ifdef COMPILER_12_UP}
- {$WARN IMPLICIT_STRING_CAST       OFF}
- {$WARN IMPLICIT_STRING_CAST_LOSS  OFF}
-{$endif COMPILER_12_UP}
+{$WARN IMPLICIT_STRING_CAST       OFF}
+{$WARN IMPLICIT_STRING_CAST_LOSS  OFF}
 
 uses
   Windows, SysUtils, Classes, Controls, Forms,
   StdCtrls, ExtCtrls, VirtualTrees, ActiveX,
-  {$IFNDEF UNICODE}
-  TntForms,
-  {$ENDIF}
   SpTBXDkPanels, SpTBXControls, SpTBXEditors, SpTBXItem;
-
-
-{$IFDEF UNICODE}
-type
-  TTntForm = TForm;
-{$ENDIF}
 
 type
   TVETUpdate = procedure(Sender: TObject) of object;
 
-  TFormColumnSettings = class({$IFDEF COMPILER_12_UP}TForm{$ELSE}TTntForm{$ENDIF})
+  TFormColumnSettings = class(TForm)
     SpTBXPanel1: TSpTBXPanel;
     Bevel1: TBevel;
     Label2: TSpTBXLabel;
@@ -87,15 +75,9 @@ type
     procedure FormKeyPress(Sender: TObject; var Key: Char);
     procedure FormResize(Sender: TObject);
     procedure FormShow(Sender: TObject);
-    {$ifdef COMPILER_12_UP}
     procedure VSTColumnNamesGetText(Sender: TBaseVirtualTree;
       Node: PVirtualNode; Column: TColumnIndex; TextType: TVSTTextType;
       var CellText: string);
-    {$else}
-    procedure VSTColumnNamesGetText(Sender: TBaseVirtualTree;
-      Node: PVirtualNode; Column: TColumnIndex; TextType: TVSTTextType;
-      var CellText: WideString);
-    {$endif}
   private
     FDragNode: PVirtualNode;
     FOnVETUpdate: TVETUpdate;
@@ -109,7 +91,7 @@ type
 
   PColumnData = ^TColumnData;
   TColumnData = packed record
-    Title: WideString;
+    Title: string;
     Enabled: Boolean;
     Width: integer;
     ColumnIndex: integer;
@@ -120,9 +102,7 @@ var
 
 implementation
 
-// < FR added 11-28-05 >
 uses VirtualResources;
-// </ FR added 11-28-05 >
 
 {$R *.DFM}
 
@@ -299,7 +279,6 @@ begin
   CheckBoxLiveUpdate.Left := Label2.Left;
 end;
 
-// < FR added 11-28-05 >
 // Here we load the strings variables. This allow runtime customization.
 procedure TFormColumnSettings.FormShow(Sender: TObject);
 begin
@@ -312,9 +291,7 @@ begin
   ButtonCancel.Caption := STR_COLUMNDLG_BUTTONCANCEL;
   VSTColumnNames.CheckImageKind := COLUMNDLG_CHKSTYLE;
 end;
-// </ FR added 11-28-05 >
 
-{$ifdef COMPILER_12_UP}
 procedure TFormColumnSettings.VSTColumnNamesGetText(Sender: TBaseVirtualTree;
   Node: PVirtualNode; Column: TColumnIndex; TextType: TVSTTextType;
   var CellText: string);
@@ -324,16 +301,5 @@ begin
   ColData := PColumnData( Sender.GetNodeData(Node));
   CellText := ColData.Title
 end;
-{$else}
-procedure TFormColumnSettings.VSTColumnNamesGetText(Sender: TBaseVirtualTree;
-  Node: PVirtualNode; Column: TColumnIndex; TextType: TVSTTextType;
-  var CellText: WideString);
-var
-  ColData: PColumnData;
-begin
-  ColData := PColumnData( Sender.GetNodeData(Node));
-  CellText := ColData.Title
-end;
-{$endif}
 
 end.

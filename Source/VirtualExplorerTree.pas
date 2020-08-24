@@ -144,14 +144,12 @@ uses
   MPCommonUtilities,
   MPThreadManager,
   MPResources,
-  MPShellTypes,
   MPDataObject,
   Themes,
   Types,
   UITypes,
   UxTheme,
-  VirtualTrees.StyleHooks,
-  EasyListview;  // Windows XP themes support for D5-D6. Get these units from www.delphi-gems.com.
+  VirtualTrees.StyleHooks;
 
 {*******************************************************************************}
 {  VET Declarations                                                             }
@@ -202,7 +200,7 @@ type
 type
 
 { How VET displays the file size                                                }
-  TFileSizeFormat = ( 
+  TFileSizeFormat = (
     fsfExplorer,
     fsfActual,
     fsfDiskUsage
@@ -457,7 +455,7 @@ type
   );
   TPopupStates = set of TPopupState;
 
-  
+
   TPopupOption = (
     poAnimated,               // The popup uses animation to roll
     poEnabled,                // Enable or disable the popup
@@ -475,14 +473,14 @@ type
 type
   PFindSpecialFolderByNameData = ^TFindSpecialFolderByNameData;
   TFindSpecialFolderByNameData = record
-    Name: WideString;
+    Name: string;
     PIDL: PItemIDList;
   end;
 
 {-------------------------------------------------------------------------------}
 
 const
-  DefaultVETPaintOptions = [toShowButtons, toUseBlendedImages, toShowTreeLines, toGhostedIfUnfocused];
+  DefaultVETPaintOptions = [toHideSelection, toShowButtons, toUseBlendedImages, toShowTreeLines, toGhostedIfUnfocused];
   DefaultVETFolderOptions = [toFoldersExpandable];
   DefaultVETShellOptions = [toContextMenus, toRightAlignSizeColumn];
   DefaultVETMiscOptions = [toExecuteOnDblClk, toBrowseExecuteFolder, toBrowseExecuteFolderShortcut, toBrowseExecuteZipFolder];
@@ -490,9 +488,9 @@ const
   DefaultVETSyncOptions = [toCollapseTargetFirst, toSelectTarget, toExpandTarget];
 
   DefaultExplorerTreeFileObjects = [foFolders, foHidden];
-  DefaultExplorerTreeAutoOptions = [toAutoScroll];
+  DefaultExplorerTreeAutoOptions = [toAutoScroll, toAutoChangeScale];
   DefaultExplorerTreeMiscOptions = [toEditable, toAcceptOLEDrop, toToggleOnDblClick];
-  DefaultExplorerTreePaintOptions = [toShowButtons, toUseBlendedImages, toShowTreeLines, toGhostedIfUnfocused];
+  DefaultExplorerTreePaintOptions = [toHideSelection, toShowButtons, toUseBlendedImages, toShowTreeLines, toGhostedIfUnfocused];
   DefaultExplorerTreeVETFolderOptions = [toFoldersExpandable];
   DefaultExplorerTreeVETShellOptions = [toContextMenus];
   DefaultExplorerTreeVETMiscOptions = [toChangeNotifierThread, toBrowseExecuteFolder, toBrowseExecuteFolderShortcut, toBrowseExecuteZipFolder, toRemoveContextMenuShortCut];
@@ -501,9 +499,9 @@ const
   DefaultExplorerTreeVETSyncOptions = [toCollapseTargetFirst, toSelectTarget, toExpandTarget];
 
   DefaultExplorerListFileObjects = [foFolders, foHidden, foNonFolders, foEnableAsync];
-  DefaultExplorerListPaintOptions = [toShowTreeLines, toUseBlendedImages, toGhostedIfUnfocused];
+  DefaultExplorerListPaintOptions = [toHideSelection, toShowTreeLines, toUseBlendedImages, toGhostedIfUnfocused];
   DefaultExplorerListMiscOptions = [toAcceptOLEDrop, toToggleOnDblClick, toReportMode, toEditable];
-  DefaultExplorerListAutoOptions = [toAutoScroll];
+  DefaultExplorerListAutoOptions = [toAutoScroll, toAutoChangeScale];
   DefaultExplorerListVETFolderOptions = [toHideRootFolder];
   DefaultExplorerListVETShellOptions = [toContextMenus, toShellColumnMenu, toRightAlignSizeColumn];
   DefaultExplorerListVETMiscOptions = [toExecuteOnDblClk, toChangeNotifierThread, toBrowseExecuteFolder, toBrowseExecuteFolderShortcut, toBrowseExecuteZipFolder];
@@ -517,10 +515,10 @@ const
   // These are all for the popup windows for the combobox
   DefaultPopupMiscOptions = [];
 
-  DefaultPopupPaintOptions = [toUseBlendedImages, toPopupMode, toHideFocusRect, toShowBackground];
-  DefaultPopupAutoOptions = [toAutoScroll, toAutoScrollOnExpand, toAutoScrollOnExpand];
+  DefaultPopupPaintOptions = [toUseBlendedImages, toPopupMode, toHideFocusRect, toThemeAware, toShowBackground];
+  DefaultPopupAutoOptions = [toAutoScroll, toAutoScrollOnExpand, toAutoScrollOnExpand, toAutoChangeScale];
   DefaultPopupSelectionOptions = [toDisableDrawSelection];
-  DefaultExplorerComboVETFolderOptions = [toFoldersExpandable];
+  DefaultExplorerComboVETFolderOptions = [toFoldersExpandable, toNoUseVETColorsProp];
   DefaultExplorerComboVETShellOptions = [];
   DefaultExplorerComboVETMiscOptions = [toBrowseExecuteFolder, toBrowseExecuteZipFolder];
   DefaultExplorerComboVETImageOptions = [toImages];
@@ -720,9 +718,9 @@ type
     procedure Clear(FreeUserData: Boolean = False); virtual;
     constructor Create(AnAbsolutePIDL: PItemIDList; AnOwnerNode: TNodeStorage); virtual;
     destructor Destroy; override;
-    procedure LoadFromFile(FileName: WideString; Version: integer = VETStreamStorageVer; ReadVerFromStream: Boolean = False); override;
+    procedure LoadFromFile(FileName: string; Version: integer = VETStreamStorageVer; ReadVerFromStream: Boolean = False); override;
     procedure LoadFromStream(S: TStream; Version: integer = VETStreamStorageVer; ReadVerFromStream: Boolean = False); override;
-    procedure SaveToFile(FileName: WideString; Version: integer = VETStreamStorageVer; ReadVerFromStream: Boolean = False); override;
+    procedure SaveToFile(FileName: string; Version: integer = VETStreamStorageVer; ReadVerFromStream: Boolean = False); override;
     procedure SaveToStream(S: TStream; Version: integer = VETStreamStorageVer; WriteVerToStream: Boolean = False); override;
 
     property AbsolutePIDL: PItemIDList read FAbsolutePIDL write FAbsolutePIDL;
@@ -758,7 +756,7 @@ type
     procedure Delete(APIDL: PItemIDList; StorageTypes: TStorageTypes; Force: Boolean = False; FreeUserData: Boolean = False);
     function Find(APIDL: PItemIDList; StorageTypes: TStorageTypes): TNodeStorage; overload; virtual;
     function Find(APIDL: PItemIDList; StorageTypes: TStorageTypes; var StorageNode: TNodeStorage): Boolean; overload; virtual;
-    function SetFileChecked(FileName: WideString; CheckBoxType: TCheckType): Boolean;
+    function SetFileChecked(FileName: string; CheckBoxType: TCheckType): Boolean;
     function SetPIDLChecked(PIDL: PItemIDList; CheckBoxType: TCheckType): Boolean;
     function Store(APIDL: PItemIDList; StorageTypes: TStorageTypes): TNodeStorage; virtual;
 
@@ -777,9 +775,9 @@ type
     procedure SetItems(Index: integer; const Value: TNodeStorage);
   public
     procedure Clear; override;
-    procedure LoadFromFile(FileName: WideString; Version: integer = VETStreamStorageVer; ReadVerFromStream: Boolean = False); override;
+    procedure LoadFromFile(FileName: string; Version: integer = VETStreamStorageVer; ReadVerFromStream: Boolean = False); override;
     procedure LoadFromStream(S: TStream; Version: integer = VETStreamStorageVer; ReadVerFromStream: Boolean = False); override;
-    procedure SaveToFile(FileName: WideString; Version: integer = VETStreamStorageVer; ReadVerFromStream: Boolean = False); override;
+    procedure SaveToFile(FileName: string; Version: integer = VETStreamStorageVer; ReadVerFromStream: Boolean = False); override;
     procedure SaveToStream(S: TStream; Version: integer = VETStreamStorageVer; WriteVerToStream: Boolean = False); override;
 
     property Items[Index: integer]: TNodeStorage read GetItems write SetItems; default;
@@ -827,7 +825,7 @@ type
     FLeafNodes: TLeafNodeList;
     FSelectedPIDLs: TCommonPIDLList;
     FTopNodePIDL: PItemIDList;
-    FRootFolderCustomPath: WideString;
+    FRootFolderCustomPath: string;
     FRootFolder: TRootFolder;
     FSelectedPIDLsParent: PItemIDList;
     FStorage: TRootNodeStorage;
@@ -844,19 +842,19 @@ type
     constructor Create; virtual;
     destructor Destroy; override;
     procedure Clear; virtual;
-    procedure LoadFromFile(FileName: WideString; Version: integer = VETStreamStorageVer; ReadVerFromStream: Boolean = False); override;
+    procedure LoadFromFile(FileName: string; Version: integer = VETStreamStorageVer; ReadVerFromStream: Boolean = False); override;
     procedure LoadFromStream(S: TStream; Version: integer = VETStreamStorageVer; ReadVerFromStream: Boolean = False); override;
     procedure RestoreTree(VET: TCustomVirtualExplorerTree; RestoreSelection, RestoreFocus: Boolean; ScrollToOldTopNode: Boolean = False);
     procedure RestoreTreeBranch(VET: TCustomVirtualExplorerTree; Node: PVirtualNode; RestoreSelection: Boolean);
     procedure SaveTree(VET: TCustomVirtualExplorerTree; SaveSelection, SaveFocus: Boolean);
     procedure SaveTreeBranch(VET: TCustomVirtualExplorerTree; Node: PVirtualNode; SaveSelection: Boolean);
-    procedure SaveToFile(FileName: WideString; Version: integer = VETStreamStorageVer; ReadVerFromStream: Boolean = False); override;
+    procedure SaveToFile(FileName: string; Version: integer = VETStreamStorageVer; ReadVerFromStream: Boolean = False); override;
     procedure SaveToStream(S: TStream; Version: integer = VETStreamStorageVer; WriteVerToStream: Boolean = False); override;
 
     property FocusPIDL: PItemIDList read FFocusPIDL write FFocusPIDL;
     property LeafNodes: TLeafNodeList read FLeafNodes;
     property RootFolder: TRootFolder read FRootFolder write FRootFolder;
-    property RootFolderCustomPath: WideString read FRootFolderCustomPath write FRootFolderCustomPath;
+    property RootFolderCustomPath: string read FRootFolderCustomPath write FRootFolderCustomPath;
     property RootFolderCustomPIDL: PItemIDList read FRootFolderCustomPIDL write FRootFolderCustomPIDL;
     property SelectedPIDLs: TCommonPIDLList read FSelectedPIDLs;
     property SelectedPIDLsParent: PItemIDList read FSelectedPIDLsParent;
@@ -869,13 +867,13 @@ type
   { views may be stored and retreived by VET or externally.                     }
   TView = class(TVETPersistent)
   private
-    FViewName: WideString;
+    FViewName: string;
     public
-      constructor Create(AViewName: WideString); reintroduce;
+      constructor Create(AViewName: string); reintroduce;
       procedure LoadFromStream(S: TStream; Version: integer = VETStreamStorageVer; ReadVerFromStream: Boolean = False); override;
       procedure SaveToStream(S: TStream; Version: integer = VETStreamStorageVer; WriteVerToStream: Boolean = False); override;
 
-      property ViewName: WideString read FViewName write FViewName;
+      property ViewName: string read FViewName write FViewName;
   end;
 
   { Implements a TList that can handle TView Objects.                           }
@@ -885,10 +883,10 @@ type
     procedure SetItems(Index: Integer; const Value: TView);
   public
     destructor Destroy; override;
-    procedure LoadFromFile(FileName: WideString; Version: integer = VETStreamStorageVer; ReadVerFromStream: Boolean = False); override;
+    procedure LoadFromFile(FileName: string; Version: integer = VETStreamStorageVer; ReadVerFromStream: Boolean = False); override;
     procedure LoadFromStream(S: TStream; Version: integer = VETStreamStorageVer; ReadVerFromStream: Boolean = False); override;
     procedure SaveToStream(S: TStream; Version: integer = VETStreamStorageVer; WriteVerToStream: Boolean = False); override;
-    procedure SaveToFile(FileName: WideString; Version: integer = VETStreamStorageVer; ReadVerFromStream: Boolean = False); override;
+    procedure SaveToFile(FileName: string; Version: integer = VETStreamStorageVer; ReadVerFromStream: Boolean = False); override;
 
     property Items[Index: Integer]: TView read GetItems write SetItems;
   end;
@@ -899,35 +897,35 @@ type
   TViewManager = class(TStreamableClass)
   private
     FViews: TViewList;
-    function GetView(ViewName: WideString): TView;
+    function GetView(ViewName: string): TView;
     function GetViewCount: Integer;
-    function GetViewName(Index: integer): WideString;
-    procedure SetViewName(Index: integer; NewViewName: WideString);
+    function GetViewName(Index: integer): string;
+    procedure SetViewName(Index: integer; NewViewName: string);
   protected
     property Views: TViewList read FViews write FViews;
   public
     procedure Clear; virtual;
     constructor Create;
     destructor Destroy; override;
-    procedure DeleteView(ViewName: WideString);
-    procedure LoadFromFile(FileName: WideString; Version: integer = VETStreamStorageVer; ReadVerFromStream: Boolean = False); override;
+    procedure DeleteView(ViewName: string);
+    procedure LoadFromFile(FileName: string; Version: integer = VETStreamStorageVer; ReadVerFromStream: Boolean = False); override;
     procedure LoadFromStream(S: TStream; Version: integer = VETStreamStorageVer; ReadVerFromStream: Boolean = False); override;
-    procedure ShowView(ViewName: WideString; VET: TCustomVirtualExplorerTree); virtual;
-    procedure Snapshot(NewViewName: WideString; VET: TCustomVirtualExplorerTree); virtual;
+    procedure ShowView(ViewName: string; VET: TCustomVirtualExplorerTree); virtual;
+    procedure Snapshot(NewViewName: string; VET: TCustomVirtualExplorerTree); virtual;
     procedure SaveToStream(S: TStream; Version: integer = VETStreamStorageVer; WriteVerToStream: Boolean = False); override;
-    procedure SaveToFile(FileName: WideString; Version: integer = VETStreamStorageVer; ReadVerFromStream: Boolean = False); override;
+    procedure SaveToFile(FileName: string; Version: integer = VETStreamStorageVer; ReadVerFromStream: Boolean = False); override;
 
-    property View[ViewName: WideString]: TView read GetView;
+    property View[ViewName: string]: TView read GetView;
     property ViewCount: integer read GetViewCount;
-    property ViewName[Index: integer]: WideString read GetViewName write SetViewName;
+    property ViewName[Index: integer]: string read GetViewName write SetViewName;
   end;
 
   TGlobalViewManager = class(TViewManager)
   public
     procedure LoadFromStream(S: TStream; Version: integer = VETStreamStorageVer; ReadVerFromStream: Boolean = False); override;
     procedure SaveToStream(S: TStream; Version: integer = VETStreamStorageVer; WriteVerToStream: Boolean = False); override;
-    procedure ShowView(ViewName: WideString; VET: TCustomVirtualExplorerTree); override;
-    procedure Snapshot(NewViewName: WideString; VET: TCustomVirtualExplorerTree); override;
+    procedure ShowView(ViewName: string; VET: TCustomVirtualExplorerTree); override;
+    procedure Snapshot(NewViewName: string; VET: TCustomVirtualExplorerTree); override;
   end;
 
 {*******************************************************************************}
@@ -1063,11 +1061,11 @@ type
   protected
     FMenuShown: Boolean;
 
-    procedure ContextMenuCmdCallback(Namespace: TNamespace; Verb: WideString;
+    procedure ContextMenuCmdCallback(Namespace: TNamespace; Verb: string;
     MenuItemID: Integer; var Handled: Boolean);
     procedure ContextMenuShowCallback(Namespace: TNamespace; Menu: hMenu;
       var Allow: Boolean);
-    procedure ContextMenuAfterCmdCallback(Namespace: TNamespace; Verb: WideString;
+    procedure ContextMenuAfterCmdCallback(Namespace: TNamespace; Verb: string;
       MenuItemID: Integer; Successful: Boolean);
     procedure ShowContextMenu(NS: TNamespace; Position: PPoint = nil);
   public
@@ -1182,7 +1180,7 @@ type
     Column: TColumnIndex; Node1, Node2: PVirtualNode; var Result: integer) of object;
   TVETOnHeaderRebuild = procedure(Sender: TCustomVirtualExplorerTree; Header: TVTHeader) of object;
   TVETOnShellExecute = procedure(Sender: TCustomVirtualExplorerTree; Namespace: TNamespace;
-    var WorkingDir: WideString; var CmdLineArgument: WideString; var Allow: Boolean) of object;
+    var WorkingDir: string; var CmdLineArgument: string; var Allow: Boolean) of object;
   TVETOnShellNotify = procedure(Sender: TCustomVirtualExplorerTree;
     ShellEvent: TVirtualShellEvent) of object;
   TVETOnEnumFolder = procedure(Sender: TCustomVirtualExplorerTree;
@@ -1190,9 +1188,9 @@ type
   TVETEnumFinishedEvent = procedure(Sender: TCustomVirtualExplorerTree) of object;
   TVETEnumLenghyOperaionEvent = procedure(Sender: TCustomVirtualExplorerTree; var ShowAnimation: Boolean) of object;
   TVETOnContextMenuAfterCmd = procedure(Sender: TCustomVirtualExplorerTree;
-    Namespace: TNamespace; Verb: WideString; MenuItemID: Integer; Successful: Boolean) of object;
+    Namespace: TNamespace; Verb: string; MenuItemID: Integer; Successful: Boolean) of object;
   TVETOnContextMenuCmd = procedure(Sender: TCustomVirtualExplorerTree;
-    Namespace: TNamespace; Verb: WideString; MenuItemID: Integer; var Handled: Boolean) of object;
+    Namespace: TNamespace; Verb: string; MenuItemID: Integer; var Handled: Boolean) of object;
   TVETOnContextMenuShow = procedure(Sender: TCustomVirtualExplorerTree;
     Namespace: TNamespace; Menu: hMenu; var Allow: Boolean) of object;
   TVETContextMenuItemChange = procedure(Sender: TCustomVirtualExplorerTree;
@@ -1213,9 +1211,9 @@ type
   TNamespaceStructureChangeEvent = procedure(Sender: TCustomVirtualExplorerTree; Node: PVirtualNode; NS: TNamespace; ChangeType: TNamespaceStructureChange) of object;
   TOnPopupRollDown = procedure(Sender: TObject; var Allow: Boolean) of object;
   TOnPopupRollUp = procedure(Sender: TObject; Selected: Boolean) of object;
-  TVETOnComboInvalidEntry = procedure(Sender: TCustomVirtualExplorerCombobox; EnteredText: WideString) of object;
-  TOnAutoCompleteUpdateList = procedure(Sender: TObject; const CurrentEditContents: WideString; EnumList: TStringList; var Handled: Boolean) of object;
-  TVETComboBoxDecodeSpecialVariableEvent = procedure(Sender: TCustomVirtualExplorerCombobox; Variable: WideString; var NS: TNamespace) of object;
+  TVETOnComboInvalidEntry = procedure(Sender: TCustomVirtualExplorerCombobox; EnteredText: string) of object;
+  TOnAutoCompleteUpdateList = procedure(Sender: TObject; const CurrentEditContents: string; EnumList: TStringList; var Handled: Boolean) of object;
+  TVETComboBoxDecodeSpecialVariableEvent = procedure(Sender: TCustomVirtualExplorerCombobox; Variable: string; var NS: TNamespace) of object;
   TOnComboPathChange = procedure(Sender: TCustomVirtualExplorerCombobox; SelectedNamespace: TNamespace) of object;
   TOnComboPathChanging = procedure(Sender: TCustomVirtualExplorerCombobox; PrevNamespace: TNamespace; var Allow: Boolean) of object;
   TVETOnComboDraw = procedure(Sender: TCustomVirtualExplorerCombobox; ACanvas: TCanvas; AClientRect, AButtonRect: TRect;
@@ -1265,7 +1263,7 @@ type
     FFileObjects: TFileObjects;         // Shell objects shown: Folders, Files, Hidden
     FRebuildRootNamespaceCount: integer;// Used for reference counting the RootNamespace rebuilds during DFM loading especially
     FRootFolder: TRootFolder;           // What Namespace folder it the tree root node
-    FRootFolderCustomPath: WideString;      // Root is a custom path
+    FRootFolderCustomPath: string;      // Root is a custom path
     FRootFolderCustomPIDL: PItemIDList; // Root is a custom PIDL
     FRootFolderNamespace: TNamespace;   // TNamespace of the Tree Root node
     FTempRootNamespace: TNamespace;     // Place holder to support the OnRootChanging event
@@ -1329,7 +1327,7 @@ type
     FShellNotifyQueue: TList;
     FExpandingByButtonClick: Boolean;
     FShellContextSubMenu: TPopupMenu;
-    FShellContextSubMenuCaption: WideString;
+    FShellContextSubMenuCaption: string;
     FChangeNotifierEnabled: Boolean;
     FThreadedImagesEnabled: Boolean;
     FChangeNotifierCount: integer;
@@ -1342,10 +1340,10 @@ type
     function GetOkToShellNotifyDispatch: Boolean;
     function GetOptions: TVirtualExplorerTreeOptions;
     function GetRecycleBinNode: PVirtualNode;
-    function GetSelectedFile: WideString;
+    function GetSelectedFile: string;
     function GetSelectedFiles: TStrings;
     function GetSelectedPaths: TStrings;
-    function GetSelectedPath: WideString;
+    function GetSelectedPath: string;
     function GetSelectedPIDL: PItemIDList;
     function GetThreadedExpandMarkEnabled: Boolean;
     function InternalWalkPIDLToNode(PIDL: PItemIDList): PVirtualNode;
@@ -1357,7 +1355,7 @@ type
     procedure SetNodeDataSize(const Value: Integer);
     procedure SetOptions(const Value: TVirtualExplorerTreeOptions);
     procedure SetRootFolder(const Value: TRootFolder);
-    procedure SetRootFolderCustomPath(const Value: WideString);
+    procedure SetRootFolderCustomPath(const Value: string);
     procedure SetRootFolderCustomPIDL(const Value: PItemIDList);
     procedure SetThreadedExpandMarkEnabled(Value: Boolean);
     procedure SetThreadedImagesEnabled(const Value: Boolean);
@@ -1395,8 +1393,8 @@ type
     procedure DoColumnResize(Column: TColumnIndex); override;
     procedure DoColumnUserChangedVisibility; virtual;
     function DoCompare(Node1, Node2: PVirtualNode; Column: TColumnIndex): Integer; override;
-    procedure DoContextMenuAfterCmd(Namespace: TNamespace; Verb: WideString; MenuItemID: Integer; Successful: Boolean);
-    function DoContextMenuCmd(Namespace: TNamespace; Verb: WideString; MenuItemID: Integer): Boolean;
+    procedure DoContextMenuAfterCmd(Namespace: TNamespace; Verb: string; MenuItemID: Integer; Successful: Boolean);
+    function DoContextMenuCmd(Namespace: TNamespace; Verb: string; MenuItemID: Integer): Boolean;
     procedure DoContextMenuSelect(Namespace: TNamespace; MenuItemID : Integer; SubMenuID: hMenu; MouseSelect: Boolean);
     function DoContextMenuShow(Namespace: TNamespace; Menu: hMenu): Boolean;
     function DoCreateDataObject: IDataObject; override;
@@ -1434,14 +1432,13 @@ type
     procedure DoUpdating(State: TVTUpdateState); override;
     function DragDrop(const DataObject: IDataObject; KeyState: Integer; Pt: TPoint;  var Effect: Integer): HResult; override;
     function DragEnter(KeyState: Integer; Pt: TPoint; var Effect: Integer): HResult; override;
-    procedure DragAndDrop(AllowedEffects: dword; const DataObject: IDataObject; var DragEffect: Integer); override;
     procedure DragLeave; override;
     function DragOver(Source: TObject; KeyState: Integer; DragState: TDragState; Pt: TPoint; var Effect: Integer): HResult; override;
     procedure DummyOnDragOver(Sender: TBaseVirtualTree; Source: TObject; Shift: TShiftState; State: TDragState; Pt: TPoint; Mode: TDropMode; var Effect: Integer; var Accept: Boolean);
     procedure EnumThreadFinished; virtual;
     procedure EnumThreadStart; virtual;
     procedure EnumThreadTimer(Enable: Boolean);
-    procedure ExecuteNamespace(Namespace: TNamespace; var WorkingDir: WideString; var CmdLineArgument: WideString); virtual;
+    procedure ExecuteNamespace(Namespace: TNamespace; var WorkingDir: string; var CmdLineArgument: string); virtual;
     function EnumerateFolderCallback(MessageWnd: HWnd; APIDL: PItemIDList; AParent: TNamespace; Data: pointer; var Terminate: Boolean): Boolean;
     function ExpandNamespaceFolder(Node: PVirtualNode): integer; virtual;
     function FindFolderByNameCallback(MessageWnd: HWnd; APIDL: PItemIDList; AParent: TNamespace; Data: Pointer; var Terminate: Boolean): Boolean;
@@ -1452,7 +1449,7 @@ type
     function GetColumnMenu: TColumnMenu; // prop getter for BCB compatibilty
     function GetOptionsClass: TTreeOptionsClass; override;
     function HasPopupMenu(Node: PVirtualNode; Column: TColumnIndex; Pos: TPoint): Boolean; override;
-    function InternalCreateNewFolder(TargetPIDL: PItemIDList; SuggestedFolderName: WideString): WideString; virtual;
+    function InternalCreateNewFolder(TargetPIDL: PItemIDList; SuggestedFolderName: string): string; virtual;
     procedure HideAnimateFolderWnd;
     procedure InvalidateChildNamespaces(Node: PVirtualNode; RefreshIcon: Boolean);
     procedure InvalidateImageByIndex(ImageIndex: integer);
@@ -1468,7 +1465,7 @@ type
     procedure Notification(AComponent: TComponent; Operation: TOperation); override;
     function OkToBrowseTo(PIDL: PItemIDList): Boolean; virtual;
     function OkToExpandNode(Node: PVirtualNode): Boolean;
-    function PathofNameSpace(NS: TNameSpace): WideString;
+    function PathofNameSpace(NS: TNameSpace): string;
     procedure Notify(var Msg: TMessage);
     procedure ReadChildNodes(Node: PVirtualNode; var ANodeArray: TNodeSearchArray; Sorted: Boolean; var ValidNodesRead: Integer);
     procedure RebuildRootNamespace; virtual;
@@ -1481,7 +1478,7 @@ type
     procedure ShowAnimateFolderWnd; virtual;
     procedure StoreColumnState; virtual;
     procedure SetActive(const Value: Boolean); virtual;
-    procedure ShellExecuteFolderLink(NS: TNamespace; WorkingDir, CmdLineArgument: WideString); virtual;
+    procedure ShellExecuteFolderLink(NS: TNamespace; WorkingDir, CmdLineArgument: string); virtual;
     function SuggestDropEffect(Source: TObject; Shift: TShiftState; Pt: TPoint; AllowedEffects: Integer): Integer; override;
     procedure TerminateEnumThread;
     function ValidRootNamespace: Boolean;
@@ -1533,7 +1530,7 @@ type
     property EnumThread: TVirtualBackGndEnumThread read FEnumThread write FEnumThread;
     property EnumTimer: THandle read FEnumTimer write FEnumTimer;
     property EnumBkGndTime: Cardinal read FEnumBkGndTime write FEnumBkGndTime;
-    property ExpandingByButtonClick: Boolean read FExpandingByButtonClick;  
+    property ExpandingByButtonClick: Boolean read FExpandingByButtonClick;
   {$IFDEF EXPLORERCOMBOBOX_L}
     property ExplorerComboBox: TCustomVirtualExplorerCombobox read FExplorerComboBox write SetExplorerComboBox;
   {$ENDIF}
@@ -1573,7 +1570,7 @@ type
     property RootFolder: TRootFolder read FRootFolder write SetRootFolder;
     property ShellBaseColumnCount: integer read FShellBaseColumnCount write FShellBaseColumnCount;
     property ShellContextSubMenu: TPopupMenu read FShellContextSubMenu write FShellContextSubMenu;
-    property ShellContextSubMenuCaption: WideString read FShellContextSubMenuCaption write FShellContextSubMenuCaption;
+    property ShellContextSubMenuCaption: string read FShellContextSubMenuCaption write FShellContextSubMenuCaption;
     property OkToShellNotifyDispatch: Boolean read GetOkToShellNotifyDispatch;   // IShellNotify
     property ShellNotifyQueue: TList read FShellNotifyQueue write FShellNotifyQueue;
     property ShellNotifyTimerHandle: THandle read FShellNotifyTimerHandle write FShellNotifyTimerHandle;
@@ -1596,28 +1593,28 @@ type
     function AddNodeToTree(ParentNode: PVirtualNode): PVirtualNode;
     procedure Assign(Source: TPersistent); override;
     procedure AssignTo(Dest: TPersistent); override;
-    function BrowseTo(APath: WideString; ExpandTarget, SelectTarget, SetFocusToVET, CollapseAllFirst: Boolean): Boolean; overload;
-    function BrowseTo(APath: WideString; SetFocusToVET: Boolean = True): Boolean; overload;
+    function BrowseTo(APath: string; ExpandTarget, SelectTarget, SetFocusToVET, CollapseAllFirst: Boolean): Boolean; overload;
+    function BrowseTo(APath: string; SetFocusToVET: Boolean = True): Boolean; overload;
     function BrowseToByPIDL(APIDL: PItemIDList; ExpandTarget, SelectTarget, SetFocusToVET, CollapseAllFirst: Boolean; ShowAllSiblings: Boolean = True): Boolean; virtual;
     procedure ChangeLinkChanging(Server: TObject; NewPIDL: PItemIDList); dynamic; // ChangeLink method
     procedure ChangeLinkDispatch; virtual;
     procedure ChangeLinkFreeing(ChangeLink: IVETChangeLink); dynamic;
     procedure Clear; override;
     procedure CopyToClipboard; override;
-    function CreateNewFolder(TargetPath: WideString): Boolean; overload;
-    function CreateNewFolder(TargetPath: WideString; var NewFolder: WideString): Boolean; overload;
-    function CreateNewFolder(TargetPath, SuggestedFolderName: WideString; var NewFolder: WideString): Boolean; overload;
+    function CreateNewFolder(TargetPath: string): Boolean; overload;
+    function CreateNewFolder(TargetPath: string; var NewFolder: string): Boolean; overload;
+    function CreateNewFolder(TargetPath, SuggestedFolderName: string; var NewFolder: string): Boolean; overload;
     function CreateNewFolderByNode(Node: PVirtualNode): Boolean;
     procedure CutToClipboard; override;
     procedure DeleteNode(Node: PVirtualNode; Reindex: Boolean = True); reintroduce;
     procedure DeleteSelectedNodes(ShiftKeyState: TExecuteVerbShift = evsCurrent); reintroduce;
     function DoCancelEdit: Boolean; override;
     function DoEndEdit: Boolean; override;
-    function FindDesktopFolderByName(AName: WideString; var Namespace: TNamespace): Boolean;
-    function FindNode(APath: WideString): PVirtualNode;
+    function FindDesktopFolderByName(AName: string; var Namespace: TNamespace): Boolean;
+    function FindNode(APath: string): PVirtualNode;
     function FindNodeByPIDL(APIDL: PItemIDList): PVirtualNode;
-    function FindFolderByName(AName: WideString; var Namespace: TNamespace): Boolean;
-    function ForceNode(APath: WideString; Expand: Boolean): PVirtualNode;
+    function FindFolderByName(AName: string; var Namespace: TNamespace): Boolean;
+    function ForceNode(APath: string; Expand: Boolean): PVirtualNode;
     function ForceNodeByPIDL(APIDL: PItemIDList; Expand: Boolean; ShowAllSiblings: Boolean = True): PVirtualNode;
     procedure EnableChangeNotifier(Enable: Boolean);
     procedure FlushChangeNotifier;
@@ -1646,13 +1643,13 @@ type
     function ValidateParentNamespace(Node: PVirtualNode; var Namespace: TNamespace): Boolean;
     property AutoFireChangeLink: Boolean read FAutoFireChangeLink write FAutoFireChangeLink;
     property ContextMenuShown: Boolean read GetContextMenuShown;
-    property RootFolderCustomPath: WideString read FRootFolderCustomPath write SetRootFolderCustomPath;
+    property RootFolderCustomPath: string read FRootFolderCustomPath write SetRootFolderCustomPath;
     property RootFolderCustomPIDL: PItemIDList read FRootFolderCustomPIDL write SetRootFolderCustomPIDL;
     property RootFolderNamespace: TNamespace read FRootFolderNamespace;
-    property SelectedFile: WideString read GetSelectedFile;
+    property SelectedFile: string read GetSelectedFile;
     property SelectedFiles: TStrings read GetSelectedFiles;
     property SelectedPaths: TStrings read GetSelectedPaths;
-    property SelectedPath: WideString read GetSelectedPath;
+    property SelectedPath: string read GetSelectedPath;
     property SelectedPIDL: PItemIDList read GetSelectedPIDL;
     property ShellNotifySuspended: Boolean read FShellNotifySuspended write FShellNotifySuspended default False;
     property ThreadedExpandMarkEnabled: Boolean read GetThreadedExpandMarkEnabled write SetThreadedExpandMarkEnabled;
@@ -1754,7 +1751,7 @@ type
   {$IFDEF EXPLORERTREE_L}
     property VirtualExplorerTree;
   {$ENDIF}
-    property Visible;      
+    property Visible;
     property OnAdvancedHeaderDraw;
     property OnAfterCellPaint;
     property OnAfterItemErase;
@@ -2109,7 +2106,7 @@ type
     procedure Notification(AComponent: TComponent; Operation: TOperation); override;
     function OkToBrowseTo(PIDL: PItemIDList): Boolean; override;
     procedure RebuildRootNamespace; override;
-    procedure ShellExecuteFolderLink(NS: TNamespace; WorkingDir, CmdLineArgument: WideString); override;
+    procedure ShellExecuteFolderLink(NS: TNamespace; WorkingDir, CmdLineArgument: string); override;
     procedure WMShellNotify(var Msg: TMessage); message WM_SHELLNOTIFY;
   public
     destructor Destroy; override;
@@ -2156,15 +2153,15 @@ type
     FCursorOld: TCursor;
     FSelectingAll: Boolean;
 
-    function GetText: WideString;
-    procedure SetText(const Value: WideString);
+    function GetText: string;
+    procedure SetText(const Value: string);
     procedure SetOldNamespace(const Value: TNamespace);
     procedure SetStyle(const Value: TShellComboStyle);
 
   protected
     procedure CreateWnd; override;
-    procedure DefaultOnInvalidEntry(InvalidText: WideString);
-    procedure DoOnInvalidEntry(InvalidPath: WideString); virtual;
+    procedure DefaultOnInvalidEntry(InvalidText: string);
+    procedure DoOnInvalidEntry(InvalidPath: string); virtual;
     procedure HandleDropDowns(DropDown: TDropDown);
     procedure PaintWindow(DC: HDC); override;
     procedure SelectEnteredPath;
@@ -2199,7 +2196,7 @@ type
 
     property ExplorerComboBox: TCustomVirtualExplorerCombobox read FExplorerComboBox write FExplorerComboBox;
     property Style: TShellComboStyle read FStyle write SetStyle;
-    property Text: WideString read GetText write SetText;
+    property Text: string read GetText write SetText;
 
     property OnChange;
     property OnClick;
@@ -2496,11 +2493,11 @@ type
   protected
     procedure CreateParams(var Params: TCreateParams); override;
     procedure DoGetText(var pEventArgs: TVSTGetCellTextEventArgs); override;
-    procedure DoUpdateList(const CurrentEditContents: WideString;
+    procedure DoUpdateList(const CurrentEditContents: string;
       EnumList: TStringList; var Handled: Boolean);
     procedure MouseMove(Shift: TShiftState; X, Y: Integer); override;
     procedure Paint; override;
-    procedure UpdateList(CurrentEditStr: WideString);
+    procedure UpdateList(CurrentEditStr: string);
 
     procedure WMLButtonDown(var Message: TWMLButtonDown); message WM_LBUTTONDOWN;
     procedure WMLButtonUp(var Message: TWMLButtonUp); message WM_LBUTTONUP;
@@ -2676,7 +2673,7 @@ type
     function GetOnEnter: TNotifyEvent;
     function GetOnEnumFolder: TVETOnEnumFolder;
     function GetOnExit: TNotifyEvent;
-    function GetPath: WideString;
+    function GetPath: string;
     function GetTabStop: Boolean;
     procedure SetColor(const Value: TColor);
     procedure SetEditNamespace(const Value: TNamespace);
@@ -2690,7 +2687,7 @@ type
     procedure SetOnEnter(const Value: TNotifyEvent);
     procedure SetOnExit(const Value: TNotifyEvent);
     procedure SetOptions(const Value: TVETComboOptions);
-    procedure SetPath(const Value: WideString);
+    procedure SetPath(const Value: string);
     procedure SetStyle(const Value: TShellComboStyle);
     procedure SetTabStop(const Value: Boolean);
     procedure SetTextType(const Value: TExplorerComboboxText);
@@ -2713,7 +2710,7 @@ type
     function CreatePopupExplorerDropDown: TPopupExplorerDropDown; virtual;
     procedure CreateWnd; override;
     procedure DestroyWnd; override;
-    procedure DoDecodeSpecialVariable(Variable: WideString; var NS: TNamespace); virtual;
+    procedure DoDecodeSpecialVariable(Variable: string; var NS: TNamespace); virtual;
     procedure DoDraw(ACanvas: TCanvas; AClientRect, AButtonRect: TRect; AComboState: TVETComboStates; Stage: TCustomDrawStage; var DefaultDraw: Boolean); virtual;
     procedure DoFontChange(NewFont: TFont);
     procedure DoPathChange(SelectedNamespace: TNamespace); virtual;
@@ -2775,7 +2772,7 @@ type
     property OnPathChange: TOnComboPathChange read FOnPathChange write FOnPathChange;
     property OnPathChanging: TOnComboPathChanging read FOnPathChanging write FOnPathChanging;
     property Options: TVETComboOptions read FOptions write SetOptions default DefaultExplorerComboOptions;
-    property Path: WideString read GetPath write SetPath;
+    property Path: string read GetPath write SetPath;
     property PopupAutoCompleteDropDown: TPopupAutoCompleteDropDown read FPopupAutoCompleteDropDown;
     property PopupAutoCompleteOptions: TPopupAutoCompleteOptions read FPopupAutoCompleteOptions write FPopupAutoCompleteOptions;
     property PopupExplorerDropDown: TPopupExplorerDropDown read FPopupExplorerDropDown;
@@ -2790,7 +2787,7 @@ type
     property ThemesActive: Boolean read FThemesActive write FThemesActive;
     property VETComboState: TVETComboStates read FVETComboState write FVETComboState;
     property VirtualExplorerTree: TCustomVirtualExplorerTree read FVirtualExplorerTree write SetVirtualExplorerTree;
-    
+
   public
     constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
@@ -2923,11 +2920,7 @@ uses
   {$IFDEF SpTBX}
   ColumnFormSpTBX,
   {$ELSE}
-    {$IFDEF TBX}
-    ColumnFormTBX,
-    {$ELSE}
-      ColumnForm,
-    {$ENDIF}
+  ColumnForm,
   {$ENDIF}
   Imm;
 
@@ -2936,7 +2929,7 @@ uses
 
 type
   TAnimateWindow = function(hWnd: HWND; dwTime: DWORD; dwFlags: DWORD): BOOL; stdcall;
-  
+
 var
   // Set if any VET has set the wait cursor.  If one VET set the cursor to the hourglass
   // a second may save that as the old cursor.  When done the second maybe the last
@@ -3065,7 +3058,7 @@ var
   pceltFetched: LongWord;
   TempPIDL: PItemIDList;
   OldWow64: Pointer;
-begin          
+begin
   if Assigned(Folder) then
   begin
     OldWow64 := Wow64RedirectDisable;
@@ -3097,7 +3090,7 @@ begin
       end;
     finally
       Wow64RedirectRevert(OldWow64);
-    end   
+    end
   end else
     PIDLsRead := 0;
 end;
@@ -3113,7 +3106,7 @@ begin
     Result := Result or SHCONTF_NONFOLDERS;
   if foHidden in FileObjects then
     Result := Result or SHCONTF_INCLUDEHIDDEN;
-  if IsUnicode and not IsWinNT4 then
+  if not IsWinNT4 then
   begin
     if foShareable in FileObjects then
       Result := Result or SHCONTF_SHAREABLE;
@@ -3124,7 +3117,7 @@ end;
 
 function TCustomVirtualExplorerTree.CanShowDragImage: Boolean;
 begin
-  if (Win32Platform = VER_PLATFORM_WIN32_NT) and (Win32MajorVersion >= 6) and Assigned(SHDoDragDrop_MP) then
+  if (Win32MajorVersion >= 6) then
     Result := False
   else
     Result := inherited CanShowDragImage;
@@ -3273,7 +3266,7 @@ procedure TCustomVirtualExplorerTree.AddMyDocumentsFolder(
 var
   MyDocuments, NS: TNamespace;
   Desktop: IShellFolder;
-  LS: WideString;
+  LS: string;
   chEaten, Attrib: ULONG;
   PIDL: PItemIDList;
   Child: PVirtualNode;
@@ -3386,7 +3379,7 @@ begin
   end
 end;
 
-function TCustomVirtualExplorerTree.BrowseTo(APath: WideString; ExpandTarget,
+function TCustomVirtualExplorerTree.BrowseTo(APath: string; ExpandTarget,
   SelectTarget, SetFocusToVET, CollapseAllFirst: Boolean): Boolean;
 var
   PIDL: PItemIdList;
@@ -3401,7 +3394,7 @@ begin
   end
 end;
 
-function TCustomVirtualExplorerTree.BrowseTo(APath: WideString;
+function TCustomVirtualExplorerTree.BrowseTo(APath: string;
   SetFocusToVET: Boolean): Boolean;
 // Browse to path using the SyncOptions of the Tree as defaults
 var
@@ -3445,7 +3438,7 @@ begin
         if SelectTarget and Assigned(TargetNode) then
         begin
           FocusedNode := nil;
-          ClearSelection;  
+          ClearSelection;
           Selected[TargetNode] := True;
           FocusedNode := TargetNode;
         end;
@@ -3655,7 +3648,7 @@ begin
   GlobalThreadManager.RegisterControl(Self);
 end;
 
-function TCustomVirtualExplorerTree.CreateNewFolder(TargetPath: WideString): Boolean;
+function TCustomVirtualExplorerTree.CreateNewFolder(TargetPath: string): Boolean;
 { Creates a new folder.  Note you do NOT pass the name of the new folder, only pass the }
 { the path up to where the new folder is to be created.  VET will then create the new   }
 { folder like Explorer does, in the "New Folder (X)" fashion (this constant is redefinable }
@@ -3669,7 +3662,7 @@ begin
   PIDLMgr.FreePIDL(PIDL);
 end;
 
-function TCustomVirtualExplorerTree.CreateNewFolder(TargetPath: WideString; var NewFolder: WideString): Boolean;
+function TCustomVirtualExplorerTree.CreateNewFolder(TargetPath: string; var NewFolder: string): Boolean;
 var
   PIDL: PItemIDList;
 begin
@@ -3680,7 +3673,7 @@ begin
 end;
 
 function TCustomVirtualExplorerTree.CreateNewFolder(TargetPath,
-  SuggestedFolderName: WideString; var NewFolder: WideString): Boolean;
+  SuggestedFolderName: string; var NewFolder: string): Boolean;
 var
   PIDL: PItemIDList;
 begin
@@ -4080,16 +4073,16 @@ begin
 end;
 
 procedure TCustomVirtualExplorerTree.DoContextMenuAfterCmd(
-  Namespace: TNamespace; Verb: WideString; MenuItemID: Integer;
+  Namespace: TNamespace; Verb: string; MenuItemID: Integer;
   Successful: Boolean);
 var
-  AVerb: WideString;
+  AVerb: string;
 begin
   if Assigned(OnContextMenuAfterCmd) then
     OnContextMenuAfterCmd(Self, Namespace, Verb, MenuItemID, Successful);
   if Successful then
   begin
-    AVerb := WideLowerCase(PWideChar( Verb));
+    AVerb := SysUtils.AnsiLowerCase(Verb);
     if AVerb = 'cut' then
       MarkNodesCut;
     if AVerb = 'copy' then
@@ -4098,7 +4091,7 @@ begin
 end;
 
 function TCustomVirtualExplorerTree.DoContextMenuCmd(
-  Namespace: TNamespace; Verb: WideString; MenuItemID: Integer): Boolean;
+  Namespace: TNamespace; Verb: string; MenuItemID: Integer): Boolean;
 begin
   Result := False;
   if Assigned(OnContextMenuCmd) then
@@ -4183,8 +4176,8 @@ var
   RePostQuit: Boolean;
 begin
   // Refresh the cached information to reflect the edited name
-  ValidateNamespace(FocusedNode, NS); 
-  if Assigned(NS) then 
+  ValidateNamespace(FocusedNode, NS);
+  if Assigned(NS) then
     NS.InvalidateNamespace;
   // This allows Windows to send its change notifications and for VET to receive
   // them.  Since we are still in edit mode the WM_SHELLNOTIFY will not update
@@ -4335,7 +4328,6 @@ begin
       end;
     end;
   end
-
 end;
 
 function TCustomVirtualExplorerTree.DoGetNodeHint(Node: PVirtualNode;
@@ -4540,7 +4532,7 @@ procedure TCustomVirtualExplorerTree.DoInitNode(Parent, Node: PVirtualNode;
 { if it has been forced to be initialized when saving to the tree, etc.         }
 var
   Data: PNodeData;
-{  WS: WideString; }
+{  WS: string; }
   ParentNode: PVirtualNode;
   NS: TNamespace;
   StorageNode: TNodeStorage;
@@ -4930,7 +4922,7 @@ procedure TCustomVirtualExplorerTree.DoShellExecute(Node: PVirtualNode);
 { Fired when the Namespace associated with Node is to be used as a ShellExecuteEx }
 { parameter.                                                                      }
 var
-  WorkingDir, CmdLineArgument: WideString;
+  WorkingDir, CmdLineArgument: string;
   Allow: Boolean;
   NS: TNamespace;
 begin
@@ -4981,12 +4973,12 @@ begin
   case State of
     usBegin:
       begin
-        WaitCursor(True);
+        //WaitCursor(True);
         EnableChangeNotifier(False);
       end;
     usEnd:
       begin
-        WaitCursor(False);
+        //WaitCursor(False);
         EnableChangeNotifier(True)
       end
   end
@@ -5086,15 +5078,6 @@ begin
     end
   end else
     Effect := DROPEFFECT_NONE
-end;
-
-procedure TCustomVirtualExplorerTree.DragAndDrop(AllowedEffects: dword;
-  const DataObject: IDataObject; var DragEffect: Integer);
-begin
-  if (Win32Platform = VER_PLATFORM_WIN32_NT) and (Win32MajorVersion >= 6) and Assigned(SHDoDragDrop_MP) then
-    SHDoDragDrop_MP(Handle, DataObject, nil, AllowedEffects, DragEffect)
-  else
-    inherited DragAndDrop(AllowedEffects, DataObject, DragEffect);
 end;
 
 procedure TCustomVirtualExplorerTree.DragLeave;
@@ -5212,7 +5195,7 @@ begin
     Node := AddNodeToTree(Data);
     NewNodeData := InternalData(Node);
     if Assigned(NewNodeData) then
-    begin    
+    begin
       NewNodeData.Namespace := NS;
       NewNodeData.ColumnManager := TColumnManager.Create(Self);
       Result := True
@@ -5231,7 +5214,7 @@ begin
     WaitCursor(True);
     try
       BeginUpdate;
-      if ChildCount[Node] = 0 then
+      if Node.ChildCount = 0 then
       begin
         if ValidateNamespace(Node, NS) then
         begin
@@ -5251,7 +5234,7 @@ begin
             Result := 0;
           end else
           begin
-            // Let the tree redraw itself if a dialog is popped 
+            // Let the tree redraw itself if a dialog is popped
             // get reset when the NS callback in the AfterValidEnumIDList event
             CurrentUpdateCount := UpdateCount;
             while UpdateCount > 0 do
@@ -5264,14 +5247,14 @@ begin
             { there is no children.                                                   }
             if Node.ChildCount > 0 then
               Sort(Node, Header.SortColumn, Header.SortDirection, False);
-            Result := ChildCount[Node];
+            Result := Node.ChildCount;
 
             if ThreadedEnum and not (csDesigning in ComponentState) then
               EnumThreadFinished;
           end;
         end
       end
-    finally 
+    finally
       EndUpdate;
       WaitCursor(False)
     end
@@ -5352,7 +5335,7 @@ begin
 end;
 
 procedure TCustomVirtualExplorerTree.ExecuteNamespace(
-  Namespace: TNamespace; var WorkingDir, CmdLineArgument: WideString);
+  Namespace: TNamespace; var WorkingDir, CmdLineArgument: string);
 // Excutes the Namespace and allows special cases to be handled
 var
   ExecuteFolder: Boolean;
@@ -5374,7 +5357,7 @@ begin
 end;
 
 function TCustomVirtualExplorerTree.FindDesktopFolderByName(
-  AName: WideString; var Namespace: TNamespace): Boolean;
+  AName: string; var Namespace: TNamespace): Boolean;
 { Finds a special folder by passing the localize name shown in the treeview.    }
 { It is limited to the immediate children of the Desktop and the immediate      }
 { children of My Computer to keep the search times reasonable.                  }
@@ -5383,7 +5366,6 @@ var
   FindData: TFindSpecialFolderByNameData;
 begin
   Result := False;
-  AName := WideUpperCase(AName);
   if Assigned(Namespace) then
     FreeAndNil(Namespace);
   if WideStrIComp(PWideChar(AName), PWideChar(DesktopFolder.NameNormal)) = 0 then
@@ -5405,7 +5387,7 @@ begin
   end
 end;
 
-function TCustomVirtualExplorerTree.FindNode(APath: WideString): PVirtualNode;
+function TCustomVirtualExplorerTree.FindNode(APath: string): PVirtualNode;
 var
   PIDL: PItemIdList;
 begin
@@ -5419,7 +5401,7 @@ begin
   Result := WalkPIDLToNode(APIDL, False, False, False, True);
 end;
 
-function TCustomVirtualExplorerTree.FindFolderByName(AName: WideString; var Namespace: TNamespace): Boolean;
+function TCustomVirtualExplorerTree.FindFolderByName(AName: string; var Namespace: TNamespace): Boolean;
 { Finds a special folder by passing the localized name shown in the treeview.    }
 { It is limited to the immediate children of the Desktop and the immediate      }
 { children of My Computer to keep the search times reasonable.                  }
@@ -5443,7 +5425,7 @@ begin
   end;
 end;
 
-function TCustomVirtualExplorerTree.ForceNode(APath: WideString; Expand: Boolean): PVirtualNode;
+function TCustomVirtualExplorerTree.ForceNode(APath: string; Expand: Boolean): PVirtualNode;
 var
   PIDL: PItemIdList;
 begin
@@ -5458,7 +5440,7 @@ begin
   Result := WalkPIDLToNode(APIDL, Expand, True, not Expand, ShowAllSiblings);
 end;
 
-function TCustomVirtualExplorerTree.FindFolderByNameCallback(MessageWnd: HWnd; 
+function TCustomVirtualExplorerTree.FindFolderByNameCallback(MessageWnd: HWnd;
   APIDL: PItemIDList; AParent: TNamespace; Data: Pointer;
   var Terminate: Boolean): Boolean;
 var
@@ -5562,7 +5544,7 @@ begin
     Result := InternalWalkPIDLToNode(RecycleBinFolder.AbsolutePIDL);
 end;
 
-function TCustomVirtualExplorerTree.GetSelectedFile: WideString;
+function TCustomVirtualExplorerTree.GetSelectedFile: string;
 var
   NS: TNamespace;
 begin
@@ -5589,7 +5571,7 @@ begin
   Result := FSelectedFiles;
 end;
 
-function TCustomVirtualExplorerTree.GetSelectedPath: WideString;
+function TCustomVirtualExplorerTree.GetSelectedPath: string;
 var
   NS: TNamespace;
 begin
@@ -5677,12 +5659,12 @@ begin
 end;
 
 function TCustomVirtualExplorerTree.InternalCreateNewFolder(TargetPIDL: PItemIDList;
-  SuggestedFolderName: WideString): WideString;
+  SuggestedFolderName: string): string;
 // Creates a new folder in TargetPath.  The name of the new folder is returned by
 // the function
 
 
-   function FindChildByName(Parent: TNamespace; ChildName: WideString): PItemIDList;
+   function FindChildByName(Parent: TNamespace; ChildName: string): PItemIDList;
    // Searches the Parent for the Child Name, returns AbsolutePIDL to the Child if found
    var
      EnumIDList:  IEnumIDList;
@@ -5723,8 +5705,8 @@ const
 
 var
   Node, NewNode: PVirtualNode;
-  NewName: WideString;
-  TargetPath: WideString;
+  NewName: string;
+  TargetPath: string;
   NS, ParentNS: TNamespace;
   NewChildPIDL: PItemIDList;
   i: Integer;
@@ -5734,7 +5716,7 @@ begin
   TargetPath := PIDLToPath(TargetPIDL);
   TargetPath := WideStripTrailingBackslash(TargetPath);
 
-  if WideDirectoryExists(TargetPath) then
+  if DirectoryExists(TargetPath) then
   begin
     Node := WalkPIDLToNode(TargetPIDL, False, True, False, True);
 
@@ -5744,7 +5726,7 @@ begin
       // Generate a Unique Name
       NewName := WideNewFolderName(TargetPath, SuggestedFolderName);
 
-      if WideCreateDir(NewName) then
+      if CreateDir(NewName) then
       begin
         ParentNS := TNamespace.Create(TargetPIDL, nil);
         ParentNS.FreePIDLOnDestroy := False; // We don't own the PIDL
@@ -6065,7 +6047,7 @@ end;
 function TCustomVirtualExplorerTree.OkToExpandNode(Node: PVirtualNode): Boolean;
 var
   NS: TNamespace;
-  S: WideString;
+  S: string;
 begin
   Result := False;
   if ((toFoldersExpandable in TreeOptions.VETFolderOptions) or (Node = GetFirst) or
@@ -6093,7 +6075,7 @@ begin
 end;
 
 function TCustomVirtualExplorerTree.PathofNameSpace(
-  NS: TNameSpace): WideString;
+  NS: TNameSpace): string;
 begin
   // DEPRICIATED:  NameForParsing now contains old PathOfNamespaceLogic
   Result := NS.NameForParsing
@@ -6251,7 +6233,7 @@ procedure TCustomVirtualExplorerTree.RebuildShellHeader(BasedOnNamespace: TNames
 var
   i: integer;
   Column: TVETColumn;
-  Title: WideString;
+  Title: string;
   ColStates: TSHColumnStates;
   SortCol: TColumnIndex;
   SortDir: TSortDirection;
@@ -6304,24 +6286,24 @@ begin
             if BasedOnNamespace.IsMyComputer and
               (Column.Index <= High(VET_DEFAULT_DRIVES_COLUMNWIDTHS))
             then
-              Column.Width := VET_DEFAULT_DRIVES_COLUMNWIDTHS[Column.Index]
+              Column.Width := MulDiv(VET_DEFAULT_DRIVES_COLUMNWIDTHS[Column.Index], Screen.PixelsPerInch, 96)
             else
             if BasedOnNamespace.IsControlPanel and
               (Column.Index <= High(VET_DEFAULT_CONTROLPANEL_COLUMNWIDTHS))
             then
-              Column.Width := VET_DEFAULT_CONTROLPANEL_COLUMNWIDTHS[Column.Index]
+              Column.Width :=  MulDiv(VET_DEFAULT_CONTROLPANEL_COLUMNWIDTHS[Column.Index], Screen.PixelsPerInch, 96)
             else
             if (BasedOnNamespace.IsNetworkNeighborhood or
                BasedOnNamespace.IsNetworkNeighborhoodChild) and
                ((BasedOnNamespace.DetailsSupportedColumns < 3) and
                (Column.Index <= High(VET_DEFAULT_NETWORK_COLUMNWIDTHS)))
             then
-              Column.Width := VET_DEFAULT_NETWORK_COLUMNWIDTHS[Column.Index]
+              Column.Width := MulDiv(VET_DEFAULT_NETWORK_COLUMNWIDTHS[Column.Index], Screen.PixelsPerInch, 96)
             else
             if (Column.Index <= High(VET_ColumnWidths)) then
-              Column.Width := VET_ColumnWidths[Column.Index]
+              Column.Width := MulDiv(VET_ColumnWidths[Column.Index], Screen.PixelsPerInch, 96)
             else
-              Column.Width := 120;
+              Column.Width := MulDiv(120, Screen.PixelsPerInch, 96);
             Column.FColumnDetails := cdCustom;
 
             ColStates := BasedOnNamespace.DetailsGetDefaultColumnState(Column.Index);
@@ -6350,7 +6332,7 @@ begin
 end;
 
 function TCustomVirtualExplorerTree.RebuildTree: Boolean;
-begin   
+begin
   if ShellNotifyManager.OkToDispatch then
   begin
     RebuildRootNamespace;
@@ -6465,7 +6447,7 @@ function TCustomVirtualExplorerTree.RefreshTree(RestoreTopNode: Boolean = False)
 var
   WasThreadedEnum: Boolean;
 begin
-  if ShellNotifyManager.OkToDispatch then
+  if FActive and ShellNotifyManager.OkToDispatch then
   begin
     WaitCursor(True);
     // None of the restores will work if enumerated
@@ -6820,7 +6802,7 @@ begin
       Header.Options := Header.Options - [hoVisible];
     end else
       Exclude(FVETState, vsHeaderWasShown);
-    
+
     AnimateFolderEnum := TAnimate.Create(Parent);
     AnimateFolderEnum.Visible := False;
     AnimateFolderEnum.Parent := GetAnimateWndParent;
@@ -7122,16 +7104,16 @@ begin
   end
 end;
 
-procedure TCustomVirtualExplorerTree.SetRootFolderCustomPath(const Value: WideString);
+procedure TCustomVirtualExplorerTree.SetRootFolderCustomPath(const Value: string);
 var
   Allow: Boolean;
-  CustomPath: WideString;
+  CustomPath: string;
 begin
  // if Value <> FRootFolderCustomPath then
   begin
     Allow := True;
     if Value <> '' then
-      CustomPath := IncludeTrailingBackslashW(Value)
+      CustomPath := IncludeTrailingPathDelimiter(Value)
     else
       CustomPath := Value;
 
@@ -7141,7 +7123,7 @@ begin
       if Allow then
       begin
         TerminateEnumThread;
-        if WideDirectoryExists(CustomPath) then
+        if DirectoryExists(CustomPath) then
         begin
           FRootFolderCustomPath := CustomPath;
           { TempRootNamespace will be used in RootFolder Setter }
@@ -7220,10 +7202,10 @@ end;
 {$ENDIF}
 
 procedure TCustomVirtualExplorerTree.ShellExecuteFolderLink(NS: TNamespace;
-  WorkingDir, CmdLineArgument: WideString);
+  WorkingDir, CmdLineArgument: string);
 var
   ShellLink: TVirtualShellLink;
-  LinkTarget: WideString;
+  LinkTarget: string;
 begin
   if Assigned(NS) then
   begin
@@ -7233,7 +7215,7 @@ begin
       try
         ShellLink.ReadLink(NS.NameParseAddress);
         LinkTarget := ShellLink.TargetPath;
-        if WideDirectoryExists(LinkTarget) and OkToBrowseTo(ShellLink.TargetIDList) then
+        if DirectoryExists(LinkTarget) and OkToBrowseTo(ShellLink.TargetIDList) then
           with TreeOptions do
             if BrowseToByPIDL(ShellLink.TargetIDList, toExpandTarget in VETSyncOptions,
               toSelectTarget in VETSyncOptions, False, toCollapseTargetFirst in VETSyncOptions) then
@@ -7353,14 +7335,14 @@ end;
 
 procedure TCustomVirtualExplorerTree.TerminateEnumThread;
 begin
+  if not Assigned(EnumThread) then Exit;
   try
     EnterCriticalSection(FEnumLock);
     EnumThreadTimer(False);
     HideAnimateFolderWnd;
     FreeAndNil(FEnumBkGndList);
     // Frees itself
-    if Assigned(EnumThread) then
-      EnumThread.Terminate;
+    EnumThread.Terminate;
   finally
     EnumThread := nil;
     LeaveCriticalSection(FEnumLock)
@@ -7687,7 +7669,7 @@ procedure TCustomVirtualExplorerTree.WMLButtonDown(var Message: TWMLButtonDown);
 var
   Info: THitInfo;
 begin
-  GetHitTestInfoAt(Message.XPos, Message.YPos, True, Info);    
+  GetHitTestInfoAt(Message.XPos, Message.YPos, True, Info);
   // Set flag so clicking on the button still expands the node in DoExpanding
   FExpandingByButtonClick := hiOnItemButton in Info.HitPositions;
   inherited;
@@ -7752,7 +7734,7 @@ begin
   //    property LastClickPos: TPoint read FLastClickPos write FLastClickPos;
   LastClickPos := Point(Msg.XPos, Msg.YPos);
   // This will be added to VT in version 4.0.2
-  // ****************************************************************     
+  // ****************************************************************
 
   GetHitTestInfoAt(Msg.XPos, Msg.YPos, True, HitInfo);
   AutoDrag := DoBeforeDrag(HitInfo.HitNode, HitInfo.HitColumn);
@@ -7786,8 +7768,7 @@ var
   ShellEvent: TVirtualShellEvent;
   i: integer;
   NS: TNamespace;
-  S: string;
-  WS: WideString;
+  WS: string;
   MappedDriveNotification: Boolean;
   List: TList;
   PIDL: PItemIDList;
@@ -7844,15 +7825,8 @@ begin
                       if NS.Folder then
                       begin
                         ValidNS := NS.Valid;
-                        if IsUnicode then
-                        begin
-                          WS := WideExtractFileDrive(NS.NameForParsing);
-                          MappedDriveNotification := WideIsDrive(WS) and (GetDriveTypeW_MP(PWideChar(WS)) = DRIVE_REMOTE)
-                        end else
-                        begin   
-                          S := ExtractFileDrive(NS.NameForParsing);
-                          MappedDriveNotification := WideIsDrive(S) and (GetDriveType(PChar(S)) = DRIVE_REMOTE)
-                        end;
+                        WS := WideExtractFileDrive(NS.NameForParsing);
+                        MappedDriveNotification := WideIsDrive(WS) and (GetDriveType(PWideChar(WS)) = DRIVE_REMOTE);
                         if MappedDriveNotification then
                           RereadAndRefreshNode(FindNodeByPIDL(ShellEvent.PIDL1), not(foNonFolders in FileObjects))
                       end;
@@ -8077,7 +8051,7 @@ begin
           LocalList.SharePIDLs := True;
           if vsHeaderWasShown in FVETState then
             Header.Options := Header.Options + [hoVisible];
-          RebuildHeader(FRootFolderNamespace);  
+          RebuildHeader(FRootFolderNamespace);
           DeleteChildren(Node);
           for i := 0 to LocalList.Count - 1 do
           begin
@@ -8174,7 +8148,7 @@ begin
     Exclude(FStates, vpsFullInit);
 end;
 
-procedure TVETPersistent.LoadFromFile(FileName: WideString;
+procedure TVETPersistent.LoadFromFile(FileName: string;
   Version: integer; ReadVerFromStream: Boolean);
 begin
   inherited;
@@ -8362,10 +8336,10 @@ begin
     ReStoreSelectedPIDLs(VET, Node);
 end;
 
-procedure TVETPersistent.SaveToFile(FileName: WideString; Version: integer;
+procedure TVETPersistent.SaveToFile(FileName: string; Version: integer;
   ReadVerFromStream: Boolean);
 begin
-  inherited;   
+  inherited;
 end;
 
 procedure TVETPersistent.SaveToStream(S: TStream; Version: integer = VETStreamStorageVer; WriteVerToStream: Boolean = False);
@@ -8616,14 +8590,14 @@ end;
 { TViewManager                                                                  }
 { ----------------------------------------------------------------------------- }
 
-procedure TViewList.LoadFromFile(FileName: WideString; Version: integer;
+procedure TViewList.LoadFromFile(FileName: string; Version: integer;
   ReadVerFromStream: Boolean);
 begin
   inherited;
 
 end;
 
-procedure TViewList.SaveToFile(FileName: WideString; Version: integer;
+procedure TViewList.SaveToFile(FileName: string; Version: integer;
   ReadVerFromStream: Boolean);
 begin
   inherited;
@@ -8636,7 +8610,7 @@ begin
   Views := TViewList.Create;
 end;
 
-procedure TViewManager.DeleteView(ViewName: WideString);
+procedure TViewManager.DeleteView(ViewName: string);
 { Finds and removes the view that has the same name as ViewName.                }
 var
   View: TView;
@@ -8655,7 +8629,7 @@ begin
   inherited;
 end;
 
-function TViewManager.GetView(ViewName: WideString): TView;
+function TViewManager.GetView(ViewName: string): TView;
 { Locates the View by the name ViewName.                                        }
 var
   i: integer;
@@ -8671,7 +8645,7 @@ begin
   Result := Views.Count
 end;
 
-function TViewManager.GetViewName(Index: integer): WideString;
+function TViewManager.GetViewName(Index: integer): string;
 { Retrieves the name of a view at the passed index.                             }
 begin
   Result := Views.Items[Index].ViewName
@@ -8686,13 +8660,13 @@ begin
   {   read new data                     }
 end;
 
-procedure TViewManager.SetViewName(Index: integer; NewViewName: WideString);
+procedure TViewManager.SetViewName(Index: integer; NewViewName: string);
 { Changes the name of the view at Index to NewViewName.                         }
 begin
   Views.Items[Index].ViewName := NewViewName
 end;
 
-procedure TViewManager.ShowView(ViewName: WideString; VET: TCustomVirtualExplorerTree);
+procedure TViewManager.ShowView(ViewName: string; VET: TCustomVirtualExplorerTree);
 { Finds the view associated with ViewName and restores it to the passed VET.    }
 var
   View: TView;
@@ -8707,7 +8681,7 @@ begin
   end
 end;
 
-procedure TViewManager.Snapshot(NewViewName: WideString; VET: TCustomVirtualExplorerTree);
+procedure TViewManager.Snapshot(NewViewName: string; VET: TCustomVirtualExplorerTree);
 { Creates a new view with the name of NewViewName and save the current state of }
 { the passed VET.                                                               }
 var
@@ -8735,7 +8709,7 @@ end;
 { TView }
 { ----------------------------------------------------------------------------- }
 
-constructor TView.Create(AViewName: WideString);
+constructor TView.Create(AViewName: string);
 begin
   inherited Create;
   ViewName := AViewName;
@@ -8775,16 +8749,16 @@ begin
   end;
 end;
 
-procedure TViewManager.LoadFromFile(FileName: WideString; Version: integer;
+procedure TViewManager.LoadFromFile(FileName: string; Version: integer;
   ReadVerFromStream: Boolean);
 begin
   inherited;
 end;
 
-procedure TViewManager.SaveToFile(FileName: WideString; Version: integer;
+procedure TViewManager.SaveToFile(FileName: string; Version: integer;
   ReadVerFromStream: Boolean);
 begin
-  inherited;   
+  inherited;
 end;
 
 { TLeafNodeList }
@@ -8948,7 +8922,7 @@ procedure TVETColors.AssignTo(Dest: TPersistent);
 begin
   if Dest is TVETColors then
     TVETColors(Dest).FVETColors := FVETColors;
-end;                 
+end;
 
 constructor TVETColors.Create(AnOwner: TCustomVirtualExplorerTree);
 begin
@@ -8995,7 +8969,7 @@ begin
 end;
 
 procedure TContextMenuManager.ContextMenuAfterCmdCallback(
-  Namespace: TNamespace; Verb: WideString; MenuItemID: Integer;
+  Namespace: TNamespace; Verb: string; MenuItemID: Integer;
   Successful: Boolean);
 begin
   if Assigned(Owner) then
@@ -9003,7 +8977,7 @@ begin
 end;
 
 procedure TContextMenuManager.ContextMenuCmdCallback(Namespace: TNamespace;
-  Verb: WideString; MenuItemID: Integer; var Handled: Boolean);
+  Verb: string; MenuItemID: Integer; var Handled: Boolean);
 begin
   if Assigned(Owner) then
     Handled := Owner.DoContextMenuCmd(Namespace, Verb, MenuItemID)
@@ -9261,7 +9235,7 @@ function TVETDataObject.DUnadvise(dwConnection: Integer): HResult;
 begin
   Result := E_NOTIMPL;
   if Assigned(ShellDataObject) then
-    Result := ShellDataObject.DUnadvise(dwConnection); 
+    Result := ShellDataObject.DUnadvise(dwConnection);
   if Result <> S_OK then
     Result := inherited DUnadvise(dwConnection);
 end;
@@ -9369,7 +9343,7 @@ procedure TVETColumn.SetColumnDetails(const Value: TColumnDetails);
 var
   VET: TCustomVirtualExplorerTree;
 
-  procedure InitColumn(AText: WideString; AWidth: integer);
+  procedure InitColumn(AText: string; AWidth: integer);
   begin
     Text := AText;
     if not(csLoading in Owner.Header.Treeview.ComponentState) then
@@ -9943,7 +9917,7 @@ procedure TVirtualExplorerListview.ReReadAndRefreshNode(Node: PVirtualNode;
 begin
   // Don't waste time on subnode refreshes that don't matter
   if Node = RootNode then
-    inherited;   
+    inherited;
 end;
 
 procedure TVirtualExplorerListview.SelectedFilesPaste(
@@ -10014,10 +9988,10 @@ end;
 {$ENDIF}
 
 procedure TVirtualExplorerListview.ShellExecuteFolderLink(NS: TNamespace;
-  WorkingDir, CmdLineArgument: WideString);
+  WorkingDir, CmdLineArgument: string);
 var
   ShellLink: TVirtualShellLink;
-  LinkTarget: WideString;
+  LinkTarget: string;
 begin
   if Assigned(NS) then
   begin
@@ -10027,7 +10001,7 @@ begin
       try
         ShellLink.ReadLink(NS.NameParseAddress);
         LinkTarget := ShellLink.TargetPath;
-        if WideDirectoryExists(LinkTarget) and OkToBrowseTo(ShellLink.TargetIDList) then
+        if DirectoryExists(LinkTarget) and OkToBrowseTo(ShellLink.TargetIDList) then
           with TreeOptions do
             if BrowseToByPIDL(ShellLink.TargetIDList, toExpandTarget in VETSyncOptions,
               toSelectTarget in VETSyncOptions, False, toCollapseTargetFirst in VETSyncOptions) then
@@ -10116,7 +10090,7 @@ end;
 
 procedure TColumnMenu.Popup(X, Y: Integer);
 
-    function DuplicateTitle(HeaderTitle: WideString): Boolean;
+    function DuplicateTitle(HeaderTitle: string): Boolean;
     var
       i: integer;
     begin
@@ -10182,7 +10156,7 @@ end;
 
 procedure TColumnMenuItem.Click;
 
-  function IsDuplicate(VST: TVirtualStringTree; Text: WideString): Boolean;
+  function IsDuplicate(VST: TVirtualStringTree; Text: string): Boolean;
   var
     ColData: PColumnData;
     Node: PVirtualNode;
@@ -10335,7 +10309,7 @@ end;
 
 procedure TVETChangeLink.SetChangeLinkServer(const Value: TObject);
 begin
-  FChangeLinkServer := Value; 
+  FChangeLinkServer := Value;
 end;
 
 procedure TVETChangeLink.SetOnChangeLinkFree(const Value: TVETChangeLinkFreeEvent);
@@ -10497,7 +10471,7 @@ function TVETChangeDispatch.UnRegisterChangeLink(Server, Client: TObject; UnRegi
 // is begin destroyed then the server should call like this
 //    UnRegisterChangeLink(Self, nil, utServer)
 // assuming it is called from the servers Destroy method. Each link will be searched
-// for an entry that references the 
+// for an entry that references the
 
 var
   i, j: integer;
@@ -10684,7 +10658,7 @@ begin
   Result := FShellFolder;
 end;
 
-procedure TNodeStorage.LoadFromFile(FileName: WideString; Version: integer = VETStreamStorageVer;
+procedure TNodeStorage.LoadFromFile(FileName: string; Version: integer = VETStreamStorageVer;
   ReadVerFromStream: Boolean = False);
 begin
   // Just to get the right StreamVersion
@@ -10778,7 +10752,7 @@ begin
 
 end;
 
-procedure TNodeStorage.SaveToFile(FileName: WideString; Version: integer = VETStreamStorageVer;
+procedure TNodeStorage.SaveToFile(FileName: string; Version: integer = VETStreamStorageVer;
   ReadVerFromStream: Boolean = False);
 begin
   inherited SaveToFile(FileName, Version, ReadVerFromStream);
@@ -10854,7 +10828,7 @@ var
 begin
   for i := 0 to Count - 1 do
     Items[i].Free;
-  inherited;      
+  inherited;
 end;
 
 function TNodeStorageList.GetItems(Index: integer): TNodeStorage;
@@ -10862,7 +10836,7 @@ begin
   Result := TNodeStorage( inherited Items[Index]);
 end;
 
-procedure TNodeStorageList.LoadFromFile(FileName: WideString;
+procedure TNodeStorageList.LoadFromFile(FileName: string;
   Version: integer; ReadVerFromStream: Boolean);
 begin
   inherited LoadFromFile(FileName, Version, ReadVerFromStream);
@@ -10923,7 +10897,7 @@ begin
   {   read new data                     }
 end;
 
-procedure TNodeStorageList.SaveToFile(FileName: WideString;
+procedure TNodeStorageList.SaveToFile(FileName: string;
   Version: integer; ReadVerFromStream: Boolean);
 begin
   inherited SaveToFile(FileName, Version, ReadVerFromStream)
@@ -10934,7 +10908,7 @@ procedure TNodeStorageList.SaveToStream(S: TStream; Version: integer = VETStream
 var
   C, i: integer;
 begin
-  inherited; 
+  inherited;
   C := Count;
   S.write(C, SizeOf(C));
   for i := 0 to Count - 1 do
@@ -11056,7 +11030,7 @@ function TRootNodeStorage.GetCheckedFileNames: TStrings;
     Str := NS.NameForParsing;
     { The items must - be in the file system, a valid file or directory, have a }
     { full check (not mixed)    }
-    if NS.FileSystem and (FileExistsW(Str) or WideDirectoryExists(Str) or WideIsDrive(Str)) and
+    if NS.FileSystem and (FileExists(Str) or DirectoryExists(Str) or WideIsDrive(Str)) and
       (S.Storage.Check.CheckState = csCheckedNormal) then
       Strings.Add(Str);
     if Assigned(S.ChildNodeList) then
@@ -11148,7 +11122,7 @@ begin
       if MarkCheckMixed and (Storage.Check.CheckType = ctTriStateCheckBox) then
       begin
         { These are intermediate levels so they will be checked as mixed }
-        NewNode.Storage.Check.CheckType := ctTriStateCheckBox;  
+        NewNode.Storage.Check.CheckType := ctTriStateCheckBox;
         NewNode.Storage.Check.CheckState := csMixedNormal;
         NewNode.Storage.Types := [stChecks];
       end;
@@ -11193,7 +11167,7 @@ procedure TRootNodeStorage.SetCheckFileNames(const Value: TStrings);
 var
   Desktop: IShellFolder;
   i: integer;
-  WS: WideString;
+  WS: string;
   pchEaten, pdwAttributes: LongWord;
   PIDL: PItemIdList;
   Storage: TNodeStorage;
@@ -11217,7 +11191,7 @@ begin
   end;
 end;
 
-function TRootNodeStorage.SetFileChecked(FileName: WideString;
+function TRootNodeStorage.SetFileChecked(FileName: string;
   CheckBoxType: TCheckType): Boolean;
 var
   Desktop: IShellFolder;
@@ -11340,7 +11314,7 @@ begin
   inherited SaveToStream(S, VETStreamStorageVer, True);
 end;
 
-procedure TGlobalViewManager.ShowView(ViewName: WideString;
+procedure TGlobalViewManager.ShowView(ViewName: string;
   VET: TCustomVirtualExplorerTree);
 var
   View: TView;
@@ -11360,7 +11334,7 @@ begin
   end
 end;
 
-procedure TGlobalViewManager.Snapshot(NewViewName: WideString;
+procedure TGlobalViewManager.Snapshot(NewViewName: string;
   VET: TCustomVirtualExplorerTree);
 var
   View: TView;
@@ -11386,7 +11360,7 @@ function TCustomVirtualExplorerCombobox.BackGroundRect(ItemRect: TComboItemRect)
 var
   Size: TSize;
   R: TRect;
-  WS: WideString;
+  WS: string;
 begin
   case ItemRect of
     crBackGround:
@@ -11690,7 +11664,7 @@ var
   validDir : Boolean;
 begin
   inherited;
-  validDir := Assigned (EditNameSpace) and (WideDirectoryExists(EditNamespace.nameParseAddress));
+  validDir := Assigned (EditNameSpace) and (DirectoryExists(EditNamespace.nameParseAddress));
   if (csDesigning in ComponentState) and not (validDir) then
     ComboEdit.Text := Name
   else begin
@@ -11737,7 +11711,7 @@ begin
 end;
 
 procedure TCustomVirtualExplorerCombobox.DoDecodeSpecialVariable(
-  Variable: WideString; var NS: TNamespace);
+  Variable: string; var NS: TNamespace);
 begin
   if Assigned(OnDecodeSpecialVariable) then
     OnDecodeSpecialVariable(Self, Variable, NS)
@@ -11762,7 +11736,7 @@ begin
   RealignControls;
   PopupExplorerDropDown.Font.Assign(NewFont);
   PopupAutoCompleteDropDown.Font.Assign(NewFont);
-  Invalidate   
+  Invalidate
 end;
 
 procedure TCustomVirtualExplorerCombobox.DoPathChange(SelectedNamespace: TNamespace);
@@ -11865,13 +11839,10 @@ begin
   Result := ComboEdit.OnExit
 end;
 
-function TCustomVirtualExplorerCombobox.GetPath: WideString;
+function TCustomVirtualExplorerCombobox.GetPath: string;
 begin
   if Assigned(EditNamespace) then
-//    if IsWinNT4 then      {1/10/02  Some one has problems with Win2k and this}
-      Result := EditNamespace.NameForParsing
-//    else
-//      Result := EditNamespace.NameParseAddress
+    Result := EditNamespace.NameForParsing
   else begin
     if csDesigning in ComponentState then
       Result := Name
@@ -11987,7 +11958,7 @@ begin
           DrawThemeBackground(ThemeEdit, PaintDC, EP_EDITTEXT, ETS_DISABLED, R, nil);
         GetThemeBackgroundContentRect(ThemeEdit, PaintDC, EP_EDITTEXT, ETS_NORMAL, R, @R);
         OldColor := Brush.Color;
-        Brush.Color := Color;
+        Brush.Color := StyleServices.GetSystemColor(Color);
         FillRect(PaintDC, R, Brush.Handle);
         Brush.Color := OldColor;
 
@@ -12001,14 +11972,14 @@ begin
           CtlState := CBXS_PRESSED;
         if vcbsOverDropDownButton in FVETComboState then
           CtlState := CBXS_HOT;
-        DrawThemeBackground(ThemeCombo, PaintDC, CtlType, CtlState, FButtonRect, nil)
+         DrawThemeBackground(ThemeCombo, PaintDC, CtlType, CtlState, FButtonRect, nil)
       end else
       begin
         { Draw the Edit }
         if FBorderStyle = bsNone then
         begin
           OldColor := Brush.Color;
-          Brush.Color := Color;
+          Brush.Color := StyleServices.GetSystemColor(Color);
           FillRect(PaintDC, R, Brush.Handle);
           Brush.Color := OldColor;
         end else
@@ -12040,7 +12011,7 @@ begin
           SubtractRect(R, R, BackGroundRect(crDropDownButton));
           InflateRect(R, -2, -2);
           OldColor := Brush.Color;
-          Brush.Color := clHighLight;
+          Brush.Color := StyleServices.GetSystemColor(clHighLight);
           FillRect(PaintDC, R, Brush.Handle);
           Brush.Color := OldColor;
           DrawFocusRect(PaintDC, R);
@@ -12107,7 +12078,7 @@ end;
 
 procedure TCustomVirtualExplorerCombobox.RefreshComboEdit(SelectText: Boolean);
 var
-  WS: WideString;
+  WS: string;
 begin
   if Assigned(EditNamespace) then
   begin
@@ -12365,7 +12336,7 @@ end;
 
 procedure TCustomVirtualExplorerCombobox.WMEraseBkgnd(var Message: TWmEraseBkgnd);
 var
-  R: TRect;    
+  R: TRect;
 begin
   // Don't paint the background in the border area
   R := BackGroundRect(crBackGround);
@@ -12449,7 +12420,7 @@ begin
 end;
 
 procedure TCustomVirtualExplorerCombobox.WMSize(var Message: TWMSize);
-begin   
+begin
   inherited;
 { JIM  if Message.Height < SmallSysImages.Height + 4 then
     Message.Height := SmallSysImages.Height + 4;  }
@@ -12480,7 +12451,7 @@ begin
 end;
 
 
-procedure TCustomVirtualExplorerCombobox.SetPath(const Value: WideString);
+procedure TCustomVirtualExplorerCombobox.SetPath(const Value: string);
 var
   PIDL: PItemIdList;
   NS: TNamespace;
@@ -12597,18 +12568,18 @@ begin
           {$IFDEF GXDEBUG_ADDRESSBAR}
           SendDebug('EN_CHANGE: Keypressed, ComboActive, not SelectingAll');
           {$ENDIF}
-          
+
           HandleDropDowns(ddAutoComplete);
         end;
         FSelectingAll := False
-      end;   
+      end;
   end;
   inherited;
 end;
 
 constructor TComboEdit.Create(AOwner: TComponent);
 begin
-  inherited;          
+  inherited;
 end;
 
 procedure TComboEdit.CreateWnd;
@@ -12617,7 +12588,7 @@ begin
   IsEditing := False;
 end;
 
-procedure TComboEdit.DefaultOnInvalidEntry(InvalidText: WideString);
+procedure TComboEdit.DefaultOnInvalidEntry(InvalidText: string);
 var
   H: THandle;
 begin
@@ -12635,10 +12606,10 @@ end;
 destructor TComboEdit.Destroy;
 begin
   FOldNameSpace.Free;
-  inherited;   
+  inherited;
 end;
 
-procedure TComboEdit.DoOnInvalidEntry(InvalidPath: WideString);
+procedure TComboEdit.DoOnInvalidEntry(InvalidPath: string);
 begin
   if Assigned(OwnerControl.OnInvalidEntry) then
     OwnerControl.OnInvalidEntry(OwnerControl, InvalidPath)
@@ -12646,13 +12617,13 @@ begin
     DefaultOnInvalidEntry(InvalidPath)
 end;
 
-function TComboEdit.GetText: WideString;
+function TComboEdit.GetText: string;
 begin
   Result := inherited Text
 end;
 
 procedure TComboEdit.HandleDropDowns(DropDown: TDropDown);
-begin       
+begin
   if DropDown = ddAutoComplete then
   begin
     if not ({(Text = '') or} ReadOnly) then
@@ -12684,7 +12655,7 @@ end;
 procedure TComboEdit.SelectEnteredPath;
 
 
-    function AutoCompleteDrive(TestPath: WideString): WideString;
+    function AutoCompleteDrive(TestPath: string): string;
     // Fills in the drive if the user only entered a drive lettter or the letter and semicolon
     // C -> C:\
     // C: -> C:\
@@ -12692,14 +12663,14 @@ procedure TComboEdit.SelectEnteredPath;
       if (Length(TestPath) < 3) and (Length(TestPath) > 0) then
       begin
         if Length(TestPath) = 1 then  // Just assume the first char is ok
-          Result := TestPath + WideString(':\')
+          Result := TestPath + string(':\')
         else
-          Result := TestPath + WideString('\')
+          Result := TestPath + string('\')
       end else
         Result := TestPath
     end;
 
-    procedure HandleInvalidText(TestPath: WideString);
+    procedure HandleInvalidText(TestPath: string);
     var
       WP: PWideChar;
       OldWP: WideChar;
@@ -12709,13 +12680,13 @@ procedure TComboEdit.SelectEnteredPath;
       DoOnInvalidEntry(TestPath);
       Done := False;
       Index := -1;
-      WP := WideStrScan(PWideChar(TestPath), WideChar('\'));
+      WP := SysUtils.StrScan(PWideChar(TestPath), WideChar('\'));
       while Assigned(WP) and not Done do
       begin
         OldWP := WP^;
         WP^ := WideNull;
         try
-          Done := not WideDirectoryExists(TestPath);
+          Done := not DirectoryExists(TestPath);
           if not Done then
             Index := lstrlenW(PWideChar(TestPath));
         finally
@@ -12723,7 +12694,7 @@ procedure TComboEdit.SelectEnteredPath;
         end;
         if WP^ <> WideNull then
           Inc(WP, 2);
-        WP := WideStrScan(WP, WideChar('\'));
+        WP := SysUtils.StrScan(WP, WideChar('\'));
       end;
       SelStart := Index + 1;
       SelLength := Length(Text);
@@ -12731,7 +12702,7 @@ procedure TComboEdit.SelectEnteredPath;
 
 var
   PIDL: PItemIDList;
-  WS: WideString;
+  WS: string;
   NS: TNamespace;
 begin
   if Style = scsDropDown then
@@ -12757,7 +12728,7 @@ begin
             HandleInvalidText(WS);
       end else
       { If it is an true folder we can do it the easy way }
-      if WideDirectoryExists(WS) then
+      if DirectoryExists(WS) then
       begin
         PIDL := PathToPIDL(WS);
         if Assigned(PIDL) then
@@ -12773,7 +12744,7 @@ begin
         OwnerControl.EditNamespace := NS ;
         SelectAll;
       end else
-      if FileExistsW(WS) then
+      if FileExists(WS) then
       { If it is a file then it is a bit different.  We execute the file but don't }
       { notify any linked controls or tell the Combobox about it                   }
       begin
@@ -12798,7 +12769,7 @@ begin
           OwnerControl.EditNamespace := NS;
           SelectAll;
         end else
-        if FileExistsW(NS.NameParseAddress) then
+        if FileExists(NS.NameParseAddress) then
         { If it is a file then it is a bit different.  We execute the file but don't }
         { notify any linked controls or tell the Combobox about it                   }
         begin
@@ -12850,7 +12821,7 @@ begin
   end
 end;
 
-procedure TComboEdit.SetText(const Value: WideString);
+procedure TComboEdit.SetText(const Value: string);
 begin
   inherited Text := Value;
   IsEditing := False;
@@ -12877,7 +12848,7 @@ begin
   if Message.CharCode in [VK_F16] then    // F16 seems to be Control-Backspace
   begin
     SelectingAll := True; // don't let the autocomplete drop down
-    Text := WideExtractFilePath(WideStripTrailingBackslash(Text));
+    Text := ExtractFilePath(WideStripTrailingBackslash(Text));
     SelStart := Length(Text);
     SelLength := 0;
   end else
@@ -12927,7 +12898,7 @@ begin
       HandleDropDowns(ddAutoComplete)
     else
       KeyPressed := True;
-  end     }     
+  end     }
 
   KeyPressed := True;
   if Message.CharCode = VK_F4 then
@@ -13016,6 +12987,8 @@ begin
   Visible := False;
   DropDownCount := 8;
   ComboBoxStyle := cbsClassic;
+  if Screen.PixelsPerInch <> 96 then
+    PopupExplorerTree.ScaleForPPI(Screen.PixelsPerInch);
 end;
 
 destructor TPopupExplorerDropDown.Destroy;
@@ -13784,7 +13757,7 @@ begin
 end;
 
 procedure TDropDownWnd.RefreshScrollbar;
-begin     
+begin
 end;
 
 procedure TDropDownWnd.RollDown(AnOwnerControl, AlignmentControl: TWinControl; Extents: PPoint);
@@ -14567,7 +14540,7 @@ begin
 end;
 
 procedure TPopupAutoCompleteTree.DoUpdateList(const CurrentEditContents:
-  WideString; EnumList: TStringList; var Handled: Boolean);
+  string; EnumList: TStringList; var Handled: Boolean);
 begin
   if Assigned(PopupAutoCompleteDropDown.OnAutoCompleteUpdateList) then
     PopupAutoCompleteDropDown.OnAutoCompleteUpdateList(
@@ -14676,11 +14649,11 @@ begin
     inherited
 end;
 
-procedure TPopupAutoCompleteTree.UpdateList(CurrentEditStr: WideString);
+procedure TPopupAutoCompleteTree.UpdateList(CurrentEditStr: string);
 var
   Handled: Boolean;
   i: NativeInt;
-  TestString: WideString;
+  TestString: string;
 begin
   Handled := False;
   Clear;
@@ -14699,22 +14672,22 @@ begin
       if Length(CurrentEditStr) = 1 then
         TestString := CurrentEditStr + ':\'
       else
-        TestString := WideExtractFileDir(CurrentEditStr);
+        TestString := ExtractFileDir(CurrentEditStr);
 
       if TestString <> '' then
       begin
-        TestString := IncludeTrailingBackslashW(TestString);
+        TestString := IncludeTrailingPathDelimiter(TestString);
         AutoComplete.CurrentDir := TestString;
         AutoComplete.Refresh;
         Strings.Assign(AutoComplete.Strings);
-        CurrentEditStr := WideLowerCase(CurrentEditStr);
+        CurrentEditStr := SysUtils.AnsiLowerCase(CurrentEditStr);
        { Add the filtered nodes to the VT }
         for i := 0 to Strings.Count - 1 do
         begin
            TestString := Strings[i];
-           TestString := WideLowerCase(TestString);
+           TestString := SysUtils.AnsiLowerCase(TestString);
           { See if the CurrentEditStr is a substring of the test string starting from position 1 }
-          if (WideStrPos(PWideChar( TestString), PWideChar( CurrentEditStr)) = @TestString[1]) or (CurrentEditStr[Length(CurrentEditStr)] = '\') then
+          if (SysUtils.StrPos(PWideChar(TestString), PWideChar(CurrentEditStr)) = @TestString[1]) or (CurrentEditStr[Length(CurrentEditStr)] = '\') then
             AddChild(nil, Pointer(i));  // Store the index in the list for the GetText event
         end
       end;
@@ -14855,7 +14828,7 @@ end;
 
 procedure TPopupExplorerOptions.SetColor(const Value: TColor);
 begin
-  PopupExplorerDropDown.PopupExplorerTree.Color := Value
+  PopupExplorerDropDown.PopupExplorerTree.Color := StyleServices.GetSystemColor(Value);
 end;
 
 procedure TPopupExplorerOptions.SetComboBoxStyle(const Value: TComboBoxStyle);
@@ -15098,6 +15071,8 @@ begin
   PopupAutoCompleteTree.TreeOptions.SelectionOptions := DefaultPopupSelectionOptions;
   WheelMouseTarget := PopupAutoCompleteTree;
   DropDownCount := 8;
+  if Screen.PixelsPerInch <> 96 then
+    PopupAutoCompleteTree.ScaleForPPI(Screen.PixelsPerInch);
 end;
 
 function TPopupAutoCompleteDropDown.CreatePopupAutoCompleteTree: TPopupAutoCompleteTree;
@@ -15481,6 +15456,8 @@ initialization
   LoadShell32Functions;
 
   TCustomStyleEngine.RegisterStyleHook(TVirtualExplorerTree, TVclStyleScrollBarsHook);
+  TCustomStyleEngine.RegisterStyleHook(TVirtualExplorerTreeview, TVclStyleScrollBarsHook);
+  TCustomStyleEngine.RegisterStyleHook(TVirtualExplorerListview, TVclStyleScrollBarsHook);
 
 finalization
   FreeAndNil(ViewManager);

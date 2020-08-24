@@ -26,18 +26,13 @@ unit VirtualBreadCrumbBar;
 
 interface
 
-{$include Compilers.inc}
 {$include ..\Include\AddIns.inc}
 
-{$ifdef COMPILER_12_UP}
-  {$WARN IMPLICIT_STRING_CAST       OFF}
- {$WARN IMPLICIT_STRING_CAST_LOSS  OFF}
-{$endif COMPILER_12_UP}
+{$WARN IMPLICIT_STRING_CAST       OFF}
+{$WARN IMPLICIT_STRING_CAST_LOSS  OFF}
 
 uses
-  {$IFDEF COMPILER_9_UP}
   Types,
-  {$ENDIF}
   {$IFDEF GXDEBUG}
   DbugIntf,
   {$ENDIF}
@@ -54,21 +49,6 @@ uses
   ImgList,
   ExtCtrls,
   CommCtrl,
-  {$IFDEF SpTBX}
-  SpTBXSkins,
-  SpTBXEditors,
-  {$ENDIF SpTBX}
-  {$IFDEF TNTSUPPORT}
-  TntStdCtrls,
-  TntClasses,
-  TntSysUtils,
-  TntMenus,
-    {$IFDEF COMPILER_10_UP}
-    WideStrings,
-    {$ELSE}
-    TntWideStrings,
-    {$ENDIF}
-  {$ENDIF}
   MPShellUtilities,
   VirtualScrollbars,
   VirtualShellNotifier,
@@ -80,12 +60,8 @@ uses
   MPResources,
   MPShellTypes,
   MPDataObject,
-  {$IFDEF COMPILER_7_UP}
   Themes,
-  {$ELSE}
-  TMSchema, // Windows XP themes support for D5-D6. Get these units from www.delphi-gems.com.
-  {$ENDIF}
-  UxTheme;  // Windows XP themes support for D5-D6. Get these units from www.delphi-gems.com.
+  UxTheme;
 
 
 const
@@ -236,11 +212,11 @@ type
     FPathImage: TBreadCrumbBarObject;
     FState: TVirtualBreadCrumbBarStates;
     FTrackingMenu: TPopupMenu;             // Set/Cleared by the Crumb object when it opens a menu
-    function GetPath: WideString;
+    function GetPath: string;
     function GetPIDL: PItemIDList;
     procedure SetActive(const Value: Boolean);
     procedure SetOptions(const Value: TVirtualBreadCrumbBarOptions);
-    procedure SetPath(const Value: WideString);
+    procedure SetPath(const Value: string);
     procedure SetPIDL(const Value: PItemIDList);
   protected
     procedure BuildViewRects;
@@ -268,7 +244,7 @@ type
     property Namespace: TNamespace read FNamespace;
     property Options: TVirtualBreadCrumbBarOptions read FOptions write SetOptions default [vbcoEditable, vbcoDropDownTree, vbcoDropDownAutoComplete, vbcoDropDownMenus, vbcoDropDownExpandableMenus];
     property PaintOptions: TVirtualBreadCrumbBarPaintOptions read FPaintOptions write FPaintOptions;
-    property Path: WideString read GetPath write SetPath;
+    property Path: string read GetPath write SetPath;
     property TrackingMenu: TPopupMenu read FTrackingMenu write FTrackingMenu;
   public
     constructor Create(AOwner: TComponent); override;
@@ -370,7 +346,7 @@ begin
   end
 end;
 
-function TCustomVirtualBreadCrumbBar.GetPath: WideString;
+function TCustomVirtualBreadCrumbBar.GetPath: string;
 begin
   if Assigned(FNamespace) then
     Result := Namespace.NameForParsing
@@ -427,10 +403,9 @@ end;
 
 procedure TCustomVirtualBreadCrumbBar.CalcThemedNCSize(var ContextRect: TRect);
 begin
-  {$IFDEF USETHEMES}
-  if Succeeded(GetThemeBackgroundContentRect(Themes.EditThemeTheme, Canvas.Handle, LVP_EMPTYTEXT, LIS_NORMAL, ContextRect, @ContextRect)) then
-    InflateRect(ContextRect, -(BorderWidth), -(BorderWidth));
-  {$ENDIF USETHEMES}
+  if UseThemes then
+    if Succeeded(GetThemeBackgroundContentRect(Themes.EditThemeTheme, Canvas.Handle, LVP_EMPTYTEXT, LIS_NORMAL, ContextRect, @ContextRect)) then
+      InflateRect(ContextRect, -(BorderWidth), -(BorderWidth));
 end;
 
 procedure TCustomVirtualBreadCrumbBar.CreateWnd;
@@ -550,20 +525,16 @@ begin
 end;
 
 procedure TCustomVirtualBreadCrumbBar.PaintThemedNCBkgnd(ACanvas: TCanvas; ARect: TRect);
-{$IFDEF USETHEMES}
 var
   R: TRect;
-{$ENDIF USETHEMES}
 begin
-  {$IFDEF USETHEMES}
-  if ShowThemedBorder then
+  if UseThemes and ShowThemedBorder then
   begin
     R := Rect(0, 0, 0, 0);
     GetThemeBackgroundExtent(Themes.EditThemeTheme, ACanvas.Handle, LVP_EMPTYTEXT, LIS_NORMAL, ARect, R);
     InflateRect(ARect, R.Left - ARect.Left, R.Top - ARect.Top);
     DrawThemeBackground(Themes.EditThemeTheme, ACanvas.Handle, LVP_EMPTYTEXT, LIS_NORMAL, ARect, nil);
   end
-  {$ENDIF USETHEMES}
 end;
 
 procedure TCustomVirtualBreadCrumbBar.ParsePath;
@@ -614,7 +585,7 @@ begin
   end
 end;
 
-procedure TCustomVirtualBreadCrumbBar.SetPath(const Value: WideString);
+procedure TCustomVirtualBreadCrumbBar.SetPath(const Value: string);
 var
   PIDL: PItemIDList;
   NS, OldNS: TNamespace;
@@ -851,30 +822,16 @@ end;
 
 function TBreadCrumbBarPathObject.EnumFunc(MessageWnd: HWnd; APIDL: PItemIDList; AParent: TNamespace; Data: Pointer; var Terminate: Boolean): Boolean;
 var
-  {$IFDEF TNTSUPPORT}
-  MenuItem: TTntMenuItem;
-  {$ELSE}
   MenuItem: TMenuItem;
-  {$ENDIF}
   NS: TNamespace;
 begin
-  {$IFDEF TNTSUPPORT}
-  MenuItem := TTntMenuItem.Create(TTntPopupMenu( Data));
-  {$ELSE}
   MenuItem := TMenuItem.Create(TPopupMenu( Data));
- {$ENDIF}
   NS := TNamespace.Create(APIDL, AParent); // Let the NS free the PIDL
   MenuItem.Caption := NS.NameNormal;
   MenuItem.OnClick := OnPopupMenuClick;
-  {$IFDEF TNTSUPPORT}
-  if Assigned(TTntPopupMenu( Data).Images) then
-    MenuItem.ImageIndex := NS.GetIconIndex(False, icSmall);
-  TTntPopupMenu( Data).Items.Add(MenuItem);
-  {$ELSE}
   if Assigned(TPopupMenu( Data).Images) then
     MenuItem.ImageIndex := NS.GetIconIndex(False, icSmall);
   TPopupMenu( Data).Items.Add(MenuItem);
- {$ENDIF}
   NS.Free;
   Result := True
 end;
@@ -886,20 +843,12 @@ end;
 
 procedure TBreadCrumbBarPathObject.Click(Pt: TPoint);
 var
-  {$IFDEF TNTSUPPORT}
-  Menu: TTntPopupMenu;
-  {$ELSE}
   Menu: TPopupMenu;
-  {$ENDIF}
   OriginPt: TPoint;
 begin
   if PtInDropDownButton(Pt) then
   begin
-    {$IFDEF TNTSUPPORT}
-    Menu := TTntPopupMenu.Create(nil);
-    {$ELSE}
     Menu := TPopupMenu.Create(nil);
-    {$ENDIF}
     try
       if vbcoMenuIcons in Owner.Options then
         Menu.Images := SmallSysImages;

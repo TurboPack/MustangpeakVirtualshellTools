@@ -87,7 +87,7 @@ type
 
   PColumnData = ^TColumnData;
   TColumnData = packed record
-    Title: WideString;
+    Title: string;
     Enabled: Boolean;
     Width: integer;
     ColumnIndex: integer;

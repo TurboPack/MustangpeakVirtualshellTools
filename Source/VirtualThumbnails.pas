@@ -11,7 +11,6 @@ The initial developer of this code is Robert Lee.
 Requirements:
   - Jim Kuenaman's Mustangpeak Common Library
     http://www.mustangpeak.net
-  - Troy Wolbrink's TNT Unicode Controls
     http://www.tntware.com/delphicontrols/unicode/
 
 Credits:
@@ -100,38 +99,38 @@ type
 
   TThumbInfo = class
   private
-    FComment: WideString;
-    FExif: WideString;
-    FFilename: WideString;
+    FComment: string;
+    FExif: string;
+    FFilename: string;
     FFileDateTime: TDateTime;
     FImageWidth: Integer;
     FImageHeight: Integer;
-    FStreamSignature: WideString;
+    FStreamSignature: string;
     FTag: Integer;
     FThumbBitmapStream: TMemoryStream;
     FUseCompression: Boolean;
     function GetThumbSize: TPoint;
   protected
-    function DefaultStreamSignature: WideString; virtual;
+    function DefaultStreamSignature: string; virtual;
   public
     constructor Create; virtual;
     destructor Destroy; override;
     procedure Assign(T: TThumbInfo); virtual;
     procedure Draw(ACanvas: TCanvas; ARect: TRect; Alignment: TThumbsAlignment; Stretch: Boolean = False);
-    procedure Fill(AFilename, AExif, AComment: WideString;
+    procedure Fill(AFilename, AExif, AComment: string;
       AFileDateTime: TDateTime; AImageWidth, AImageHeight: Integer;
       AThumbBitmapStream: TMemoryStream; ATag: Integer);
     function LoadFromStream(ST: TStream): Boolean; virtual;
     procedure SaveToStream(ST: TStream); virtual;
     function ReadBitmap(OutBitmap: TBitmap): Boolean;
     procedure WriteBitmap(ABitmap: TBitmap);
-    property Comment: WideString read FComment write FComment;
-    property Exif: WideString read FExif write FExif;
-    property Filename: WideString read FFilename write FFilename;
+    property Comment: string read FComment write FComment;
+    property Exif: string read FExif write FExif;
+    property Filename: string read FFilename write FFilename;
     property FileDateTime: TDateTime read FFileDateTime write FFileDateTime;
     property ImageWidth: Integer read FImageWidth write FImageWidth;
     property ImageHeight: Integer read FImageHeight write FImageHeight;
-    property StreamSignature: WideString read FStreamSignature;
+    property StreamSignature: string read FStreamSignature;
     property Tag: Integer read FTag write FTag;
     property ThumbBitmapStream: TMemoryStream read FThumbBitmapStream write FThumbBitmapStream;
     property ThumbSize: TPoint read GetThumbSize;
@@ -140,7 +139,7 @@ type
 
   TThumbAlbum = class
   private
-    FDirectory: WideString;
+    FDirectory: string;
     FLoadedFromFile: Boolean;
     FStreamVersion: Integer;
     FSize: Integer;
@@ -156,17 +155,17 @@ type
     constructor Create; virtual;
     destructor Destroy; override;
     procedure Clear;
-    function IndexOf(Filename: WideString): Integer;
+    function IndexOf(Filename: string): Integer;
     function Add(T: TThumbInfo): Integer; overload;
     procedure Assign(AThumbAlbum: TThumbAlbum);
     procedure Delete(Index: Integer); overload;
-    procedure Delete(Filename: WideString); overload;
+    procedure Delete(Filename: string); overload;
     function Read(Index: Integer; var OutThumbInfo: TThumbInfo): Boolean; overload;
     function Read(Index: Integer; OutBitmap: TBitmap): Boolean; overload;
-    procedure LoadFromFile(const Filename: WideString); overload;
-    procedure LoadFromFile(const Filename: WideString; InvalidFiles: TStringList); overload;
-    procedure SaveToFile(const Filename: WideString);
-    property Directory: WideString read FDirectory write FDirectory;
+    procedure LoadFromFile(const Filename: string); overload;
+    procedure LoadFromFile(const Filename: string; InvalidFiles: TStringList); overload;
+    procedure SaveToFile(const Filename: string);
+    property Directory: string read FDirectory write FDirectory;
     property ThumbWidth: Integer read FThumbWidth write FThumbWidth;
     property ThumbHeight: Integer read FThumbHeight write FThumbHeight;
     property Comments: TStringList read FComments;
@@ -190,8 +189,8 @@ type
     FMaxThumbHeight: Integer;
     FMaxThumbWidth: Integer;
     FStorageCompressed: Boolean;
-    FStorageFilename: WideString;
-    FStorageRepositoryFolder: WideString;
+    FStorageFilename: string;
+    FStorageRepositoryFolder: string;
     FStorageType: TThumbsAlbumStorage;
     FStretch: Boolean;
     FUpdateCount: Integer;
@@ -201,7 +200,7 @@ type
     FUseShellExtraction: Boolean;
     FUseSubsampling: Boolean;
     function GetUpdating: Boolean;
-    procedure SetStorageRepositoryFolder(const Value: WideString);
+    procedure SetStorageRepositoryFolder(const Value: string);
     procedure SetAlignment(const Value: TThumbsAlignment);
   protected
     FOwner: TComponent;
@@ -209,8 +208,8 @@ type
     procedure EndUpdate;
     procedure DoOptionsChanged(ResetThread, Invalidate: Boolean); virtual;
     function GetAlbumList(L: TStringList): Boolean;
-    function GetAlbumFileToLoad(Dir: WideString): WideString;
-    function GetAlbumFileToSave(Dir: WideString; AppendToAlbumList: Boolean): WideString;
+    function GetAlbumFileToLoad(Dir: string): string;
+    function GetAlbumFileToSave(Dir: string; AppendToAlbumList: Boolean): string;
     procedure FillImageFormats(FillColors: Boolean = True); virtual;
     property Alignment: TThumbsAlignment read FAlignment write SetAlignment default talCenter;
     property AutoLoad: Boolean read FAutoLoad write FAutoLoad default False;
@@ -221,8 +220,8 @@ type
     property MaxThumbHeight: Integer read FMaxThumbHeight write FMaxThumbHeight default 0;
     property MaxThumbWidth: Integer read FMaxThumbWidth write FMaxThumbWidth default 0;
     property StorageCompressed: Boolean read FStorageCompressed write FStorageCompressed default False;
-    property StorageFilename: WideString read FStorageFilename write FStorageFilename;
-    property StorageRepositoryFolder: WideString read FStorageRepositoryFolder write SetStorageRepositoryFolder;
+    property StorageFilename: string read FStorageFilename write FStorageFilename;
+    property StorageRepositoryFolder: string read FStorageRepositoryFolder write SetStorageRepositoryFolder;
     property StorageType: TThumbsAlbumStorage read FStorageType write FStorageType default tasRepository;
     property Stretch: Boolean read FStretch write FStretch default False;
     property UseExifThumbnail: Boolean read FUseExifThumbnail write FUseExifThumbnail default True;
@@ -267,25 +266,25 @@ type
 procedure SpInitBitmap(OutB: TBitmap; W, H: Integer; BackgroundColor: TColor);
 function SpRectAspectRatio(ImageW, ImageH, ThumbW, ThumbH: Integer; Alignment: TThumbsAlignment; AllowEnlarge: Boolean = False): TRect;
 function SpIsIncompleteJPGError(E: Exception): Boolean;
-function SpGetGraphicClass(Filename: WideString): TGraphicClass;
-function SpLoadGraphicFile(Filename: WideString; outP: TPicture; CatchIncompleteJPGErrors: Boolean = True): Boolean;
+function SpGetGraphicClass(Filename: string): TGraphicClass;
+function SpLoadGraphicFile(Filename: string; outP: TPicture; CatchIncompleteJPGErrors: Boolean = True): Boolean;
 procedure SpPixelRotate(InOutB: TBitmap; Angle: Integer);
 procedure SpStretchDraw(G: TGraphic; ACanvas: TCanvas; DestR: TRect; UseSubsampling: Boolean);
-function SpMakeThumbFromFile(Filename: WideString; OutBitmap: TBitmap; ThumbW,
+function SpMakeThumbFromFile(Filename: string; OutBitmap: TBitmap; ThumbW,
   ThumbH: Integer; BgColor: TColor; SubSampling, ExifThumbnail, ExifOrientation: Boolean;
   var ImageWidth, ImageHeight: Integer): Boolean;
 function SpCreateThumbInfoFromFile(NS: TNamespace; ThumbW, ThumbH: Integer;
   UseSubsampling, UseShellExtraction, UseExifThumbnail, UseExifOrientation: Boolean;
   BackgroundColor: TColor): TThumbInfo;
-  function SpReadExifThumbnail(FileName: WideString; Exif: TStringList): TJpegImage;
+  function SpReadExifThumbnail(FileName: string; Exif: TStringList): TJpegImage;
 
 { Stream helpers }
 function SpReadDateTimeFromStream(ST: TStream): TDateTime;
 procedure SpWriteDateTimeToStream(ST: TStream; D: TDateTime);
 function SpReadIntegerFromStream(ST: TStream): Integer;
 procedure SpWriteIntegerToStream(ST: TStream; I: Integer);
-function SpReadWideStringFromStream(ST: TStream): WideString;
-procedure SpWriteWideStringToStream(ST: TStream; WS: WideString);
+function SpReadUnicodeStringFromStream(ST: TStream): string;
+procedure SpWriteUnicodeStringToStream(ST: TStream; WS: string);
 function SpReadMemoryStreamFromStream(ST: TStream; MS: TMemoryStream): Boolean;
 procedure SpWriteMemoryStreamToStream(ST: TStream; MS: TMemoryStream);
 function SpReadBitmapFromStream(ST: TStream; B: TBitmap): Boolean;
@@ -443,11 +442,11 @@ begin
             (S = 'JPEG error #57');
 end;
 
-function SpGetGraphicClass(Filename: WideString): TGraphicClass;
+function SpGetGraphicClass(Filename: string): TGraphicClass;
 var
-  Ext: WideString;
+  Ext: string;
 begin
-  Ext := WideLowercase(WideExtractFileExt(Filename));
+  Ext := SysUtils.AnsiLowerCase(WideExtractFileExt(Filename));
   Delete(Ext, 1, 1);
 
   Result := nil;
@@ -470,7 +469,7 @@ type
   TFixedGraphic = class(TGraphic);
   TFixedGraphicClass = class of TFixedGraphic;
 
-function SpLoadGraphicFile(Filename: WideString; outP: TPicture; CatchIncompleteJPGErrors: Boolean = True): Boolean;
+function SpLoadGraphicFile(Filename: string; outP: TPicture; CatchIncompleteJPGErrors: Boolean = True): Boolean;
 // Loads an image file with a unicode name
 // If CatchIncompleteJPGErrors = True it tries to see if the image
 // is an incomplete jpeg image file.
@@ -553,10 +552,10 @@ begin
         case Angle of
           90: B.Canvas.Pixels[OrigHeight-J-1, I] := InOutB.Canvas.Pixels[I, J];
           180: B.Canvas.Pixels[OrigWidth-I-1, OrigHeight-J-1] := InOutB.Canvas.Pixels[I, J];
-          270:  B.Canvas.Pixels[J, OrigWidth-I-1] := InOutB.Canvas.Pixels[I, J];          
+          270:  B.Canvas.Pixels[J, OrigWidth-I-1] := InOutB.Canvas.Pixels[I, J];
         end;
       end;
-      
+
     InOutB.Assign(B);
   finally
     B.Free;
@@ -607,7 +606,7 @@ begin
   end;
 end;
 
-function SpMakeThumbFromFile(Filename: WideString; OutBitmap: TBitmap; ThumbW,
+function SpMakeThumbFromFile(Filename: string; OutBitmap: TBitmap; ThumbW,
   ThumbH: Integer; BgColor: TColor; SubSampling, ExifThumbnail, ExifOrientation: Boolean;
   var ImageWidth, ImageHeight: Integer): Boolean;
 var
@@ -623,7 +622,7 @@ begin
   Result := False;
   if not Assigned(OutBitmap) then Exit;
 
-  Ext := WideLowerCase(WideExtractFileExt(Filename));
+  Ext := SysUtils.AnsiLowerCase(WideExtractFileExt(Filename));
   HasExifThumb := False;
   Orientation := 0;
 
@@ -973,7 +972,7 @@ begin
   end;
 end;
 
-function SpReadExifThumbnail(FileName: WideString; Exif: TStringList): TJpegImage;
+function SpReadExifThumbnail(FileName: string; Exif: TStringList): TJpegImage;
 
   function CorrectThumbnailBuffer(ThumbBuffer: String): String;
   var
@@ -1105,10 +1104,10 @@ begin
   ST.WriteBuffer(I, SizeOf(I));
 end;
 
-function SpReadWideStringFromStream(ST: TStream): WideString;
+function SpReadUnicodeStringFromStream(ST: TStream): string;
 var
   L: Integer;
-  WS: WideString;
+  WS: string;
 begin
   Result := '';
   ST.ReadBuffer(L, SizeOf(L));
@@ -1117,7 +1116,7 @@ begin
   Result := WS;
 end;
 
-procedure SpWriteWideStringToStream(ST: TStream; WS: WideString);
+procedure SpWriteUnicodeStringToStream(ST: TStream; WS: string);
 var
   L: Integer;
 begin
@@ -1265,7 +1264,7 @@ function TExtensionsList.AddObject(const S: string; AObject: TObject): Integer;
 var
   Aux: string;
 begin
-  Aux := LowerCase(S);
+  Aux := SysUtils.AnsiLowerCase(S);
   // Add the '.' to the extension
   if (Length(Aux) > 0) and (Aux[1] <> '.') then
     Aux := '.' + Aux;
@@ -1276,7 +1275,7 @@ function TExtensionsList.IndexOf(const S: string): Integer;
 var
   Aux: string;
 begin
-  Aux := LowerCase(S);
+  Aux := SysUtils.AnsiLowerCase(S);
   // Add the '.' to the extension
   if (Length(Aux) > 0) and (Aux[1] <> '.') then
     Aux := '.' + Aux;
@@ -1340,7 +1339,7 @@ begin
       // If it's a folder stretch the bitmap to fit the thumbnail
       // If Stretch is true it will be stretched anyway
       if not Stretch then
-        Stretch := WideDirectoryExists(FileName);
+        Stretch := DirectoryExists(FileName);
 
       DestR := SpRectAspectRatio(B.Width, B.Height, CellSize.X, CellSize.Y, Alignment, Stretch);
       OffsetRect(DestR, ARect.Left, ARect.Top);
@@ -1352,7 +1351,7 @@ begin
   end;
 end;
 
-procedure TThumbInfo.Fill(AFilename, AExif, AComment: WideString;
+procedure TThumbInfo.Fill(AFilename, AExif, AComment: string;
   AFileDateTime: TDateTime; AImageWidth, AImageHeight: Integer;
   AThumbBitmapStream: TMemoryStream; ATag: Integer);
 begin
@@ -1381,7 +1380,7 @@ begin
   end;
 end;
 
-function TThumbInfo.DefaultStreamSignature: WideString;
+function TThumbInfo.DefaultStreamSignature: string;
 begin
   // Override this method to change the default stream signature
   // Use the StreamSignature to load or not the custom properties
@@ -1401,13 +1400,13 @@ begin
   // Override this method to read the properties from the stream
   // Use the StreamSignature to load or not the custom properties
   Result := True;
-  FStreamSignature := SpReadWideStringFromStream(ST);
-  FFilename := SpReadWideStringFromStream(ST);
+  FStreamSignature := SpReadUnicodeStringFromStream(ST);
+  FFilename := SpReadUnicodeStringFromStream(ST);
   FFileDateTime := SpReadDateTimeFromStream(ST);
   FImageWidth := SpReadIntegerFromStream(ST);
   FImageHeight := SpReadIntegerFromStream(ST);
-  FExif := SpReadWideStringFromStream(ST);
-  FComment := SpReadWideStringFromStream(ST);
+  FExif := SpReadUnicodeStringFromStream(ST);
+  FComment := SpReadUnicodeStringFromStream(ST);
   FUseCompression := Boolean(SpReadIntegerFromStream(ST));
   SpReadMemoryStreamFromStream(ST, FThumbBitmapStream);
   if FUseCompression then
@@ -1419,13 +1418,13 @@ var
   MS: TMemoryStream;
 begin
   // Override this method to write the properties to the stream
-  SpWriteWideStringToStream(ST, FStreamSignature);
-  SpWriteWideStringToStream(ST, FFilename);
+  SpWriteUnicodeStringToStream(ST, FStreamSignature);
+  SpWriteUnicodeStringToStream(ST, FFilename);
   SpWriteDateTimeToStream(ST, FFileDateTime);
   SpWriteIntegerToStream(ST, FImageWidth);
   SpWriteIntegerToStream(ST, FImageHeight);
-  SpWriteWideStringToStream(ST, FExif);
-  SpWriteWideStringToStream(ST, FComment);
+  SpWriteUnicodeStringToStream(ST, FExif);
+  SpWriteUnicodeStringToStream(ST, FComment);
   SpWriteIntegerToStream(ST, Integer(FUseCompression));
   if FUseCompression then begin
     MS := TMemoryStream.Create;
@@ -1496,7 +1495,7 @@ begin
   FThumbHeight := 0;
 end;
 
-function TThumbAlbum.IndexOf(Filename: WideString): Integer;
+function TThumbAlbum.IndexOf(Filename: string): Integer;
 begin
   Result := FHeaderFilelist.IndexOf(Filename);
 end;
@@ -1523,7 +1522,7 @@ begin
   end;
 end;
 
-procedure TThumbAlbum.Delete(Filename: WideString);
+procedure TThumbAlbum.Delete(Filename: string);
 var
   Index: Integer;
 begin
@@ -1557,7 +1556,7 @@ begin
   Result := 1;
 end;
 
-procedure TThumbAlbum.LoadFromFile(const Filename: WideString);
+procedure TThumbAlbum.LoadFromFile(const Filename: string);
 var
   FileStream: TStream;
   T: TThumbInfo;
@@ -1567,7 +1566,7 @@ begin
   FileStream := TVirtualFileStream.Create(FileName, fmOpenRead or fmShareDenyWrite);
   try
     // Read the header
-    FDirectory := SpReadWideStringFromStream(FileStream);
+    FDirectory := SpReadUnicodeStringFromStream(FileStream);
     FileCount := SpReadIntegerFromStream(FileStream);
     FStreamVersion := SpReadIntegerFromStream(FileStream);
     FThumbWidth := SpReadIntegerFromStream(FileStream);
@@ -1579,7 +1578,7 @@ begin
         T := TThumbInfo.Create;
         try
           T.LoadFromStream(FileStream);
-          if FileExistsW(T.Filename) then
+          if FileExists(T.Filename) then
             Add(T)
           else begin
             // The file is not valid, don't add it
@@ -1599,7 +1598,7 @@ begin
   end;
 end;
 
-procedure TThumbAlbum.LoadFromFile(const Filename: WideString; InvalidFiles: TStringList);
+procedure TThumbAlbum.LoadFromFile(const Filename: string; InvalidFiles: TStringList);
 var
   AuxThumbAlbum: TThumbAlbum;
   T, TCopy: TThumbInfo;
@@ -1610,7 +1609,7 @@ begin
   else begin
     // Tidy the list
     for I := 0 to InvalidFiles.Count - 1 do
-      InvalidFiles[I] := WideLowerCase(InvalidFiles[I]);
+      InvalidFiles[I] := SysUtils.AnsiLowerCase(InvalidFiles[I]);
     InvalidFiles.Sort;
     // Load a cache file and ATTACH only the streams that are NOT in InvalidFiles list
     AuxThumbAlbum := TThumbAlbum.Create;
@@ -1635,7 +1634,7 @@ begin
   end;
 end;
 
-procedure TThumbAlbum.SaveToFile(const Filename: WideString);
+procedure TThumbAlbum.SaveToFile(const Filename: string);
 var
   FileStream: TStream;
   T: TThumbInfo;
@@ -1646,7 +1645,7 @@ begin
   FileStream := TVirtualFileStream.Create(Filename, fmCreate);
   try
     // Write the header
-    SpWriteWideStringToStream(FileStream, Directory);
+    SpWriteUnicodeStringToStream(FileStream, Directory);
     SpWriteIntegerToStream(FileStream, Count - InvalidCount);
     SpWriteIntegerToStream(FileStream, DefaultStreamVersion);
     SpWriteIntegerToStream(FileStream, FThumbWidth);
@@ -1773,7 +1772,7 @@ end;
 procedure TCustomThumbsManager.FillImageFormats(FillColors: Boolean = True);
 var
   I: Integer;
-  Ext: WideString;
+  Ext: string;
 begin
   FValidImageFormats.Clear;
   with FValidImageFormats do begin
@@ -1784,21 +1783,21 @@ begin
     for I := 0 to FValidImageFormats.Count - 1 do begin
       Ext := FValidImageFormats[I];
 
-      if Pos(Ext, WideString( '.jpg, .jpeg, .jif, .jfif, .jpe, .jp2, .j2k, .jpc, .j2c, .crw, .cr2, .nef, .raw, .pef, .raf, .x2f, .bay, .orf, .srf, .mrw, .dcr')) > 0 then FValidImageFormats.Colors[I] := $BADDDD
-      else if Pos(Ext, WideString( '.bmp, .rle, .dib')) > 0 then FValidImageFormats.Colors[I] := $EFD3D3
-      else if Pos(Ext, WideString( '.emf, .wmf')) > 0 then FValidImageFormats.Colors[I] := $7DC7B0
-      else if Pos(Ext, WideString( '.gif')) > 0 then FValidImageFormats.Colors[I] := $CCDBCC
-      else if Pos(Ext, WideString( '.png')) > 0 then FValidImageFormats.Colors[I] := $DAB6DA
-      else if Pos(Ext, WideString( '.tif, .tiff, .fax, .g3n, .g3f, .eps')) > 0 then FValidImageFormats.Colors[I] := $DBB5B0
-      else if Pos(Ext, WideString( '.pcx, .dcx, .pcc, .scr')) > 0 then FValidImageFormats.Colors[I] := $D6D6DB
-      else if Pos(Ext, WideString( '.tga, .targa, .pix, .vst, .vda, .win, .icb, .afi')) > 0 then FValidImageFormats.Colors[I] := $EFEFD6
-      else if Pos(Ext, WideString( '.psd, .pdd')) > 0 then FValidImageFormats.Colors[I] := $D3EFEF
-      else if Pos(Ext, WideString( '.psp')) > 0 then FValidImageFormats.Colors[I] := $93C0DD
-      else if Pos(Ext, WideString( '.sgi, .rgba, .rgb, .bw')) > 0 then FValidImageFormats.Colors[I] := $C2BBE3
-      else if Pos(Ext, WideString( '.rla, .rpf')) > 0 then FValidImageFormats.Colors[I] := $D3EFEF
-      else if Pos(Ext, WideString( '.ppm, .pgm, .pbm')) > 0 then FValidImageFormats.Colors[I] := $95D4DD
-      else if Pos(Ext, WideString( '.cel, .pic, .cut, .pcd')) > 0 then FValidImageFormats.Colors[I] := $AFEFEE
-      else if Pos(Ext, WideString( '.avi, .mpg, .mpeg, .wmv')) > 0 then FValidImageFormats.Colors[I] := $0BBDFF;
+      if Pos(Ext, '.jpg, .jpeg, .jif, .jfif, .jpe, .jp2, .j2k, .jpc, .j2c, .crw, .cr2, .nef, .raw, .pef, .raf, .x2f, .bay, .orf, .srf, .mrw, .dcr') > 0 then FValidImageFormats.Colors[I] := $BADDDD
+      else if Pos(Ext, '.bmp, .rle, .dib') > 0 then FValidImageFormats.Colors[I] := $EFD3D3
+      else if Pos(Ext, '.emf, .wmf') > 0 then FValidImageFormats.Colors[I] := $7DC7B0
+      else if Pos(Ext, '.gif') > 0 then FValidImageFormats.Colors[I] := $CCDBCC
+      else if Pos(Ext, '.png') > 0 then FValidImageFormats.Colors[I] := $DAB6DA
+      else if Pos(Ext, '.tif, .tiff, .fax, .g3n, .g3f, .eps') > 0 then FValidImageFormats.Colors[I] := $DBB5B0
+      else if Pos(Ext, '.pcx, .dcx, .pcc, .scr') > 0 then FValidImageFormats.Colors[I] := $D6D6DB
+      else if Pos(Ext, '.tga, .targa, .pix, .vst, .vda, .win, .icb, .afi') > 0 then FValidImageFormats.Colors[I] := $EFEFD6
+      else if Pos(Ext, '.psd, .pdd') > 0 then FValidImageFormats.Colors[I] := $D3EFEF
+      else if Pos(Ext, '.psp') > 0 then FValidImageFormats.Colors[I] := $93C0DD
+      else if Pos(Ext, '.sgi, .rgba, .rgb, .bw') > 0 then FValidImageFormats.Colors[I] := $C2BBE3
+      else if Pos(Ext, '.rla, .rpf') > 0 then FValidImageFormats.Colors[I] := $D3EFEF
+      else if Pos(Ext, '.ppm, .pgm, .pbm') > 0 then FValidImageFormats.Colors[I] := $95D4DD
+      else if Pos(Ext, '.cel, .pic, .cut, .pcd') > 0 then FValidImageFormats.Colors[I] := $AFEFEE
+      else if Pos(Ext, '.avi, .mpg, .mpeg, .wmv') > 0 then FValidImageFormats.Colors[I] := $0BBDFF;
       // $7DC7B0 = green, $0BBDFF = orange, CFCFCF = grey
     end;
   end;
@@ -1808,7 +1807,7 @@ end;
 
 function TCustomThumbsManager.IsValidImageFileFormat(NS: TNamespace): TValidImageFileFormat;
 var
-  Ext: WideString;
+  Ext: string;
 begin
   Result := vffInvalid;
   if Assigned(NS) then begin
@@ -1824,12 +1823,12 @@ end;
 
 function TCustomThumbsManager.GetAlbumList(L: TStringList): Boolean;
 var
-  S: WideString;
+  S: string;
 begin
   Result := False;
   L.Clear;
   S := StorageRepositoryFolder + 'AlbumList.txt';
-  if FileExistsW(S) then begin
+  if FileExists(S) then begin
     L.LoadFromFile(S);
     Result := True;
   end;
@@ -1840,13 +1839,13 @@ begin
   Result := FUpdateCount > 0;
 end;
 
-function TCustomThumbsManager.GetAlbumFileToLoad(Dir: WideString): WideString;
+function TCustomThumbsManager.GetAlbumFileToLoad(Dir: string): string;
 var
   L: TStringList;
 begin
   Result := '';
   if Dir <> '' then begin
-    Dir := WideIncludeTrailingBackslash(Dir);
+    Dir := IncludeTrailingPathDelimiter(Dir);
     case FStorageType of
       tasPerFolder:
         if FStorageFilename <> '' then
@@ -1868,21 +1867,21 @@ begin
   end;
 end;
 
-function TCustomThumbsManager.GetAlbumFileToSave(Dir: WideString; AppendToAlbumList: Boolean): WideString;
+function TCustomThumbsManager.GetAlbumFileToSave(Dir: string; AppendToAlbumList: Boolean): string;
 var
-  F: WideString;
+  F: string;
   I: Integer;
   L: TStringList;
 begin
   Result := '';
   if Dir <> '' then begin
-    Dir := WideIncludeTrailingBackslash(Dir);
+    Dir := IncludeTrailingPathDelimiter(Dir);
     case FStorageType of
       tasPerFolder:
         if FStorageFilename <> '' then
           Result := Dir + FStorageFilename;
       tasRepository:
-        if (FStorageRepositoryFolder <> '') and (WideDirectoryExists(FStorageRepositoryFolder) or WideCreateDir(FStorageRepositoryFolder)) then begin
+        if (FStorageRepositoryFolder <> '') and (DirectoryExists(FStorageRepositoryFolder) or CreateDir(FStorageRepositoryFolder)) then begin
           L := TStringList.Create;
           try
             if GetAlbumList(L) then
@@ -1898,7 +1897,7 @@ begin
                 F := WideExtractFileName(WideStripTrailingBackslash(Dir));  // NameForParsingInFolder
               Result := F + '.album';
               I := 0;
-              while FileExistsW(FStorageRepositoryFolder + Result) do begin
+              while FileExists(FStorageRepositoryFolder + Result) do begin
                 inc(I);
                 Result := F + '.' + IntToStr(I) + '.album';
               end;
@@ -1926,11 +1925,11 @@ begin
   end;
 end;
 
-procedure TCustomThumbsManager.SetStorageRepositoryFolder(const Value: WideString);
+procedure TCustomThumbsManager.SetStorageRepositoryFolder(const Value: string);
 begin
   FStorageRepositoryFolder := Value;
   if FStorageRepositoryFolder <> '' then
-    FStorageRepositoryFolder := WideIncludeTrailingBackslash(FStorageRepositoryFolder);
+    FStorageRepositoryFolder := IncludeTrailingPathDelimiter(FStorageRepositoryFolder);
 end;
 
 end.

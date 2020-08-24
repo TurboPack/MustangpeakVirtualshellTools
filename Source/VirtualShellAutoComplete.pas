@@ -55,7 +55,7 @@ type
 type
   TCustomVirtualShellAutoComplete = class(TComponent)
   private
-    FCurrentDir: WideString;
+    FCurrentDir: string;
     FStrings: TStringList;
     FContents: TAutoCompleteContents;
     FOnAutoCompleteAddItem: TVirtualAutoCompleteAddItem;
@@ -66,7 +66,7 @@ type
 
     procedure ReadCurrentDir(Reader: TReader);
     procedure WriteCurrentDir(Writer: TWriter);
-    procedure SetCurrentDir(const Value: WideString);
+    procedure SetCurrentDir(const Value: string);
 
   protected
     function EnumFolder(MessageWnd: HWnd; APIDL: PItemIDList; AParent: TNamespace; Data: Pointer; var Terminate: Boolean): Boolean;
@@ -79,7 +79,7 @@ type
 
     property Contents: TAutoCompleteContents read FContents write FContents
       default AutoCompleteDefault;
-    property CurrentDir: WideString read FCurrentDir write SetCurrentDir;
+    property CurrentDir: string read FCurrentDir write SetCurrentDir;
     property OnAutoCompleteAddItem: TVirtualAutoCompleteAddItem read FOnAutoCompleteAddItem write FOnAutoCompleteAddItem;
     property Namespaces: TVirtualNameSpaceList read FNamespaces write FNamespaces;
     property Strings: TStringList read GetStrings;
@@ -173,7 +173,7 @@ procedure TCustomVirtualShellAutoComplete.FillCurrentDir;
 var
   NS: TNamespace;
 begin
-  if (accCurrentDir in FContents) and WideDirectoryExists(FCurrentDir) then
+  if (accCurrentDir in FContents) and DirectoryExists(FCurrentDir) then
   begin
     try
       NS := TNamespace.CreateFromFileName(FCurrentDir);
@@ -244,9 +244,9 @@ begin
 end;
 
 procedure TCustomVirtualShellAutoComplete.SetCurrentDir(
-  const Value: WideString);
+  const Value: string);
 begin
-  if (Value <> FCurrentDir) and WideDirectoryExists(Value) then
+  if (Value <> FCurrentDir) and DirectoryExists(Value) then
   begin
     Dirty := True;
     FCurrentDir := Value;

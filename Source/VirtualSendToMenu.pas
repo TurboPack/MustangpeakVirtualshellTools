@@ -93,9 +93,9 @@ uses
   TypInfo, System.Types;
 
 {$IFDEF USE_TOOLBAR_TB2K}
-procedure SetTBItemCaption(Item: TTBCustomItem; Caption: WideString);
+procedure SetTBItemCaption(Item: TTBCustomItem; Caption: string);
 // Set the unicode caption to the Item if it has a valid
-// WideString Caption property.
+// string Caption property.
 var
   PropInfo: PPropInfo;
 begin

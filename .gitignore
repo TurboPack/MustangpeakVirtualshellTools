@@ -8,3 +8,10 @@ Win32
 *.hpp
 *.tvsconfig
 *.identcache
+CBuilder/cpp/
+CBuilder/Sydney/Win64/
+Delphi/Berlin/Win64/
+Delphi/cpp/
+Delphi/Rio/Win64/
+Delphi/Sydney/Win64/
+Delphi/Tokyo/Win64/

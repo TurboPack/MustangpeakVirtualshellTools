@@ -112,7 +112,7 @@ type
     constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
 
-    function Run(FileName, InitialDirectory: WideString; Parameters: WideString = ''): Boolean;
+    function Run(FileName, InitialDirectory: string; Parameters: string = ''): Boolean;
     procedure Kill;
     procedure Write(Command: AnsiString); virtual;
 
@@ -134,7 +134,7 @@ type
   end;
 
   // ******************
-  TRedirectorChangeDir = procedure(Sender: TObject; NewDir: WideString; var Allow: Boolean) of object;
+  TRedirectorChangeDir = procedure(Sender: TObject; NewDir: string; var Allow: Boolean) of object;
 
   {$IF CompilerVersion >= 23}
   [ComponentPlatformsAttribute(pidWin32 or pidWin64)]
@@ -145,7 +145,7 @@ type
     FOnDirChange: TRedirectorChangeDir;
     procedure SetCurrentDir(const Value: AnsiString);
   protected
-    procedure DoChangeDir(NewDir: WideString; var Allow: Boolean); virtual;
+    procedure DoChangeDir(NewDir: string; var Allow: Boolean); virtual;
   public
     procedure CarrageReturn;
     procedure ChangeDir(NewDir: AnsiString);
@@ -304,30 +304,24 @@ begin
   end
 end;
 
-function TCustomVirtualRedirector.Run(FileName, InitialDirectory: WideString; Parameters: WideString = ''): Boolean;
+function TCustomVirtualRedirector.Run(FileName, InitialDirectory: string; Parameters: string = ''): Boolean;
 var
-  StartupInfoA: _STARTUPINFOA;
   StartupInfoW: _STARTUPINFOW;
-  szDirectoryA: PAnsiChar;
   szDirectoryW: PWideChar;
   SecAttr: TSecurityAttributes;
   PipeChildIn, PipeChildOut, PipeChildErrorOut: THandle;
-  FileNameA, InitialDirectoryA, ParametersA: AnsiString;
   TempWideCharFile, TempWideCharParams: PWideChar;
-  TempCharFile, TempCharParams: PAnsiChar;
 begin
   Result := False;
   if not Running then
   begin
-    if FileExistsW(FileName) then
+    if FileExists(FileName) then
     begin
       PipeChildIn := 0;
       PipeChildOut := 0;
       try
         ZeroMemory(@StartupInfoW, SizeOf(StartupInfoW));
-        ZeroMemory(@StartupInfoA, SizeOf(StartupInfoA));
         StartupInfoW.cb := SizeOf(StartupInfoW);
-        StartupInfoA.cb := SizeOf(StartupInfoA);
 
         ZeroMemory(@FProcessInfo, SizeOf(FProcessInfo));
 
@@ -357,67 +351,29 @@ begin
         StartupInfoW.hStdError := PipeChildErrorOut;
         StartupInfoW.dwFlags := STARTF_USESHOWWINDOW or STARTF_USESTDHANDLES;
 
-        if Assigned(CreateProcessW_MP) then
-        begin
-          if InitialDirectory = '' then
-            szDirectoryW := nil
-          else
-            szDirectoryW := PWideChar( InitialDirectory);
+        if InitialDirectory = '' then
+          szDirectoryW := nil
+        else
+          szDirectoryW := PWideChar( InitialDirectory);
 
-          // Sending a nil is NOT equal to sending PWideChar(FileName) if FileName = '';
-          if FileName = '' then
-            TempWideCharFile := nil
-          else
-            TempWideCharFile := PWideChar( FileName);
+        // Sending a nil is NOT equal to sending PWideChar(FileName) if FileName = '';
+        if FileName = '' then
+          TempWideCharFile := nil
+        else
+          TempWideCharFile := PWideChar( FileName);
 
-          if Parameters = '' then
-            TempWideCharParams := nil
-          else
-            TempWideCharParams := PWideChar( Parameters);
+        if Parameters = '' then
+          TempWideCharParams := nil
+        else
+          TempWideCharParams := PWideChar( Parameters);
 
-          // Note that fInheritHandles must be true so the process is just
-          // increasing the reference count to the passed handles.  That mean we
-          // must close them here to release our count on them.
-          if not CreateProcessW_MP(TempWideCharFile, TempWideCharParams, nil, nil, True, 0,
-            nil, szDirectoryW, StartupInfoW, FProcessInfo)
-          then
-            raise Exception.Create(STR_SHELLPROCESSCREATEERROR);
-        end else
-        begin
-          StartupInfoA.hStdInput := StartupInfoW.hStdInput;
-          StartupInfoA.hStdOutput := StartupInfoW.hStdOutput;
-          StartupInfoA.hStdError := StartupInfoW.hStdError;
-          StartupInfoA.wShowWindow := StartupInfoW.wShowWindow;
-          StartupInfoA.dwFlags := StartupInfoW.dwFlags;
-
-          InitialDirectoryA := AnsiString(InitialDirectory);
-          ParametersA := AnsiString(Parameters);
-          FileNameA := AnsiString(FileName);
-
-          if InitialDirectoryA = '' then
-            szDirectoryA := nil
-          else
-            szDirectoryA := PAnsiChar(InitialDirectoryA);
-
-          // Sending a nil is NOT equal to sending PWideChar(FileName) if FileName = '';
-          if FileNameA = '' then
-            TempCharFile := nil
-          else
-            TempCharFile := PAnsiChar( FileNameA);
-
-          if ParametersA = '' then
-            TempCharParams := nil
-          else
-            TempCharParams := PAnsiChar( ParametersA);
-
-          // Note that fInheritHandles must be true so the process is just
-          // increasing the reference count to the passed handles.  That mean we
-          // must close them here to release our count on them.
-          if not CreateProcessA(TempCharFile, TempCharParams, nil, nil, True, 0,
-            nil, szDirectoryA, StartupInfoA, FProcessInfo)
-          then
-            raise Exception.Create(STR_SHELLPROCESSCREATEERROR);
-        end;
+        // Note that fInheritHandles must be true so the process is just
+        // increasing the reference count to the passed handles.  That mean we
+        // must close them here to release our count on them.
+        if not CreateProcess(TempWideCharFile, TempWideCharParams, nil, nil, True, 0,
+          nil, szDirectoryW, StartupInfoW, FProcessInfo)
+        then
+          raise Exception.Create(STR_SHELLPROCESSCREATEERROR);
 
         // We can now close our references to the ends of the pipe the child owns
         CloseAndZeroHandle(PipeChildIn);
@@ -480,7 +436,7 @@ begin
   if Allow then
   begin
     // Are we on a different drive?
-    if WideLowerCase(WideExtractFileDrive(string(FCurrentDir))) <> WideLowerCase(WideExtractFileDrive(string(NewDir))) then
+    if LowerCase(WideExtractFileDrive(string(FCurrentDir))) <> LowerCase(WideExtractFileDrive(string(NewDir))) then
     begin
       // Different drive, change drives first
       WriteUni(WideStripTrailingBackslash(WideExtractFileDrive(string(NewDir)) + ' /d', True));  // Need switch for across network drives
@@ -493,7 +449,7 @@ begin
   end;
 end;
 
-procedure TVirtualCommandLineRedirector.DoChangeDir(NewDir: WideString; var Allow: Boolean);
+procedure TVirtualCommandLineRedirector.DoChangeDir(NewDir: string; var Allow: Boolean);
 begin
   if Assigned(FOnDirChange) then
     FOnDirChange(Self, NewDir, Allow)

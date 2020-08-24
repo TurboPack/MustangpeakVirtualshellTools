@@ -89,11 +89,7 @@ uses
   {$IFDEF SpTBX}
   ColumnFormSpTBX,
   {$ELSE}
-    {$IFDEF TBX}
-    ColumnFormTBX,
-    {$ELSE}
-      ColumnForm,
-    {$ENDIF}
+  ColumnForm,
   {$ENDIF}
   EasyListview,
   {$IFDEF USE_TOOLBAR_TB2K}
@@ -122,7 +118,7 @@ const
     ID_SIZE_COLUMN = 1;
 
 var
-  GROUPINGFILESIZE:  array[0..7] of WideString = (
+  GROUPINGFILESIZE:  array[0..7] of string = (
      '',
      '',
      '',
@@ -145,7 +141,7 @@ var
   );
 
 
-  GROUPINGMODIFIEDDATE:  array[0..MAXGROUPING] of WideString = (
+  GROUPINGMODIFIEDDATE:  array[0..MAXGROUPING] of string = (
      '',
      '',
      '',
@@ -209,13 +205,13 @@ type
   );
 
   TGroupingModifiedRec = packed record
-    Caption: WideString;
+    Caption: string;
     Days: Single;
     Enabled: Boolean
   end;
 
   TGroupingFileSizeRec = packed record
-    Caption: WideString;
+    Caption: string;
     FileSize: Int64;
     Enabled: Boolean;
     SpecialFolder: Boolean;
@@ -242,16 +238,16 @@ type
   public
     function FullRowSelect: Boolean; override;
     procedure ItemRectArray(Item: TEasyItem; Column: TEasyColumn;
-      ACanvas: TCanvas; const Caption: WideString;
+      ACanvas: TCanvas; const Caption: string;
       var RectArray: TEasyRectArrayObject); override;
     procedure PaintAfter(Item: TEasyItem; Column: TEasyColumn;
-      const Caption: WideString; ACanvas: TCanvas;
+      const Caption: string; ACanvas: TCanvas;
       RectArray: TEasyRectArrayObject); override;
     procedure PaintImage(Item: TEasyItem; Column: TEasyColumn;
-      const Caption: WideString; RectArray: TEasyRectArrayObject;
+      const Caption: string; RectArray: TEasyRectArrayObject;
       ImageSize: TEasyImageSize; ACanvas: TCanvas); override;
     procedure PaintText(Item: TEasyItem; Column: TEasyColumn;
-      const Caption: WideString; RectArray: TEasyRectArrayObject;
+      const Caption: string; RectArray: TEasyRectArrayObject;
       ACanvas: TCanvas; LinesToDraw: Integer); override;
   end;
 
@@ -321,14 +317,14 @@ type
     FAddTitleColumnCaption: Boolean;
   public
     FDetailRequest: TCommonIntegerDynArray;
-    FDetails: TCommonWideStringDynArray;
+    FDetails: TCommonStringDynArray;
 
     function HandleRequest: Boolean; override;
     procedure Assign(Source: TPersistent); override;
 
     property AddTitleColumnCaption: Boolean read FAddTitleColumnCaption write FAddTitleColumnCaption;
     property DetailRequest: TCommonIntegerDynArray read FDetailRequest write FDetailRequest;
-    property Details: TCommonWideStringDynArray read FDetails write FDetails;
+    property Details: TCommonStringDynArray read FDetails write FDetails;
   end;
 
   TVirtualEasyListviewOption = (
@@ -382,7 +378,7 @@ type
   private
     FFocusPIDL: PItemIDList;
     FRootFolder: TRootFolder;
-    FRootFolderCustomPath: WideString;
+    FRootFolderCustomPath: string;
     FRootFolderCustomPIDL: PItemIDList;
     FSelectedPIDLs: TCommonPIDLList;
     FStates: TEVLPersistentStates;
@@ -393,15 +389,15 @@ type
   public
     constructor Create;
     destructor Destroy; override;
-    procedure LoadFromFile(FileName: WideString; Version: integer = VETStreamStorageVer; ReadVerFromStream: Boolean = True); override;
+    procedure LoadFromFile(FileName: string; Version: integer = VETStreamStorageVer; ReadVerFromStream: Boolean = True); override;
     procedure LoadFromStream(S: TStream; Version: integer = VETStreamStorageVer; ReadVerFromStream: Boolean = True); override;
     procedure RestoreList(ELV: TCustomVirtualExplorerEasyListview; RestoreSelection, RestoreFocus: Boolean; ScrollToOldTopNode: Boolean = False); reintroduce; virtual;
     procedure SaveList(ELV: TCustomVirtualExplorerEasyListview; SaveSelection, SaveFocus: Boolean); reintroduce; virtual;
-    procedure SaveToFile(FileName: WideString; Version: integer = VETStreamStorageVer; ReadVerFromStream: Boolean = True); override;
+    procedure SaveToFile(FileName: string; Version: integer = VETStreamStorageVer; ReadVerFromStream: Boolean = True); override;
     procedure SaveToStream(S: TStream; Version: integer = VETStreamStorageVer; WriteVerToStream: Boolean = True); override;
     property FocusPIDL: PItemIDList read FFocusPIDL write FFocusPIDL;
     property RootFolder: TRootFolder read FRootFolder write FRootFolder;
-    property RootFolderCustomPath: WideString read FRootFolderCustomPath write FRootFolderCustomPath;
+    property RootFolderCustomPath: string read FRootFolderCustomPath write FRootFolderCustomPath;
     property RootFolderCustomPIDL: PItemIDList read FRootFolderCustomPIDL write FRootFolderCustomPIDL;
     property SelectedPIDLs: TCommonPIDLList read FSelectedPIDLs write FSelectedPIDLs;
     property States: TEVLPersistentStates read FStates write FStates;
@@ -420,13 +416,13 @@ type
     FColor: TColor;
     FEnabled: Boolean;
     FExtension: TStringList;
-    FFExtensionMask: WideString;
+    FFExtensionMask: string;
     FItalic: Boolean;
     FUnderLine: Boolean;
-    function GetExtensionMask: WideString;
-    procedure SetExtensionMask(const Value: WideString);
+    function GetExtensionMask: string;
+    procedure SetExtensionMask(const Value: string);
   protected
-    property FExtensionMask: WideString read FFExtensionMask write FFExtensionMask;
+    property FExtensionMask: string read FFExtensionMask write FFExtensionMask;
   public
     constructor Create;
     destructor Destroy; override;
@@ -435,7 +431,7 @@ type
     property Bold: Boolean read FBold write FBold;
     property Color: TColor read FColor write FColor;
     property Enabled: Boolean read FEnabled write FEnabled;
-    property ExtensionMask: WideString read GetExtensionMask write SetExtensionMask;
+    property ExtensionMask: string read GetExtensionMask write SetExtensionMask;
     property Extensions: TStringList read FExtension write FExtension;
     property Italic: Boolean read FItalic write FItalic;
     property UnderLine: Boolean read FUnderLine write FUnderLine;
@@ -456,11 +452,11 @@ type
   public
     constructor Create;
     destructor Destroy; override;
-    function Add(ExtList: WideString; AColor: TColor; IsBold: Boolean = False; IsItalic: Boolean = False; IsUnderLine: Boolean = False; IsEnabled: Boolean = True): TExtensionColorCode;
-    function FindColorCode(NS: TNamespace): TExtensionColorCode; 
+    function Add(ExtList: string; AColor: TColor; IsBold: Boolean = False; IsItalic: Boolean = False; IsUnderLine: Boolean = False; IsEnabled: Boolean = True): TExtensionColorCode;
+    function FindColorCode(NS: TNamespace): TExtensionColorCode;
     procedure Assign(Source: TPersistent); override;
     procedure Clear;
-    function Find(ExtList: WideString): TExtensionColorCode;
+    function Find(ExtList: string): TExtensionColorCode;
     procedure LoadFromStream(S: TStream; Version: integer = 0; ReadVerFromStream: Boolean = False); override;
     procedure SaveToStream(S: TStream; Version: integer = 0; WriteVerToStream: Boolean = False); override;
     property Count: Integer read GetCount;
@@ -513,7 +509,7 @@ type
     constructor Create(AnOwner: TCustomEasyListview); override;
   published
     property FirstItemFocus: Boolean read FFirstItemFocus write FFirstItemFocus default True;
-    property ForceDefaultBlend default True;    
+    property ForceDefaultBlend default True;
   end;
 
   TThumbThreadCreateProc = procedure(var ThumbRequest: TEasyThumbnailThreadRequest) of object;
@@ -524,17 +520,17 @@ type
   TELVGetStorageEvent = procedure(Sender: TCustomVirtualExplorerEasyListview; var Storage: TRootNodeStorage) of object;
   TELVInvalidRootNamespaceEvent = procedure(Sender: TCustomVirtualExplorerEasyListview) of object;
   TELVContextMenu2MessageEvent = procedure(Sender: TCustomVirtualExplorerEasyListview; var Msg: TMessage) of object;
-  TELVOnContextMenuAfterCmd = procedure(Sender: TCustomVirtualExplorerEasyListview; Namespace: TNamespace; Verb: WideString; MenuItemID: Integer; Successful: Boolean) of object;
-  TELVOnContextMenuCmd = procedure(Sender: TCustomVirtualExplorerEasyListview; Namespace: TNamespace; Verb: WideString; MenuItemID: Integer; var Handled: Boolean) of object;
+  TELVOnContextMenuAfterCmd = procedure(Sender: TCustomVirtualExplorerEasyListview; Namespace: TNamespace; Verb: string; MenuItemID: Integer; Successful: Boolean) of object;
+  TELVOnContextMenuCmd = procedure(Sender: TCustomVirtualExplorerEasyListview; Namespace: TNamespace; Verb: string; MenuItemID: Integer; var Handled: Boolean) of object;
   TELVOnContextMenuShow = procedure(Sender: TCustomVirtualExplorerEasyListview; Namespace: TNamespace; Menu: hMenu; var Allow: Boolean) of object;
   TVELCustomColumnAddEvent = procedure(Sender: TCustomVirtualExplorerEasyListview; AddColumnProc: TELVAddColumnProc) of object;
   TELVCustomColumnCompareEvent = procedure(Sender: TCustomVirtualExplorerEasyListview; Column: TExplorerColumn; Group: TEasyGroup; Item1, Item2: TExplorerItem; var CompareResult: Integer) of object;
-  TELVCustomColumnGetCaptionEvent = procedure(Sender: TCustomVirtualExplorerEasyListview; Column: TExplorerColumn; Item: TExplorerItem; var ACaption: WideString) of object;
+  TELVCustomColumnGetCaptionEvent = procedure(Sender: TCustomVirtualExplorerEasyListview; Column: TExplorerColumn; Item: TExplorerItem; var ACaption: string) of object;
   TELVContextMenuItemChange = procedure(Sender: TCustomVirtualExplorerEasyListview; Namespace: TNamespace; MenuItemID : Integer; SubMenuID: hMenu; MouseSelect: Boolean) of object;
   TELVOnRootChange = procedure(Sender: TCustomVirtualExplorerEasyListview) of object;
   TELVOnRootChanging = procedure(Sender: TCustomVirtualExplorerEasyListview; const NewValue: TRootFolder; const CurrentNamespace, Namespace: TNamespace; var Allow: Boolean) of object;
   TELVOnRootRebuild = procedure(Sender: TCustomVirtualExplorerEasyListview) of object;
-  TELVOnShellExecute = procedure(Sender: TCustomVirtualExplorerEasyListview; Namespace: TNamespace;var WorkingDir: WideString; var CmdLineArgument: WideString; var Allow: Boolean) of object;
+  TELVOnShellExecute = procedure(Sender: TCustomVirtualExplorerEasyListview; Namespace: TNamespace;var WorkingDir: string; var CmdLineArgument: string; var Allow: Boolean) of object;
   TELVOnShellNotifyEvent = procedure(Sender: TCustomVirtualExplorerEasyListview; ShellEvent: TVirtualShellEvent) of object;
   TEasyCustomGroupEvent = procedure(Sender: TCustomVirtualExplorerEasyListview; Groups: TEasyGroups; NS: TNamespace; var Group: TExplorerGroup) of object;
   TELVLoadStorageFromRoot = procedure(Sender: TCustomVirtualExplorerEasyListview; NodeStorage: TNodeStorage) of object;
@@ -542,8 +538,8 @@ type
   TELVEnumFinishedEvent = procedure(Sender: TCustomVirtualExplorerEasyListview) of object;
   TELVEnumLenghyOperaionEvent = procedure(Sender: TCustomVirtualExplorerEasyListview; var ShowAnimation: Boolean) of object;
   TELVThumbThreadCreateCallbackEvent = procedure(Sender: TCustomVirtualExplorerEasyListview; var ThumbRequestClass: TEasyThumbnailThreadRequest) of object;
-  TELVQuickFilterCustomCompareEvent = procedure(Sender: TCustomVirtualExplorerEasyListview; Item: TExplorerItem; Mask: WideString; var IsVisible: Boolean) of object;
-  TELVQuickFilterStartEvent = procedure(Sender: TCustomVirtualExplorerEasyListview; Mask: WideString) of object;
+  TELVQuickFilterCustomCompareEvent = procedure(Sender: TCustomVirtualExplorerEasyListview; Item: TExplorerItem; Mask: string; var IsVisible: Boolean) of object;
+  TELVQuickFilterStartEvent = procedure(Sender: TCustomVirtualExplorerEasyListview; Mask: string) of object;
   TELVRebuildingShellHeaderEvent = procedure(Sender: TCustomVirtualExplorerEasyListview; var Allow: Boolean) of object;
   TELVRebuiltShellHeaderEvent = procedure(Sender: TCustomVirtualExplorerEasyListview) of object;
 
@@ -555,7 +551,7 @@ type
     FColumnID: TSHColumnID;       // The SCID of the header column
     FEnumerated: Boolean; // True if the Category was aquired through ICategoryProvider.EnumCategories
     FIsDefault: Boolean;  // True if the Category is the default category defined by the namespace through ICategoryProvider.GetDefaultCategory
-    FName: WideString;            // Name returned by ICategoryProvider.GetCategoryName, the standard AlphabeticalCategorizer always returns empty
+    FName: string;            // Name returned by ICategoryProvider.GetCategoryName, the standard AlphabeticalCategorizer always returns empty
   public
     property Category: TGUID read FCategory;
     property CategoryType: TEasyCategoryType read FCategoryType;
@@ -563,7 +559,7 @@ type
     property ColumnID: TSHColumnID read FColumnID;
     property Enumerated: Boolean read FEnumerated write FEnumerated;
     property IsDefault: Boolean read FIsDefault;
-    property Name: WideString read FName;
+    property Name: string read FName;
   end;
 
   TCategories = class
@@ -728,11 +724,11 @@ type
     FPrevFolderSettings: TNodeStorage;
     FQueryInfoHintTimeout: Integer;
     FQuickFiltered: Boolean;
-    FQuickFilterMask: WideString;
+    FQuickFilterMask: string;
     FQuickFilterUpdatedNeeded: Boolean;
     FRebuildingRootNamespace: Boolean;
     FRootFolder: TRootFolder;
-    FRootFolderCustomPath: WideString;
+    FRootFolderCustomPath: string;
     FRootFolderCustomPIDL: PItemIDList;
     FRootFolderNamespace: TNamespace;
     FSelectedFiles: TStrings;
@@ -754,10 +750,10 @@ type
     function GetPaintInfoColumn: TEasyPaintInfoColumn;
     function GetPaintInfoGroup: TEasyPaintInfoGroup;
     function GetPaintInfoItem: TEasyPaintInfoItem;
-    function GetSelectedFile: WideString;
+    function GetSelectedFile: string;
     function GetSelectedFiles: TStrings;
     function GetSelectedPaths: TStrings;
-    function GetSelectedPath: WideString;
+    function GetSelectedPath: string;
     function GetSelection: TEasyVirtualSelectionManager;
     function GetStorage: TRootNodeStorage;
     function GetThreadedDetailsEnabled: Boolean;
@@ -769,7 +765,7 @@ type
     procedure SetDefaultSortColumn(const Value: Integer);
     procedure SetDefaultSortDir(const Value: TEasySortDirection);
     procedure SetEnumThread(const Value: TVirtualBackGndEnumThread);
-  {$IFDEF EXPLORERCOMBOBOX_L}      
+  {$IFDEF EXPLORERCOMBOBOX_L}
     procedure SetExplorerCombobox(Value: TVirtualExplorerCombobox);
   {$ENDIF}
   {$IFDEF EXPLORERTREEVIEW_L}
@@ -784,13 +780,13 @@ type
     procedure SetPaintInfoGroup(const Value: TEasyPaintInfoGroup);
     procedure SetPaintInfoItem(const Value: TEasyPaintInfoItem);
     procedure SetQuickFiltered(const Value: Boolean);
-    procedure SetQuickFilterMask(const Value: WideString);
+    procedure SetQuickFilterMask(const Value: string);
     procedure SetSelection(Value: TEasyVirtualSelectionManager);
     procedure SetSortFolderFirstAlways(const Value: Boolean);
     procedure SetStorage(const Value: TRootNodeStorage);
   protected
     function AddColumnProc: TExplorerColumn;
-    function CreateNewFolderInternal(TargetPIDL: PItemIDList; SuggestedFolderName: WideString): WideString;
+    function CreateNewFolderInternal(TargetPIDL: PItemIDList; SuggestedFolderName: string): string;
     function CustomEasyHintWindowClass: THintWindowClass; override;
     function ExecuteDragDrop(AvailableEffects: TCommonDropEffects; DataObjectInf: IDataObject; DropSource: IDropSource; var dwEffect: Integer): HRESULT; override;
     function FindGroup(NS: TNamespace): TExplorerGroup;
@@ -806,9 +802,9 @@ type
     procedure CMParentFontChanged(var Msg: TMessage); message CM_PARENTFONTCHANGED;
     procedure ColumnHeaderMenuItemClick(Sender: TObject);
     procedure ColumnSettingCallback(Sender: TObject);
-    procedure ContextMenuCmdCallback(Namespace: TNamespace; Verb: WideString; MenuItemID: Integer; var Handled: Boolean);
+    procedure ContextMenuCmdCallback(Namespace: TNamespace; Verb: string; MenuItemID: Integer; var Handled: Boolean);
     procedure ContextMenuShowCallback(Namespace: TNamespace; Menu: hMenu; var Allow: Boolean);
-    procedure ContextMenuAfterCmdCallback(Namespace: TNamespace; Verb: WideString; MenuItemID: Integer; Successful: Boolean);
+    procedure ContextMenuAfterCmdCallback(Namespace: TNamespace; Verb: string; MenuItemID: Integer; Successful: Boolean);
     procedure CreateWnd; override;
     procedure DestroyWnd; override;
     procedure DoAfterPaint(ACanvas: TCanvas; ClipRect: TRect); override;
@@ -817,13 +813,13 @@ type
     procedure DoColumnContextMenu(HitInfo: TEasyHitInfoColumn; WindowPoint: TPoint; var Menu: TPopupMenu); override;
     procedure DoContextMenu(MousePt: TPoint; var Handled: Boolean); override;
     procedure DoContextMenu2Message(var Msg: TMessage); virtual;
-    procedure DoContextMenuAfterCmd(Namespace: TNamespace; Verb: WideString; MenuItemID: Integer; Successful: Boolean);
-    function DoContextMenuCmd(Namespace: TNamespace; Verb: WideString; MenuItemID: Integer): Boolean;
+    procedure DoContextMenuAfterCmd(Namespace: TNamespace; Verb: string; MenuItemID: Integer; Successful: Boolean);
+    function DoContextMenuCmd(Namespace: TNamespace; Verb: string; MenuItemID: Integer): Boolean;
     procedure DoContextMenuSelect(Namespace: TNamespace; MenuItemID : Integer; SubMenuID: hMenu; MouseSelect: Boolean);
     function DoContextMenuShow(Namespace: TNamespace; Menu: hMenu): Boolean;
     procedure DoCustomColumnAdd; virtual;
     procedure DoCustomColumnCompare(Column: TExplorerColumn; Group: TEasyGroup; Item1, Item2: TExplorerItem; var CompareResult: Integer); virtual;
-    procedure DoCustomColumnGetCaption(Column: TExplorerColumn; Item: TExplorerItem; var Caption: WideString); virtual;
+    procedure DoCustomColumnGetCaption(Column: TExplorerColumn; Item: TExplorerItem; var Caption: string); virtual;
     procedure DoCustomGroup(Groups: TEasyGroups; NS: TNamespace; var Group: TExplorerGroup); virtual;
     procedure DoEnumFinished; virtual;
     procedure DoEnumFolder(const Namespace: TNamespace; var AllowAsChild: Boolean); virtual;
@@ -835,19 +831,19 @@ type
     procedure DoGetHintTimeOut(var HintTimeOut: Integer); override;
     procedure DoGetStorage(var Storage: TRootNodeStorage); virtual;
     procedure DoGroupingChange; virtual;
-    procedure DoHintPopup(TargetObj: TEasyCollectionItem; HintType: TEasyHintType; MousePos: TPoint; var AText: WideString; var HideTimeout: Integer; var ReshowTimeout: Integer; var Allow: Boolean); override;
+    procedure DoHintPopup(TargetObj: TEasyCollectionItem; HintType: TEasyHintType; MousePos: TPoint; var AText: string; var HideTimeout: Integer; var ReshowTimeout: Integer; var Allow: Boolean); override;
     procedure DoInvalidRootNamespace;
     procedure DoItemContextMenu(HitInfo: TEasyHitInfoItem; WindowPoint: TPoint; var Menu: TPopupMenu; var Handled: Boolean); override;
     procedure DoItemCreateEditor(Item: TEasyItem; var Editor: IEasyCellEditor); override;
     procedure DoItemCustomView(Item: TEasyItem; ViewStyle: TEasyListStyle; var View: TEasyViewItemClass); override;
     procedure DoItemDblClick(Button: TCommonMouseButton; MousePos: TPoint; HitInfo: TEasyHitInfoItem); override;
-    procedure DoItemGetCaption(Item: TEasyItem; Column: Integer; var ACaption: WideString); override;
-    procedure DoItemGetEditCaption(Item: TEasyItem; Column: TEasyColumn; var Caption: WideString); override;
+    procedure DoItemGetCaption(Item: TEasyItem; Column: Integer; var ACaption: string); override;
+    procedure DoItemGetEditCaption(Item: TEasyItem; Column: TEasyColumn; var Caption: string); override;
     procedure DoItemGetImageIndex(Item: TEasyItem; Column: Integer; ImageKind: TEasyImageKind; var ImageIndex: TCommonImageIndexInteger); override;
     procedure DoItemGetTileDetail(Item: TEasyItem; Line: Integer; var Detail: Integer); override;
     procedure DoItemGetTileDetailCount(Item: TEasyItem; var Count: Integer); override;
     procedure DoItemPaintText(Item: TEasyItem; Position: Integer; ACanvas: TCanvas); override;
-    procedure DoItemSetCaption(Item: TEasyItem; Column: Integer; const Caption: WideString); override;
+    procedure DoItemSetCaption(Item: TEasyItem; Column: Integer; const Caption: string); override;
     procedure DoItemThumbnailDraw(Item: TEasyItem; ACanvas: TCanvas; ARect: TRect; AlphaBlender: TEasyAlphaBlender; var DoDefault: Boolean); override;
     procedure DoKeyAction(var CharCode: Word; var Shift: TShiftState; var DoDefault: Boolean); override;
     procedure DoLoadStorageToRoot(StorageNode: TNodeStorage); virtual;
@@ -858,9 +854,9 @@ type
     procedure DoOLEDropTargetDragLeave; override;
     procedure DoOLEDropTargetDragOver(KeyState: TCommonKeyStates; WindowPt: TPoint; AvailableEffects: TCommonDropEffects; var DesiredEffect: TCommonDropEffect); override;
     procedure DoOLEGetDataObject(var DataObject: IDataObject); override;
-    procedure DoQuickFilterCustomCompare(Item: TExplorerItem; Mask: WideString; var IsVisible: Boolean); virtual;
+    procedure DoQuickFilterCustomCompare(Item: TExplorerItem; Mask: string; var IsVisible: Boolean); virtual;
     procedure DoQuickFilterEnd; virtual;
-    procedure DoQuickFilterStart(Mask: WideString); virtual;
+    procedure DoQuickFilterStart(Mask: string); virtual;
     procedure DoRebuildingShellHeader(var Allow: Boolean); virtual;
     procedure DoRebuiltShellHeader; virtual;
     procedure DoRootChange; virtual;
@@ -896,7 +892,7 @@ type
     procedure SetActive(Value: Boolean); virtual;
     procedure SetOptions(Value: TVirtualEasyListviewOptions); virtual;
     procedure SetRootFolder(Value: TRootFolder); virtual;
-    procedure SetRootFolderCustomPath(Value: WideString); virtual;
+    procedure SetRootFolderCustomPath(Value: string); virtual;
     procedure SetRootFolderCustomPIDL(Value: PItemIDList); virtual;
     procedure SetView(Value: TEasyListStyle); override;
     procedure ShowAnimateFolderWnd;
@@ -1005,7 +1001,7 @@ type
     property QuickFilterUpdatedNeeded: Boolean read FQuickFilterUpdatedNeeded write FQuickFilterUpdatedNeeded;
     property RebuildingRootNamespace: Boolean read FRebuildingRootNamespace write FRebuildingRootNamespace;
     property RootFolder: TRootFolder read FRootFolder write SetRootFolder default rfDesktop;
-    property RootFolderCustomPath: WideString read FRootFolderCustomPath write SetRootFolderCustomPath;
+    property RootFolderCustomPath: string read FRootFolderCustomPath write SetRootFolderCustomPath;
     property RootFolderCustomPIDL: PItemIDList read FRootFolderCustomPIDL write SetRootFolderCustomPIDL;
     property RootFolderNamespace: TNamespace read FRootFolderNamespace;
     property Selection: TEasyVirtualSelectionManager read GetSelection write SetSelection;
@@ -1021,14 +1017,14 @@ type
     constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
     function AddCustomItem(Group: TEasyGroup; NS: TNamespace; LockoutSort: Boolean): TExplorerItem; virtual;
-    function BrowseTo(APath: WideString; SelectTarget: Boolean = True): Boolean;
+    function BrowseTo(APath: string; SelectTarget: Boolean = True): Boolean;
     function BrowseToByPIDL(APIDL: PItemIDList; SelectTarget: Boolean = True; ShowExplorerMsg: Boolean = True): Boolean; virtual;
     function BrowseToNextLevel: Boolean;
-    function CreateNewFolder(TargetPath: WideString): Boolean; overload;
-    function CreateNewFolder(TargetPath: WideString; var NewFolder: WideString): Boolean; overload;
-    function CreateNewFolder(TargetPath, SuggestedFolderName: WideString; var NewFolder: WideString): Boolean; overload;
+    function CreateNewFolder(TargetPath: string): Boolean; overload;
+    function CreateNewFolder(TargetPath: string; var NewFolder: string): Boolean; overload;
+    function CreateNewFolder(TargetPath, SuggestedFolderName: string; var NewFolder: string): Boolean; overload;
     function FindInsertPosition(WindowX, WindowY: Integer; var Group: TEasyGroup): Integer;
-    function FindItemByPath(Path: WideString): TEasyItem;
+    function FindItemByPath(Path: string): TEasyItem;
     function FindItemByPIDL(PIDL: PItemIDList): TExplorerItem;
     function GroupClass:  TExplorerGroupClass;
     function IsRootNamespace(PIDL: PItemIDList): Boolean;
@@ -1075,11 +1071,11 @@ type
     property OnGenericCallback;
     property PrevFolderSettings: TNodeStorage read FPrevFolderSettings write FPrevFolderSettings;
     property QuickFiltered: Boolean read FQuickFiltered write SetQuickFiltered;
-    property QuickFilterMask: WideString read FQuickFilterMask write SetQuickFilterMask;
-    property SelectedFile: WideString read GetSelectedFile;
+    property QuickFilterMask: string read FQuickFilterMask write SetQuickFilterMask;
+    property SelectedFile: string read GetSelectedFile;
     property SelectedFiles: TStrings read GetSelectedFiles;
     property SelectedPaths: TStrings read GetSelectedPaths;
-    property SelectedPath: WideString read GetSelectedPath;
+    property SelectedPath: string read GetSelectedPath;
     property ShellNotifySuspended: Boolean read FShellNotifySuspended write FShellNotifySuspended;
     property Storage: TRootNodeStorage read GetStorage write SetStorage;
     property VETStates: TVETStates read FVETStates write FVETStates;
@@ -1112,7 +1108,7 @@ type
     FStackDepth: Word;
   protected
     procedure AddDropStackItems(const DataObject: IDataObject);
-    procedure DoHintPopup(TargetObj: TEasyCollectionItem; HintType: TEasyHintType; MousePos: TPoint; var AText: WideString; var HideTimeout: Integer; var ReshowTimeout: Integer; var Allow: Boolean); override;
+    procedure DoHintPopup(TargetObj: TEasyCollectionItem; HintType: TEasyHintType; MousePos: TPoint; var AText: string; var HideTimeout: Integer; var ReshowTimeout: Integer; var Allow: Boolean); override;
     procedure DoOLEDragEnd(ADataObject: IDataObject; DragResult: TCommonOLEDragResult; ResultEffect: TCommonDropEffects; KeyStates: TCommonKeyStates); override;
     procedure DoOLEDragStart(ADataObject: IDataObject; var AvailableEffects: TCommonDropEffects; var AllowDrag: Boolean); override;
     procedure DoOLEDropTargetDragDrop(DataObject: IDataObject; KeyState: TCommonKeyStates; WindowPt: TPoint; AvailableEffects: TCommonDropEffects; var DesiredEffect: TCommonDropEffect; var Handled: Boolean); override;
@@ -1413,7 +1409,7 @@ type
     function DoItemCompare(Column: TEasyColumn; Group: TEasyGroup; Item1: TEasyItem; Item2: TEasyItem): Integer; override;
     procedure DoCustomColumnAdd; override;
     procedure DoCustomColumnCompare(Column: TExplorerColumn; Group: TEasyGroup; Item1: TExplorerItem; Item2: TExplorerItem; var CompareResult: Integer); override;
-    procedure DoCustomColumnGetCaption(Column: TExplorerColumn; Item: TExplorerItem; var Caption: WideString); override;
+    procedure DoCustomColumnGetCaption(Column: TExplorerColumn; Item: TExplorerItem; var Caption: string); override;
     procedure ScanAndDeleteInValidItems;
     property ColumnIndex: Integer read FColumnIndex write FColumnIndex;
   public
@@ -1841,7 +1837,7 @@ procedure LoadListviewWithColumnArray(Listview: TCustomVirtualExplorerEasyListvi
 implementation
 
 uses
-  TypInfo, System.Types, System.UITypes, Dialogs, AnsiStrings;
+  TypInfo, System.Types, System.UITypes, Dialogs;
 
 type
   TEasySelectionManagerHack = class(TEasySelectionManager);
@@ -2253,7 +2249,7 @@ begin
   Groups.HideFromDFM := True;
   Header.Columns.HideFromDFM := True;
   SHGetMalloc(FMalloc);
-  GlobalThreadManager.RegisterControl(Self);    
+  GlobalThreadManager.RegisterControl(Self);
   FColumnMenuItemCount := 5;
   Header.StreamColumns := False;
   Groups.StreamGroups := False;
@@ -2326,7 +2322,7 @@ begin
     Result.IsCustom := True
 end;
 
-function TCustomVirtualExplorerEasyListview.CreateNewFolder(TargetPath: WideString): Boolean;
+function TCustomVirtualExplorerEasyListview.CreateNewFolder(TargetPath: string): Boolean;
 { Creates a new folder.  Note you do NOT pass the name of the new folder, only pass the }
 { the path up to where the new folder is to be created.  VET will then create the new   }
 { folder like Explorer does, in the "New Folder (X)" fashion (this constant is redefinable }
@@ -2340,7 +2336,7 @@ begin
   PIDLMgr.FreePIDL(PIDL);
 end;
 
-function TCustomVirtualExplorerEasyListview.CreateNewFolder(TargetPath: WideString; var NewFolder: WideString): Boolean;
+function TCustomVirtualExplorerEasyListview.CreateNewFolder(TargetPath: string; var NewFolder: string): Boolean;
 var
   PIDL: PItemIDList;
 begin
@@ -2354,7 +2350,7 @@ begin
   end
 end;
 
-function TCustomVirtualExplorerEasyListview.CreateNewFolder(TargetPath, SuggestedFolderName: WideString; var NewFolder: WideString): Boolean;
+function TCustomVirtualExplorerEasyListview.CreateNewFolder(TargetPath, SuggestedFolderName: string; var NewFolder: string): Boolean;
 var
   PIDL: PItemIDList;
 begin
@@ -2368,9 +2364,9 @@ begin
   end
 end;
 
-function TCustomVirtualExplorerEasyListview.CreateNewFolderInternal(TargetPIDL: PItemIDList; SuggestedFolderName: WideString): WideString;
+function TCustomVirtualExplorerEasyListview.CreateNewFolderInternal(TargetPIDL: PItemIDList; SuggestedFolderName: string): string;
 
-   function FindChildByName(Parent: TNamespace; ChildName: WideString): PItemIDList;
+   function FindChildByName(Parent: TNamespace; ChildName: string): PItemIDList;
    // Searches the Parent for the Child Name, returns AbsolutePIDL to the Child if found
    var
      EnumIDList:  IEnumIDList;
@@ -2411,8 +2407,8 @@ const
 
 var
   NewItem: TExplorerItem;
-  NewName: WideString;
-  TargetPath: WideString;
+  NewName: string;
+  TargetPath: string;
   NS, ParentNS: TNamespace;
   NewChildPIDL: PItemIDList;
   i: Integer;
@@ -2424,12 +2420,12 @@ begin
     TargetPath := PIDLToPath(TargetPIDL);
     TargetPath := WideStripTrailingBackslash(TargetPath);
 
-    if WideDirectoryExists(TargetPath) then
+    if DirectoryExists(TargetPath) then
     begin
       // Generate a Unique Name
       NewName := WideNewFolderName(TargetPath, SuggestedFolderName);
 
-      if WideCreateDir(NewName) then
+      if CreateDir(NewName) then
       begin
         ParentNS := TNamespace.Create(TargetPIDL, nil);
         ParentNS.FreePIDLOnDestroy := False; // We don't own the PIDL
@@ -2472,7 +2468,7 @@ begin
   Result := TVirtualExplorerEasyListviewHintWindow;
 end;
 
-function TCustomVirtualExplorerEasyListview.DoContextMenuCmd(Namespace: TNamespace; Verb: WideString; MenuItemID: Integer): Boolean;
+function TCustomVirtualExplorerEasyListview.DoContextMenuCmd(Namespace: TNamespace; Verb: string; MenuItemID: Integer): Boolean;
 begin
   Result := False;
   if Assigned(OnContextMenuCmd) then
@@ -2545,7 +2541,7 @@ begin
             Result := NS2.ComparePIDL(NS1.RelativePIDL, False, ColumnIndex)
           else begin
             if (ColumnIndex = 2) and IsWinVista then
-              Result := CompareText(WideString(NS1.DetailsOf(2)), WideString( NS2.DetailsOf(2)))
+              Result := CompareText(string(NS1.DetailsOf(2)), string( NS2.DetailsOf(2)))
             else
               Result := NS2.ComparePIDL(NS1.RelativePIDL, False, ColumnIndex);
           end;
@@ -2559,7 +2555,7 @@ begin
       end else
       begin
         Result := NS2.ComparePIDL(NS1.RelativePIDL, False, ColumnIndex);
-          
+
         // Secondary level of sorting is on the Name
         if (Result = 0) and (ColumnIndex > 0) then
            Result := NS2.ComparePIDL(NS1.RelativePIDL, False, 0);
@@ -2576,15 +2572,19 @@ function TCustomVirtualExplorerEasyListview.ExecuteDragDrop(
   DropSource: IDropSource; var dwEffect: Integer): HRESULT;
 var
   Medium: TStgMedium;
+  ldwEffect: DWord; // required for type compatibility with SHDoDragDrop
 begin
-  if (Win32Platform = VER_PLATFORM_WIN32_NT) and (Win32MajorVersion >= 6) and Assigned(SHDoDragDrop_MP) then
+  if (Win32MajorVersion >= 6) then
   begin
     if Succeeded(DataObjectInf.GetData(HeaderClipFormat, Medium)) then
     begin
       ReleaseStgMedium(Medium);
       Result := inherited ExecuteDragDrop(AvailableEffects, DataObjectInf, DropSource, dwEffect)
-    end else
-      Result := SHDoDragDrop_MP(Handle, DataObjectInf, nil, DropEffectStatesToDropEffect(AvailableEffects), dwEffect)
+    end else begin
+      ldwEffect := DWord(dwEffect);
+      Result := SHDoDragDrop(Handle, DataObjectInf, nil, DropEffectStatesToDropEffect(AvailableEffects), ldwEffect);
+      dwEffect := Integer(ldwEffect);
+    end;
   end else
     Result := inherited ExecuteDragDrop(AvailableEffects, DataObjectInf, DropSource, dwEffect)
 end;
@@ -2595,7 +2595,7 @@ var
   TimeDelta: TDateTime;
   Size: Int64;
   Done: Boolean;
-  WS: WideString;
+  WS: string;
  // ColumnID: TSHCOLUMNID;
  // CanCategorizeArray: array of Boolean;
  // CategoryGUID: TGUID;
@@ -2669,7 +2669,7 @@ begin
         0: begin  // Name Grouping
              if (NS.NameInFolder <> '') and ((Groups[i].Caption <> '') and (Groups[i].Caption <> DEFAULT_GROUP_NAME)) then
              begin
-               if Groups[i].Caption[1] = Uppercase( NS.NameInFolder[1]) then
+               if Groups[i].Caption[1] = SysUtils.AnsiUpperCase( NS.NameInFolder[1]) then
                  Result := TExplorerGroup(Groups[i]);
              end else
              if (NS.NameInFolder = '') xor (Groups[i].Caption = '') then
@@ -2741,7 +2741,7 @@ begin
     case GroupingColumn of
       0: begin
            if NS.NameInFolder <> '' then
-             Result.Caption := WideUpperCase( NS.NameInFolder[1]);
+             Result.Caption := SysUtils.AnsiUpperCase(NS.NameInFolder[1]);
          end;
       1: begin
            if NS.FileSystem then
@@ -2906,7 +2906,7 @@ begin
   Result := inherited PaintInfoItem as TEasyPaintInfoItem
 end;
 
-function TCustomVirtualExplorerEasyListview.GetSelectedFile: WideString;
+function TCustomVirtualExplorerEasyListview.GetSelectedFile: string;
 begin
   Result := '';
   if Selection.Count > 0 then
@@ -2927,7 +2927,7 @@ begin
   end;
 end;
 
-function TCustomVirtualExplorerEasyListview.GetSelectedPath: WideString;
+function TCustomVirtualExplorerEasyListview.GetSelectedPath: string;
 begin
   Result := '';
   if Selection.Count > 0 then
@@ -3085,7 +3085,7 @@ function TCustomVirtualExplorerEasyListview.UseInternalDragImage(DataObject: IDa
 var
   Medium: TStgMedium;
 begin
-  if (Win32Platform = VER_PLATFORM_WIN32_NT) and (Win32MajorVersion < 6) then
+  if (Win32MajorVersion < 6) then
     Result := True
   else begin
     if Succeeded(DataObject.GetData(HeaderClipFormat, Medium)) then
@@ -3187,7 +3187,7 @@ end;
 
 procedure TCustomVirtualExplorerEasyListview.ColumnHeaderMenuItemClick(Sender: TObject);
 
-  function IsDuplicate(VST: TVirtualStringTree; Text: WideString): Boolean;
+  function IsDuplicate(VST: TVirtualStringTree; Text: string): Boolean;
   var
     ColData: PColumnData;
     Node: PVirtualNode;
@@ -3295,9 +3295,9 @@ end;
 procedure TCustomVirtualExplorerEasyListview.DoColumnContextMenu(HitInfo: TEasyHitInfoColumn; WindowPoint: TPoint; var Menu: TPopupMenu);
 
     {$IFDEF USE_TOOLBAR_TB2K}
-    procedure SetTBItemCaption(Item: TTBCustomItem; Caption: WideString);
+    procedure SetTBItemCaption(Item: TTBCustomItem; Caption: string);
     // Set the unicode caption to the Item if it has a valid
-    // WideString Caption property.
+    // string Caption property.
     var
       PropInfo: PPropInfo;
     begin
@@ -3405,7 +3405,7 @@ begin
     OnCustomColumnCompare(Self, Column, Group, Item1, Item2, CompareResult)
 end;
 
-procedure TCustomVirtualExplorerEasyListview.DoCustomColumnGetCaption(Column: TExplorerColumn; Item: TExplorerItem; var Caption: WideString);
+procedure TCustomVirtualExplorerEasyListview.DoCustomColumnGetCaption(Column: TExplorerColumn; Item: TExplorerItem; var Caption: string);
 begin
   if Assigned(OnCustomColumnGetCaption) then
     OnCustomColumnGetCaption(Self, Column, Item, Caption)
@@ -3499,7 +3499,7 @@ begin
   end
 end;
 
-procedure TCustomVirtualExplorerEasyListview.DoItemGetEditCaption(Item: TEasyItem; Column: TEasyColumn; var Caption: WideString);
+procedure TCustomVirtualExplorerEasyListview.DoItemGetEditCaption(Item: TEasyItem; Column: TEasyColumn; var Caption: string);
 begin
   Caption := TExplorerItem( Item).Namespace.NameForEditingInFolder
 end;
@@ -3535,7 +3535,7 @@ begin
   inherited DoItemPaintText(Item, Position, ACanvas);
 end;
 
-procedure TCustomVirtualExplorerEasyListview.DoQuickFilterCustomCompare(Item: TExplorerItem; Mask: WideString; var IsVisible: Boolean);
+procedure TCustomVirtualExplorerEasyListview.DoQuickFilterCustomCompare(Item: TExplorerItem; Mask: string; var IsVisible: Boolean);
 begin
   if Assigned(OnQuickFilterCustomCompare) then
     OnQuickFilterCustomCompare(Self, Item, Mask, IsVisible)
@@ -3547,7 +3547,7 @@ begin
     OnQuickFilterEnd(Self)
 end;
 
-procedure TCustomVirtualExplorerEasyListview.DoQuickFilterStart(Mask: WideString);
+procedure TCustomVirtualExplorerEasyListview.DoQuickFilterStart(Mask: string);
 begin
   if Assigned(OnQuickFilterStart) then
     OnQuickFilterStart(Self, Mask)
@@ -3629,7 +3629,7 @@ begin
     end;
 
     if Assigned(ThumbsManager) and ThumbsManager.AutoLoad then
-      ThumbsManager.LoadAlbum;    
+      ThumbsManager.LoadAlbum;
     LoadAllThumbs;
     QuickFilter;
     DoEnumFinished;
@@ -3787,7 +3787,7 @@ procedure TCustomVirtualExplorerEasyListview.LoadFromStream(S: TStream);
 var
   RFolder: TRootFolder;
   CustomPIDL: PItemIDList;
-  CustomPath: WideString;
+  CustomPath: string;
   TempInt, i, Version: Integer;
 begin
   VETStates := VETStates + [vsLockChangeNotifier];
@@ -3821,7 +3821,7 @@ begin
       LoadWideString(S, CustomPath);
       if RFolder = rfCustom then
       begin
-        if WideDirectoryExists(CustomPath) then
+        if DirectoryExists(CustomPath) then
           RootFolderCustomPath := CustomPath
         else
           RootFolder := rfDesktop
@@ -4153,7 +4153,7 @@ begin
   Result.Namespace := NS;
 end;
 
-function TCustomVirtualExplorerEasyListview.BrowseTo(APath: WideString; SelectTarget: Boolean = True): Boolean;
+function TCustomVirtualExplorerEasyListview.BrowseTo(APath: string; SelectTarget: Boolean = True): Boolean;
 var
   PIDL: PItemIdList;
 begin
@@ -4173,7 +4173,7 @@ var
   P, OldPIDL, JunctionPtPIDL: PItemIDList;
   SelectItem: TExplorerItem;
   Browsing, FreePIDL, ParentBrowsable: Boolean;
-  JunctionPtPath: WideString;
+  JunctionPtPath: string;
 begin
   P := nil;
   FreePIDL := False;
@@ -4220,7 +4220,7 @@ begin
           if Assigned(JunctionPtPIDL) then
             P := JunctionPtPIDL
           else
-            P := nil;    
+            P := nil;
         end;
 
         if Assigned(P) then
@@ -4342,12 +4342,12 @@ begin
   {$ENDIF}
 end;
 
-procedure TCustomVirtualExplorerEasyListview.ContextMenuAfterCmdCallback(Namespace: TNamespace; Verb: WideString; MenuItemID: Integer; Successful: Boolean);
+procedure TCustomVirtualExplorerEasyListview.ContextMenuAfterCmdCallback(Namespace: TNamespace; Verb: string; MenuItemID: Integer; Successful: Boolean);
 begin
   DoContextMenuAfterCmd(Namespace, Verb, MenuItemID, Successful);
 end;
 
-procedure TCustomVirtualExplorerEasyListview.ContextMenuCmdCallback(Namespace: TNamespace; Verb: WideString; MenuItemID: Integer; var Handled: Boolean);
+procedure TCustomVirtualExplorerEasyListview.ContextMenuCmdCallback(Namespace: TNamespace; Verb: string; MenuItemID: Integer; var Handled: Boolean);
 begin
   if Assigned(Owner) then
     Handled := DoContextMenuCmd(Namespace, Verb, MenuItemID)
@@ -4370,7 +4370,7 @@ procedure TCustomVirtualExplorerEasyListview.ContextMenuShowCallback(Namespace: 
 
 var
   i: Integer;
-  S: AnsiString;
+  S: string;
   Done: Boolean;
 
 begin
@@ -4382,8 +4382,8 @@ begin
       i := 0;
       while not Done and (i < GetMenuItemCount(Menu)) do
       begin
-        S := AnsiString(Namespace.ContextMenuVerb(GetMenuItemID(Menu, i)));
-        if AnsiStrings.StrComp(PAnsiChar(S), 'link') = 0 then
+        S := Namespace.ContextMenuVerb(GetMenuItemID(Menu, i));
+        if WideStrComp(PWideChar(S), 'link') = 0 then
         begin
           DeleteMenu(Menu, i, MF_BYPOSITION);
           if IndexIsSeparator(i - 1) then
@@ -4488,15 +4488,15 @@ begin
     OnContextMenu2Message(Self, Msg)
 end;
 
-procedure TCustomVirtualExplorerEasyListview.DoContextMenuAfterCmd(Namespace: TNamespace; Verb: WideString; MenuItemID: Integer; Successful: Boolean);
+procedure TCustomVirtualExplorerEasyListview.DoContextMenuAfterCmd(Namespace: TNamespace; Verb: string; MenuItemID: Integer; Successful: Boolean);
 var
-  AVerb: WideString;
+  AVerb: string;
 begin
   if Assigned(OnContextMenuAfterCmd) then
     OnContextMenuAfterCmd(Self, Namespace, Verb, MenuItemID, Successful);
   if Successful then
   begin
-    AVerb := WideLowerCase(Verb);
+    AVerb := SysUtils.AnsiLowerCase(Verb);
     if AVerb = 'cut' then
       MarkSelectedCut;
     if AVerb = 'copy' then
@@ -4523,7 +4523,7 @@ begin
     OnEnumFolder(Self, Namespace, AllowAsChild);
 end;
 
-procedure TCustomVirtualExplorerEasyListview.DoHintPopup(TargetObj: TEasyCollectionItem; HintType: TEasyHintType; MousePos: TPoint; var AText: WideString; var HideTimeout: Integer; var ReshowTimeout: Integer; var Allow: Boolean);
+procedure TCustomVirtualExplorerEasyListview.DoHintPopup(TargetObj: TEasyCollectionItem; HintType: TEasyHintType; MousePos: TPoint; var AText: string; var HideTimeout: Integer; var ReshowTimeout: Integer; var Allow: Boolean);
 var
   R: TRect;
   ACanvas: TCanvas;
@@ -4595,7 +4595,7 @@ begin
     DoShellExecute(Selection.First);
 end;
 
-procedure TCustomVirtualExplorerEasyListview.DoItemGetCaption(Item: TEasyItem; Column: Integer; var ACaption: WideString);
+procedure TCustomVirtualExplorerEasyListview.DoItemGetCaption(Item: TEasyItem; Column: Integer; var ACaption: string);
 var
   NS: TNamespace;
   DetailsOfRequest: TEasyDetailStringsThreadRequest;
@@ -4778,7 +4778,7 @@ begin
     Count := Length(NS.TileDetail) + 1;
 end;
 
-procedure TCustomVirtualExplorerEasyListview.DoItemSetCaption(Item: TEasyItem; Column: Integer; const Caption: WideString);
+procedure TCustomVirtualExplorerEasyListview.DoItemSetCaption(Item: TEasyItem; Column: Integer; const Caption: string);
 begin
   if Column < 1 then
   begin
@@ -4975,7 +4975,7 @@ end;
 
 procedure TCustomVirtualExplorerEasyListview.DoNamespaceStructureChange(Item: TExplorerItem; ChangeType: TNamespaceStructureChange);
 begin
- 
+
 end;
 
 procedure TCustomVirtualExplorerEasyListview.DoOLEDragStart(ADataObject: IDataObject; var AvailableEffects: TCommonDropEffects; var AllowDrag: Boolean);
@@ -5165,10 +5165,10 @@ procedure TCustomVirtualExplorerEasyListview.DoShellExecute(Item: TEasyItem);
 { ShellExecuteEx parameter.                                           }
 var
   NS: TNamespace;
-  WorkingDir, CmdLineArgument: WideString;
+  WorkingDir, CmdLineArgument: string;
   Allow, DefaultExecution: Boolean;
   ShellLink: TVirtualShellLink;
-  LinkTarget: WideString;
+  LinkTarget: string;
   TempNS: TNamespace;
 begin
   if ValidateNamespace(Item, NS) then
@@ -5204,7 +5204,7 @@ begin
           try
             ShellLink.ReadLink(TempNS.NameForParsing);
             LinkTarget := ShellLink.TargetPath;
-            if WideDirectoryExists(LinkTarget) then
+            if DirectoryExists(LinkTarget) then
             begin
               if OkToBrowseTo(ShellLink.TargetIDList) then
                 BrowseToByPIDL(ShellLink.TargetIDList);
@@ -5287,7 +5287,7 @@ begin
   end
 end;
 
-function TCustomVirtualExplorerEasyListview.FindItemByPath(Path: WideString): TEasyItem;
+function TCustomVirtualExplorerEasyListview.FindItemByPath(Path: string): TEasyItem;
 var
   PIDL: PItemIDList;
 begin
@@ -5531,7 +5531,7 @@ var
   NS: TNamespace;
   DefaultColumnID, pscid: TSHColumnID;
   Category: TGUID;
-  WS: WideString;
+  WS: string;
   EnumGUID: IEnumGUID;
   Fetched, i: UINT;
   NewCategory: TCategory;
@@ -5540,7 +5540,7 @@ var
   Buffer: array[0..128] of WideChar;
 begin
   Category := CLSID_DefCategoryProvider;
-  
+
   NS := RootFolderNamespace;
   Provider := NS.CategoryProviderInterface;
   if Assigned(Provider) then
@@ -6229,7 +6229,7 @@ begin
   end
 end;
 
-procedure TCustomVirtualExplorerEasyListview.SetQuickFilterMask(const Value: WideString);
+procedure TCustomVirtualExplorerEasyListview.SetQuickFilterMask(const Value: string);
 begin
   if FQuickFilterMask <> Value then
   begin
@@ -6349,16 +6349,16 @@ begin
   end
 end;
 
-procedure TCustomVirtualExplorerEasyListview.SetRootFolderCustomPath(Value: WideString);
+procedure TCustomVirtualExplorerEasyListview.SetRootFolderCustomPath(Value: string);
 var
   Allow: Boolean;
-  CustomPath: WideString;
+  CustomPath: string;
 begin
  // if Value <> FRootFolderCustomPath then
   begin
     Allow := True;
     if Value <> '' then
-      CustomPath := IncludeTrailingBackslashW(Value)
+      CustomPath := IncludeTrailingPathDelimiter(Value)
     else
       CustomPath := Value;
 
@@ -6367,7 +6367,7 @@ begin
       DoRootChanging(rfCustom, TempRootNamespace, Allow);
       if Allow then
       begin
-        if WideDirectoryExists(CustomPath) then
+        if DirectoryExists(CustomPath) then
         begin
           TerminateEnumThread;
           TerminateDetailsOfThread;
@@ -6738,8 +6738,7 @@ var
   ShellEvent: TVirtualShellEvent;
   i: integer;
   NS: TNamespace;
-  S: string;
-  WS: WideString;
+  WS: string;
   MappedDriveNotification: Boolean;
   List: TList;
   PIDL: PItemIDList;
@@ -6795,15 +6794,8 @@ begin
                       NS.FreePIDLOnDestroy := False;
                       if NS.Folder then
                       begin
-                        if IsUnicode then
-                        begin
-                          WS := WideExtractFileDrive(NS.NameForParsing);
-                          MappedDriveNotification := WideIsDrive(WS) and (GetDriveTypeW_MP(PWideChar(WS)) = DRIVE_REMOTE)
-                        end else
-                        begin
-                          S := ExtractFileDrive(NS.NameForParsing);
-                          MappedDriveNotification := WideIsDrive(S) and (GetDriveType(PChar(S)) = DRIVE_REMOTE)
-                        end;
+                        WS := WideExtractFileDrive(NS.NameForParsing);
+                        MappedDriveNotification := WideIsDrive(WS) and (GetDriveType(PWideChar(WS)) = DRIVE_REMOTE);
                         if MappedDriveNotification and IsRootNamespace(ShellEvent.PIDL1) then
                           RereadAndRefresh(False);
                       end;
@@ -6978,7 +6970,7 @@ begin
                       end
                     end
                   end; // Handled
-                  DoAfterShellNotify(ShellEvent);   
+                  DoAfterShellNotify(ShellEvent);
                 end
               end
             end
@@ -6998,7 +6990,7 @@ begin
 end;
 
 procedure TCustomVirtualExplorerEasyListview.WMSysChar(var Msg: TWMSysChar);
-begin 
+begin
   case Msg.CharCode of
     VK_RETURN:
       begin
@@ -7273,7 +7265,7 @@ end;
 procedure TEasyThumbsManager.LoadAlbum(Force: Boolean);
 var
   NS: TNamespace;
-  AlbumFilename: WideString;
+  AlbumFilename: string;
   Album: TThumbAlbum;
 begin
   if Assigned(FController) then
@@ -7284,7 +7276,7 @@ begin
       if Assigned(NS) and NS.Folder and NS.FileSystem then
       begin
         AlbumFilename := GetAlbumFileToLoad(NS.NameForParsing);
-        if FileExistsW(AlbumFilename) then
+        if FileExists(AlbumFilename) then
         begin
           Album := TThumbAlbum.Create;
           try
@@ -7328,7 +7320,7 @@ end;
 procedure TEasyThumbsManager.SaveAlbum;
 var
   NS: TNamespace;
-  AlbumFilename: WideString;
+  AlbumFilename: string;
   Album: TThumbAlbum;
 begin
   if Assigned(FController) then
@@ -7541,7 +7533,7 @@ function TEasyDetailStringsThreadRequest.HandleRequest: Boolean;
 var
   i: Integer;
   NS: TNamespace;
-  WS, Title: WideString;
+  WS, Title: string;
 begin
   Result := True;
   NS := TNamespace.Create(PIDL, nil);
@@ -7608,7 +7600,7 @@ begin
   FreeAndNil(FStorage)
 end;
 
-procedure TELVPersistent.LoadFromFile(FileName: WideString; Version: integer = VETStreamStorageVer; ReadVerFromStream: Boolean = True);
+procedure TELVPersistent.LoadFromFile(FileName: string; Version: integer = VETStreamStorageVer; ReadVerFromStream: Boolean = True);
 begin
   inherited LoadFromFile(FileName, Version, ReadVerFromStream);
 end;
@@ -7627,7 +7619,7 @@ begin
   S.ReadBuffer(FRootFolder, SizeOf(RootFolder));
   S.read(Count, SizeOf(Count));
   SetLength(FRootFolderCustomPath, Count);
-  S.read(PWideChar( FRootFolderCustomPath)^, Count * 2); 
+  S.read(PWideChar( FRootFolderCustomPath)^, Count * 2);
   FreeAndNil(FStorage);
   Storage := TNodeStorage.Create(PIDLMgr.LoadFromStream(S), nil);
   Storage.LoadFromStream(S, Version, ReadVerFromStream);
@@ -7648,7 +7640,7 @@ begin
     Include(FStates, epsRestoring);
     try
       VEEL := TVirtualExplorerEasyListview( ELV);
-      VEEL.BeginUpdate;   
+      VEEL.BeginUpdate;
       try
         Sel := TEasySelectionManagerHack( ELV.Selection);
 
@@ -7727,7 +7719,7 @@ begin
   end
 end;
 
-procedure TELVPersistent.SaveToFile(FileName: WideString; Version: integer = VETStreamStorageVer; ReadVerFromStream: Boolean = True);
+procedure TELVPersistent.SaveToFile(FileName: string; Version: integer = VETStreamStorageVer; ReadVerFromStream: Boolean = True);
 begin
   inherited SaveToFile(FileName, Version, ReadVerFromStream);
 end;
@@ -7768,7 +7760,7 @@ var
   Position: Integer;
   Tail: PWideChar;
   TempItem: TExplorerItem;
-  WS: WideString;
+  WS: string;
 begin
   Position := 0;
   (Editor as TEasyMemo).SelStart := 0;
@@ -7825,7 +7817,7 @@ var
   Position: Integer;
   Tail: PWideChar;
   TempItem: TExplorerItem;
-  WS: WideString;
+  WS: string;
 begin
   (Editor as TEasyEdit).SelStart := 0;
   WS := (Editor as TEasyEdit).Text;
@@ -7894,7 +7886,7 @@ begin
 end;
 
 procedure TEasyVirtualThumbView.ItemRectArray(Item: TEasyItem;
-  Column: TEasyColumn; ACanvas: TCanvas; const Caption: WideString;
+  Column: TEasyColumn; ACanvas: TCanvas; const Caption: string;
   var RectArray: TEasyRectArrayObject);
 begin
   ZeroMemory(@RectArray, SizeOf(RectArray));
@@ -7912,7 +7904,7 @@ begin
 end;
 
 procedure TEasyVirtualThumbView.PaintAfter(Item: TEasyItem;
-  Column: TEasyColumn; const Caption: WideString; ACanvas: TCanvas;
+  Column: TEasyColumn; const Caption: string; ACanvas: TCanvas;
   RectArray: TEasyRectArrayObject);
 begin
   if not TVirtualExplorerEasyListview( OwnerListview).ThumbsManager.HideBorder then
@@ -7920,14 +7912,14 @@ begin
 end;
 
 procedure TEasyVirtualThumbView.PaintImage(Item: TEasyItem;
-  Column: TEasyColumn; const Caption: WideString;
+  Column: TEasyColumn; const Caption: string;
   RectArray: TEasyRectArrayObject; ImageSize: TEasyImageSize; ACanvas: TCanvas);
 begin
   inherited PaintImage(Item, Column, Caption, RectArray, ImageSize, ACanvas);
 end;
 
 procedure TEasyVirtualThumbView.PaintText(Item: TEasyItem; Column: TEasyColumn;
-  const Caption: WideString; RectArray: TEasyRectArrayObject; ACanvas: TCanvas;
+  const Caption: string; RectArray: TEasyRectArrayObject; ACanvas: TCanvas;
   LinesToDraw: Integer);
 begin
 //  inherited;
@@ -7978,7 +7970,7 @@ begin
   end
 end;
 
-procedure TCustomVirtualDropStack.DoHintPopup(TargetObj: TEasyCollectionItem; HintType: TEasyHintType; MousePos: TPoint; var AText: WideString; var HideTimeout: Integer; var ReshowTimeout: Integer; var Allow: Boolean);
+procedure TCustomVirtualDropStack.DoHintPopup(TargetObj: TEasyCollectionItem; HintType: TEasyHintType; MousePos: TPoint; var AText: string; var HideTimeout: Integer; var ReshowTimeout: Integer; var Allow: Boolean);
 var
   Item: TVirtualDropStackItem;
   ShellIDList: TCommonShellIDList;
@@ -8121,7 +8113,7 @@ end;
 
 procedure TCustomVirtualDropStack.DoViewChange;
 begin
-  inherited DoViewChange;   
+  inherited DoViewChange;
 end;
 
 { TVirtualDropStackItem }
@@ -8222,11 +8214,11 @@ begin
     inherited DoCustomColumnCompare(Column, Group, Item1, Item2, CompareResult);
 end;
 
-procedure TCustomVirtualMultiPathExplorerEasyListview.DoCustomColumnGetCaption(Column: TExplorerColumn; Item: TExplorerItem; var Caption: WideString);
+procedure TCustomVirtualMultiPathExplorerEasyListview.DoCustomColumnGetCaption(Column: TExplorerColumn; Item: TExplorerItem; var Caption: string);
 begin
   if Column.Index = ColumnIndex then
   begin
-    Caption := WideExtractFilePath( Item.Namespace.NameForParsing)
+    Caption := ExtractFilePath( Item.Namespace.NameForParsing)
   end else
     inherited DoCustomColumnGetCaption(Column, Item, Caption);
 end;
@@ -8282,7 +8274,7 @@ begin
   inherited Destroy;
 end;
 
-function TExtensionColorCodeList.Add(ExtList: WideString; AColor: TColor; IsBold: Boolean = False; IsItalic: Boolean = False; IsUnderLine: Boolean = False; IsEnabled: Boolean = True): TExtensionColorCode;
+function TExtensionColorCodeList.Add(ExtList: string; AColor: TColor; IsBold: Boolean = False; IsItalic: Boolean = False; IsUnderLine: Boolean = False; IsEnabled: Boolean = True): TExtensionColorCode;
 var
   WasFound: Boolean;
 begin
@@ -8309,15 +8301,15 @@ end;
 function TExtensionColorCodeList.FindColorCode(NS: TNamespace): TExtensionColorCode;
 var
   i, j: Integer;
-  TargetExt: WideString;
+  TargetExt: string;
 begin
   Result := nil;
   if NS.Link then
   begin
-    TargetExt := WideLowerCase(ExtractFileExt(NS.ShellLink.TargetPath));
+    TargetExt := SysUtils.AnsiLowerCase(ExtractFileExt(NS.ShellLink.TargetPath));
   end else
   begin
-    TargetExt := WideLowerCase(ExtractFileExt(NS.FileName));
+    TargetExt := SysUtils.AnsiLowerCase(ExtractFileExt(NS.FileName));
   end;
   if TargetExt <> '' then
   begin
@@ -8327,7 +8319,7 @@ begin
       j := 0;
       while not Assigned(Result) and (j < Items[i].Extensions.Count) do
       begin
-        if WideStrIComp(PWideChar( WideString((Items[i].Extensions[j]))), PWideChar( TargetExt)) = 0 then
+        if WideStrIComp(PWideChar( string((Items[i].Extensions[j]))), PWideChar( TargetExt)) = 0 then
           Result := Items[i];
         Inc(j)
       end;
@@ -8369,10 +8361,10 @@ begin
   ItemList.Count := 0;
 end;
 
-function TExtensionColorCodeList.Find(ExtList: WideString): TExtensionColorCode;
+function TExtensionColorCodeList.Find(ExtList: string): TExtensionColorCode;
 var
   i: Integer;
-//  Ext: WideString;
+//  Ext: string;
 begin
   Result := nil;
   // Ext := ExtractFileExt(FileName);
@@ -8430,7 +8422,7 @@ begin
   inherited Destroy;
 end;
 
-function TExtensionColorCode.GetExtensionMask: WideString;
+function TExtensionColorCode.GetExtensionMask: string;
 begin
   Result := Extensions.CommaText
 end;
@@ -8443,7 +8435,7 @@ begin
   FBold := StreamHelper.ReadBoolean(S);
   FItalic := StreamHelper.ReadBoolean(S);
   FUnderLine := StreamHelper.ReadBoolean(S);
-  ExtensionMask := StreamHelper.ReadWideString(S)
+  ExtensionMask := string(StreamHelper.ReadAnsiString(S));
 end;
 
 procedure TExtensionColorCode.SaveToStream(S: TStream; Version: integer = 0; WriteVerToStream: Boolean = False);
@@ -8454,10 +8446,10 @@ begin
   StreamHelper.WriteBoolean(S, Bold);
   StreamHelper.WriteBoolean(S, Italic);
   StreamHelper.WriteBoolean(S, UnderLine);
-  StreamHelper.WriteWideString(S, ExtensionMask);
+  StreamHelper.WriteUnicodeString(S, ExtensionMask);
  end;
 
-procedure TExtensionColorCode.SetExtensionMask(const Value: WideString);
+procedure TExtensionColorCode.SetExtensionMask(const Value: string);
 begin
   Extensions.CommaText := WideValidateDelimitedExtList(Value, [vdwcPeriod], vdeComma)
 end;
@@ -8491,7 +8483,7 @@ begin
       Item := TExplorerItem( HintInfo.TargetObj);
       LV := (HintInfo.Listview as TCustomVirtualExplorerEasyListview);
       ResizedResult := Result;
-   
+
       SetRect(FontHeightR, 0, 0, 0, 0);
       DrawTextWEx(Canvas.Handle, 'Ty', FontHeightR, [dtLeft, dtCalcRect, dtSingleLine], 1);
 
