@@ -18,7 +18,7 @@ type
       var DoDefault: Boolean): Integer;
     procedure LVRootRebuild(Sender: TCustomVirtualExplorerEasyListview);
     procedure LVItemGetCaption(Sender: TCustomEasyListview; Item: TEasyItem;
-      Column: Integer; var Caption: WideString);
+      Column: Integer; var Caption: string);
     procedure ComboBox1Click(Sender: TObject);
   private
     { Private declarations }
@@ -75,7 +75,7 @@ begin
 end;
 
 procedure TForm1.LVItemGetCaption(Sender: TCustomEasyListview; Item: TEasyItem;
-  Column: Integer; var Caption: WideString);
+  Column: Integer; var Caption: string);
 // Change the caption of the ZombieItem
 begin
   if Assigned(FZombieItem) and (FZombieItem = Item) and (Column = 0) then

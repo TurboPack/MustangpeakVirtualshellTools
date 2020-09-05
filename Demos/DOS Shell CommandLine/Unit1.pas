@@ -46,16 +46,10 @@ var
   Path: string;
 begin
   SetLength(Path, MAX_PATH);
-  if Win32Platform = VER_PLATFORM_WIN32_NT then
-    GetSystemDirectory(PChar(Path), MAX_PATH)
-  else
-    GetWindowsDirectory(PChar(Path), MAX_PATH);
+  GetSystemDirectory(PChar(Path), MAX_PATH);
   SetLength(Path, StrLen(PChar(Path)));
   Path := ExcludeTrailingBackslash(Path);
-  if Win32Platform = VER_PLATFORM_WIN32_NT then
-    Path := Path + '\cmd.exe'
-  else
-    Path := Path + '\COMMAND.COM';
+  Path := Path + '\cmd.exe';
   VirtualCommandLineRedirector1.Run(Path, ExtractFileDrive(Path) + '\');
 end;
 
@@ -154,8 +148,7 @@ begin
 
     // Scroll down until we stop scrolling
     // In XP and Win2k the EM_SCROLLCARET does not do anything!
-    if Win32Platform = VER_PLATFORM_WIN32_NT then
-      while LoWord(SendMessage(RichEdit1.Handle, EM_SCROLL, SB_LINEDOWN, 0)) > 0 do
+    while LoWord(SendMessage(RichEdit1.Handle, EM_SCROLL, SB_LINEDOWN, 0)) > 0 do
   end;
   NewCommand := False;
 end;

@@ -2,10 +2,8 @@
 
 Welcome to the VirtualShellTools Demo Folder!
 
-These are the Demo supplied with VirtualShellTools.  If you want to compile all the demos at once then use the *.bpg file supplied in this folder.  There are three differnt builds:
-
+These are the Demo supplied with VirtualShellTools.  If you want to compile all the demos at once then use the *.bpg file supplied in this folder.  
 VirtualShellToolsDemos.bpg  			-  All the Demos having to do with VirtualShellTools
-VirtualShellToolsDemos with Toolbar2000-TBX.bpg -  All the Demos plus any demos that use Toolbar2000 with TBX
 
 In order to build the package open the *.bpg file with Delphi.  Answer yes to *all* the annoying quesions about recreating the resource file.  Go to 
 

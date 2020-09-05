@@ -19,7 +19,7 @@ type
       var CompareResult: Integer);
     procedure VirtualExplorerEasyListview1CustomColumnGetCaption(
       Sender: TCustomVirtualExplorerEasyListview; Column: TExplorerColumn;
-      Item: TExplorerItem; var Caption: WideString);
+      Item: TExplorerItem; var Caption: string);
   private
     { Private declarations }
   public
@@ -59,7 +59,7 @@ end;
 
 procedure TForm1.VirtualExplorerEasyListview1CustomColumnGetCaption(
   Sender: TCustomVirtualExplorerEasyListview; Column: TExplorerColumn;
-  Item: TExplorerItem; var Caption: WideString);
+  Item: TExplorerItem; var Caption: string);
 begin
   // Something silly and unique
   Caption := IntToStr( Integer(Item))

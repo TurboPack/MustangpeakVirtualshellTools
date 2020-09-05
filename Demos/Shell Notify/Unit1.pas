@@ -10,9 +10,6 @@ uses
   StdCtrls, VirtualExplorerTree, VirtualTrees, ExtCtrls, Menus, ShlObj,
   VirtualShellNewMenu, MPShellUtilities, VirtualShellNotifier,
   ToolWin, VirtualShellToolBar, VirtualResources,
-  {$IFDEF TNTSUPPORT}
-  TntSysUtils, TntClasses,
-  {$ENDIF}
   MPCommonUtilities,
   MPShellTypes,
   ComCtrls;
@@ -157,7 +154,7 @@ procedure TForm1.ExplorerListview1RootChanging(
   const CurrentNamespace, Namespace: TNamespace; var Allow: Boolean);
 begin
   {$IFDEF KernelNotifier}
-  if DirExistsW(Namespace.NameForParsing) then
+  if DirectoryExists(Namespace.NameForParsing) then
     ChangeNotifier.NotifyWatchFolder(ExplorerListview1, Namespace.NameForParsing)
   else
     ChangeNotifier.NotifyWatchFolder(ExplorerListview1, '')

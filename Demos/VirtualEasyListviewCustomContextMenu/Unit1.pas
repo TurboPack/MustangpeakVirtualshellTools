@@ -15,7 +15,7 @@ type
       Menu: HMENU; var Allow: Boolean);
     procedure VirtualExplorerEasyListview1ContextMenuCmd(
       Sender: TCustomVirtualExplorerEasyListview; Namespace: TNamespace;
-      Verb: WideString; MenuItemID: Integer; var Handled: Boolean);
+      Verb: string; MenuItemID: Integer; var Handled: Boolean);
   private
     { Private declarations }
   public
@@ -41,7 +41,7 @@ end;
 
 procedure TForm1.VirtualExplorerEasyListview1ContextMenuCmd(
   Sender: TCustomVirtualExplorerEasyListview; Namespace: TNamespace;
-  Verb: WideString; MenuItemID: Integer; var Handled: Boolean);
+  Verb: string; MenuItemID: Integer; var Handled: Boolean);
 begin
   if MenuItemID = CustomMenuID then
   begin

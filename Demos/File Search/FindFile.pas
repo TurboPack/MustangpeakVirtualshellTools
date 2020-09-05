@@ -390,7 +390,7 @@ function FileContains(const FileName: String; const Phrase: String;
   IgnoreCase: Boolean): Boolean;
 begin
   if IgnoreCase then
-    Result := FileContainsPhrase(FileName, PChar(LowerCase(Phrase)),
+    Result := FileContainsPhrase(FileName, PChar(SysUtils.AnsiLowerCase(Phrase)),
       Length(Phrase), True)
   else
     Result := FileContainsPhrase(FileName, PChar(Phrase),
@@ -682,7 +682,7 @@ begin
     fPhrase := Value;
     fPhraseLen := Length(Value);
     if IgnoreCase then
-      fTargetPhrase := LowerCase(Phrase)
+      fTargetPhrase := SysUtils.AnsiLowerCase(Phrase)
     else
       fTargetPhrase := Phrase;
   end;
@@ -694,7 +694,7 @@ begin
   begin
     fIgnoreCase := Value;
     if IgnoreCase then
-      fTargetPhrase := LowerCase(Phrase)
+      fTargetPhrase := SysUtils.AnsiLowerCase(Phrase)
     else
       fTargetPhrase := Phrase;
   end;

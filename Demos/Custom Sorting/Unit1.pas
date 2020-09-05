@@ -77,7 +77,7 @@ var
   SR: TSearchRec;
 begin
   Result := 0;
-  ADirectory := IncludeTrailingBackslash(ADirectory);
+  ADirectory := IncludeTrailingPathDelimiter(ADirectory);
   VirtualExplorerEasyListview1.BeginUpdate;
   try
     if SysUtils.FindFirst(ADirectory + '*.*', faAnyFile, SR) = 0 then

@@ -1,17 +1,49 @@
-*.~dsk
-*.dsk
-*.local
+# Compiled source #
+###################
+*.dcu
+*.obj
+*.exe
+*.bpl
+*.bpi
+*.dcp
+*.rsm
 *.stat
-__history
-Win32
-*.tmp
+*.map
+*.lib
+
+# Generated source #
+###################
 *.hpp
-*.tvsconfig
+
+# Backup files    #
+###################
+*.~*
+*.bak
+*.#00
+*.pch
+*.Patch
+/__history
+
+# IDE Files	  #
+###################
+*.dproj.local
+*.groupproj.local
 *.identcache
-CBuilder/cpp/
-CBuilder/Sydney/Win64/
-Delphi/Berlin/Win64/
-Delphi/cpp/
-Delphi/Rio/Win64/
-Delphi/Sydney/Win64/
-Delphi/Tokyo/Win64/
+*.dsk
+*.tvsconfig
+*.otares
+*.drc
+*.rc
+*.res
+*.local
+
+# Output Folders  #
+###################
+/Win32
+/Win64
+/OSX32
+
+#    C++ Files    #
+###################
+*.prjmgc
+

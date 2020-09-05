@@ -185,7 +185,7 @@ end;
 
 procedure TForm1.SpeedButton2Click(Sender: TObject);
 var
-  Path: WideString;
+  Path: string;
   IconIndex: Longword;
 begin
   Path := 'shell32.dll';

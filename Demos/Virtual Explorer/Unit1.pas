@@ -1,4 +1,4 @@
-unit Unit1;
+﻿unit Unit1;
 
 interface
 
@@ -8,7 +8,7 @@ uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
   Menus, ExtCtrls, ComCtrls, StdCtrls, VirtualExplorerTree,
   VirtualShellToolBar, VirtualTrees, MPShellUtilities, ActiveX,
-  MPCommonUtilities,   
+  MPCommonUtilities,
   MPShellTypes, ShlObj, VirtualShellNewMenu, ToolWin,
   VirtualShellHistory, VirtualShellNotifier, ImgList;
 
@@ -44,7 +44,7 @@ type
       var AskParent: Boolean; var PopupMenu: TPopupMenu);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure VirtualShellNewMenu1AfterFileCreate(Sender: TMenu;
-      const NewMenuItem: TVirtualShellNewItem; const FileName: WideString);
+      const NewMenuItem: TVirtualShellNewItem; const FileName: string);
     procedure PopupMenuMRUPopup(Sender: TObject);
     procedure VirtualExplorerListview1RootChanging(
       Sender: TCustomVirtualExplorerTree; const NewValue: TRootFolder;
@@ -62,7 +62,7 @@ type
       Mode: TDropMode; var Effect: Integer; var Accept: Boolean);
     procedure VirtualShellNewMenu1CreateNewFile(Sender: TMenu;
       const NewMenuItem: TVirtualShellNewItem; var Path,
-      FileName: WideString; var Allow: Boolean);
+      FileName: string; var Allow: Boolean);
   private
     { Private declarations }
   public
@@ -155,7 +155,7 @@ begin
 end;
 
 procedure TForm1.VirtualShellNewMenu1AfterFileCreate(Sender: TMenu;
-  const NewMenuItem: TVirtualShellNewItem; const FileName: WideString);
+  const NewMenuItem: TVirtualShellNewItem; const FileName: string);
 var
   Node: PVirtualNode;
   NS: TNamespace;
@@ -202,7 +202,7 @@ begin
       ChangeNotifier.NotifyWatchFolder(VirtualExplorerListview1, '')
   end;
   {$ENDIF}
-  
+
   // Save the state of the header
   if Assigned(CurrentNamespace) then
     if CurrentNamespace.FileSystem then
@@ -269,7 +269,7 @@ begin
 end;
 
 procedure TForm1.VirtualShellNewMenu1CreateNewFile(Sender: TMenu;
-  const NewMenuItem: TVirtualShellNewItem; var Path, FileName: WideString;
+  const NewMenuItem: TVirtualShellNewItem; var Path, FileName: string;
   var Allow: Boolean);
 var
   NS: TNamespace;

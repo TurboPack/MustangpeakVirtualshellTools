@@ -15,7 +15,7 @@ type
     procedure AddZombie;
     procedure RemoveZombie;
     function DoCompare(Node1: PVirtualNode; Node2: PVirtualNode; Column: TColumnIndex): Integer; override;
-    procedure DoGetText(Node: PVirtualNode; Column: TColumnIndex; TextType: TVSTTextType; var Text: WideString); override;
+    procedure DoGetText(Node: PVirtualNode; Column: TColumnIndex; TextType: TVSTTextType; var Text: string); override;
     procedure DoRootChanging(const NewRoot: TRootFolder; Namespace: TNamespace; var Allow: Boolean); override;
     procedure DoRootRebuild; override;
     procedure ReReadAndRefreshNode(Node: PVirtualNode; SortNode: Boolean); override;
@@ -139,7 +139,7 @@ begin
 end;
 
 procedure TMyLV.DoGetText(Node: PVirtualNode; Column: TColumnIndex;
-  TextType: TVSTTextType; var Text: WideString);
+  TextType: TVSTTextType; var Text: string);
 // The change the ZombieNode caption to '[..]'
 begin
   inherited;

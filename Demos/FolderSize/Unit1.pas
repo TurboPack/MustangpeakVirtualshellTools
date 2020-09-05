@@ -84,7 +84,7 @@ begin
   Result := Format('%.'+ IntToStr(Precision) + 'n ' + FormatArray[FormatType], [D]);
 end;
 
-function IsFloppyW(FileFolder: WideString): boolean;
+function IsFloppyW(FileFolder: string): boolean;
 begin
   Result := Char(FileFolder[1]) in ['A', 'a', 'B', 'b'];
 end;

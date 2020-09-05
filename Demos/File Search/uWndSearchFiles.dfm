@@ -1,9 +1,9 @@
 object WndSearchFiles: TWndSearchFiles
   Left = 345
   Top = 149
-  Width = 423
-  Height = 503
   Caption = 'File Search'
+  ClientHeight = 464
+  ClientWidth = 407
   Color = clBtnFace
   Constraints.MinHeight = 220
   Constraints.MinWidth = 420
@@ -35,8 +35,8 @@ object WndSearchFiles: TWndSearchFiles
   TextHeight = 13
   object StatusBar: TStatusBar
     Left = 0
-    Top = 450
-    Width = 415
+    Top = 445
+    Width = 407
     Height = 19
     Panels = <>
     SimplePanel = True
@@ -44,7 +44,7 @@ object WndSearchFiles: TWndSearchFiles
   object Panel_Middle: TPanel
     Left = 0
     Top = 190
-    Width = 415
+    Width = 407
     Height = 16
     Align = alTop
     BevelOuter = bvNone
@@ -53,7 +53,7 @@ object WndSearchFiles: TWndSearchFiles
   object Panel_Top: TPanel
     Left = 0
     Top = 0
-    Width = 415
+    Width = 407
     Height = 190
     Align = alTop
     BevelOuter = bvNone
@@ -154,6 +154,10 @@ object WndSearchFiles: TWndSearchFiles
       object TabSheet3: TTabSheet
         Caption = 'Date'
         ImageIndex = 2
+        ExplicitLeft = 0
+        ExplicitTop = 0
+        ExplicitWidth = 0
+        ExplicitHeight = 0
         object DateTimePicker_BeforeDate: TDateTimePicker
           Left = 7
           Top = 133
@@ -250,6 +254,10 @@ object WndSearchFiles: TWndSearchFiles
       object TabSheet2: TTabSheet
         Caption = 'Advanced'
         ImageIndex = 1
+        ExplicitLeft = 0
+        ExplicitTop = 0
+        ExplicitWidth = 0
+        ExplicitHeight = 0
         object Attributes: TGroupBox
           Left = 8
           Top = 1
@@ -379,7 +387,7 @@ object WndSearchFiles: TWndSearchFiles
     object Panel_Right: TPanel
       Left = 293
       Top = 0
-      Width = 122
+      Width = 114
       Height = 190
       Align = alClient
       BevelOuter = bvNone
@@ -412,15 +420,15 @@ object WndSearchFiles: TWndSearchFiles
         Height = 50
         AutoSize = False
         CommonAVI = aviFindFile
-        StopFrame = 23
+        StopFrame = 8
       end
     end
   end
   object Panel_SearchResult: TPanel
     Left = 0
     Top = 206
-    Width = 415
-    Height = 244
+    Width = 407
+    Height = 239
     Align = alClient
     BevelOuter = bvNone
     Caption = 'Panel_SearchResult'
@@ -428,8 +436,8 @@ object WndSearchFiles: TWndSearchFiles
     object SearchResult: TVirtualExplorerListview
       Left = 0
       Top = 0
-      Width = 415
-      Height = 244
+      Width = 407
+      Height = 239
       Active = False
       Align = alClient
       ColumnDetails = cdVETColumns
@@ -440,11 +448,7 @@ object WndSearchFiles: TWndSearchFiles
       FileSizeFormat = fsfExplorer
       FileSort = fsFileType
       Header.AutoSizeIndex = -1
-      Header.Font.Charset = DEFAULT_CHARSET
-      Header.Font.Color = clWindowText
-      Header.Font.Height = -11
-      Header.Font.Name = 'MS Shell Dlg 2'
-      Header.Font.Style = []
+      Header.Height = 17
       Header.Options = [hoColumnResize, hoDblClickResize, hoDrag, hoShowSortGlyphs, hoVisible]
       HintMode = hmHint
       Indent = 0
@@ -480,53 +484,53 @@ object WndSearchFiles: TWndSearchFiles
         item
           Alignment = taRightJustify
           Position = 1
-          Width = 200
+          Width = 96
           ColumnDetails = cdSize
           WideText = 'Size'
         end
         item
           Position = 2
-          Width = 200
+          Width = 120
           ColumnDetails = cdType
           WideText = 'Type'
         end
         item
           Position = 3
-          Width = 200
+          Width = 120
           ColumnDetails = cdModified
           WideText = 'Modified'
         end
         item
           Position = 4
-          Width = 200
+          Width = 60
           ColumnDetails = cdAttributes
           WideText = 'Attributes'
         end
         item
-          Options = [coAllowClick, coDraggable, coEnabled, coParentBidiMode, coParentColor, coResizable, coShowDropMark]
+          Options = [coAllowClick, coDraggable, coEnabled, coParentBidiMode, coParentColor, coResizable, coShowDropMark, coAllowFocus, coEditable]
           Position = 5
-          Width = 200
+          Width = 180
           ColumnDetails = cdAccessed
           WideText = 'Accessed'
         end
         item
-          Options = [coAllowClick, coDraggable, coEnabled, coParentBidiMode, coParentColor, coResizable, coShowDropMark]
+          Options = [coAllowClick, coDraggable, coEnabled, coParentBidiMode, coParentColor, coResizable, coShowDropMark, coAllowFocus, coEditable]
           Position = 6
-          Width = 200
+          Width = 120
           ColumnDetails = cdCreated
           WideText = 'Created'
         end
         item
-          Options = [coAllowClick, coDraggable, coEnabled, coParentBidiMode, coParentColor, coResizable, coShowDropMark]
+          Options = [coAllowClick, coDraggable, coEnabled, coParentBidiMode, coParentColor, coResizable, coShowDropMark, coAllowFocus, coEditable]
           Position = 7
-          Width = 200
+          Width = 80
           ColumnDetails = cdDOSName
           WideText = 'DOS Name'
         end
         item
-          Options = [coAllowClick, coDraggable, coEnabled, coParentBidiMode, coParentColor, coResizable, coShowDropMark]
+          Options = [coAllowClick, coDraggable, coEnabled, coParentBidiMode, coParentColor, coResizable, coShowDropMark, coAllowFocus, coEditable]
           Position = 8
-          Width = 200
+          Width = 150
           ColumnDetails = cdPath
           WideText = 'Path'
         end>

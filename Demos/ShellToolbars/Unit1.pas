@@ -68,13 +68,13 @@ begin
   Edit4.Text := IntToStr(ShellToolbar1.ButtonSpacing);
 
 
-{  if FileExistsW(ShellToolbarDataFile) then
+{  if FileExists(ShellToolbarDataFile) then
    ShellToolbar1.ReadFromFile(ShellToolbarDataFile);
 
-  if FileExistsW(ShellToolbarDataFile1) then
+  if FileExists(ShellToolbarDataFile1) then
    ShellToolbar2.ReadFromFile(ShellToolbarDataFile1);
 
-  if FileExistsW(ShellToolbarDataFile2) then
+  if FileExists(ShellToolbarDataFile2) then
    ShellToolbar3.ReadFromFile(ShellToolbarDataFile2);
 
   if ShellToolbar1.AutoSize then

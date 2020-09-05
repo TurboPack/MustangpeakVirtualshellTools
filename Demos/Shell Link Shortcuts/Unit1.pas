@@ -59,7 +59,7 @@ implementation
 
 {$R *.DFM}
 
-function ShowCmdToStr(Cmd: TCmdShow): WideString;
+function ShowCmdToStr(Cmd: TCmdShow): string;
 begin
   case Cmd of
     swHide: Result := 'SW_HIDE';

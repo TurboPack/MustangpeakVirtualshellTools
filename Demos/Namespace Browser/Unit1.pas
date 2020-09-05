@@ -249,11 +249,11 @@ var
   EnumGUID: IEnumGUID;
   GUID: TGUID;
   Fetched: Longword;
-  WS: WideString;
+  WS: string;
   CategoryList: array of TGUID;
   Categorizer: ICategorizer;
   ColumnID: TSHColumnID;
-  IconFile: WideString;
+  IconFile: string;
   IconFileA: AnsiString;
   iIndex: INteger;
   pwFlags: Cardinal;
@@ -262,7 +262,7 @@ var
   DetailData: TAGShellDetails;
   TreeNode: TTreeNode;
 
-  sx: WideString;
+  sx: string;
 begin
   Node := VET.GetFirstSelected;
   if VET.ValidateNamespace(Node, NS) then

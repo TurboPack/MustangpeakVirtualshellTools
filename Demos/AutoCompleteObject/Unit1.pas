@@ -16,7 +16,7 @@ type
     CheckBoxCustom: TCheckBox;
     Label1: TLabel;
     procedure ExplorerComboBox1AutoCompleteUpdateList(Sender: TObject;
-      const CurrentEditContents: WideString; EnumList: TStringList;
+      const CurrentEditContents: string; EnumList: TStringList;
       var Handled: Boolean);
   private
     { Private declarations }
@@ -32,7 +32,7 @@ implementation
 {$R *.DFM}
 
 procedure TForm1.ExplorerComboBox1AutoCompleteUpdateList(Sender: TObject;
-  const CurrentEditContents: WideString; EnumList: TStringList;
+  const CurrentEditContents: string; EnumList: TStringList;
   var Handled: Boolean);
 begin
   if CheckBoxCustom.Checked then

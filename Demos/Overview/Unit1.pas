@@ -287,7 +287,7 @@ Type
       MouseSelect: Boolean);
     Procedure CheckBoxCustomMenuItemClick(Sender: TObject);
     Procedure VET1ContextMenuCmd(Sender: TCustomVirtualExplorerTree;
-      Namespace: TNamespace; Verb: WideString; MenuItemID: Integer;
+      Namespace: TNamespace; Verb: string; MenuItemID: Integer;
       Var Handled: Boolean);
     Procedure RadioGroupColumnTypeClick(Sender: TObject);
     Procedure VET1Change(Sender: TBaseVirtualTree; Node: PVirtualNode);
@@ -1317,7 +1317,7 @@ Begin
 End;
 
 Procedure TForm1.VET1ContextMenuCmd(Sender: TCustomVirtualExplorerTree;
-  Namespace: TNamespace; Verb: WideString; MenuItemID: Integer;
+  Namespace: TNamespace; Verb: string; MenuItemID: Integer;
   Var Handled: Boolean);
 Begin
   If MenuItemID = FCustomMenuItemID Then Begin
@@ -1429,11 +1429,11 @@ End;
 Procedure TForm1.VET1EnumFolder(Sender: TCustomVirtualExplorerTree;
   Namespace: TNamespace; Var AllowAsChild: Boolean);
 Var
-  FileExt: WideString;
+  FileExt: string;
 Begin
-  FileExt := UpperCase(ExtractFileExt(Namespace.NameParseAddress));
+  FileExt := SysUtils.AnsiUpperCase(ExtractFileExt(Namespace.NameParseAddress));
   If Not Namespace.Folder Then { Don't filter folders }
-    If Not Namespace.Folder And (Pos(FileExt, WideUpperCase(EditFilter.Text)) = 0) Then
+    If Not Namespace.Folder And (Pos(FileExt, SysUtils.AnsiUpperCase(EditFilter.Text)) = 0) Then
       AllowAsChild := False;
 End;
 
