@@ -480,8 +480,8 @@ type
 {-------------------------------------------------------------------------------}
 
 const
-  DefaultVETPaintOptions = [toHideSelection, toShowButtons, toUseBlendedImages, toShowTreeLines, toGhostedIfUnfocused];
-  DefaultVETFolderOptions = [toFoldersExpandable];
+  DefaultVETPaintOptions = [toHideSelection, toShowButtons, toThemeAware, toUseBlendedImages, toShowTreeLines, toGhostedIfUnfocused];
+  DefaultVETFolderOptions = [toFoldersExpandable, toNoUseVETColorsProp];
   DefaultVETShellOptions = [toContextMenus, toRightAlignSizeColumn];
   DefaultVETMiscOptions = [toExecuteOnDblClk, toBrowseExecuteFolder, toBrowseExecuteFolderShortcut, toBrowseExecuteZipFolder];
   DefaultVETImageOptions = [toImages, toMarkCutAndCopy];
@@ -490,8 +490,8 @@ const
   DefaultExplorerTreeFileObjects = [foFolders, foHidden];
   DefaultExplorerTreeAutoOptions = [toAutoScroll, toAutoChangeScale];
   DefaultExplorerTreeMiscOptions = [toEditable, toAcceptOLEDrop, toToggleOnDblClick];
-  DefaultExplorerTreePaintOptions = [toHideSelection, toShowButtons, toUseBlendedImages, toShowTreeLines, toGhostedIfUnfocused];
-  DefaultExplorerTreeVETFolderOptions = [toFoldersExpandable];
+  DefaultExplorerTreePaintOptions = [toHideSelection, toShowButtons, toThemeAware, toUseBlendedImages, toShowTreeLines, toGhostedIfUnfocused];
+  DefaultExplorerTreeVETFolderOptions = [toFoldersExpandable, toNoUseVETColorsProp];
   DefaultExplorerTreeVETShellOptions = [toContextMenus];
   DefaultExplorerTreeVETMiscOptions = [toChangeNotifierThread, toBrowseExecuteFolder, toBrowseExecuteFolderShortcut, toBrowseExecuteZipFolder, toRemoveContextMenuShortCut];
   DefaultExplorerTreeVETImageOptions = [toImages, toThreadedImages, toMarkCutAndCopy];
@@ -1289,6 +1289,10 @@ type
     FCreatingHeaders: Boolean;          // True when the Tree in the middle of rebuilding the headers
     FShellBaseColumnCount: integer;     // Tracks how many columns are available for the shell columns defined by the root folder
                                         // Used in aid of custom columns expecially in ShellColumn mode where column count can change
+  {$IF CompilerVersion >= 33}
+    FScaledSmallSysImages: TCommonVirtualImageList;  // used to scale system images
+    FScaledLargeSysImages: TCommonVirtualImageList;  // used to scale system images
+  {$IFEND}
   {$IFDEF EXPLORERTREE_L}
     { InterTree Link support }
     FVirtualExplorerTree: TCustomVirtualExplorerTree;   // Linked VET
@@ -3629,6 +3633,18 @@ begin
   FSelectedPaths := TStringList.Create;
   FSelectedFiles := TStringList.Create;
 
+  {$IF CompilerVersion >= 33}
+  FScaledSmallSysImages := TCommonVirtualImageList.Create(Owner);
+  FScaledSmallSysImages.SourceImageList := SmallSysImages;
+  FScaledSmallSysImages.SetSize(MulDiv(SmallSysImages.Width, 96, Screen.PixelsPerInch),
+    MulDiv(SmallSysImages.Height, 96, Screen.PixelsPerInch));
+
+  FScaledLargeSysImages := TCommonVirtualImageList.Create(Owner);
+  FScaledLargeSysImages.SourceImageList := LargeSysImages;
+  FScaledLargeSysImages.SetSize(MulDiv(LargeSysImages.Width, 96, Screen.PixelsPerInch),
+    MulDiv(LargeSysImages.Height, 96, Screen.PixelsPerInch));
+  {$IFEND}
+
   { Remove any weird clipboard formats.  The IDataObject will handle that.      }
   { Still need the virtual tree internal formats though.                        }
   CF := VirtualTrees.TClipboardFormats.Create(Self);
@@ -4275,7 +4291,11 @@ begin
     begin
       Result := Images;
       if Result = nil then
+        {$IF CompilerVersion >= 33}
+        Result := FScaledSmallSysImages;
+        {$ELSE}
         Result := SmallSysImages;
+        {$IFEND}
       if not NS.ThreadedIconLoaded and ThreadedImagesEnabled and not (csDesigning in ComponentState) then
       begin
         if (Kind = ikNormal) or (Kind = ikSelected) then
@@ -6286,24 +6306,24 @@ begin
             if BasedOnNamespace.IsMyComputer and
               (Column.Index <= High(VET_DEFAULT_DRIVES_COLUMNWIDTHS))
             then
-              Column.Width := MulDiv(VET_DEFAULT_DRIVES_COLUMNWIDTHS[Column.Index], Screen.PixelsPerInch, 96)
+              Column.Width := ScaledPixels(VET_DEFAULT_DRIVES_COLUMNWIDTHS[Column.Index])
             else
             if BasedOnNamespace.IsControlPanel and
               (Column.Index <= High(VET_DEFAULT_CONTROLPANEL_COLUMNWIDTHS))
             then
-              Column.Width :=  MulDiv(VET_DEFAULT_CONTROLPANEL_COLUMNWIDTHS[Column.Index], Screen.PixelsPerInch, 96)
+              Column.Width :=  ScaledPixels(VET_DEFAULT_CONTROLPANEL_COLUMNWIDTHS[Column.Index])
             else
             if (BasedOnNamespace.IsNetworkNeighborhood or
                BasedOnNamespace.IsNetworkNeighborhoodChild) and
                ((BasedOnNamespace.DetailsSupportedColumns < 3) and
                (Column.Index <= High(VET_DEFAULT_NETWORK_COLUMNWIDTHS)))
             then
-              Column.Width := MulDiv(VET_DEFAULT_NETWORK_COLUMNWIDTHS[Column.Index], Screen.PixelsPerInch, 96)
+              Column.Width := ScaledPixels(VET_DEFAULT_NETWORK_COLUMNWIDTHS[Column.Index])
             else
             if (Column.Index <= High(VET_ColumnWidths)) then
-              Column.Width := MulDiv(VET_ColumnWidths[Column.Index], Screen.PixelsPerInch, 96)
+              Column.Width := ScaledPixels(VET_ColumnWidths[Column.Index])
             else
-              Column.Width := MulDiv(120, Screen.PixelsPerInch, 96);
+              Column.Width := ScaledPixels(120);
             Column.FColumnDetails := cdCustom;
 
             ColStates := BasedOnNamespace.DetailsGetDefaultColumnState(Column.Index);
@@ -9511,16 +9531,28 @@ begin
     if BitChanged(Value, OldOptions, toImages) then
     begin
       if toImages in Value then
-        Owner.Images := SmallSysImages
+        {$IF CompilerVersion >= 33}
+        Owner.Images := Owner.FScaledSmallSysImages
+        {$ELSE}
+        Owner.Images := Owner.SmallSysImages
+        {$IFEND}
       else
         Owner.Images := nil
     end;
 
     if BitChanged(Value, OldOptions, toLargeImages) then
       if toLargeImages in Value then
+        {$IF CompilerVersion >= 33}
+        Owner.Images := Owner.FScaledLargeSysImages
+        {$ELSE}
         Owner.Images := LargeSysImages
+        {$IFEND}
       else
-       Owner.Images := SmallSysImages;
+        {$IF CompilerVersion >= 33}
+        Owner.Images := Owner.FScaledSmallSysImages;
+        {$ELSE}
+        Owner.Images := Owner.SmallSysImages;
+        {$IFEND}
 
     if not (csLoading in Owner.ComponentState) then
       Owner.RebuildRootNamespace;
@@ -11381,13 +11413,23 @@ begin
     crImage:
       begin
         Result := BackGroundRect(crBackGround);
-        Result.Top := (Height - SmallSysImages.Height) div 2;
+        Result.Top := (Height -
+          {$IF CompilerVersion >= 33}
+          PopupExplorerDropDown.PopupExplorerTree.FScaledSmallSysImages.Height) div 2;
+          {$ELSE}
+          PopupExplorerDropDown.PopupExplorerTree.SmallSysImages.Height) div 2;
+          {$IFEND}
         Result.Left := Result.Left + 2;
         SetRect(Result,
                 Result.Left,
                 Result.Top,
-                Result.Left + SmallSysImages.Height,
-                Result.Top + SmallSysImages.Height);
+                {$IF CompilerVersion >= 33}
+                Result.Left + PopupExplorerDropDown.PopupExplorerTree.FScaledSmallSysImages.Height,
+                Result.Top + PopupExplorerDropDown.PopupExplorerTree.FScaledSmallSysImages.Height);
+                {$ELSE}
+                Result.Left + PopupExplorerDropDown.PopupExplorerTree.SmallSysImages.Height,
+                Result.Top + PopupExplorerDropDown.PopupExplorerTree.SmallSysImages.Height);
+                {$IFEND}
       end;
     crComboEdit:
       begin
@@ -11403,7 +11445,7 @@ begin
           Result.Bottom := Result.Top + Size.cy;
         end;
         R := BackGroundRect(crImage);
-        Result.Left := Result.Left + (R.Right - R.Left) + 4; // 4 Pixel margin between image and WideEdit
+        Result.Left := Result.Left + (R.Right - R.Left) + PPIScale(4); // 4 Pixel margin between image and WideEdit
         R := BackGroundRect(crDropDownButton);
         Result.Right := Result.Right - (R.Right - R.Left) - 1;
       end;
@@ -11640,7 +11682,7 @@ function TCustomVirtualExplorerCombobox.CreatePopupAutoCompleteDropDown: TPopupA
 // Overridable to create a custom version of TPopupAutoCompleteDropDown
 
 begin
-  Result := TPopupAutoCompleteDropDown.Create(nil)
+  Result := TPopupAutoCompleteDropDown.Create(Self)
 end;
 
 function TCustomVirtualExplorerCombobox.CreatePopupExplorerOptions: TPopupExplorerOptions;
@@ -11656,7 +11698,7 @@ function TCustomVirtualExplorerCombobox.CreatePopupExplorerDropDown: TPopupExplo
 // Overridable to create a custom version of TPopupExplorerOptions
 
 begin
-   Result := TPopupExplorerDropDown.Create(nil)
+   Result := TPopupExplorerDropDown.Create(Self)
 end;
 
 procedure TCustomVirtualExplorerCombobox.CreateWnd;
@@ -11694,9 +11736,7 @@ begin
   ComboEdit.Parent := nil;  // Break the link first, causes weird AV's
   FreeAndNil(FComboEdit); // Make sure nothing references this (like a sizing message)
   PopupAutoCompleteDropDown.Parent := nil;
-  FreeAndNil(FPopupAutoCompleteDropDown);
   PopupExplorerDropDown.Parent := nil;
-  FreeAndNil(FPopupExplorerDropDown);
   FreeAndNil(FPopupAutoCompleteOptions);   // Make sure popup is freed before Options container
   FreeAndNil(FPopupExplorerOptions);      // Make sure popup is freed before Options container
   FreeAndNil(FEditNamespace);
@@ -12021,9 +12061,9 @@ begin
         begin
           R := BackGroundRect(crImage);
           if Enabled then
-            DrawThemeIcon(ThemeEdit, PaintDC, EP_EDITTEXT, ETS_NORMAL, R, SmallSysImages.Handle, ImageIndex)
+            DrawThemeIcon(ThemeEdit, PaintDC, EP_EDITTEXT, ETS_NORMAL, R, SmallSysImagesForPPI(FCurrentPPI).Handle, ImageIndex)
           else
-            DrawThemeIcon(ThemeEdit, PaintDC, EP_EDITTEXT, ETS_DISABLED, R, SmallSysImages.Handle, ImageIndex);
+            DrawThemeIcon(ThemeEdit, PaintDC, EP_EDITTEXT, ETS_DISABLED, R, SmallSysImagesForPPI(FCurrentPPI).Handle, ImageIndex);
         end;
       end else
       begin
@@ -12047,7 +12087,7 @@ begin
         if Active and (not ComboEdit.IsEditing or (csDesigning in ComponentState)) then
         begin
           R := BackGroundRect(crImage);
-          ImageList_DrawEx(SmallSysImages.Handle, ImageIndex, PaintDC,
+          ImageList_DrawEx(SmallSysImagesForPPI(FCurrentPPI).Handle, ImageIndex, PaintDC,
             R.Left, R.Top, R.Right - R.Left, R.Bottom - R.Top, rgbBk, CLR_NONE, ILD_NORMAL);
         end;
       end;
@@ -12987,8 +13027,6 @@ begin
   Visible := False;
   DropDownCount := 8;
   ComboBoxStyle := cbsClassic;
-  if Screen.PixelsPerInch <> 96 then
-    PopupExplorerTree.ScaleForPPI(Screen.PixelsPerInch);
 end;
 
 destructor TPopupExplorerDropDown.Destroy;
@@ -13186,10 +13224,12 @@ begin
     if poThemeAware in Value then
     begin
       PaintOptions := PaintOptions + [toThemeAware];
+      VETFolderOptions := VETFolderOptions - [toNoUseVETColorsProp];
       RemoteScrollbar.Options := RemoteScrollbar.Options + [soThemeAware]
     end else
     begin
       PaintOptions := PaintOptions - [toThemeAware];
+      VETFolderOptions := VETFolderOptions - [toNoUseVETColorsProp];
       RemoteScrollbar.Options := RemoteScrollbar.Options - [soThemeAware]
     end
 end;
@@ -15071,8 +15111,6 @@ begin
   PopupAutoCompleteTree.TreeOptions.SelectionOptions := DefaultPopupSelectionOptions;
   WheelMouseTarget := PopupAutoCompleteTree;
   DropDownCount := 8;
-  if Screen.PixelsPerInch <> 96 then
-    PopupAutoCompleteTree.ScaleForPPI(Screen.PixelsPerInch);
 end;
 
 function TPopupAutoCompleteDropDown.CreatePopupAutoCompleteTree: TPopupAutoCompleteTree;
