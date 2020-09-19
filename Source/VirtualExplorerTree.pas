@@ -1,4 +1,4 @@
-unit VirtualExplorerTree;
+﻿unit VirtualExplorerTree;
 
 // Version 2.4.0
 //
@@ -3634,12 +3634,12 @@ begin
   FSelectedFiles := TStringList.Create;
 
   {$IF CompilerVersion >= 33}
-  FScaledSmallSysImages := TCommonVirtualImageList.Create(Owner);
+  FScaledSmallSysImages := TCommonVirtualImageList.Create(Self);
   FScaledSmallSysImages.SourceImageList := SmallSysImages;
   FScaledSmallSysImages.SetSize(MulDiv(SmallSysImages.Width, 96, Screen.PixelsPerInch),
     MulDiv(SmallSysImages.Height, 96, Screen.PixelsPerInch));
 
-  FScaledLargeSysImages := TCommonVirtualImageList.Create(Owner);
+  FScaledLargeSysImages := TCommonVirtualImageList.Create(Self);
   FScaledLargeSysImages.SourceImageList := LargeSysImages;
   FScaledLargeSysImages.SetSize(MulDiv(LargeSysImages.Width, 96, Screen.PixelsPerInch),
     MulDiv(LargeSysImages.Height, 96, Screen.PixelsPerInch));
