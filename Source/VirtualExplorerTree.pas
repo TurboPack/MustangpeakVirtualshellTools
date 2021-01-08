@@ -3842,6 +3842,7 @@ end;
 
 destructor TCustomVirtualExplorerTree.Destroy;
 begin
+  Images := nil;
   // Clear the Tree in case the app accesses any of the helper objects
   ShellNotifyManager.UnRegisterExplorerWnd(Self);
   FreeAndNil(FEnumBkGndList);
