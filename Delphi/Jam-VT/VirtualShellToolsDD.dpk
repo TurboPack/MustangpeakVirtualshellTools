@@ -58,6 +58,6 @@ requires
   VirtualShellToolsD;
 
 contains
-  VirtualShellToolsReg in '..\Design\VirtualShellToolsReg.pas';
+  VirtualShellToolsReg in '..\..\Design\VirtualShellToolsReg.pas';
 
 end.
