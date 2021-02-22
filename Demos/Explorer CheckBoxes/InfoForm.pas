@@ -5,7 +5,7 @@ interface
 uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
   StdCtrls, MPShellUtilities, ComCtrls, ExtCtrls, ImgList, ShlObj, ShellAPI,
-  ActiveX, ComObj, ToolWin;
+  ActiveX, ComObj, ToolWin, System.ImageList;
 
 type
   TFormInfo = class(TForm)
@@ -219,7 +219,7 @@ begin
   CheckBox24.Checked := Assigned(NS.ShellDetailsInterface);
   CheckBox23.Checked := Assigned(NS.QueryInfoInterface);
   CheckBox25.Checked := Assigned(NS.ContextMenu3Interface);
-  CheckBox28.Checked := Assigned(NS.ShellLink) and Assigned(NS.ShellLink.ShellLinkAInterface);
+  CheckBox28.Checked := Assigned(NS.ShellLink) and Assigned(NS.ShellLink.ShellLinkWInterface);
   CheckBox26.Checked := Assigned(NS.ExtractImage) and Assigned(NS.ExtractImage.ExtractImageInterface);
   CheckBox27.Checked := Assigned(NS.ExtractImage) and Assigned(NS.ExtractImage.ExtractImage2Interface);
   CheckBox1.Checked := Assigned(NS.ShellIconInterface);
