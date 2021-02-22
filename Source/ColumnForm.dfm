@@ -116,7 +116,6 @@ object FormColumnSettings: TFormColumnSettings
     Width = 265
     Height = 186
     Anchors = [akLeft, akTop, akRight, akBottom]
-    CheckImageKind = ckXP
     Header.AutoSizeIndex = 0
     Header.DefaultHeight = 17
     Header.Font.Charset = DEFAULT_CHARSET

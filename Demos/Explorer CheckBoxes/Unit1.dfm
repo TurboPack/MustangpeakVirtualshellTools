@@ -1,9 +1,9 @@
 object Form1: TForm1
   Left = 274
   Top = 180
-  Width = 667
-  Height = 459
   Caption = 'Form1'
+  ClientHeight = 420
+  ClientWidth = 651
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -20,12 +20,13 @@ object Form1: TForm1
   object Splitter1: TSplitter
     Left = 241
     Top = 0
-    Height = 301
+    Height = 296
+    ExplicitHeight = 301
   end
   object StatusBar1: TStatusBar
     Left = 0
-    Top = 406
-    Width = 659
+    Top = 401
+    Width = 651
     Height = 19
     AutoHint = True
     Panels = <>
@@ -33,8 +34,8 @@ object Form1: TForm1
   end
   object Panel3: TPanel
     Left = 0
-    Top = 301
-    Width = 659
+    Top = 296
+    Width = 651
     Height = 105
     Align = alBottom
     BevelOuter = bvLowered
@@ -120,7 +121,7 @@ object Form1: TForm1
     object TreeMemo: TMemo
       Left = 161
       Top = 3
-      Width = 495
+      Width = 487
       Height = 99
       Align = alClient
       ScrollBars = ssVertical
@@ -131,10 +132,9 @@ object Form1: TForm1
     Left = 0
     Top = 0
     Width = 241
-    Height = 301
+    Height = 296
     Active = True
     Align = alLeft
-    CheckImageKind = ckLightTick
     ColumnDetails = cdUser
     DefaultNodeHeight = 17
     DragHeight = 250
@@ -143,11 +143,7 @@ object Form1: TForm1
     FileSizeFormat = fsfExplorer
     FileSort = fsFileType
     Header.AutoSizeIndex = 0
-    Header.Font.Charset = DEFAULT_CHARSET
-    Header.Font.Color = clWindowText
-    Header.Font.Height = -11
-    Header.Font.Name = 'MS Shell Dlg 2'
-    Header.Font.Style = []
+    Header.Height = 17
     Header.MainColumn = -1
     Header.Options = [hoColumnResize, hoDrag]
     HintMode = hmHint
@@ -172,11 +168,10 @@ object Form1: TForm1
   object SysList: TVirtualExplorerListview
     Left = 244
     Top = 0
-    Width = 415
-    Height = 301
+    Width = 407
+    Height = 296
     Active = True
     Align = alClient
-    CheckImageKind = ckLightTick
     ColumnDetails = cdShellColumns
     DefaultNodeHeight = 17
     DragHeight = 250
@@ -185,11 +180,7 @@ object Form1: TForm1
     FileSizeFormat = fsfExplorer
     FileSort = fsFileType
     Header.AutoSizeIndex = -1
-    Header.Font.Charset = DEFAULT_CHARSET
-    Header.Font.Color = clWindowText
-    Header.Font.Height = -11
-    Header.Font.Name = 'MS Shell Dlg 2'
-    Header.Font.Style = []
+    Header.Height = 17
     Header.Options = [hoColumnResize, hoDrag, hoShowSortGlyphs, hoVisible]
     Header.SortColumn = 0
     HintMode = hmHint

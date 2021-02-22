@@ -289,7 +289,6 @@ begin
   CheckBoxLiveUpdate.Caption := STR_COLUMNDLG_CHECKBOXLIVEUPDATE;
   ButtonOk.Caption := STR_COLUMNDLG_BUTTONOK;
   ButtonCancel.Caption := STR_COLUMNDLG_BUTTONCANCEL;
-  VSTColumnNames.CheckImageKind := COLUMNDLG_CHKSTYLE;
 end;
 
 procedure TFormColumnSettings.VSTColumnNamesGetText(Sender: TBaseVirtualTree;

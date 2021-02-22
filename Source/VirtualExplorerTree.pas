@@ -1762,6 +1762,7 @@ type
     property OnAfterItemPaint;
     property OnAfterPaint;
     property OnBeforeCellPaint;
+    property OnBeforeGetCheckState;
     property OnBeforeItemErase;
     property OnBeforeItemPaint;
     property OnBeforePaint;
@@ -1945,6 +1946,7 @@ type
     property OnAfterItemPaint;
     property OnAfterPaint;
     property OnBeforeCellPaint;
+    property OnBeforeGetCheckState;
     property OnBeforeItemErase;
     property OnBeforeItemPaint;
     property OnBeforePaint;
