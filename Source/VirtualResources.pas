@@ -55,6 +55,7 @@ const
   WM_CHANGENOTIFY_CUSTOM = WM_VETBASE + 9;
   WM_UPDATESCROLLBAR = WM_VETBASE + 10;       // Signal TDropDownWnd to update scrollbar
   WM_VTSETTHREADMARK = WM_VETBASE + 11;
+  WM_FOLDERCHANGENOTIFY = WM_VETBASE + 11;
 
 // <FR changes 2005-11-09>
 // Const were changed to var of string type, to allow customization
