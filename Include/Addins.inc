@@ -27,7 +27,7 @@
 // if you forget to add the packages to the "Requires" section.
 
 // Define USE_TOOLBAR_TB2K if you use Toolbar 2000, SpTBXLib
-{.$DEFINE USE_TOOLBAR_TB2K}
+{$DEFINE USE_TOOLBAR_TB2K}
 // Define SpTBX if you use SpTBXLib
 {.$DEFINE SpTBX}
 

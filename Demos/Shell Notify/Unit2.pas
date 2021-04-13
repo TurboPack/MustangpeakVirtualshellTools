@@ -85,7 +85,7 @@ begin
     Node2 := Treeview1.Items.AddChild(Node, 'Item 1');
     if Assigned(NS1) then
     begin
-      Node3 := Treeview1.Items.AddChild(Node2, 'PIDL 1 = ' + IntToStr( Integer(PIDL1)));
+      Node3 := Treeview1.Items.AddChild(Node2, 'PIDL 1 = ' + IntToStr( NativeInt(PIDL1)));
       Treeview1.Items.AddChild(Node3, 'ItemID Count = ' + IntToStr( PIDLMgr.IDCount(PIDL1)));
       Treeview1.Items.AddChild(Node3, 'Path = ' + NS1.NameParseAddress);
     end else
@@ -97,7 +97,7 @@ begin
     Node2 := Treeview1.Items.AddChild(Node, 'Item 2');
     if Assigned(NS2) then
     begin
-      Node3 := Treeview1.Items.AddChild(Node2, 'PIDL 2 = ' + IntToStr( Integer(PIDL2)));
+      Node3 := Treeview1.Items.AddChild(Node2, 'PIDL 2 = ' + IntToStr( NativeInt(PIDL2)));
       Treeview1.Items.AddChild(Node3, 'ItemID Count = ' + IntToStr( PIDLMgr.IDCount(PIDL2)));
       Treeview1.Items.AddChild(Node3, 'Path = ' + NS2.NameParseAddress);
     end else

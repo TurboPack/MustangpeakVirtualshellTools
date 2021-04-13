@@ -52,7 +52,7 @@ procedure TForm1.VirtualExplorerEasyListview1CustomColumnCompare(
   var CompareResult: Integer);
 begin
   // sort on something silly like the item pointers
-  CompareResult := Integer( Item1) - Integer( Item2);
+  CompareResult := NativeInt(Item1) - NativeInt(Item2);
   if Column.SortDirection = esdDescending then
     CompareResult := -CompareResult;
 end;
@@ -62,7 +62,7 @@ procedure TForm1.VirtualExplorerEasyListview1CustomColumnGetCaption(
   Item: TExplorerItem; var Caption: string);
 begin
   // Something silly and unique
-  Caption := IntToStr( Integer(Item))
+  Caption := IntToStr(NativeInt(Item))
 end;
 
 end.

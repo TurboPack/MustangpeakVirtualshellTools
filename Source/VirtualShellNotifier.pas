@@ -319,7 +319,7 @@ type
 
     procedure CreateNotifyWindow;
     procedure DestroyNotifyWindow;
-    function NotifyWndProc(Wnd: HWND; Msg: UINT; wParam, lParam: LPARAM): LRESULT; stdcall;
+    function NotifyWndProc(Wnd: HWND; Msg: UINT; wParam: WPARAM; lParam: LPARAM): LRESULT; stdcall;
     procedure RegisterChangeNotify;
     procedure UnRegisterChangeNotify;
 
@@ -1075,7 +1075,7 @@ begin
       begin
         // Had some strange AV's that may be related to this call
         // See if this fixes it. 1/22/03
-  //      PackMessages(TempList);
+        //PackMessages(TempList);
         List := ControlList.LockList;
         try
           TempList.ID := IDCounter;
@@ -1168,7 +1168,7 @@ begin
         DoTrigger := True;
         Result := True;
       end else
-        // Yes it is already resistered
+        // Yes it is already registered
         Result := True
     end
     else begin
@@ -1907,8 +1907,7 @@ begin
 end;
 
 
-function TVirtualShellChangeThread.NotifyWndProc(Wnd: HWND; Msg: UINT;
-  wParam, lParam: LPARAM): LRESULT;
+function TVirtualShellChangeThread.NotifyWndProc(Wnd: HWND; Msg: UINT; wParam: WPARAM; lParam: LPARAM): LRESULT;
 
       procedure AddEventToList(Event: LongWord; SNR: PShellNotifyRec; W1, W2: DWORD);
       begin
@@ -2239,7 +2238,7 @@ begin
             AddingEvents := False;
 
             // for debugging
-        //    DoneAdding := True;               
+            //DoneAdding := True;
           finally
             LeaveCriticalSection(FAddLock);
           end;
@@ -2734,7 +2733,7 @@ begin
         TVirtualReferenceCountedList(EList[i]).FRefCount := VList.Count;
         for j := 0 to VList.Count - 1 do
         begin
-          NotifyMsg.wParam := Integer(TVirtualShellEventList(EList[i]));
+          NotifyMsg.wParam := WParam(TVirtualShellEventList(EList[i]));
           if TWinControl(VList[j]).GetInterface(IVirtualShellNotify, ShellNotify) then
             ShellNotify.Notify(NotifyMsg);
         end;

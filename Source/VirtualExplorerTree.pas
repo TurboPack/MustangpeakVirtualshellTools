@@ -183,8 +183,6 @@ const
 
   INVALIDFILECHAR = ['/', '\', ':', '*', '?', '"', '<', '>', '|'];
 
-  ID_HARDREFRESHTIMER = 204;
-
   TID_ICON = TID_START + 9990;
   TID_EXPANDMARK = TID_START + 9991;
 
@@ -1327,8 +1325,6 @@ type
     FVETState: TVETStates;
     FDisableWaitCursors: Boolean;
     FOnRootRebuild: TVETOnRootRebuild;
-    FShellNotifyTimerHandle: THandle;
-    FShellNotifyQueue: TList;
     FExpandingByButtonClick: Boolean;
     FShellContextSubMenu: TPopupMenu;
     FShellContextSubMenuCaption: string;
@@ -1576,8 +1572,6 @@ type
     property ShellContextSubMenu: TPopupMenu read FShellContextSubMenu write FShellContextSubMenu;
     property ShellContextSubMenuCaption: string read FShellContextSubMenuCaption write FShellContextSubMenuCaption;
     property OkToShellNotifyDispatch: Boolean read GetOkToShellNotifyDispatch;   // IShellNotify
-    property ShellNotifyQueue: TList read FShellNotifyQueue write FShellNotifyQueue;
-    property ShellNotifyTimerHandle: THandle read FShellNotifyTimerHandle write FShellNotifyTimerHandle;
     property SortHelper: TShellSortHelper read FSortHelper write FSortHelper;
     property ThreadedEnum: Boolean read FThreadedEnum write FThreadedEnum default False;
     property ThreadedImagesEnabled: Boolean read FThreadedImagesEnabled write SetThreadedImagesEnabled;
@@ -3142,9 +3136,9 @@ end;
 function TCustomVirtualExplorerTree.GetOkToShellNotifyDispatch: Boolean;
 begin
   if Assigned(ContextMenuManager) then
-    Result := not(IsAnyEditing or Dragging or ShellNotifySuspended or ContextMenuManager.MenuShown)
+    Result := not (IsAnyEditing or Dragging or ShellNotifySuspended or ContextMenuManager.MenuShown)
   else
-    Result := not(IsAnyEditing or Dragging or ShellNotifySuspended);
+    Result := not (IsAnyEditing or Dragging or ShellNotifySuspended);
 end;
 
 function TCustomVirtualExplorerTree.GetSelectedPIDL: PItemIDList;
@@ -3620,7 +3614,6 @@ begin
   ColumnMenu := TColumnMenu.Create(Self);
   ColumnMenuItemCount := 8;
   AutoFireChangeLink := True;
-  FShellNotifyQueue := TList.Create;
   RootFolder := rfDesktop;
   OnDragOver := DummyOnDragOver;
   FFileObjects := [foFolders];
@@ -3863,7 +3856,6 @@ begin
   FreeAndNil(FContextMenuManager);
   FreeAndNil(FSelectedPaths);
   FreeAndNil(FSelectedFiles);
-  FreeAndNil(FShellNotifyQueue);
   { In case we were using the hidden root node with toHideRootNode }
   FreeAndNil(PNodeData(InternalData(RootNode))^.Namespace);
   // Support Halt( );
@@ -4861,7 +4853,7 @@ begin
     begin
       StorageNode := Storage.Find(NS.AbsolutePIDL, [stUser, stChecks, stColumns]);
       if not NS.SetNameOf(Text) then
-        PostMessage(Handle, WM_INVALIDFILENAME, Integer( Node), 0)
+        PostMessage(Handle, WM_INVALIDFILENAME, WParam(Node), 0)
       else begin
         NS.InvalidateCache;
         // Update the storage with the new name
