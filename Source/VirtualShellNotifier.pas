@@ -2282,7 +2282,7 @@ begin
           WorkingList.UnlockList
         end;
         TempList.FRefCount := 1;
-        PostMessage(ChangeNotifier.Listener, WM_SHELLNOTIFY, Longword(TempList), 0)
+        PostMessage(ChangeNotifier.Listener, WM_SHELLNOTIFY, WPARAM(TempList), 0)
       end
     except
       // trap all exceptions

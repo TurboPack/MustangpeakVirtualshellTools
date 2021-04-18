@@ -527,7 +527,7 @@ begin
         begin
           Mem := AllocMem(AvailableBytes + 1);
           if ReadFile(PipeIn, Mem^, AvailableBytes, BytesRead, nil) then
-            PostMessage(TargetWnd, WM_NEWINPUT, LPARAM(Mem), 0);
+            PostMessage(TargetWnd, WM_NEWINPUT, WPARAM(Mem), 0);
         end
       end;
       if PeekNamedPipe(PipeErrorIn, nil, 0, nil, @AvailableBytes, nil) then
@@ -536,7 +536,7 @@ begin
         begin
           Mem := AllocMem(AvailableBytes + 1);
           if ReadFile(PipeErrorIn, Mem^, AvailableBytes, BytesRead, nil) then
-            PostMessage(TargetWnd, WM_ERRORINPUT, LPARAM(Mem), 0);
+            PostMessage(TargetWnd, WM_ERRORINPUT, WPARAM(Mem), 0);
         end
       end
     end

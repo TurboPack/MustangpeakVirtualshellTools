@@ -554,9 +554,9 @@ function TAppletsAndWizards.NetworkShare(Wizard: TShareWizard): Boolean;
 begin
   Result := False;
   if Win32Platform = VER_PLATFORM_WIN32_NT then
-    case Integer(Wizard) of
-      0: Launch(S_NETWORKSHARE + 'ShareCreate');
-      1: Launch(S_NETWORKSHARE + 'ShareManage');
+    case Wizard of
+      swCreate: Launch(S_NETWORKSHARE + 'ShareCreate');
+      swManage: Launch(S_NETWORKSHARE + 'ShareManage');
     end
 end;
 

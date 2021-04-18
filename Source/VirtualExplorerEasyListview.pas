@@ -6699,12 +6699,12 @@ var
 begin
   if Assigned(ContextMenuItem) then
   begin
-    if HiWord(Longword( TMessage( Msg).wParam)) and MF_POPUP <> 0 then
-      ChildMenu := GetSubMenu(LongWord( TMessage( Msg).lParam), LoWord(Longword( TMessage( Msg).wParam)))
+    if Msg.MenuFlag and MF_POPUP <> 0 then
+      ChildMenu := GetSubMenu(Msg.Menu, Msg.IDItem)
     else
       ChildMenu := 0;
-    DoContextMenuSelect((ContextMenuItem as TExplorerItem).Namespace, LoWord(Longword( TMessage( Msg).wParam)), ChildMenu,
-      HiWord(Longword( TMessage( Msg).wParam)) and MF_MOUSESELECT <> 0);
+    DoContextMenuSelect((ContextMenuItem as TExplorerItem).Namespace, Msg.IDItem,
+      ChildMenu, Msg.MenuFlag  and MF_MOUSESELECT <> 0);
   end
 end;
 
