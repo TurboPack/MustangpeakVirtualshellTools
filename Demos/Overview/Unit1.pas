@@ -490,7 +490,7 @@ End;
 
 Procedure TForm1.ButtonSetRootFolderClick(Sender: TObject);
 Begin
-  If DirectoryExists(EditCustomRootFolderPath.Text) Then
+  If SysUtils.DirectoryExists(EditCustomRootFolderPath.Text) Then
     VET1.RootFolderCustomPath := EditCustomRootFolderPath.Text
 End;
 
@@ -832,7 +832,7 @@ End;
 
 Procedure TForm1.ComboBoxHintAnimationChange(Sender: TObject);
 Begin
-  VET1.HintAnimation := THintAnimationType(ComboBoxHintAnimation.ItemIndex);
+//  VET1.HintAnimation := THintAnimationType(ComboBoxHintAnimation.ItemIndex);
 End;
 
 Procedure TForm1.ComboBoxRootFolderChange(Sender: TObject);
@@ -1104,7 +1104,7 @@ End;
 
 Procedure TForm1.SetCustomRootPath;
 Begin
-  If DirectoryExists(EditCustomRootFolderPath.Text) And FEditCustomRootFolderPathDirty Then Begin
+  If SysUtils.DirectoryExists(EditCustomRootFolderPath.Text) And FEditCustomRootFolderPathDirty Then Begin
     VET1.RootFolderCustomPath := EditCustomRootFolderPath.Text;
     FEditCustomRootFolderPathDirty := False
   End
