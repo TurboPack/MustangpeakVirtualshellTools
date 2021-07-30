@@ -134,6 +134,10 @@ uses
   SpTBXEditors,
   {$ENDIF SpTBX}
   Registry,
+  VirtualTrees.DataObject,
+  VirtualTrees.EditLink,
+  VirtualTrees.Header,
+  VirtualTrees.Types,
   VirtualTrees,
   MPShellUtilities,
   VirtualScrollbars,
@@ -2917,6 +2921,7 @@ implementation
 
 uses
   TypInfo,
+  VirtualTrees.DragnDrop,
   {$IFDEF SpTBX}
   ColumnFormSpTBX,
   {$ELSE}
@@ -9287,7 +9292,7 @@ begin
       end
     end
   end;
-  EnumFormatEtc := TEnumFormatEtc.Create(Owner, Temp);
+  EnumFormatEtc := TEnumFormatEtc.Create(Temp);
   if Assigned(EnumFormatEtc) then
     Result := S_OK
 end;
