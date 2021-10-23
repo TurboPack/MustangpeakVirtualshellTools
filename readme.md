@@ -35,8 +35,8 @@ MustangpeakVirtualShellTools package names have the following form:
 To install MustangpeakVirtualShellTools into your IDE, take the following
 steps:
 
-  1. Install first [MustangpeakCommonLib](https://github.com/pyscripter/MustangpeakCommonLib),
-    [MustangpeakEasyListView](https://github.com/pyscripter/MustangpeakEasyListView) and
+  1. Install first [MustangpeakCommonLib]((https://github.com/TurboPack/MustangpeakCommonLib),
+    [MustangpeakEasyListView](https://github.com/TurboPack/MustangpeakEasyListView) and
     [Virtual-TreeView](https://github.com/Virtual-TreeView/Virtual-TreeView).
 
   2. Clone or download and unzip the Github repository into a directory (e.g., D:\MustangpeakVirtualShellTools). 
