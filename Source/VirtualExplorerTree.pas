@@ -3636,13 +3636,9 @@ begin
   {$IF CompilerVersion >= 33}
   FScaledSmallSysImages := TCommonVirtualImageList.Create(Self);
   FScaledSmallSysImages.SourceImageList := SmallSysImages;
-  FScaledSmallSysImages.SetSize(MulDiv(SmallSysImages.Width, 96, Screen.PixelsPerInch),
-    MulDiv(SmallSysImages.Height, 96, Screen.PixelsPerInch));
 
   FScaledLargeSysImages := TCommonVirtualImageList.Create(Self);
   FScaledLargeSysImages.SourceImageList := LargeSysImages;
-  FScaledLargeSysImages.SetSize(MulDiv(LargeSysImages.Width, 96, Screen.PixelsPerInch),
-    MulDiv(LargeSysImages.Height, 96, Screen.PixelsPerInch));
   {$IFEND}
 
   { Remove any weird clipboard formats.  The IDataObject will handle that.      }
