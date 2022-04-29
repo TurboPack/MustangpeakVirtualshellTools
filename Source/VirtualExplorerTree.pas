@@ -1073,8 +1073,8 @@ type
   public
     function CalculatePopupPoint(Node: PVirtualNode): TPoint;
     constructor Create(AnOwner: TCustomVirtualExplorerTree);
-    procedure HandleContextMenuMsg(Msg, wParam, lParam: integer; var Result: LRESULT);
-    procedure MenuSelect(Msg, wParam, lParam: integer; var Result: LRESULT);
+    procedure HandleContextMenuMsg(AMsg: Cardinal; AWParam: WPARAM; ALParam: LPARAM; var AResult: LRESULT);
+    procedure MenuSelect(AMsg: Cardinal; AWParam: WPARAM; ALParam: LPARAM; var AResult: LRESULT);
     procedure ResetState;
     procedure RightClick(XPos, YPos: Integer; ButtonState: TButtonState; Coordinates: TCoordType);
     function ShowContextMenuOfActiveNode(Point: TPoint): Boolean;
@@ -9057,33 +9057,31 @@ begin
   FOwner := AnOwner;
 end;
 
-procedure TContextMenuManager.HandleContextMenuMsg(Msg, wParam,
-  lParam: Integer; var Result: LRESULT);
+procedure TContextMenuManager.HandleContextMenuMsg(AMsg: Cardinal; AWParam: WPARAM; ALParam: LPARAM; var AResult: LRESULT);
 var
-  NS: TNamespace;
+  lNS: TNamespace;
 begin
   if Assigned(Owner) then
-    if Owner.ValidateNamespace(ActiveNode, NS) then
-      NS.HandleContextMenuMsg(Msg, wParam, lParam, Result);
+    if Owner.ValidateNamespace(ActiveNode, lNS) then
+      lNS.HandleContextMenuMsg(AMsg, AWParam, ALParam, AResult);
 end;
 
-procedure TContextMenuManager.MenuSelect(Msg, wParam, lParam: integer;
-  var Result: LRESULT);
+procedure TContextMenuManager.MenuSelect(AMsg: Cardinal; AWParam: WPARAM; ALParam: LPARAM; var AResult: LRESULT);
 var
-  NS: TNamespace;
-  ChildMenu: hMenu;
+  lChildMenu: hMenu;
+  lNS: TNamespace;
 begin
   if Assigned(Owner) then
   begin
     if MenuShown then
-      if Owner.ValidateNamespace(ActiveNode, NS) then
+      if Owner.ValidateNamespace(ActiveNode, lNS) then
       begin
-        if HiWord(Longword( wParam)) and MF_POPUP <> 0 then
-          ChildMenu := GetSubMenu(LongWord( lParam), LoWord(Longword( wParam)))
+        if HiWord(AWParam) and MF_POPUP <> 0 then
+          lChildMenu := GetSubMenu(ALParam, LoWord(AWParam))
         else
-          ChildMenu := 0;
-        Owner.DoContextMenuSelect(NS, LoWord(Longword( wParam)), ChildMenu,
-          HiWord(Longword( wParam)) and MF_MOUSESELECT <> 0);
+          lChildMenu := 0;
+        Owner.DoContextMenuSelect(lNS, LoWord(AWParam), lChildMenu,
+          HiWord(AWParam) and MF_MOUSESELECT <> 0);
       end
   end
 end;
