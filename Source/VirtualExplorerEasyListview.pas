@@ -2222,6 +2222,10 @@ end;
 { TVirtualEasyListview }
 
 constructor TCustomVirtualExplorerEasyListview.Create(AOwner: TComponent);
+{$IF CompilerVersion >= 33}
+var
+  lImageList: TCommonVirtualImageList;
+{$IFEND}
 begin
   inherited Create(AOwner);
   Active := False;
@@ -2243,6 +2247,21 @@ begin
   RootFolder := rfDesktop;
   FFileObjects := [foFolders, foNonFolders];
   FOptions := [eloBrowseExecuteFolder, eloBrowseExecuteFolderShortcut, eloBrowseExecuteZipFolder, eloExecuteOnDblClick, eloThreadedImages, eloThreadedDetails];
+
+{$IF CompilerVersion >= 33}
+  lImageList := TCommonVirtualImageList.Create(Self);
+  lImageList.SourceImageList := SmallSysImages;
+  ScaledImagesSmall := lImageList;
+
+  lImageList := TCommonVirtualImageList.Create(Self);
+  lImageList.SourceImageList := LargeSysImages;
+  ScaledImagesLarge := lImageList;
+
+  lImageList := TCommonVirtualImageList.Create(Self);
+  lImageList.SourceImageList := ExtraLargeSysImages;
+  ScaledImagesExLarge := lImageList;
+{$IFEND}
+
   ImagesSmall := SmallSysImages;
   ImagesLarge := LargeSysImages;
   ImagesExLarge := ExtraLargeSysImages;
@@ -7928,11 +7947,26 @@ end;
 
 { TCustomVirtualDropStack}
 constructor TCustomVirtualDropStack.Create(AOwner: TComponent);
+{$IF COMPILERVERSION >= 33}
+var
+  lImageList: TCommonVirtualImageList;
+{$IFEND}
 begin
   inherited Create(AOwner);
   HintItemCount := 16;
   StackDepth := 64;
   DragManager.Enabled := True;
+
+{$IF COMPILERVERSION >= 33}
+  lImageList := TCommonVirtualImageList.Create(Self);
+  lImageList.SourceImageList := SmallSysImages;
+  ScaledImagesSmall := lImageList;
+
+  lImageList := TCommonVirtualImageList.Create(Self);
+  lImageList.SourceImageList := LargeSysImages;
+  ScaledImagesLarge := lImageList;
+{$IFEND}
+
   ImagesSmall := SmallSysImages;
   ImagesLarge := LargeSysImages;
   Selection.UseFocusRect := False;
