@@ -2945,6 +2945,15 @@ var
   ExpandMarkThread: TCommonThreadManager;
 
 
+function GetOwnerCustomForm(const ASelf: TComponent): TComponent;
+begin
+  Result := ASelf;
+  while Assigned(Result) and not (Result is TCustomForm) do
+    Result := Result.Owner;
+  if Result = nil then
+    Result := ASelf;
+end;
+
 function ExpandMarkThreadManager: TCommonThreadManager;
 begin
   if not Assigned(ExpandMarkThread) then
@@ -11672,11 +11681,8 @@ begin
 end;
 
 function TCustomVirtualExplorerCombobox.CreatePopupAutoCompleteDropDown: TPopupAutoCompleteDropDown;
-
-// Overridable to create a custom version of TPopupAutoCompleteDropDown
-
 begin
-  Result := TPopupAutoCompleteDropDown.Create(Self)
+  Result := TPopupAutoCompleteDropDown.Create(GetOwnerCustomForm(Self));
 end;
 
 function TCustomVirtualExplorerCombobox.CreatePopupExplorerOptions: TPopupExplorerOptions;
@@ -11687,12 +11693,10 @@ begin
   Result := TPopupExplorerOptions.Create
 end;
 
-function TCustomVirtualExplorerCombobox.CreatePopupExplorerDropDown: TPopupExplorerDropDown;
-
 // Overridable to create a custom version of TPopupExplorerOptions
-
+function TCustomVirtualExplorerCombobox.CreatePopupExplorerDropDown: TPopupExplorerDropDown;
 begin
-   Result := TPopupExplorerDropDown.Create(Self)
+  Result := TPopupExplorerDropDown.Create(GetOwnerCustomForm(Self));
 end;
 
 procedure TCustomVirtualExplorerCombobox.CreateWnd;
@@ -13137,12 +13141,11 @@ begin
   RefreshScrollbar
 end;
 
-function TPopupExplorerDropDown.CreatePopupExplorerTree: TPopupExplorerTree;
-
 // Overridable so a decendant of TPopupExplorerTree may be created
 
+function TPopupExplorerDropDown.CreatePopupExplorerTree: TPopupExplorerTree;
 begin
-  Result := TPopupExplorerTree.Create(Self);
+  Result := TPopupExplorerTree.Create(GetOwnerCustomForm(Self));
 end;
 
 procedure TPopupExplorerDropDown.KeyPressDispatch(var Message: TMessage; var Handled: Boolean);
@@ -15107,12 +15110,10 @@ begin
   DropDownCount := 8;
 end;
 
-function TPopupAutoCompleteDropDown.CreatePopupAutoCompleteTree: TPopupAutoCompleteTree;
-
 // Overridable so a decendant of TPopupAutoCompleteTree may be created and used
-
+function TPopupAutoCompleteDropDown.CreatePopupAutoCompleteTree: TPopupAutoCompleteTree;
 begin
-  Result := TPopupAutoCompleteTree.Create(Self);
+  Result := TPopupAutoCompleteTree.Create(GetOwnerCustomForm(Self));
 end;
 
 destructor TPopupAutoCompleteDropDown.Destroy;
