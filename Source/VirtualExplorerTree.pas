@@ -2459,6 +2459,7 @@ type
     procedure SetPopupOptions(const Value: TPopupOptions);
   protected
     function AllowClickInWindow(Window: HWnd; Point: TPoint): Boolean; override;
+    procedure ChangeScaleLoaded(AM, AD: Integer; AIsDpiChange: Boolean);
     function CreatePopupExplorerTree: TPopupExplorerTree; virtual;
     procedure DoRollDownInit; override;
     procedure DoRollUp(Selected: Boolean); override;
@@ -2596,6 +2597,7 @@ type
     procedure SetPopupOptions(const Value: TPopupOptions);
   protected
     function AllowClickInWindow(Window: HWnd; Point: TPoint): Boolean; override;
+    procedure ChangeScaleLoaded(AM, AD: Integer; AIsDpiChange: Boolean);
     function CreatePopupAutoCompleteTree: TPopupAutoCompleteTree; virtual;
     procedure DoRollDown(var Allow: Boolean); override;
     procedure DoRollDownInit; override;
@@ -2708,6 +2710,7 @@ type
     function CalculateEditHeight: integer;
     function CanResize(var NewWidth, NewHeight: Integer): Boolean; override;
     procedure ChangeLinkDispatch(PIDL: PItemIDList); virtual;
+    procedure ChangeScale(AM, AD: Integer; AIsDpiChange: Boolean); override;
     function CreatePopupAutoCompleteOptions: TPopupAutoCompleteOptions; virtual;
     function CreatePopupAutoCompleteDropDown: TPopupAutoCompleteDropDown; virtual;
     function CreatePopupExplorerOptions: TPopupExplorerOptions; virtual;
@@ -2944,15 +2947,6 @@ var
   // The expand marks can be very time consuming so they have their own thread
   ExpandMarkThread: TCommonThreadManager;
 
-
-function GetOwnerCustomForm(const ASelf: TComponent): TComponent;
-begin
-  Result := ASelf;
-  while Assigned(Result) and not (Result is TCustomForm) do
-    Result := Result.Owner;
-  if Result = nil then
-    Result := ASelf;
-end;
 
 function ExpandMarkThreadManager: TCommonThreadManager;
 begin
@@ -11578,6 +11572,16 @@ begin
   end
 end;
 
+procedure TCustomVirtualExplorerCombobox.ChangeScale(AM, AD: Integer; AIsDpiChange: Boolean);
+begin
+  if AIsDpiChange and (csLoading in ComponentState) then
+  begin
+    FPopupExplorerDropDown.ChangeScaleLoaded(AM, AD, AIsDpiChange);
+    FPopupAutoCompleteDropDown.ChangeScaleLoaded(AM, AD, AIsDpiChange);
+  end;
+  inherited ChangeScale(AM, AD, AIsDpiChange);
+end;
+
 procedure TCustomVirtualExplorerCombobox.CMExit(var Message: TCMExit);
 begin
   inherited;
@@ -11682,7 +11686,7 @@ end;
 
 function TCustomVirtualExplorerCombobox.CreatePopupAutoCompleteDropDown: TPopupAutoCompleteDropDown;
 begin
-  Result := TPopupAutoCompleteDropDown.Create(GetOwnerCustomForm(Self));
+  Result := TPopupAutoCompleteDropDown.Create(Self);
 end;
 
 function TCustomVirtualExplorerCombobox.CreatePopupExplorerOptions: TPopupExplorerOptions;
@@ -11696,7 +11700,7 @@ end;
 // Overridable to create a custom version of TPopupExplorerOptions
 function TCustomVirtualExplorerCombobox.CreatePopupExplorerDropDown: TPopupExplorerDropDown;
 begin
-  Result := TPopupExplorerDropDown.Create(GetOwnerCustomForm(Self));
+  Result := TPopupExplorerDropDown.Create(Self);
 end;
 
 procedure TCustomVirtualExplorerCombobox.CreateWnd;
@@ -13145,7 +13149,7 @@ end;
 
 function TPopupExplorerDropDown.CreatePopupExplorerTree: TPopupExplorerTree;
 begin
-  Result := TPopupExplorerTree.Create(GetOwnerCustomForm(Self));
+  Result := TPopupExplorerTree.Create(Self);
 end;
 
 procedure TPopupExplorerDropDown.KeyPressDispatch(var Message: TMessage; var Handled: Boolean);
@@ -13191,6 +13195,15 @@ begin
   // This will be handled by the ExplorerCombo box as so not to allow a second click
   // to redrop the window.  It is closed in the ButtonClick method of the ExplorerCombo
   Result := ExplorerCombobox.MouseInDropDownButton
+end;
+
+procedure TPopupExplorerDropDown.ChangeScaleLoaded(AM, AD: Integer; AIsDpiChange: Boolean);
+begin
+  if AIsDpiChange then
+  begin
+    FPopupExplorerTree.ChangeScale(AM, AD, AIsDpiChange);
+    ChangeScale(AM, AD, AIsDpiChange);
+  end;
 end;
 
 procedure TPopupExplorerDropDown.DoRollDownInit;
@@ -15113,12 +15126,21 @@ end;
 // Overridable so a decendant of TPopupAutoCompleteTree may be created and used
 function TPopupAutoCompleteDropDown.CreatePopupAutoCompleteTree: TPopupAutoCompleteTree;
 begin
-  Result := TPopupAutoCompleteTree.Create(GetOwnerCustomForm(Self));
+  Result := TPopupAutoCompleteTree.Create(Self);
 end;
 
 destructor TPopupAutoCompleteDropDown.Destroy;
 begin
   inherited;
+end;
+
+procedure TPopupAutoCompleteDropDown.ChangeScaleLoaded(AM, AD: Integer; AIsDpiChange: Boolean);
+begin
+  if AIsDpiChange then
+  begin
+    FPopupAutoCompleteTree.ChangeScale(AM, AD, AIsDpiChange);
+    ChangeScale(AM, AD, AIsDpiChange);
+  end;
 end;
 
 procedure TPopupAutoCompleteDropDown.DoRollDown(var Allow: Boolean);
