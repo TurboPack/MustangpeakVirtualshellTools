@@ -2222,10 +2222,8 @@ end;
 { TVirtualEasyListview }
 
 constructor TCustomVirtualExplorerEasyListview.Create(AOwner: TComponent);
-{$IF CompilerVersion >= 33}
 var
   lImageList: TCommonVirtualImageList;
-{$IFEND}
 begin
   inherited Create(AOwner);
   Active := False;
@@ -2248,23 +2246,26 @@ begin
   FFileObjects := [foFolders, foNonFolders];
   FOptions := [eloBrowseExecuteFolder, eloBrowseExecuteFolderShortcut, eloBrowseExecuteZipFolder, eloExecuteOnDblClick, eloThreadedImages, eloThreadedDetails];
 
-{$IF CompilerVersion >= 33}
   lImageList := TCommonVirtualImageList.Create(Self);
   lImageList.SourceImageList := SmallSysImages;
-  ScaledImagesSmall := lImageList;
+  lImageList.Size := TSysImageListSize.sisSmall;
+  ImagesSmall := lImageList;
 
   lImageList := TCommonVirtualImageList.Create(Self);
   lImageList.SourceImageList := LargeSysImages;
-  ScaledImagesLarge := lImageList;
+  lImageList.Size := TSysImageListSize.sisLarge;
+  ImagesLarge := lImageList;
 
   lImageList := TCommonVirtualImageList.Create(Self);
   lImageList.SourceImageList := ExtraLargeSysImages;
-  ScaledImagesExLarge := lImageList;
-{$IFEND}
+  lImageList.Size := TSysImageListSize.sisExtraLarge;
+  ImagesExLarge := lImageList;
 
-  ImagesSmall := SmallSysImages;
-  ImagesLarge := LargeSysImages;
-  ImagesExLarge := ExtraLargeSysImages;
+  lImageList := TCommonVirtualImageList.Create(Self);
+  lImageList.SourceImageList := JumboSysImages;
+  lImageList.Size := TSysImageListSize.sisJumbo;
+  ImagesJumbo := lImageList;
+
   Groups.HideFromDFM := True;
   Header.Columns.HideFromDFM := True;
   SHGetMalloc(FMalloc);
@@ -7947,28 +7948,34 @@ end;
 
 { TCustomVirtualDropStack}
 constructor TCustomVirtualDropStack.Create(AOwner: TComponent);
-{$IF COMPILERVERSION >= 33}
 var
   lImageList: TCommonVirtualImageList;
-{$IFEND}
 begin
   inherited Create(AOwner);
   HintItemCount := 16;
   StackDepth := 64;
   DragManager.Enabled := True;
 
-{$IF COMPILERVERSION >= 33}
   lImageList := TCommonVirtualImageList.Create(Self);
   lImageList.SourceImageList := SmallSysImages;
-  ScaledImagesSmall := lImageList;
+  lImageList.Size := TSysImageListSize.sisSmall;
+  ImagesSmall := lImageList;
 
   lImageList := TCommonVirtualImageList.Create(Self);
   lImageList.SourceImageList := LargeSysImages;
-  ScaledImagesLarge := lImageList;
-{$IFEND}
+  lImageList.Size := TSysImageListSize.sisLarge;
+  ImagesLarge := lImageList;
 
-  ImagesSmall := SmallSysImages;
-  ImagesLarge := LargeSysImages;
+  lImageList := TCommonVirtualImageList.Create(Self);
+  lImageList.SourceImageList := ExtraLargeSysImages;
+  lImageList.Size := TSysImageListSize.sisExtraLarge;
+  ImagesExLarge := lImageList;
+
+  lImageList := TCommonVirtualImageList.Create(Self);
+  lImageList.SourceImageList := JumboSysImages;
+  lImageList.Size := TSysImageListSize.sisJumbo;
+  ImagesJumbo := lImageList;
+
   Selection.UseFocusRect := False;
   Selection.MultiSelect := True;
   Selection.EnableDragSelect := True;
