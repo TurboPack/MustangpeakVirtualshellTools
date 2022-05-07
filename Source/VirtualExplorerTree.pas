@@ -1668,7 +1668,7 @@ type
   {$ENDIF}
   TVirtualExplorerTree = class(TCustomVirtualExplorerTree)
   public
-     property ColumnMenu;
+    property ColumnMenu;
     property SortHelper;
   published
     property Action;
