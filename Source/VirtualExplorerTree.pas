@@ -3639,9 +3639,11 @@ begin
   {$IF CompilerVersion >= 33}
   FScaledSmallSysImages := TCommonVirtualImageList.Create(Self);
   FScaledSmallSysImages.SourceImageList := SmallSysImages;
+  FScaledSmallSysImages.Size := TSysImageListSize.sisSmall;
 
   FScaledLargeSysImages := TCommonVirtualImageList.Create(Self);
   FScaledLargeSysImages.SourceImageList := LargeSysImages;
+  FScaledLargeSysImages.Size := TSysImageListSize.sisLarge;
   {$IFEND}
 
   { Remove any weird clipboard formats.  The IDataObject will handle that.      }
@@ -12063,9 +12065,9 @@ begin
         begin
           R := BackGroundRect(crImage);
           if Enabled then
-            DrawThemeIcon(ThemeEdit, PaintDC, EP_EDITTEXT, ETS_NORMAL, R, SmallSysImagesForPPI(FCurrentPPI).Handle, ImageIndex)
+            DrawThemeIcon(ThemeEdit, PaintDC, EP_EDITTEXT, ETS_NORMAL, R, SmallSysImagesCommon.GetImageList(FCurrentPPI).Handle, ImageIndex)
           else
-            DrawThemeIcon(ThemeEdit, PaintDC, EP_EDITTEXT, ETS_DISABLED, R, SmallSysImagesForPPI(FCurrentPPI).Handle, ImageIndex);
+            DrawThemeIcon(ThemeEdit, PaintDC, EP_EDITTEXT, ETS_DISABLED, R, SmallSysImagesCommon.GetImageList(FCurrentPPI).Handle, ImageIndex);
         end;
       end else
       begin
@@ -12089,7 +12091,7 @@ begin
         if Active and (not ComboEdit.IsEditing or (csDesigning in ComponentState)) then
         begin
           R := BackGroundRect(crImage);
-          ImageList_DrawEx(SmallSysImagesForPPI(FCurrentPPI).Handle, ImageIndex, PaintDC,
+          ImageList_DrawEx(SmallSysImagesCommon.GetImageList(FCurrentPPI).Handle, ImageIndex, PaintDC,
             R.Left, R.Top, R.Right - R.Left, R.Bottom - R.Top, rgbBk, CLR_NONE, ILD_NORMAL);
         end;
       end;
