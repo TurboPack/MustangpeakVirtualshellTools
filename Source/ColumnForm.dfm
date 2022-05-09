@@ -127,7 +127,7 @@ object FormColumnSettings: TFormColumnSettings
     Header.Options = [hoColumnResize, hoDrag]
     HintAnimation = hatNone
     TabOrder = 4
-    TreeOptions.AutoOptions = [toAutoDropExpand, toAutoScroll, toAutoScrollOnExpand, toAutoTristateTracking]
+    TreeOptions.AutoOptions = [toAutoDropExpand, toAutoScroll, toAutoScrollOnExpand, toAutoTristateTracking, toAutoChangeScale]
     TreeOptions.MiscOptions = [toAcceptOLEDrop, toCheckSupport, toInitOnSave, toToggleOnDblClick]
     TreeOptions.PaintOptions = [toShowButtons, toShowRoot, toThemeAware, toUseBlendedImages]
     OnChecking = VSTColumnNamesChecking

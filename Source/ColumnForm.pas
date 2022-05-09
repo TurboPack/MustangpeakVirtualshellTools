@@ -198,7 +198,7 @@ begin
     if Assigned(Node) then
     begin
       ColData := PColumnData( VSTColumnNames.GetNodeData(Node));
-      ColData.Width := StrToInt(EditPixelWidth.Text);
+      ColData.Width := MulDiv(StrToInt(EditPixelWidth.Text), CurrentPPI, Screen.DefaultPixelsPerInch);
       if CheckBoxLiveUpdate.Checked and Assigned(OnVETUpdate) then
         OnVetUpdate(Self);
     end;
@@ -215,12 +215,12 @@ begin
   if Assigned(OldNode) then
   begin
     ColData := PColumnData( Sender.GetNodeData(OldNode));
-    ColData.Width := StrToInt(EditPixelWidth.Text);
+    ColData.Width := MulDiv(StrToInt(EditPixelWidth.Text), CurrentPPI, Screen.DefaultPixelsPerInch);
   end;
   if Assigned(NewNode) then
   begin
     ColData := PColumnData( Sender.GetNodeData(NewNode));
-    EditPixelWidth.Text := IntToStr(ColData.Width);
+    EditPixelWidth.Text := MulDiv(ColData.Width, Screen.DefaultPixelsPerInch, CurrentPPI).ToString;
   end;
   Allowed := True
 end;
@@ -234,7 +234,7 @@ begin
   if Assigned(Node) then
   begin
     ColData := PColumnData( VSTColumnNames.GetNodeData(Node));
-    ColData.Width := StrToInt(EditPixelWidth.Text);
+    ColData.Width := MulDiv(StrToInt(EditPixelWidth.Text), CurrentPPI, Screen.DefaultPixelsPerInch);
   end;
   if CheckBoxLiveUpdate.Checked and Assigned(OnVETUpdate) then
     OnVetUpdate(Self);
@@ -266,10 +266,12 @@ end;
 
 procedure TFormColumnSettings.FormResize(Sender: TObject);
 const
-  TextMargin = 4;
+  cTextMargin = 4;
 var
-  B: integer;
+  B: Integer;
+  TextMargin: Integer;
 begin
+  TextMargin := MulDiv(cTextMargin, CurrentPPI, Screen.DefaultPixelsPerInch);
   B := (Width - (Label2.Width + Label3.Width + EditPixelWidth.Width)) div 2;
   Label2.Left := B - 2 * TextMargin;
   EditPixelWidth.Left := (Label2.Left + Label2.Width) + TextMargin;
