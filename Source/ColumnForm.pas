@@ -36,36 +36,35 @@ type
 
 type
   TFormColumnSettings = class(TForm)
-    Label1: TLabel;
-    Panel1: TPanel;
-    VSTColumnNames: TVirtualStringTree;
-    pnBottom: TPanel;
-    CheckBoxLiveUpdate: TCheckBox;
     Bevel1: TBevel;
-    Label3: TLabel;
-    EditPixelWidth: TEdit;
-    Label2: TLabel;
     ButtonCancel: TButton;
     ButtonOk: TButton;
-    procedure FormCreate(ASender: TObject);
-    procedure VSTColumnNamesInitNode(ASender: TBaseVirtualTree; ParentNode, Node: PVirtualNode; var InitialStates: TVirtualNodeInitStates);
-    procedure VSTColumnNamesChecking(ASender: TBaseVirtualTree; Node: PVirtualNode; var NewState: TCheckState; var Allowed: Boolean);
-    procedure VSTColumnNamesDragOver(ASender: TBaseVirtualTree; Source: TObject; Shift: TShiftState; State: TDragState; Pt: TPoint; Mode: TDropMode; var Effect: Integer; var Accept: Boolean);
-    procedure VSTColumnNamesDragAllowed(ASender: TBaseVirtualTree; Node: PVirtualNode; Column: TColumnIndex; var Allowed: Boolean);
-    procedure VSTColumnNamesDragDrop(ASender: TBaseVirtualTree; Source: TObject; DataObject: IDataObject; Formats: TFormatArray; Shift: TShiftState; Pt: TPoint; var Effect: Integer; Mode: TDropMode);
-    procedure EditPixelWidthKeyPress(ASender: TObject; var Key: Char);
-    procedure VSTColumnNamesFocusChanging(ASender: TBaseVirtualTree; OldNode, NewNode: PVirtualNode; OldColumn, NewColumn: TColumnIndex; var Allowed: Boolean);
-    procedure EditPixelWidthExit(ASender: TObject);
-    procedure VSTColumnNamesFreeNode(ASender: TBaseVirtualTree; Node: PVirtualNode);
+    CheckBoxLiveUpdate: TCheckBox;
+    EditPixelWidth: TEdit;
+    Label1: TLabel;
+    Label2: TLabel;
+    Label3: TLabel;
+    Panel1: TPanel;
+    pnBottom: TPanel;
+    VSTColumnNames: TVirtualStringTree;
     procedure CheckBoxLiveUpdateClick(ASender: TObject);
+    procedure EditPixelWidthExit(ASender: TObject);
+    procedure EditPixelWidthKeyPress(ASender: TObject; var AKey: Char);
+    procedure FormCreate(ASender: TObject);
     procedure FormKeyPress(ASender: TObject; var AKey: Char);
     procedure FormResize(ASender: TObject);
     procedure FormShow(ASender: TObject);
-    procedure VSTColumnNamesGetText(ASender: TBaseVirtualTree; Node: PVirtualNode; Column: TColumnIndex; TextType: TVSTTextType; var CellText: string);
-  private
+    procedure VSTColumnNamesChecking(ASender: TBaseVirtualTree; ANode: PVirtualNode; var ANewState: TCheckState; var AAllowed: Boolean);
+    procedure VSTColumnNamesDragAllowed(ASender: TBaseVirtualTree; ANode: PVirtualNode; AColumn: TColumnIndex; var AAllowed: Boolean);
+    procedure VSTColumnNamesDragDrop(ASender: TBaseVirtualTree; ASource: TObject; ADataObject: IDataObject; AFormats: TFormatArray; AShift: TShiftState; APoint: TPoint; var AEffect: Integer; AMode: TDropMode);
+    procedure VSTColumnNamesDragOver(ASender: TBaseVirtualTree; ASource: TObject; AShift: TShiftState; AState: TDragState; APoint: TPoint; AMode: TDropMode; var AEffect: Integer; var AAccept: Boolean);
+    procedure VSTColumnNamesFocusChanging(ASender: TBaseVirtualTree; AOldNode, NewNode: PVirtualNode; AOldColumn, ANewColumn: TColumnIndex; var AAllowed: Boolean);
+    procedure VSTColumnNamesFreeNode(ASender: TBaseVirtualTree; ANode: PVirtualNode);
+    procedure VSTColumnNamesGetText(ASender: TBaseVirtualTree; ANode: PVirtualNode; AColumn: TColumnIndex; ATextType: TVSTTextType; var ACellText: string);
+    procedure VSTColumnNamesInitNode(ASender: TBaseVirtualTree; AParentNode, ANode: PVirtualNode; var AInitialStates: TVirtualNodeInitStates);
+  strict private
     FDragNode: PVirtualNode;
     FOnVETUpdate: TVETUpdate;
-  private
     property DragNode: PVirtualNode read FDragNode write FDragNode;
   public
     property OnVETUpdate: TVETUpdate read FOnVETUpdate write FOnVETUpdate;
@@ -84,148 +83,61 @@ var
 
 implementation
 
-{$R *.DFM}
+{$R *.dfm}
 
-// < FR added 11-28-05 >
 uses
   VirtualResources;
-// </ FR added 11-28-05 >
 
 { TFormColumnSettings }
-
-procedure TFormColumnSettings.FormCreate(ASender: TObject);
-begin
-  VSTColumnNames.NodeDataSize := SizeOf(TColumnData);
-end;
-
-procedure TFormColumnSettings.VSTColumnNamesInitNode(ASender: TBaseVirtualTree; ParentNode, Node: PVirtualNode; var InitialStates: TVirtualNodeInitStates);
-var
-  ColData: PColumnData;
-begin
-  ColData := PColumnData(ASender.GetNodeData(Node));
-  Node.CheckType := ctCheckBox;
-  if ColData.Enabled then
-    Node.CheckState := csCheckedNormal
-end;
-
-procedure TFormColumnSettings.VSTColumnNamesChecking(ASender: TBaseVirtualTree; Node: PVirtualNode; var NewState: TCheckState; var Allowed: Boolean);
-var
-  ColData: PColumnData;
-begin
-  ColData := PColumnData(ASender.GetNodeData(Node));
-  ColData.Enabled := NewState = csCheckedNormal;
-  if CheckBoxLiveUpdate.Checked and Assigned(OnVETUpdate) then
-    OnVetUpdate(Self);
-  Allowed := True;
-end;
-
-procedure TFormColumnSettings.VSTColumnNamesDragOver(ASender: TBaseVirtualTree; Source: TObject; Shift: TShiftState; State: TDragState; Pt: TPoint; Mode: TDropMode; var Effect: Integer; var Accept: Boolean);
-begin
-  Accept := True;
-end;
-
-procedure TFormColumnSettings.VSTColumnNamesDragAllowed(ASender: TBaseVirtualTree; Node: PVirtualNode; Column: TColumnIndex; var Allowed: Boolean);
-begin
-  Allowed := True;
-  DragNode := Node;
-end;
-
-procedure TFormColumnSettings.VSTColumnNamesDragDrop(ASender: TBaseVirtualTree; Source: TObject; DataObject: IDataObject; Formats: TFormatArray; Shift: TShiftState; Pt: TPoint; var Effect: Integer; Mode: TDropMode);
-var
-  i, TargetIndex, SourceIndex: Integer;
-  ChildNode: PVirtualNode;
-begin
-  ChildNode := VSTColumnNames.GetFirst;
-  i := 0;
-  TargetIndex := 0;
-  SourceIndex := 0;
-  while Assigned(ChildNode) do
-  begin
-    if ChildNode = VSTColumnNames.DropTargetNode then
-      TargetIndex := i;
-    if ChildNode = DragNode then
-      SourceIndex := i;
-    Inc(i);
-    ChildNode := ChildNode.NextSibling
-  end;
-  if TargetIndex > SourceIndex then
-    VSTColumnNames.MoveTo(DragNode, VSTColumnNames.DropTargetNode, amInsertAfter, False)
-  else
-    VSTColumnNames.MoveTo(DragNode, VSTColumnNames.DropTargetNode, amInsertBefore, False);
-  if CheckBoxLiveUpdate.Checked and Assigned(OnVETUpdate) then
-    OnVetUpdate(Self);
-  DragNode := nil;
-  Effect := DROPEFFECT_NONE;
-end;
-
-procedure TFormColumnSettings.EditPixelWidthKeyPress(ASender: TObject; var Key: Char);
-var
-  ColData: PColumnData;
-  Node: PVirtualNode;
-begin
-  if ((Key < #48) or (Key > #57)) and not((Key = #8) or (Key = #13)) then
-  begin
-    Beep;
-    Key := #0;
-  end;
-  if (Key = #13) then
-  begin
-    Node := VSTColumnNames.GetFirstSelected;
-    if Assigned(Node) then
-    begin
-      ColData := PColumnData( VSTColumnNames.GetNodeData(Node));
-      ColData.Width := MulDiv(StrToInt(EditPixelWidth.Text), CurrentPPI, Screen.DefaultPixelsPerInch);
-      if CheckBoxLiveUpdate.Checked and Assigned(OnVETUpdate) then
-        OnVetUpdate(Self);
-    end;
-    Key := #0;
-  end
-end;
-
-procedure TFormColumnSettings.VSTColumnNamesFocusChanging(ASender: TBaseVirtualTree; OldNode, NewNode: PVirtualNode; OldColumn, NewColumn: TColumnIndex; var Allowed: Boolean);
-var
-  ColData: PColumnData;
-begin
-  if Assigned(OldNode) then
-  begin
-    ColData := PColumnData( ASender.GetNodeData(OldNode));
-    ColData.Width := MulDiv(StrToInt(EditPixelWidth.Text), CurrentPPI, Screen.DefaultPixelsPerInch);
-  end;
-  if Assigned(NewNode) then
-  begin
-    ColData := PColumnData( ASender.GetNodeData(NewNode));
-    EditPixelWidth.Text := MulDiv(ColData.Width, Screen.DefaultPixelsPerInch, CurrentPPI).ToString;
-  end;
-  Allowed := True
-end;
-
-procedure TFormColumnSettings.EditPixelWidthExit(ASender: TObject);
-var
-  ColData: PColumnData;
-  Node: PVirtualNode;
-begin
-  Node := VSTColumnNames.GetFirstSelected;
-  if Assigned(Node) then
-  begin
-    ColData := PColumnData( VSTColumnNames.GetNodeData(Node));
-    ColData.Width := MulDiv(StrToInt(EditPixelWidth.Text), CurrentPPI, Screen.DefaultPixelsPerInch);
-  end;
-  if CheckBoxLiveUpdate.Checked and Assigned(OnVETUpdate) then
-    OnVetUpdate(Self);
-end;
-
-procedure TFormColumnSettings.VSTColumnNamesFreeNode(ASender: TBaseVirtualTree; Node: PVirtualNode);
-var
-  ColData: PColumnData;
-begin
-  ColData := PColumnData( ASender.GetNodeData(Node));
-  Finalize(ColData^);
-end;
 
 procedure TFormColumnSettings.CheckBoxLiveUpdateClick(ASender: TObject);
 begin
   if CheckBoxLiveUpdate.Checked and Assigned(OnVETUpdate) then
     OnVetUpdate(Self);
+end;
+
+procedure TFormColumnSettings.EditPixelWidthExit(ASender: TObject);
+var
+  lColData: PColumnData;
+  lNode: PVirtualNode;
+begin
+  lNode := VSTColumnNames.GetFirstSelected;
+  if Assigned(lNode) then
+  begin
+    lColData := PColumnData(VSTColumnNames.GetNodeData(lNode));
+    lColData.Width := MulDiv(StrToInt(EditPixelWidth.Text), CurrentPPI, Screen.DefaultPixelsPerInch);
+  end;
+  if CheckBoxLiveUpdate.Checked and Assigned(OnVETUpdate) then
+    OnVetUpdate(Self);
+end;
+
+procedure TFormColumnSettings.EditPixelWidthKeyPress(ASender: TObject; var AKey: Char);
+var
+  lColData: PColumnData;
+  lNode: PVirtualNode;
+begin
+  if ((AKey < #48) or (AKey > #57)) and not((AKey = #8) or (AKey = #13)) then
+  begin
+    Beep;
+    AKey := #0;
+  end;
+  if (AKey = #13) then
+  begin
+    lNode := VSTColumnNames.GetFirstSelected;
+    if Assigned(lNode) then
+    begin
+      lColData := PColumnData( VSTColumnNames.GetNodeData(lNode));
+      lColData.Width := MulDiv(StrToInt(EditPixelWidth.Text), CurrentPPI, Screen.DefaultPixelsPerInch);
+      if CheckBoxLiveUpdate.Checked and Assigned(OnVETUpdate) then
+        OnVetUpdate(Self);
+    end;
+    AKey := #0;
+  end
+end;
+
+procedure TFormColumnSettings.FormCreate(ASender: TObject);
+begin
+  VSTColumnNames.NodeDataSize := SizeOf(TColumnData);
 end;
 
 procedure TFormColumnSettings.FormKeyPress(ASender: TObject; var AKey: Char);
@@ -241,18 +153,17 @@ procedure TFormColumnSettings.FormResize(ASender: TObject);
 const
   cTextMargin = 4;
 var
-  B: Integer;
-  TextMargin: Integer;
+  lWidth: Integer;
+  lTextMargin: Integer;
 begin
-  TextMargin := MulDiv(cTextMargin, CurrentPPI, Screen.DefaultPixelsPerInch);
-  B := (Width - (Label2.Width + Label3.Width + EditPixelWidth.Width)) div 2;
-  Label2.Left := B - 2 * TextMargin;
-  EditPixelWidth.Left := (Label2.Left + Label2.Width) + TextMargin;
-  Label3.Left := (EditPixelWidth.Left + EditPixelWidth.Width) + TextMargin;
+  lTextMargin := MulDiv(cTextMargin, CurrentPPI, Screen.DefaultPixelsPerInch);
+  lWidth := (Width - (Label2.Width + Label3.Width + EditPixelWidth.Width)) div 2;
+  Label2.Left := lWidth - 2 * lTextMargin;
+  EditPixelWidth.Left := (Label2.Left + Label2.Width) + lTextMargin;
+  Label3.Left := (EditPixelWidth.Left + EditPixelWidth.Width) + lTextMargin;
   CheckBoxLiveUpdate.Left := Label2.Left;
 end;
 
-// < FR added 11-28-05 >
 // Here we load the strings variables. This allow runtime customization.
 procedure TFormColumnSettings.FormShow(ASender: TObject);
 begin
@@ -264,14 +175,100 @@ begin
   ButtonOk.Caption := STR_COLUMNDLG_BUTTONOK;
   ButtonCancel.Caption := STR_COLUMNDLG_BUTTONCANCEL;
 end;
-// </ FR added 11-28-05 >
 
-procedure TFormColumnSettings.VSTColumnNamesGetText(ASender: TBaseVirtualTree; Node: PVirtualNode; Column: TColumnIndex; TextType: TVSTTextType; var CellText: string);
+procedure TFormColumnSettings.VSTColumnNamesChecking(ASender: TBaseVirtualTree; ANode: PVirtualNode; var ANewState: TCheckState; var AAllowed: Boolean);
 var
-  ColData: PColumnData;
+  lColData: PColumnData;
 begin
-  ColData := PColumnData( ASender.GetNodeData(Node));
-  CellText := ColData.Title
+  lColData := PColumnData(ASender.GetNodeData(ANode));
+  lColData.Enabled := ANewState = csCheckedNormal;
+  if CheckBoxLiveUpdate.Checked and Assigned(OnVETUpdate) then
+    OnVetUpdate(Self);
+  AAllowed := True;
+end;
+
+procedure TFormColumnSettings.VSTColumnNamesDragAllowed(ASender: TBaseVirtualTree; ANode: PVirtualNode; AColumn: TColumnIndex; var AAllowed: Boolean);
+begin
+  AAllowed := True;
+  DragNode := ANode;
+end;
+
+procedure TFormColumnSettings.VSTColumnNamesDragDrop(ASender: TBaseVirtualTree; ASource: TObject; ADataObject: IDataObject; AFormats: TFormatArray; AShift: TShiftState; APoint: TPoint; var AEffect: Integer; AMode: TDropMode);
+var
+  lChildNode: PVirtualNode;
+  lCount: Integer;
+  lSourceIndex: Integer;
+  lTargetIndex: Integer;
+begin
+  lChildNode := VSTColumnNames.GetFirst;
+  lCount := 0;
+  lTargetIndex := 0;
+  lSourceIndex := 0;
+  while Assigned(lChildNode) do
+  begin
+    if lChildNode = VSTColumnNames.DropTargetNode then
+      lTargetIndex := lCount;
+    if lChildNode = DragNode then
+      lSourceIndex := lCount;
+    Inc(lCount);
+    lChildNode := lChildNode.NextSibling
+  end;
+  if lTargetIndex > lSourceIndex then
+    VSTColumnNames.MoveTo(DragNode, VSTColumnNames.DropTargetNode, amInsertAfter, False)
+  else
+    VSTColumnNames.MoveTo(DragNode, VSTColumnNames.DropTargetNode, amInsertBefore, False);
+  if CheckBoxLiveUpdate.Checked and Assigned(OnVETUpdate) then
+    OnVetUpdate(Self);
+  DragNode := nil;
+  AEffect := DROPEFFECT_NONE;
+end;
+
+procedure TFormColumnSettings.VSTColumnNamesDragOver(ASender: TBaseVirtualTree; ASource: TObject; AShift: TShiftState; AState: TDragState; APoint: TPoint; AMode: TDropMode; var AEffect: Integer; var AAccept: Boolean);
+begin
+  AAccept := True;
+end;
+
+procedure TFormColumnSettings.VSTColumnNamesFocusChanging(ASender: TBaseVirtualTree; AOldNode, NewNode: PVirtualNode; AOldColumn, ANewColumn: TColumnIndex; var AAllowed: Boolean);
+var
+  lColData: PColumnData;
+begin
+  if Assigned(AOldNode) then
+  begin
+    lColData := PColumnData( ASender.GetNodeData(AOldNode));
+    lColData.Width := MulDiv(StrToInt(EditPixelWidth.Text), CurrentPPI, Screen.DefaultPixelsPerInch);
+  end;
+  if Assigned(NewNode) then
+  begin
+    lColData := PColumnData( ASender.GetNodeData(NewNode));
+    EditPixelWidth.Text := MulDiv(lColData.Width, Screen.DefaultPixelsPerInch, CurrentPPI).ToString;
+  end;
+  AAllowed := True
+end;
+
+procedure TFormColumnSettings.VSTColumnNamesFreeNode(ASender: TBaseVirtualTree; ANode: PVirtualNode);
+var
+  lColData: PColumnData;
+begin
+  lColData := PColumnData(ASender.GetNodeData(ANode));
+  Finalize(lColData^);
+end;
+
+procedure TFormColumnSettings.VSTColumnNamesGetText(ASender: TBaseVirtualTree; ANode: PVirtualNode; AColumn: TColumnIndex; ATextType: TVSTTextType; var ACellText: string);
+var
+  lColData: PColumnData;
+begin
+  lColData := PColumnData(ASender.GetNodeData(ANode));
+  ACellText := lColData.Title
+end;
+
+procedure TFormColumnSettings.VSTColumnNamesInitNode(ASender: TBaseVirtualTree; AParentNode, ANode: PVirtualNode; var AInitialStates: TVirtualNodeInitStates);
+var
+  lColData: PColumnData;
+begin
+  lColData := PColumnData(ASender.GetNodeData(ANode));
+  ANode.CheckType := ctCheckBox;
+  if lColData.Enabled then
+    ANode.CheckState := csCheckedNormal
 end;
 
 end.
