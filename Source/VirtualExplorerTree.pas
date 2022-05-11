@@ -11770,17 +11770,12 @@ begin
 end;
 
 procedure TCustomVirtualExplorerCombobox.DoFontChange(NewFont: TFont);
-var
-  TempHeight: Integer;
 begin
-  TempHeight := CalculateEditHeight;
-  if TempHeight > Height then
-    Height := TempHeight;
   // Still need to do this to recenter the icon if necessary
   RealignControls;
   PopupExplorerDropDown.Font.Assign(NewFont);
   PopupAutoCompleteDropDown.Font.Assign(NewFont);
-  Invalidate
+  Invalidate;
 end;
 
 procedure TCustomVirtualExplorerCombobox.DoPathChange(SelectedNamespace: TNamespace);
