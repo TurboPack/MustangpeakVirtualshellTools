@@ -2701,6 +2701,7 @@ type
     function GetPopupExplorerTree: TPopupExplorerTree;
     function GetAutoComplete: TVirtualShellAutoComplete;
     function GetOnAutoCompleteAddItem: TVirtualAutoCompleteAddItem;
+    procedure OpenThemes;
     procedure SetOnAutoCompleteAddItem(const Value: TVirtualAutoCompleteAddItem);
     procedure SetBorderStyle(const Value: TBorderStyle);
     procedure SetFlat(const Value: Boolean);
@@ -11581,6 +11582,16 @@ begin
     FPopupExplorerDropDown.ChangeScaleLoaded(AM, AD, AIsDpiChange);
     FPopupAutoCompleteDropDown.ChangeScaleLoaded(AM, AD, AIsDpiChange);
   end;
+
+  if AIsDpiChange and (AM <> AD) then
+  begin
+    if UseThemes and ThemesActive then
+    begin
+      FreeThemes;
+      OpenThemes;
+    end;
+  end;
+
   inherited ChangeScale(AM, AD, AIsDpiChange);
 end;
 
@@ -12473,9 +12484,7 @@ begin
   ThemesActive := UseThemes and (vcboThemeAware in Options);
   if ThemesActive then
   begin
-    ThemeCombo := OpenThemeData(Handle, 'combobox');
-    ThemeButton := OpenThemeData(Handle, 'button');
-    ThemeEdit := OpenThemeData(Handle, 'edit');
+    OpenThemes;
     RedrawWindow(Handle, nil, 0, RDW_FRAME or RDW_INVALIDATE or RDW_NOERASE or RDW_NOCHILDREN);
   end
 end;
@@ -12537,6 +12546,13 @@ begin
   if Assigned(PopupAutoCompleteDropDown) then
     if Assigned(PopupAutoCompleteDropDown.PopupAutoCompleteTree) then
       Result := PopupAutoCompleteDropDown.PopupAutoCompleteTree.AutoComplete;
+end;
+
+procedure TCustomVirtualExplorerCombobox.OpenThemes;
+begin
+  ThemeCombo := OpenThemeData(Handle, 'combobox');
+  ThemeButton := OpenThemeData(Handle, 'button');
+  ThemeEdit := OpenThemeData(Handle, 'edit');
 end;
 
 procedure TCustomVirtualExplorerCombobox.SetBorderStyle(
