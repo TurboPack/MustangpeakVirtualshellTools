@@ -1130,7 +1130,6 @@ type
   [ComponentPlatformsAttribute(pidWin32 or pidWin64)]
   {$IFEND}
   TVirtualExplorerEasyListview = class(TCustomVirtualExplorerEasyListview)
-  private
   public
     property AllowHiddenCheckedItems;
     property CategoryInfo;
