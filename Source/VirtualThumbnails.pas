@@ -122,7 +122,7 @@ type
       AThumbBitmapStream: TMemoryStream; ATag: Integer);
     function LoadFromStream(ST: TStream): Boolean; virtual;
     procedure SaveToStream(ST: TStream); virtual;
-    function ReadBitmap(OutBitmap: TBitmap): Boolean;
+    function ReadBitmap(AOutBitmap: TBitmap): Boolean;
     procedure WriteBitmap(ABitmap: TBitmap);
     property Comment: string read FComment write FComment;
     property Exif: string read FExif write FExif;
@@ -132,7 +132,7 @@ type
     property ImageHeight: Integer read FImageHeight write FImageHeight;
     property StreamSignature: string read FStreamSignature;
     property Tag: Integer read FTag write FTag;
-    property ThumbBitmapStream: TMemoryStream read FThumbBitmapStream write FThumbBitmapStream;
+    property ThumbBitmapStream: TMemoryStream read FThumbBitmapStream;
     property ThumbSize: TPoint read GetThumbSize;
     property UseCompression: Boolean read FUseCompression write FUseCompression;
   end;
@@ -1308,19 +1308,19 @@ begin
   Objects[Index] := Pointer(Value);
 end;
 
-//WMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWM
 { TThumbInfo }
 
 constructor TThumbInfo.Create;
 begin
+  inherited Create;
   FThumbBitmapStream := TMemoryStream.Create;
   FStreamSignature := DefaultStreamSignature;
 end;
 
 destructor TThumbInfo.Destroy;
 begin
-  FreeAndNil(FThumbBitmapStream);
-  inherited;
+  FThumbBitmapStream.Free;
+  inherited Destroy;
 end;
 
 procedure TThumbInfo.Draw(ACanvas: TCanvas; ARect: TRect;
@@ -1440,15 +1440,17 @@ begin
     SpWriteMemoryStreamToStream(ST, FThumbBitmapStream);
 end;
 
-function TThumbInfo.ReadBitmap(OutBitmap: TBitmap): Boolean;
+function TThumbInfo.ReadBitmap(AOutBitmap: TBitmap): Boolean;
 begin
-  Result := False;
-  if Assigned(FThumbBitmapStream) then begin
+  if Assigned(AOutBitmap) then
+  begin
     FThumbBitmapStream.Position := 0;
-    OutBitmap.LoadFromStream(FThumbBitmapStream);
+    AOutBitmap.LoadFromStream(FThumbBitmapStream);
     FThumbBitmapStream.Position := 0;
     Result := True;
-  end;
+  end
+  else
+    Result := False;
 end;
 
 procedure TThumbInfo.WriteBitmap(ABitmap: TBitmap);
