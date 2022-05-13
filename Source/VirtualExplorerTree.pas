@@ -10188,93 +10188,119 @@ end;
 
 procedure TColumnMenuItem.Click;
 
-  function IsDuplicate(VST: TVirtualStringTree; Text: string): Boolean;
+  function IsDuplicate(AVST: TVirtualStringTree; AText: string): Boolean;
   var
-    ColData: PColumnData;
-    Node: PVirtualNode;
+    lInnerColData: PColumnData;
+    lInnerNode: PVirtualNode;
   begin
     Result := False;
-    Node := VST.GetFirst;
-    while not Result and Assigned(Node) do
+    lInnerNode := AVST.GetFirst;
+    while not Result and Assigned(lInnerNode) do
     begin
-      ColData := VST.GetNodeData(Node);
-      Result := WideStrComp(PWideChar(ColData^.Title), PWideChar( Text)) = 0;
-      Node := VST.GetNext(Node)
+      lInnerColData := AVST.GetNodeData(lInnerNode);
+      Result := WideStrComp(PWideChar(lInnerColData^.Title), PWideChar(AText)) = 0;
+      lInnerNode := AVST.GetNext(lInnerNode)
     end
   end;
 
 var
-  j: integer;
-  i: LongWord;
-  VET: TCustomVirtualExplorerTree;
-  ColData: PColumnData;
-  VST: TVirtualStringTree;
-  BackupHeader: TMemoryStream;
+  lBackupHeader: TBytesStream;
+  lColData: PColumnData;
+  lColumn: TVirtualTreeColumn;
+  lCount: UInt32;
+  lInner: Integer;
+  lItems: TStringList;
+  lVET: TCustomVirtualExplorerTree;
+  lVST: TVirtualStringTree;
 begin
-  VET := (Owner as TColumnMenu).VET;
+  lVET := (Owner as TColumnMenu).VET;
   if ColumnIndex < -1 then
   begin
-    BackupHeader := TMemoryStream.Create;
+    lBackupHeader := TBytesStream.Create;
     try
       FormColumnSettings := TFormColumnSettings.Create(Self);
       try
-        VST := FormColumnSettings.VSTColumnNames;
-        VST.BeginUpdate;
+        lItems := nil;
+        lVST := FormColumnSettings.VSTColumnNames;
+        lVST.BeginUpdate;
         try
-          for i := 0 to VET.Header.Columns.Count - 1 do
+          lItems := TStringList.Create;
+          lItems.Duplicates := TDuplicates.dupIgnore;
+          lItems.Sorted := True;
+
+          for lCount := 0 to lVET.Header.Columns.Count - 1 do
           begin
-            j := 0;
+            lInner := 0;
             { Create the nodes ordered in columns items relative position }
-            while (j < VET.Header.Columns.Count) and (VET.Header.Columns[j].Position <> i) do
-              Inc(j);
-            if (VET.Header.Columns[j].Text <> '') and not IsDuplicate(VST, VET.Header.Columns[j].Text) then
+            while (lInner < lVET.Header.Columns.Count) and (lVET.Header.Columns[lInner].Position <> lCount) do
+              Inc(lInner);
+
+            lColumn := lVET.Header.Columns[lInner];
+            if (lColumn.Text <> '') and not IsDuplicate(lVST, lColumn.Text) then
             begin
-              ColData := VST.GetNodeData(VST.AddChild(nil));
-              ColData.Title := VET.Header.Columns[j].Text;
-              ColData.Enabled := coVisible in VET.Header.Columns[j].Options;
-              ColData.Width := VET.Header.Columns[j].Width;
-              ColData.ColumnIndex := VET.Header.Columns[j].Index;
-            end
+              if coVisible in lColumn.Options then
+              begin
+                lColData := lVST.GetNodeData(lVST.AddChild(nil));
+                lColData.Title := lColumn.Text;
+                lColData.Enabled := coVisible in lColumn.Options;
+                lColData.Width := lColumn.Width;
+                lColData.ColumnIndex := lColumn.Index;
+              end;
+            end;
           end;
-          VET.Header.SaveToStream(BackupHeader);
-          BackupHeader.Seek(0, soFromBeginning);
+
+          for lInner := 0 to lItems.Count - 1 do
+          begin
+            lColumn := lItems.Objects[lInner] as TVirtualTreeColumn;
+            lColData := lVST.GetNodeData(lVST.AddChild(nil));
+            lColData.Title := lColumn.Text;
+            lColData.Enabled := coVisible in lColumn.Options;
+            lColData.Width := lColumn.Width;
+            lColData.ColumnIndex := lColumn.Index;
+          end;
+
+          lVET.Header.SaveToStream(lBackupHeader);
+          lBackupHeader.Seek(0, soFromBeginning);
         finally
-          VST.EndUpdate;
+          lVST.EndUpdate;
+          lItems.Free;
         end;
         FormColumnSettings.OnVETUpdate := LiveVETUpdate;
         if FormColumnSettings.ShowModal = mrOk then
         begin
-          UpdateColumns(VET, VST);
-          VET.StoreColumnState;
-          VET.DoColumnUserChangedVisibility;
-        end else
+          UpdateColumns(lVET, lVST);
+          lVET.StoreColumnState;
+          lVET.DoColumnUserChangedVisibility;
+        end
+        else
         begin
           { Canceled restore the Header to original state before modifications }
-          VET.BeginUpdate;
+          lVET.BeginUpdate;
           try
-            VET.Header.LoadFromStream(BackupHeader);
-            VET.Invalidate;
+            lVET.Header.LoadFromStream(lBackupHeader);
+            lVET.Invalidate;
           finally
-            VET.EndUpdate
+            lVET.EndUpdate
           end
         end;
       finally
         FormColumnSettings.Free;
-        FormColumnSettings := nil
+        FormColumnSettings := nil;
       end
     finally
-      BackupHeader.Free
+      lBackupHeader.Free;
     end
-  end else
+  end
+  else
   begin
     if not Checked then
-      VET.Header.Columns[ColumnIndex].Options := VET.Header.Columns[ColumnIndex].Options + [coVisible]
+      lVET.Header.Columns[ColumnIndex].Options := lVET.Header.Columns[ColumnIndex].Options + [coVisible]
     else
-      VET.Header.Columns[ColumnIndex].Options := VET.Header.Columns[ColumnIndex].Options - [coVisible];
-    VET.StoreColumnState;
-    VET.DoColumnUserChangedVisibility;
+      lVET.Header.Columns[ColumnIndex].Options := lVET.Header.Columns[ColumnIndex].Options - [coVisible];
+    lVET.StoreColumnState;
+    lVET.DoColumnUserChangedVisibility;
   end;
-  inherited;
+  inherited Click;
 end;
 
 procedure TColumnMenuItem.LiveVETUpdate(Sender: TObject);
