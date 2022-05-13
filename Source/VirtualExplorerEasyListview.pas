@@ -800,7 +800,7 @@ type
     procedure CheckForDefaultGroupVisibility;
     procedure CMFontChanged(var Msg: TMessage); message CM_FONTCHANGED;
     procedure CMParentFontChanged(var Msg: TMessage); message CM_PARENTFONTCHANGED;
-    procedure ColumnHeaderMenuItemClick(Sender: TObject);
+    procedure ColumnHeaderMenuItemClick(ASender: TObject);
     procedure ColumnSettingCallback(Sender: TObject);
     procedure ContextMenuCmdCallback(Namespace: TNamespace; Verb: string; MenuItemID: Integer; var Handled: Boolean);
     procedure ContextMenuShowCallback(Namespace: TNamespace; Menu: hMenu; var Allow: Boolean);
@@ -3204,94 +3204,123 @@ begin
   end
 end;
 
-procedure TCustomVirtualExplorerEasyListview.ColumnHeaderMenuItemClick(Sender: TObject);
+procedure TCustomVirtualExplorerEasyListview.ColumnHeaderMenuItemClick(ASender: TObject);
 
-  function IsDuplicate(VST: TVirtualStringTree; Text: string): Boolean;
+  function IsDuplicate(const AVST: TVirtualStringTree; const AText: string): Boolean;
   var
-    ColData: PColumnData;
-    Node: PVirtualNode;
+    lInnerColData: PColumnData;
+    lInnerNode: PVirtualNode;
   begin
     Result := False;
-    Node := VST.GetFirst;
-    while not Result and Assigned(Node) do
+    lInnerNode := AVST.GetFirst;
+    while not Result and Assigned(lInnerNode) do
     begin
-      ColData := VST.GetNodeData(Node);
-      Result := WideStrComp(PWideChar(ColData^.Title), PWideChar( Text)) = 0;
-      Node := VST.GetNext(Node)
-    end
+      lInnerColData := AVST.GetNodeData(lInnerNode);
+      Result := WideStrComp(PWideChar(lInnerColData^.Title), PWideChar(AText)) = 0;
+      lInnerNode := AVST.GetNext(lInnerNode);
+    end;
   end;
 
 var
-  {$IFDEF USE_TOOLBAR_TB2K}
-  Item: TTBCustomItem;
-  {$ELSE}
-  Item: TVirtualMenuItem;
-  {$ENDIF}
-  ColumnSettings: TFormColumnSettings;
-  ColumnNames: TVirtualStringTree;
-  ColData: PColumnData;
-  BackupHeader: TMemoryStream;
-  i, j, Count: Integer;
+  lBackupHeader: TMemoryStream;
+  lColData: PColumnData;
+  lColumn: TEasyColumn;
+  lColumnNames: TVirtualStringTree;
+  lColumnSettings: TFormColumnSettings;
+  lCount: Integer;
+  lInner: Integer;
+  lItem: {$IFDEF USE_TOOLBAR_TB2K}TTBCustomItem{$ELSE}TVirtualMenuItem{$ENDIF};
+  lItems: TStringList;
+  lNumber: Integer;
 begin
   {$IFDEF USE_TOOLBAR_TB2K}
-  Item := Sender as TTBCustomItem;
-  Count := TTBPopupMenu(ColumnHeaderMenu).Items.Count; // Items is not polymorphic
+  lItem := ASender as TTBCustomItem;
+  lNumber := TTBPopupMenu(ColumnHeaderMenu).Items.Count; // Items is not polymorphic
   {$ELSE}
-  Item := Sender as TVirtualMenuItem;
-  Count := ColumnHeaderMenu.Items.Count;
+  lItem := ASender as TVirtualMenuItem;
+  lNumber := ColumnHeaderMenu.Items.Count;
   {$ENDIF}
 
-  if Item.Tag = Count - 1 then
-  begin
-    ColumnSettings := TFormColumnSettings.Create(nil);
+  lBackupHeader := TBytesStream.Create;
+  try
+    if lItem.Tag = lNumber - 1 then
+    begin
+      lColumnSettings := TFormColumnSettings.Create(nil);
 
-    BackupHeader := TMemoryStream.Create;
-    ColumnNames := ColumnSettings.VSTColumnNames;
-    ColumnNames.BeginUpdate;
-    try
-      for i := 0 to Header.Columns.Count - 1 do
-      begin
-        j := 0;
-        { Create the nodes ordered in columns items relative position }
-        while (j < Header.Columns.Count) and (Header.Columns[j].Position <> i) do
-          Inc(j);
-        if (Header.Columns[j].Caption <> '') and not IsDuplicate(ColumnNames, Header.Columns[j].Caption) then
+      lItems := nil;
+      lColumnNames := lColumnSettings.VSTColumnNames;
+      lColumnNames.BeginUpdate;
+      try
+        lItems := TStringList.Create;
+        lItems.Duplicates := TDuplicates.dupIgnore;
+        lItems.Sorted := True;
+
+        for lCount := 0 to Header.Columns.Count - 1 do
         begin
-          ColData := ColumnNames.GetNodeData(ColumnNames.AddChild(nil));
-          ColData.Title := Header.Columns[j].Caption;
-          ColData.Enabled :=  Header.Columns[j].Visible;
-          ColData.Width := Header.Columns[j].Width;
-          ColData.ColumnIndex := Header.Columns[j].Index;
+          lInner := 0;
+
+          { Create the nodes ordered in columns items relative position }
+          while (lInner < Header.Columns.Count) and (Header.Columns[lInner].Position <> lCount) do
+            Inc(lInner);
+
+          lColumn := Header.Columns[lInner];
+          if (lColumn.Caption <> '') and not IsDuplicate(lColumnNames, lColumn.Caption) then
+          begin
+            if lColumn.Visible then
+            begin
+              lColData := lColumnNames.GetNodeData(lColumnNames.AddChild(nil));
+              lColData.Title := lColumn.Caption;
+              lColData.Enabled := lColumn.Visible;
+              lColData.Width := lColumn.Width;
+              lColData.ColumnIndex := lColumn.Index;
+            end
+            else
+              lItems.AddObject(lColumn.Caption, lColumn);
+          end;
+        end;
+
+        for lCount := 0 to lItems.Count - 1 do
+        begin
+          lColumn := lItems.Objects[lCount] as TEasyColumn;
+          lColData := lColumnNames.GetNodeData(lColumnNames.AddChild(nil));
+          lColData.Title := lColumn.Caption;
+          lColData.Enabled := lColumn.Visible;
+          lColData.Width := lColumn.Width;
+          lColData.ColumnIndex := lColumn.Index;
+        end;
+
+        Header.SaveToStream(lBackupHeader);
+        lBackupHeader.Seek(0, soFromBeginning);
+      finally
+        lColumnNames.EndUpdate;
+        lItems.Free;
+      end;
+
+      lColumnSettings.OnVETUpdate := ColumnSettingCallback;
+      if lColumnSettings.ShowModal = mrOk then
+      begin
+        UpdateColumnsFromDialog(lColumnNames);
+        DoColumnStructureChange;
+      end
+      else
+      begin
+        BeginUpdate;
+        try
+          Header.LoadFromStream(lBackupHeader);
+        finally
+          EndUpdate;
         end
       end;
-      Header.SaveToStream(BackupHeader);
-      BackupHeader.Seek(0, soFromBeginning);
-    finally
-      ColumnNames.EndUpdate;
-    end;
-
-    ColumnSettings.OnVETUpdate := ColumnSettingCallback;
-    if ColumnSettings.ShowModal = mrOk then
+      lColumnSettings.Release;
+    end
+    else
     begin
-      UpdateColumnsFromDialog(ColumnNames);
+      Header.Columns[lItem.Tag].Visible := not lItem.Checked;
       DoColumnStructureChange;
-    end else
-    begin
-      BeginUpdate;
-      try
-        Header.LoadFromStream(BackupHeader);
-      finally
-        EndUpdate
-      end
     end;
-
-    BackupHeader.Free;
-    ColumnSettings.Release
-  end else
-  begin
-    Header.Columns[Item.Tag].Visible := not Item.Checked;
-    DoColumnStructureChange;
-  end
+  finally
+    lBackupHeader.Free;
+  end;
 end;
 
 procedure TCustomVirtualExplorerEasyListview.ColumnSettingCallback(Sender: TObject);
