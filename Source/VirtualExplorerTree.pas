@@ -1424,7 +1424,7 @@ type
     function DoKeyAction(var CharCode: Word; var Shift: TShiftState): Boolean; override;
     procedure DoNamespaceStructureChange(Node: PVirtualNode; NS: TNamespace; ChangeType: TNamespaceStructureChange); virtual;
     procedure DoNewText(Node: PVirtualNode; Column: TColumnIndex; const Text: UnicodeString); override;
-    procedure DoPaintText(Node: PVirtualNode; const Canvas: TCanvas; Column: TColumnIndex; TextType: TVSTTextType); override;
+    procedure DoPaintText(ANode: PVirtualNode; const ACanvas: TCanvas; AColumn: TColumnIndex; ATextType: TVSTTextType); override;
     procedure DoPopupMenu(Node: PVirtualNode; Column: TColumnIndex; Position: TPoint); override;
     procedure DoRootChange; virtual;
     procedure DoRootChanging(const NewRoot: TRootFolder; Namespace: TNamespace; var Allow: Boolean); virtual;
@@ -4879,35 +4879,38 @@ begin
   end;
 end;
 
-procedure TCustomVirtualExplorerTree.DoPaintText(Node: PVirtualNode;
-  const Canvas: TCanvas; Column: TColumnIndex; TextType: TVSTTextType);
+procedure TCustomVirtualExplorerTree.DoPaintText(ANode: PVirtualNode; const ACanvas: TCanvas; AColumn: TColumnIndex; ATextType: TVSTTextType);
 var
-  NS: TNamespace;
+  lNamespace: TNamespace;
+  lServices: TCustomStyleServices;
 begin
-  if ValidateNamespace(Node, NS) then
+  if ValidateNamespace(ANode, lNamespace) then
   begin
-    if (Column < 1) and not((toHotTrack in TreeOptions.PaintOptions) and
-    (Node = HotNode)) and not(toNoUseVETColorsProp in TreeOptions.VETFolderOptions) then
+    if (AColumn < 1) and not((toHotTrack in TreeOptions.PaintOptions) and
+    (ANode = HotNode)) and not(toNoUseVETColorsProp in TreeOptions.VETFolderOptions) then
     begin
-      if not(vsSelected in Node.States) and not(Node = DropTargetNode) then
+      if not(vsSelected in ANode.States) and not(ANode = DropTargetNode) then
       begin
-        if (Column < 1) and NS.Compressed then
-          Canvas.Font.Color := VETColors.CompressedTextColor
+        if (AColumn < 1) and lNamespace.Compressed then
+          ACanvas.Font.Color := VETColors.CompressedTextColor
         else
-        if (Column < 1) and NS.Encrypted then
-          Canvas.Font.Color := VETColors.EncryptedTextColor
+        if (AColumn < 1) and lNamespace.Encrypted then
+          ACanvas.Font.Color := VETColors.EncryptedTextColor
         else
-        if NS.Folder then
-          Canvas.Font.Color := VETColors.FolderTextColor
+        if lNamespace.Folder then
+          ACanvas.Font.Color := VETColors.FolderTextColor
         else
-          Canvas.Font.Color := VETColors.FileTextColor
+          ACanvas.Font.Color := VETColors.FileTextColor
       end
     end;
-    if (Column >= 1) and NS.Compressed then
-      Canvas.Font.Color := VETColors.CompressedTextColor
+    if (AColumn >= 1) and lNamespace.Compressed then
+      ACanvas.Font.Color := VETColors.CompressedTextColor
     else
-    if (Column >= 1) and NS.Encrypted then
-      Canvas.Font.Color := VETColors.EncryptedTextColor
+    if (AColumn >= 1) and lNamespace.Encrypted then
+      ACanvas.Font.Color := VETColors.EncryptedTextColor;
+    lServices := StyleServices(Self);
+    if lServices.Enabled then
+      ACanvas.Font.Color := lServices.GetSystemColor(ACanvas.Font.Color);
   end;
   inherited;
 end;
