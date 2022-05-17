@@ -4940,7 +4940,10 @@ begin
           Enqueue(NS, Item, ThumbSize, ThumbsManager.IsValidImageFileFormat(NS) = vffUnknown, True);
         end;
 
-        T.Draw(ACanvas, ARect, ThumbsManager.Alignment, ThumbsManager.Stretch);
+        //Some people have the problem that here T.ThumbBitmapStream is nil
+        //I would like to test this workaround
+        if Assigned(T.ThumbBitmapStream) then
+          T.Draw(ACanvas, ARect, ThumbsManager.Alignment, ThumbsManager.Stretch);
 
         if ShowInactive then
         begin
