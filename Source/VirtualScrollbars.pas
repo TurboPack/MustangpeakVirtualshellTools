@@ -164,7 +164,7 @@ type
     procedure CreateParams(var Params: TCreateParams); override;
     procedure CreateWnd; override;
 
-    procedure DoPaintScrollBkgnd(DC: hDC);
+    procedure DoPaintScrollBkgnd(ADC: hDC);
     procedure DoPaintScrollButton(Cycle: TScrollPaintCycle; DC: hDC);
     procedure FreeThemes;
     procedure HandleAutoScrollTimer(Enable, DelayTimer: Boolean);
@@ -349,65 +349,70 @@ begin
   inherited;
 end;
 
-procedure TCustomOwnerDrawScrollbar.DoPaintScrollBkgnd(DC: hDC);
+procedure TCustomOwnerDrawScrollbar.DoPaintScrollBkgnd(ADC: hDC);
 var
-  Handled: Boolean;
-  PartType, PartState: Longword;
-  RUp, RDown: TRect;
+  lHandled: Boolean;
+  lPartState: Integer;
+  lPartType: Integer;
+  lRDown: TRect;
+  lRUp: TRect;
 begin
-  Handled := False;
+  lHandled := False;
   if Assigned(OnScrollCustomPaint) then
-    OnScrollCustomPaint(Self, pcBackground, psNormal, ScrollArea(saBackground),
-      Canvas, Handled);
-  if not Handled then
+    OnScrollCustomPaint(Self, pcBackground, psNormal, ScrollArea(saBackground), Canvas, lHandled);
+  if not lHandled then
   begin
-    RUp := ScrollArea(saThumbPageUpClient);
-    RDown := ScrollArea(saThumbPageDownClient);
+    lRUp := ScrollArea(saThumbPageUpClient);
+    lRDown := ScrollArea(saThumbPageDownClient);
     if ssPageDownPressed in State then
     begin
       if Themed then
       begin
-        PartType := SBP_UPPERTRACKVERT;
-        PartState := SCRBS_PRESSED;
-        DrawThemeBackground(ThemeScrollbar, DC, PartType, PartState, RDown, nil);
-        PartState := SCRBS_NORMAL;
-        DrawThemeBackground(ThemeScrollbar, DC, PartType, PartState, RUp, nil);
-      end else
-      begin
-        Windows.FillRect(DC, RUp, BkGndBrush.Handle);
-        Canvas.Brush.Color := Colors.PageScrollHot;
-        Windows.FillRect(DC, RDown, Canvas.Brush.Handle);
+        lPartType := SBP_UPPERTRACKVERT;
+        lPartState := SCRBS_PRESSED;
+        DrawThemeBackground(ThemeScrollbar, ADC, lPartType, lPartState, lRDown, nil);
+        lPartState := SCRBS_NORMAL;
+        DrawThemeBackground(ThemeScrollbar, ADC, lPartType, lPartState, lRUp, nil);
       end
-    end else
-    if ssPageUpPressed in State then
+      else
+      begin
+        Windows.FillRect(ADC, lRUp, BkGndBrush.Handle);
+        Canvas.Brush.Color := Colors.PageScrollHot;
+        Windows.FillRect(ADC, lRDown, Canvas.Brush.Handle);
+      end
+    end
+    else if ssPageUpPressed in State then
     begin
       if Themed then
       begin
-        PartType := SBP_LOWERTRACKVERT;
-        PartState := SCRBS_PRESSED;
-        DrawThemeBackground(ThemeScrollbar, DC, PartType, PartState, RUp, nil);
-        PartState := SCRBS_NORMAL;
-        DrawThemeBackground(ThemeScrollbar, DC, PartType, PartState, RDown, nil);
-      end else
-      begin
-        Windows.FillRect(DC, RDown, BkGndBrush.Handle);
-        Canvas.Brush.Color := Colors.PageScrollHot;
-        Windows.FillRect(DC, RUp, Canvas.Brush.Handle);
+        lPartType := SBP_LOWERTRACKVERT;
+        lPartState := SCRBS_PRESSED;
+        DrawThemeBackground(ThemeScrollbar, ADC, lPartType, lPartState, lRUp, nil);
+        lPartState := SCRBS_NORMAL;
+        DrawThemeBackground(ThemeScrollbar, ADC, lPartType, lPartState, lRDown, nil);
       end
-    end else
+      else
+      begin
+        Windows.FillRect(ADC, lRDown, BkGndBrush.Handle);
+        Canvas.Brush.Color := Colors.PageScrollHot;
+        Windows.FillRect(ADC, lRUp, Canvas.Brush.Handle);
+      end
+    end
+    else
     begin
       if Themed then
       begin
-        PartType := SBP_UPPERTRACKVERT;
-        PartState := SCRBS_NORMAL;
-        DrawThemeBackground(ThemeScrollbar, DC, PartType, PartState, RUp, nil);
+        lPartType := SBP_UPPERTRACKVERT;
+        lPartState := SCRBS_NORMAL;
+        DrawThemeBackground(ThemeScrollbar, ADC, lPartType, lPartState, lRUp, nil);
 
-        PartType := SBP_LOWERTRACKVERT;
-        DrawThemeBackground(ThemeScrollbar, DC, PartType, PartState, RDown, nil);
-      end else
+        lPartType := SBP_LOWERTRACKVERT;
+        DrawThemeBackground(ThemeScrollbar, ADC, lPartType, lPartState, lRDown, nil);
+      end
+      else
       begin
-        Windows.FillRect(DC, RUp, BkGndBrush.Handle);
-        Windows.FillRect(DC, RDown, BkGndBrush.Handle);
+        Windows.FillRect(ADC, lRUp, BkGndBrush.Handle);
+        Windows.FillRect(ADC, lRDown, BkGndBrush.Handle);
       end
     end
   end
