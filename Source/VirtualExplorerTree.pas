@@ -2728,7 +2728,7 @@ type
     function MouseInDropDownButton: Boolean;
     procedure MouseTimerCallback(Sender: TObject);
     procedure Paint; override;
-    procedure PaintCombo(PaintDC: HDC);
+    procedure PaintCombo(APaintDC: HDC);
     procedure RealignControls;
     procedure RefreshComboEdit(SelectText: Boolean);
     procedure SetActive(const Value: Boolean); virtual;
@@ -11983,164 +11983,185 @@ begin
   PaintCombo(Canvas.Handle);
 end;
 
-procedure TCustomVirtualExplorerCombobox.PaintCombo(PaintDC: HDC);
+procedure TCustomVirtualExplorerCombobox.PaintCombo(APaintDC: HDC);
 var
-  R: TRect;
-  CtlType, CtlState: Longword;
-  OldRgn, Region: HRgn;
-  OldColor: TColor;
-  rgbBk: Longword;
-  ACanvas: TCanvas;
-  DefaultDraw: Boolean;
+  lCanvas: TCanvas;
+  lCtlState: Integer;
+  lCtlType: Integer;
+  lDefaultDraw: Boolean;
+  lOldColor: TColor;
+  lOldRgn: HRGN;
+  lRect: TRect;
+  lRegion: HRGN;
+  lrgbBk: UInt32;
+  lServices: TCustomStyleServices;
   {$IFDEF SpTBX}
-  IsHotTracked: Boolean;
-  ComboButtonR: TRect;
+  lComboButtonR: TRect;
+  lIsHotTracked: Boolean;
   {$ENDIF SpTBX}
 begin
   // In NT4 the same Region is passed the back from the BeginPaint function as was
   // created in WM_EraseBkgnd.  Newer OS's seem to reset the region after the
   // WMEraseBkgnd and on returning from BeginPaint
-  R := ClientRect;
+  lServices := StyleServices(Self);
+  lRect := ClientRect;
   FButtonRect := BackGroundRect(crDropDownButton);
-  ACanvas := TCanvas.Create;
-  OldRgn := 0;
-  Region := CreateRectRgnIndirect(R);
+  lOldRgn := 0;
+  lCanvas := nil;
+  lRegion := CreateRectRgnIndirect(lRect);
   try
-    OldRgn := SelectObject(PaintDC, Region);
-    ACanvas.Handle := PaintDC;
+    lCanvas := TCanvas.Create;
+    lOldRgn := SelectObject(APaintDC, lRegion);
+    lCanvas.Handle := APaintDC;
 
     { PrePaint }
-    DefaultDraw := True;
-    DoDraw(ACanvas, ClientRect, FButtonRect, FVETComboState, cdPrePaint, DefaultDraw);
-    if DefaultDraw then
+    lDefaultDraw := True;
+    DoDraw(lCanvas, ClientRect, FButtonRect, FVETComboState, cdPrePaint, lDefaultDraw);
+    if lDefaultDraw then
     begin
       {$IFDEF SpTBX}
       if SkinManager.GetSkinType in [sknSkin,sknDelphiStyle] then
       begin
-       OldColor := Brush.Color;
+       lOldColor := Brush.Color;
        Brush.Color := Color;
-       FillRect(PaintDC, R, Brush.Handle);
-       Brush.Color := OldColor;
-       IsHotTracked := HotTracking or Focused or PopupExplorerDropDown.Visible;
-       ComboButtonR := Rect(FButtonRect.Left, FButtonRect.Top + 1, FButtonRect.Right - 1, FButtonRect.Bottom - 1);
-       SpDrawXPComboButton(ACanvas, ComboButtonR, Enabled, IsHotTracked,
-         IsHotTracked, PopupExplorerDropDown.Visible, not UseRightToLeftReading);
-       SpDrawXPEditFrame(Self, IsHotTracked);
-      end else
+       FillRect(APaintDC, lRect, Brush.Handle);
+       Brush.Color := lOldColor;
+       lIsHotTracked := HotTracking or Focused or PopupExplorerDropDown.Visible;
+       lComboButtonR := Rect(FButtonRect.Left, FButtonRect.Top + 1, FButtonRect.Right - 1, FButtonRect.Bottom - 1);
+       SpDrawXPComboButton(lCanvas, lComboButtonR, Enabled, lIsHotTracked,
+         lIsHotTracked, PopupExplorerDropDown.Visible, not UseRightToLeftReading);
+       SpDrawXPEditFrame(Self, lIsHotTracked);
+      end
+      else
       {$ENDIF SpTBX}
       if UseThemes and ThemesActive then
       begin
         { Draw the Edit }
         if Enabled then
-          DrawThemeBackground(ThemeEdit, PaintDC, EP_EDITTEXT, ETS_NORMAL, R, nil)
+          DrawThemeBackground(ThemeEdit, APaintDC, EP_EDITTEXT, ETS_NORMAL, lRect, nil)
         else
-          DrawThemeBackground(ThemeEdit, PaintDC, EP_EDITTEXT, ETS_DISABLED, R, nil);
-        GetThemeBackgroundContentRect(ThemeEdit, PaintDC, EP_EDITTEXT, ETS_NORMAL, R, @R);
-        OldColor := Brush.Color;
-        Brush.Color := StyleServices.GetSystemColor(Color);
-        FillRect(PaintDC, R, Brush.Handle);
-        Brush.Color := OldColor;
+          DrawThemeBackground(ThemeEdit, APaintDC, EP_EDITTEXT, ETS_DISABLED, lRect, nil);
+        GetThemeBackgroundContentRect(ThemeEdit, APaintDC, EP_EDITTEXT, ETS_NORMAL, lRect, @lRect);
+        lOldColor := Brush.Color;
+        if lServices.Enabled then
+          Brush.Color := lServices.GetSystemColor(Color)
+        else
+          Brush.Color := Color;
+        FillRect(APaintDC, lRect, Brush.Handle);
+        Brush.Color := lOldColor;
 
         { Draw the DropDown Button }
-        CtlType := CP_DROPDOWNBUTTON;
+        lCtlType := CP_DROPDOWNBUTTON;
         if Enabled then
-          CtlState := CBXS_NORMAL
+          lCtlState := CBXS_NORMAL
         else
-          CtlState := CBXS_DISABLED;
+          lCtlState := CBXS_DISABLED;
         if (vcbsDropDownButtonPressed in FVETComboState) then
-          CtlState := CBXS_PRESSED;
+          lCtlState := CBXS_PRESSED;
         if vcbsOverDropDownButton in FVETComboState then
-          CtlState := CBXS_HOT;
-         DrawThemeBackground(ThemeCombo, PaintDC, CtlType, CtlState, FButtonRect, nil)
-      end else
+          lCtlState := CBXS_HOT;
+         DrawThemeBackground(ThemeCombo, APaintDC, lCtlType, lCtlState, FButtonRect, nil)
+      end
+      else
       begin
         { Draw the Edit }
         if FBorderStyle = bsNone then
         begin
-          OldColor := Brush.Color;
-          Brush.Color := StyleServices.GetSystemColor(Color);
-          FillRect(PaintDC, R, Brush.Handle);
-          Brush.Color := OldColor;
-        end else
+          lOldColor := Brush.Color;
+          if lServices.Enabled then
+            Brush.Color := lServices.GetSystemColor(Color)
+          else
+            Brush.Color := Color;
+          FillRect(APaintDC, lRect, Brush.Handle);
+          Brush.Color := lOldColor;
+        end
+        else
         begin
           if Flat then
-            DrawEdge(PaintDC, R, EDGE_SUNKEN, BF_RECT or BF_FLAT)
+            DrawEdge(APaintDC, lRect, EDGE_SUNKEN, BF_RECT or BF_FLAT)
           else
-            DrawEdge(PaintDC, R, EDGE_SUNKEN, BF_RECT)
+            DrawEdge(APaintDC, lRect, EDGE_SUNKEN, BF_RECT)
         end;
         { Draw the DropDown Button }
-        CtlType := DFC_SCROLL;
-        CtlState := DFCS_SCROLLCOMBOBOX;
+        lCtlType := DFC_SCROLL;
+        lCtlState := DFCS_SCROLLCOMBOBOX;
         if (vcbsDropDownButtonPressed in FVETComboState) or Flat then
-          CtlState := CtlState or DFCS_FLAT;
-        DrawFrameControl(PaintDC, FButtonRect, CtlType, CtlState);
+          lCtlState := lCtlState or DFCS_FLAT;
+        DrawFrameControl(APaintDC, FButtonRect, lCtlType, lCtlState);
       end;
     end;
 
     { PostPaint }
-    DefaultDraw := True;
-    DoDraw(ACanvas, ClientRect, FButtonRect, FVETComboState, cdPostPaint, DefaultDraw);
-    if DefaultDraw then begin
+    lDefaultDraw := True;
+    DoDraw(lCanvas, ClientRect, FButtonRect, FVETComboState, cdPostPaint, lDefaultDraw);
+    if lDefaultDraw then
+    begin
       if UseThemes and ThemesActive then
       begin
         { Draw the focus }
         if (Style = scsDropDownList) and (ComboEdit.Focused) then
         begin
-          GetThemeBackgroundContentRect(ThemeEdit, PaintDC, EP_EDITTEXT, ETS_NORMAL, R, @R);
-          SubtractRect(R, R, BackGroundRect(crDropDownButton));
-          InflateRect(R, -2, -2);
-          OldColor := Brush.Color;
-          Brush.Color := StyleServices.GetSystemColor(clHighLight);
-          FillRect(PaintDC, R, Brush.Handle);
-          Brush.Color := OldColor;
-          DrawFocusRect(PaintDC, R);
+          GetThemeBackgroundContentRect(ThemeEdit, APaintDC, EP_EDITTEXT, ETS_NORMAL, lRect, @lRect);
+          SubtractRect(lRect, lRect, BackGroundRect(crDropDownButton));
+          InflateRect(lRect, -2, -2);
+          lOldColor := Brush.Color;
+          if lServices.Enabled then
+            Brush.Color := lServices.GetSystemColor(clHighLight)
+          else
+            Brush.Color := clHighLight;
+          FillRect(APaintDC, lRect, Brush.Handle);
+          Brush.Color := lOldColor;
+          DrawFocusRect(APaintDC, lRect);
         end;
         { Draw the Image }
         if Active and (not ComboEdit.IsEditing or (csDesigning in ComponentState)) then
         begin
-          R := BackGroundRect(crImage);
+          lRect := BackGroundRect(crImage);
           if Enabled then
-            DrawThemeIcon(ThemeEdit, PaintDC, EP_EDITTEXT, ETS_NORMAL, R, SmallSysImagesCommon.GetImageList(FCurrentPPI).Handle, ImageIndex)
+            DrawThemeIcon(ThemeEdit, APaintDC, EP_EDITTEXT, ETS_NORMAL, lRect, SmallSysImagesCommon.GetImageList(FCurrentPPI).Handle, ImageIndex)
           else
-            DrawThemeIcon(ThemeEdit, PaintDC, EP_EDITTEXT, ETS_DISABLED, R, SmallSysImagesCommon.GetImageList(FCurrentPPI).Handle, ImageIndex);
+            DrawThemeIcon(ThemeEdit, APaintDC, EP_EDITTEXT, ETS_DISABLED, lRect, SmallSysImagesCommon.GetImageList(FCurrentPPI).Handle, ImageIndex);
         end;
-      end else
+      end
+      else
       begin
         { Draw the focus }
-        R := BackGroundRect(crBackGround);
-        SubtractRect(R, R, BackGroundRect(crDropDownButton));
-        InflateRect(R, -1, -1);
-        Inc(R.Bottom);
+        lRect := BackGroundRect(crBackGround);
+        SubtractRect(lRect, lRect, BackGroundRect(crDropDownButton));
+        InflateRect(lRect, -1, -1);
+        Inc(lRect.Bottom);
         if (Style = scsDropDownList) and (ComboEdit.Focused) then
         begin
-          OldColor := Brush.Color;
+          lOldColor := Brush.Color;
           Brush.Color := clHighLight;
-          FillRect(PaintDC, R, Brush.Handle);
-          Brush.Color := OldColor;
-          DrawFocusRect(PaintDC, R);
-          rgbBk := ColorToRGB(clHighLight);
-        end else
-          rgbBk := ColorToRGB(Color);
+          FillRect(APaintDC, lRect, Brush.Handle);
+          Brush.Color := lOldColor;
+          DrawFocusRect(APaintDC, lRect);
+          lrgbBk := ColorToRGB(clHighLight);
+        end
+        else
+          lrgbBk := ColorToRGB(Color);
 
         { Draw the Image }
         if Active and (not ComboEdit.IsEditing or (csDesigning in ComponentState)) then
         begin
-          R := BackGroundRect(crImage);
-          ImageList_DrawEx(SmallSysImagesCommon.GetImageList(FCurrentPPI).Handle, ImageIndex, PaintDC,
-            R.Left, R.Top, R.Right - R.Left, R.Bottom - R.Top, rgbBk, CLR_NONE, ILD_NORMAL);
+          lRect := BackGroundRect(crImage);
+          ImageList_DrawEx(SmallSysImagesCommon.GetImageList(FCurrentPPI).Handle, ImageIndex, APaintDC,
+            lRect.Left, lRect.Top, lRect.Right - lRect.Left, lRect.Bottom - lRect.Top, lrgbBk, CLR_NONE, ILD_NORMAL);
         end;
       end;
     end;
 
   finally
-    if OldRgn <> 0 then
+    if lOldRgn <> 0 then
     begin
-      SelectObject(PaintDC, OldRgn);
-      DeleteObject(Region);
+      SelectObject(APaintDC, lOldRgn);
+      DeleteObject(lRegion);
     end;
-    ACanvas.Handle := 0;
-    ACanvas.Free;
-  end
+    if Assigned(lCanvas) then
+      lCanvas.Handle := 0;
+    lCanvas.Free;
+  end;
 end;
 
 procedure TCustomVirtualExplorerCombobox.RealignControls;
