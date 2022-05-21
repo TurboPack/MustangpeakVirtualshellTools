@@ -165,7 +165,7 @@ type
     procedure CreateWnd; override;
 
     procedure DoPaintScrollBkgnd(ADC: hDC);
-    procedure DoPaintScrollButton(Cycle: TScrollPaintCycle; DC: hDC);
+    procedure DoPaintScrollButton(ACycle: TScrollPaintCycle; ADC: hDC);
     procedure FreeThemes;
     procedure HandleAutoScrollTimer(Enable, DelayTimer: Boolean);
     procedure HandleHotTimer(Enable: Boolean);
@@ -231,6 +231,9 @@ type
   end;
 
 implementation
+
+uses
+  System.UITypes;
 
 { TCustomOwnerDrawScrollbar }
 
@@ -357,6 +360,9 @@ var
   lRDown: TRect;
   lRUp: TRect;
 begin
+  if StyleServices(Self).Enabled then
+    Exit;
+
   lHandled := False;
   if Assigned(OnScrollCustomPaint) then
     OnScrollCustomPaint(Self, pcBackground, psNormal, ScrollArea(saBackground), Canvas, lHandled);
@@ -418,133 +424,200 @@ begin
   end
 end;
 
-procedure TCustomOwnerDrawScrollbar.DoPaintScrollButton(Cycle: TScrollPaintCycle; DC: hDC);
+procedure TCustomOwnerDrawScrollbar.DoPaintScrollButton(ACycle: TScrollPaintCycle; ADC: hDC);
 var
-  Handled: Boolean;
-  Flags: Longword;
-  R, ContentR: TRect;
-  PartType, PartState: Longword;
+  lColor: TColor;
+  lColorNew: TColor;
+  lContentR: TRect;
+  lDetails: TThemedElementDetails;
+  lFlags: Integer;
+  lHandled: Boolean;
+  lPartState: Integer;
+  lPartType: Integer;
+  lRect: TRect;
+  lServices: TCustomStyleServices;
+  lState: TThemedScrollBar;
 begin
-  Handled := False;
-  Flags := 0;
+  lHandled := False;
+  lFlags := 0;
   if Assigned(OnScrollCustomPaint) then
-    OnScrollCustomPaint(Self, pcScrollDown, psNormal, ScrollArea(saScrollDown), Canvas, Handled);
-  if not Handled then
+    OnScrollCustomPaint(Self, pcScrollDown, psNormal, ScrollArea(saScrollDown), Canvas, lHandled);
+  if not lHandled then
   begin
-    if Cycle = pcScrollUp then
+    lServices := StyleServices(Self);
+    if ACycle = pcScrollUp then
     begin
-      R := ScrollArea(saScrollUp);
+      lRect := ScrollArea(saScrollUp);
       if Themed then
       begin
-        PartType := SBP_ARROWBTN;
-
-        PartState := ABS_UPNORMAL;
-        if not Enabled then
-          PartState := ABS_UPDISABLED
-        else
-        if ssUpPressed in State then
-          PartState := ABS_UPPRESSED
-        else
-        if ssHotUp in State then
-          PartState := ABS_UPHOT;
-
-        DrawThemeBackground(ThemeScrollbar, DC, PartType, PartState, R, nil);
-      end else
-      begin
-        Flags := DFCS_SCROLLUP;
-
-        if not Enabled then
-          Flags := DFCS_INACTIVE
-        else begin
-          if Flat then
-            Flags := Flags or DFCS_FLAT;
-          if ssUpPressed in State then
-            if Flat then
-              Flags := Flags or DFCS_PUSHED
-            else
-              Flags := Flags or DFCS_FLAT
-        end;
-        DrawFrameControl(DC, R, DFC_SCROLL, Flags)
-      end
-    end else
-    if Cycle = pcScrollDown then
-    begin
-      R := ScrollArea(saScrollDown);
-      if Themed then
-      begin
-        PartType := SBP_ARROWBTN;
-
-        PartState := ABS_DOWNNORMAL;
-        if not Enabled then
-          PartState := ABS_DOWNDISABLED
-        else
-        if ssDownPressed in State then
-          PartState := ABS_DOWNPRESSED
-        else
-        if ssHotDown in State then
-          PartState := ABS_DOWNHOT;
-
-        DrawThemeBackground(ThemeScrollbar, DC, PartType, PartState, R, nil);
-      end else
-      begin
-        Flags := DFCS_SCROLLDOWN;
-
-        if not Enabled then
-          Flags := DFCS_INACTIVE
-        else begin
-          if Flat then
-            Flags := Flags or DFCS_FLAT;
-          if ssDownPressed in State then
-            if Flat then
-              Flags := Flags or DFCS_PUSHED
-            else
-              Flags := Flags or DFCS_FLAT     
-        end;
-        DrawFrameControl(DC, R, DFC_SCROLL, Flags)
-      end
-    end else
-    if Cycle = pcThumb then
-    begin
-      R := ScrollArea(saThumb);
-      if Themed then
-      begin
-        if R.Bottom - R.Top > 0 then
+        if lServices.Enabled then
         begin
-          PartType := SBP_THUMBBTNVERT;
-
-          PartState := SCRBS_NORMAL;
+          lState := TThemedScrollBar.tsArrowBtnUpNormal;
           if not Enabled then
-            PartState := SCRBS_DISABLED
-          else
-          if ssDraggingThumb in State then
-            PartState := SCRBS_PRESSED
-          else
-          if ssHotThumb in State then
-            PartState := SCRBS_HOT;
+            lState := TThemedScrollBar.tsArrowBtnUpDisabled
+          else if ssUpPressed in State then
+            lState := TThemedScrollBar.tsArrowBtnUpPressed
+          else if ssHotUp in State then
+            lState := TThemedScrollBar.tsArrowBtnUpHot;
 
-          DrawThemeBackground(ThemeScrollbar, DC, PartType, PartState, R, nil);
-          GetThemeBackgroundContentRect(ThemeScrollbar, DC, PartType, PartState, R, @ContentR);
-
-          PartType := SBP_GRIPPERVERT;
-          DrawThemeBackground(ThemeScrollbar, DC, PartType, PartState, ContentR, nil);
+          lDetails := lServices.GetElementDetails(lState);
+          lServices.DrawElement(ADC, lDetails, lRect);
         end
-      end else
+        else
+        begin
+          lPartType := SBP_ARROWBTN;
+
+          lPartState := ABS_UPNORMAL;
+          if not Enabled then
+            lPartState := ABS_UPDISABLED
+          else if ssUpPressed in State then
+            lPartState := ABS_UPPRESSED
+          else if ssHotUp in State then
+            lPartState := ABS_UPHOT;
+
+          DrawThemeBackground(ThemeScrollbar, ADC, lPartType, lPartState, lRect, nil);
+        end;
+      end
+      else
+      begin
+        lFlags := DFCS_SCROLLUP;
+
+        if not Enabled then
+          lFlags := DFCS_INACTIVE
+        else
+        begin
+          if Flat then
+            lFlags := lFlags or DFCS_FLAT;
+          if ssUpPressed in State then
+          begin
+            if Flat then
+              lFlags := lFlags or DFCS_PUSHED
+            else
+              lFlags := lFlags or DFCS_FLAT
+          end;
+        end;
+        DrawFrameControl(ADC, lRect, DFC_SCROLL, lFlags)
+      end;
+    end
+    else if ACycle = pcScrollDown then
+    begin
+      lRect := ScrollArea(saScrollDown);
+      if Themed then
+      begin
+        if lServices.Enabled then
+        begin
+          lState := TThemedScrollBar.tsArrowBtnDownNormal;
+          if not Enabled then
+            lState := TThemedScrollBar.tsArrowBtnDownDisabled
+          else if ssUpPressed in State then
+            lState := TThemedScrollBar.tsArrowBtnDownPressed
+          else if ssHotUp in State then
+            lState := TThemedScrollBar.tsArrowBtnDownHot;
+
+          lDetails := lServices.GetElementDetails(lState);
+          lServices.DrawElement(ADC, lDetails, lRect);
+        end
+        else
+        begin
+          lPartType := SBP_ARROWBTN;
+
+          lPartState := ABS_DOWNNORMAL;
+          if not Enabled then
+            lPartState := ABS_DOWNDISABLED
+          else if ssDownPressed in State then
+            lPartState := ABS_DOWNPRESSED
+          else if ssHotDown in State then
+            lPartState := ABS_DOWNHOT;
+
+          DrawThemeBackground(ThemeScrollbar, ADC, lPartType, lPartState, lRect, nil);
+        end;
+      end
+      else
+      begin
+        lFlags := DFCS_SCROLLDOWN;
+
+        if not Enabled then
+          lFlags := DFCS_INACTIVE
+        else
+        begin
+          if Flat then
+            lFlags := lFlags or DFCS_FLAT;
+          if ssDownPressed in State then
+          begin
+            if Flat then
+              lFlags := lFlags or DFCS_PUSHED
+            else
+              lFlags := lFlags or DFCS_FLAT
+          end;
+        end;
+        DrawFrameControl(ADC, lRect, DFC_SCROLL, lFlags)
+      end;
+    end
+    else if ACycle = pcThumb then
+    begin
+      lRect := ScrollArea(saThumb);
+      if Themed then
+      begin
+        if lRect.Bottom - lRect.Top > 0 then
+        begin
+          if lServices.Enabled then
+          begin
+            lState := TThemedScrollBar.tsThumbBtnVertNormal;
+            if not Enabled then
+              lState := TThemedScrollBar.tsThumbBtnVertDisabled
+            else if ssUpPressed in State then
+              lState := TThemedScrollBar.tsThumbBtnVertPressed
+            else if ssHotUp in State then
+              lState := TThemedScrollBar.tsThumbBtnVertHot;
+            lDetails := lServices.GetElementDetails(lState);
+
+            lContentR := ScrollArea(saThumbClient);
+            lColor := BkGndBrush.Color;
+            lColorNew := lServices.GetSystemColor(clScrollBar);
+            BkGndBrush.Color := lColorNew;
+            FillRect(ADC, lContentR, BkGndBrush.Handle);
+            BkGndBrush.Color := lColor;
+
+            lServices.DrawElement(ADC, lDetails, lRect);
+          end
+          else
+          begin
+            lPartType := SBP_THUMBBTNVERT;
+
+            lPartState := SCRBS_NORMAL;
+            if not Enabled then
+              lPartState := SCRBS_DISABLED
+            else if ssDraggingThumb in State then
+              lPartState := SCRBS_PRESSED
+            else if ssHotThumb in State then
+              lPartState := SCRBS_HOT;
+
+            DrawThemeBackground(ThemeScrollbar, ADC, lPartType, lPartState, lRect, nil);
+            GetThemeBackgroundContentRect(ThemeScrollbar, ADC, lPartType, lPartState, lRect, @lContentR);
+
+            lPartType := SBP_GRIPPERVERT;
+            DrawThemeBackground(ThemeScrollbar, ADC, lPartType, lPartState, lContentR, nil);
+          end;
+        end
+      end
+      else
       begin
         Canvas.Brush.Color := Colors.ThumbButton;
-        FillRect(DC, R, Canvas.Brush.Handle);
+        FillRect(ADC, lRect, Canvas.Brush.Handle);
         if not Flat then
         begin
-          Flags := EDGE_RAISED;
-          DrawEdge(DC, R, Flags, BF_RECT)
-        end else
+          lFlags := EDGE_RAISED;
+          DrawEdge(ADC, lRect, lFlags, BF_RECT)
+        end
+        else
         begin
           Canvas.Brush.Color := clBtnShadow;
-          Canvas.FrameRect(R);
+          Canvas.FrameRect(lRect);
         end;
-        DrawEdge(DC, R, Flags, BF_RECT)
-      end
-    end
-  end
+        DrawEdge(ADC, lRect, lFlags, BF_RECT)
+      end;
+    end;
+  end;
 end;
 
 procedure TCustomOwnerDrawScrollbar.FreeThemes;
@@ -695,16 +768,24 @@ end;
 
 procedure TCustomOwnerDrawScrollbar.RebuildDefaultColors;
 var
-  i, j: integer;
+  lCount: Integer;
+  lInner: Integer;
 begin
-  for i := 0 to 7 do
-    for j := 0 to 7 do
-      if Odd(i+j) then
-        BkGndBrush.Bitmap.Canvas.Pixels[i,j] := Colors.Background
-      else
-        BkGndBrush.Bitmap.Canvas.Pixels[i,j] := Colors.BackgroundBlend;
+  if Assigned(BkGndBrush.Bitmap) then
+  begin
+    for lCount := 0 to 7 do
+    begin
+      for lInner := 0 to 7 do
+      begin
+        if Odd(lCount + lInner) then
+          BkGndBrush.Bitmap.Canvas.Pixels[lCount, lInner] := Colors.Background
+        else
+          BkGndBrush.Bitmap.Canvas.Pixels[lCount, lInner] := Colors.BackgroundBlend;
+      end;
+    end;
+  end;
   Invalidate;
-  Update
+  Update;
 end;
 
 function TCustomOwnerDrawScrollbar.ScrollArea(Area: TScrollArea): TRect;
