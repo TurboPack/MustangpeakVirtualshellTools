@@ -461,7 +461,7 @@ begin
             lState := TThemedScrollBar.tsArrowBtnUpHot;
 
           lDetails := lServices.GetElementDetails(lState);
-          lServices.DrawElement(ADC, lDetails, lRect);
+          lServices.DrawElement(ADC, lDetails, lRect, nil, CurrentPPI);
         end
         else
         begin
@@ -515,7 +515,7 @@ begin
             lState := TThemedScrollBar.tsArrowBtnDownHot;
 
           lDetails := lServices.GetElementDetails(lState);
-          lServices.DrawElement(ADC, lDetails, lRect);
+          lServices.DrawElement(ADC, lDetails, lRect, nil, CurrentPPI);
         end
         else
         begin
@@ -578,7 +578,7 @@ begin
             FillRect(ADC, lContentR, BkGndBrush.Handle);
             BkGndBrush.Color := lColor;
 
-            lServices.DrawElement(ADC, lDetails, lRect);
+            lServices.DrawElement(ADC, lDetails, lRect, nil, CurrentPPI);
           end
           else
           begin
