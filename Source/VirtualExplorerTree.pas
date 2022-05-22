@@ -11989,12 +11989,14 @@ var
   lCtlState: Integer;
   lCtlType: Integer;
   lDefaultDraw: Boolean;
+  lDetails: TThemedElementDetails;
   lOldColor: TColor;
   lOldRgn: HRGN;
   lRect: TRect;
   lRegion: HRGN;
   lrgbBk: UInt32;
   lServices: TCustomStyleServices;
+  lState: TThemedComboBox;
   {$IFDEF SpTBX}
   lComboButtonR: TRect;
   lIsHotTracked: Boolean;
@@ -12051,16 +12053,36 @@ begin
         Brush.Color := lOldColor;
 
         { Draw the DropDown Button }
-        lCtlType := CP_DROPDOWNBUTTON;
-        if Enabled then
-          lCtlState := CBXS_NORMAL
+        if lServices.Enabled then
+        begin
+          if Enabled then
+          begin
+            if (vcbsDropDownButtonPressed in FVETComboState) then
+              lState := TThemedComboBox.tcDropDownButtonPressed
+            else if (vcbsOverDropDownButton in FVETComboState) then
+              lState := TThemedComboBox.tcDropDownButtonHot
+            else
+              lState := TThemedComboBox.tcDropDownButtonNormal
+          end
+          else
+            lState := TThemedComboBox.tcDropDownButtonDisabled;
+
+          lDetails := lServices.GetElementDetails(lState);
+          lServices.DrawElement(APaintDC, lDetails, FButtonRect, nil, CurrentPPI);
+        end
         else
-          lCtlState := CBXS_DISABLED;
-        if (vcbsDropDownButtonPressed in FVETComboState) then
-          lCtlState := CBXS_PRESSED;
-        if vcbsOverDropDownButton in FVETComboState then
-          lCtlState := CBXS_HOT;
-         DrawThemeBackground(ThemeCombo, APaintDC, lCtlType, lCtlState, FButtonRect, nil)
+        begin
+          lCtlType := CP_DROPDOWNBUTTON;
+          if Enabled then
+            lCtlState := CBXS_NORMAL
+          else
+            lCtlState := CBXS_DISABLED;
+          if (vcbsDropDownButtonPressed in FVETComboState) then
+            lCtlState := CBXS_PRESSED;
+          if vcbsOverDropDownButton in FVETComboState then
+            lCtlState := CBXS_HOT;
+           DrawThemeBackground(ThemeCombo, APaintDC, lCtlType, lCtlState, FButtonRect, nil)
+        end;
       end
       else
       begin
