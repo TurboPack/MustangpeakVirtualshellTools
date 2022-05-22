@@ -509,9 +509,9 @@ begin
           lState := TThemedScrollBar.tsArrowBtnDownNormal;
           if not Enabled then
             lState := TThemedScrollBar.tsArrowBtnDownDisabled
-          else if ssUpPressed in State then
+          else if ssDownPressed in State then
             lState := TThemedScrollBar.tsArrowBtnDownPressed
-          else if ssHotUp in State then
+          else if ssHotDown in State then
             lState := TThemedScrollBar.tsArrowBtnDownHot;
 
           lDetails := lServices.GetElementDetails(lState);
@@ -565,9 +565,9 @@ begin
             lState := TThemedScrollBar.tsThumbBtnVertNormal;
             if not Enabled then
               lState := TThemedScrollBar.tsThumbBtnVertDisabled
-            else if ssUpPressed in State then
+            else if ssDraggingThumb in State then
               lState := TThemedScrollBar.tsThumbBtnVertPressed
-            else if ssHotUp in State then
+            else if ssHotThumb in State then
               lState := TThemedScrollBar.tsThumbBtnVertHot;
             lDetails := lServices.GetElementDetails(lState);
 
