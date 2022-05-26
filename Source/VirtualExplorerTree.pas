@@ -13286,7 +13286,7 @@ procedure TPopupExplorerDropDown.ChangeScaleLoaded(AM, AD: Integer; AIsDpiChange
 begin
   if AIsDpiChange then
   begin
-    if FPopupExplorerTree.CurrentPPI <> AM then
+    if FPopupExplorerTree.FCurrentPPI <> AM then
       FPopupExplorerTree.ChangeScale(AM, AD, AIsDpiChange);
     ChangeScale(AM, AD, AIsDpiChange);
   end;
@@ -15224,7 +15224,7 @@ procedure TPopupAutoCompleteDropDown.ChangeScaleLoaded(AM, AD: Integer; AIsDpiCh
 begin
   if AIsDpiChange then
   begin
-    if FPopupAutoCompleteTree.CurrentPPI <> AM then
+    if FPopupAutoCompleteTree.FCurrentPPI <> AM then
       FPopupAutoCompleteTree.ChangeScale(AM, AD, AIsDpiChange);
     ChangeScale(AM, AD, AIsDpiChange);
   end;
