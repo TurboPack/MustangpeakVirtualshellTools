@@ -1836,7 +1836,7 @@ procedure LoadListviewWithColumnArray(Listview: TCustomVirtualExplorerEasyListvi
 implementation
 
 uses
-  TypInfo, System.Types, System.UITypes, Dialogs;
+  TypInfo, System.Types, System.UITypes, Dialogs, Vcl.Forms;
 
 type
   TEasySelectionManagerHack = class(TEasySelectionManager);
@@ -5780,15 +5780,15 @@ begin
             if ValidIndex(Column.Index) then
             begin
               if RootFolderNamespace.IsMyComputer then
-                Column.Width := VET_DEFAULT_DRIVES_COLUMNWIDTHS[Column.Index]
+                Column.Width := MulDiv(VET_DEFAULT_DRIVES_COLUMNWIDTHS[Column.Index], FCurrentPPI, Screen.DefaultPixelsPerInch)
               else
               if RootFolderNamespace.IsControlPanel then
-                Column.Width := VET_DEFAULT_CONTROLPANEL_COLUMNWIDTHS[Column.Index]
+                Column.Width := MulDiv(VET_DEFAULT_CONTROLPANEL_COLUMNWIDTHS[Column.Index], FCurrentPPI, Screen.DefaultPixelsPerInch)
               else
               if (RootFolderNamespace.IsNetworkNeighborhood or
                 RootFolderNamespace.IsNetworkNeighborhoodChild) and
                 ((RootFolderNamespace.DetailsSupportedColumns < 3)) then
-                Column.Width := VET_DEFAULT_NETWORK_COLUMNWIDTHS[Column.Index]
+                Column.Width := MulDiv(VET_DEFAULT_NETWORK_COLUMNWIDTHS[Column.Index], FCurrentPPI, Screen.DefaultPixelsPerInch)
               else begin
                 if (Column.Index = 0) then
                 begin
@@ -5806,12 +5806,12 @@ begin
                        end
                   end;
                   if Column.Width = 0 then
-                    Column.Width := VET_ColumnWidths[Column.Index]
+                    Column.Width := MulDiv(VET_ColumnWidths[Column.Index], FCurrentPPI, Screen.DefaultPixelsPerInch);
                 end else
-                  Column.Width := VET_ColumnWidths[Column.Index]
+                  Column.Width := MulDiv(VET_ColumnWidths[Column.Index], FCurrentPPI, Screen.DefaultPixelsPerInch);
               end
             end else
-              Column.Width := 120;
+              Column.Width := MulDiv(120, FCurrentPPI, Screen.DefaultPixelsPerInch);
             // Some Column Handers return this always and Explorer does not
             // respect that flag
             {$IFDEF ALWAYS_SHOW_ALL_COLUMNS}
