@@ -1320,6 +1320,7 @@ end;
 destructor TThumbInfo.Destroy;
 begin
   FThumbBitmapStream.Free;
+  FThumbBitmapStream := nil;
   inherited Destroy;
 end;
 

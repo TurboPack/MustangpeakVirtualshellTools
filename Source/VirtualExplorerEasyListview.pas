@@ -1036,7 +1036,7 @@ type
     function SelectedToNamespaceArray: TNamespaceArray; virtual;
     function SelectedToPIDLArray: TRelativePIDLArray; virtual;
     function ValidateNamespace(Item: TEasyItem; var Namespace: TNamespace): Boolean;
-    function ValidateThumbnail(Item: TEasyItem; var ThumbInfo: TThumbInfo): Boolean;
+    function ValidateThumbnail(AItem: TEasyItem; var AThumbInfo: TThumbInfo): Boolean;
     function ValidRootNamespace: Boolean;
     procedure BrowseToPrevLevel; virtual;
     procedure ChangeLinkChanging(Server: TObject; NewPIDL: PItemIDList); dynamic; // ChangeLink method
@@ -4135,13 +4135,13 @@ begin
   end
 end;
 
-function TCustomVirtualExplorerEasyListview.ValidateThumbnail(Item: TEasyItem; var ThumbInfo: TThumbInfo): Boolean;
+function TCustomVirtualExplorerEasyListview.ValidateThumbnail(AItem: TEasyItem; var AThumbInfo: TThumbInfo): Boolean;
 begin
-   if Assigned(Item) then
-    ThumbInfo := TExplorerItem(Item).ThumbInfo
+   if AItem is TExplorerItem then
+    AThumbInfo := TExplorerItem(AItem).ThumbInfo
   else
-    ThumbInfo := nil;
-  Result := Assigned(ThumbInfo);
+    AThumbInfo := nil;
+  Result := Assigned(AThumbInfo);
 end;
 
 function TCustomVirtualExplorerEasyListview.ValidRootNamespace: Boolean;
