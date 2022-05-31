@@ -300,7 +300,7 @@ procedure SpConvertJPGStreamToBitmap(MS: TMemoryStream; OutBitmap: TBitmap);
 implementation
 
 uses
-{$IFDEF USEIMAGEEN} ImageEnIo, ImageEnProc, hyieutils,{$ENDIF}
+{$IFDEF USEIMAGEEN} ImageEnIo, ImageEnProc, hyieutils, iexBitmaps, iexHelperFunctions,{$ENDIF}
   Types,
   Math;
 
@@ -1923,12 +1923,12 @@ var
 begin
   FValidImageFormats.Clear;
   with FValidImageFormats do begin
-    CommaText := '.jpg, .jpeg, .jif, .bmp, .emf, .wmf';
+    CommaText := '.jpg, .jpeg, .jpe, .jif, .bmp, .emf, .wmf';
     {$IFDEF USEIMAGEEN}
-    CommaText := CommaText + ', .png, .pcx, .dcx, .tif, .tiff, .fax, .g3n, .g3f, .gif, .dib, .rle' +
-      ', .tga, .targa, .vda, .icb, .vst, .pix, .jp2, .j2k, .jpc, .j2c' +
-      ', .crw, .cr2, .nef, .raw, .pef, .raf, .x3f, .bay, .orf, .srf, .mrw, .dcr' +
-      ', .avi, .mpeg, .mpg, .wmv';
+    CommaText := CommaText + ', .tif, .tiff, .fax, .g3n, .g3f, .xif, .gif, .pcx, .dib, .rle, .ico, .cur, .png, .dcm, .dic, .dicom' +
+      ', .v2, .tga, .targa, .vda, .icb, .vst, .pix, .pxm, .ppm, .pgm, .pbm, .wbmp, .jp2, .j2k, .jpc, .j2c, .dcx' +
+      ', .crw, .cr2, .dng, .nef, .raw, .raf, .x3f, .orf, .srf, .mrw, .dcr, .bay, .pef, .sr2, .arw, .kdc, .mef, .3fr, .k25, .erf, .cam, .cs1, .dc2, .dcs, .fff, .mdc, .mos, .nrw, .ptx, .pxn, .rdc, .rw2, .rwl, .iiq, .srw' +
+      ', .psd, .psb, .wdp, .hdp, .jxr, .dds, .heic, .heif, .heics, .avcs, .heifs, .webp, .avi, .mpe, .mpg, .mpeg, .wmv';
     {$ELSE}
     {$IFDEF USEENVISION}
       //version 1.1
@@ -1939,25 +1939,15 @@ begin
     {$ENDIF}
   end;
 
-  if FillColors then begin
+if FillColors then begin
     for I := 0 to FValidImageFormats.Count - 1 do begin
       Ext := FValidImageFormats[I];
 
-      if Pos(Ext, '.jpg, .jpeg, .jif, .jfif, .jpe, .jp2, .j2k, .jpc, .j2c, .crw, .cr2, .nef, .raw, .pef, .raf, .x2f, .bay, .orf, .srf, .mrw, .dcr') > 0 then FValidImageFormats.Colors[I] := $BADDDD
-      else if Pos(Ext, '.bmp, .rle, .dib') > 0 then FValidImageFormats.Colors[I] := $EFD3D3
-      else if Pos(Ext, '.emf, .wmf') > 0 then FValidImageFormats.Colors[I] := $7DC7B0
-      else if Pos(Ext, '.gif') > 0 then FValidImageFormats.Colors[I] := $CCDBCC
-      else if Pos(Ext, '.png') > 0 then FValidImageFormats.Colors[I] := $DAB6DA
-      else if Pos(Ext, '.tif, .tiff, .fax, .g3n, .g3f, .eps') > 0 then FValidImageFormats.Colors[I] := $DBB5B0
-      else if Pos(Ext, '.pcx, .dcx, .pcc, .scr') > 0 then FValidImageFormats.Colors[I] := $D6D6DB
-      else if Pos(Ext, '.tga, .targa, .pix, .vst, .vda, .win, .icb, .afi') > 0 then FValidImageFormats.Colors[I] := $EFEFD6
-      else if Pos(Ext, '.psd, .pdd') > 0 then FValidImageFormats.Colors[I] := $D3EFEF
-      else if Pos(Ext, '.psp') > 0 then FValidImageFormats.Colors[I] := $93C0DD
-      else if Pos(Ext, '.sgi, .rgba, .rgb, .bw') > 0 then FValidImageFormats.Colors[I] := $C2BBE3
-      else if Pos(Ext, '.rla, .rpf') > 0 then FValidImageFormats.Colors[I] := $D3EFEF
-      else if Pos(Ext, '.ppm, .pgm, .pbm') > 0 then FValidImageFormats.Colors[I] := $95D4DD
-      else if Pos(Ext, '.cel, .pic, .cut, .pcd') > 0 then FValidImageFormats.Colors[I] := $AFEFEE
-      else if Pos(Ext, '.avi, .mpg, .mpeg, .wmv') > 0 then FValidImageFormats.Colors[I] := $0BBDFF;
+      if Pos(Ext, '.jpg, .jpeg, .jpe, .jif, .bmp, .emf, .wmf') > 0 then FValidImageFormats.Colors[I] := $BADDDD
+      else if Pos(Ext, '.tif, .tiff, .fax, .g3n, .g3f, .xif, .gif, .pcx, .dib, .rle, .ico, .cur, .png, .dcm, .dic, .dicom') > 0 then FValidImageFormats.Colors[I] := $EFD3D3
+      else if Pos(Ext, '.v2, .tga, .targa, .vda, .icb, .vst, .pix, .pxm, .ppm, .pgm, .pbm, .wbmp, .jp2, .j2k, .jpc, .j2c, .dcx') > 0 then FValidImageFormats.Colors[I] := $7DC7B0
+      else if Pos(Ext, '.crw, .cr2, .dng, .nef, .raw, .raf, .x3f, .orf, .srf, .mrw, .dcr, .bay, .pef, .sr2, .arw, .kdc, .mef, .3fr, .k25, .erf, .cam, .cs1, .dc2, .dcs, .fff, .mdc, .mos, .nrw, .ptx, .pxn, .rdc, .rw2, .rwl, .iiq, .srw') > 0 then FValidImageFormats.Colors[I] := $CCDBCC
+      else if Pos(Ext, '.psd, .psb, .wdp, .hdp, .jxr, .dds, .heic, .heif, .heics, .avcs, .heifs, .webp, .avi, .mpe, .mpg, .mpeg, .wmv') > 0 then FValidImageFormats.Colors[I] := $0BBDFF;
       // $7DC7B0 = green, $0BBDFF = orange, CFCFCF = grey
     end;
   end;

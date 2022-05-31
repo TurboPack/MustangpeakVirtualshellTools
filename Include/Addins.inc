@@ -43,3 +43,8 @@
 {$DEFINE EXPLORERTREEVIEW_L}
 // -----------------------------------------------------------------------------
 
+// ImageEn SUPPORT
+// You may need to add Path to ImageEn: Delphi Compiler, Windows 64bit, Search path \ImageEn\Source\Delphi11Alexandria_64
+
+// {$DEFINE USEIMAGEEN}
+
