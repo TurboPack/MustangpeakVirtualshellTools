@@ -10248,7 +10248,9 @@ begin
                 lColData.Enabled := coVisible in lColumn.Options;
                 lColData.Width := lColumn.Width;
                 lColData.ColumnIndex := lColumn.Index;
-              end;
+              end
+              else
+                lItems.AddObject(lColumn.Text, lColumn);
             end;
           end;
 
