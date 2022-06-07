@@ -1587,15 +1587,13 @@ end;
 
 function TThumbInfo.ReadBitmap(AOutBitmap: TBitmap): Boolean;
 begin
-  if Assigned(AOutBitmap) then
+  Result := Assigned(AOutBitmap);
+  if Result then
   begin
     FThumbBitmapStream.Position := 0;
     AOutBitmap.LoadFromStream(FThumbBitmapStream);
     FThumbBitmapStream.Position := 0;
-    Result := True;
-  end
-  else
-    Result := False;
+  end;
 end;
 
 procedure TThumbInfo.WriteBitmap(ABitmap: TBitmap);
