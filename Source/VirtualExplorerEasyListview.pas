@@ -4892,12 +4892,12 @@ begin
       if not ThumbsManager.UseEndScrollDraw or
         (ThumbsManager.UseEndScrollDraw and not (ebcsScrolling in States)) then
       begin
-      lFileFormat := ThumbsManager.IsValidImageFileFormat(lNS);
-      if lFileFormat <> vffInvalid then
-      begin
-        lThumbSize.X := Max(RectWidth(ARect), ThumbsManager.MaxThumbWidth);
-        lThumbSize.Y := Max(RectHeight(ARect), ThumbsManager.MaxThumbHeight);
-        Enqueue(lNS, AItem, lThumbSize, lFileFormat = vffUnknown, False);
+        lFileFormat := ThumbsManager.IsValidImageFileFormat(lNS);
+        if lFileFormat <> vffInvalid then
+        begin
+          lThumbSize.X := Max(RectWidth(ARect), ThumbsManager.MaxThumbWidth);
+          lThumbSize.Y := Max(RectHeight(ARect), ThumbsManager.MaxThumbHeight);
+          Enqueue(lNS, AItem, lThumbSize, lFileFormat = vffUnknown, False);
         end;
       end;
     end
@@ -4910,26 +4910,25 @@ begin
         lThumbSize.X := Max(RectWidth(ARect), ThumbsManager.MaxThumbWidth);
         lThumbSize.Y := Max(RectHeight(ARect), ThumbsManager.MaxThumbHeight);
         lThumbInfo := SpCreateThumbInfoFromFile(lExplorerItem.Namespace, lThumbSize.X, lThumbSize.Y, True, True, True, True, Color);
-        if Assigned(lThumbInfo) then
-        begin
-          try
+        try
+          if Assigned(lThumbInfo) then
+          begin
             if not Assigned(lExplorerItem.ThumbInfo) then
               lExplorerItem.ThumbInfo := TThumbInfo.Create;
             if Assigned(lExplorerItem.ThumbInfo) then
             begin
               lExplorerItem.ThumbInfo.Assign(lThumbInfo);
               lExplorerItem.Namespace.States := lExplorerItem.Namespace.States - [nsThreadedImageLoading, nsThreadedImageResizing] + [nsThreadedImageLoaded]
-            end
-          finally
-            lThumbInfo.Free;
-          end
-        end;
+            end;
+          end;
+        finally
+          lThumbInfo.Free;
+        end
       end;
       if (nsThreadedImageLoaded in lNS.States) and ValidateThumbnail(AItem, lThumbInfo) then
       begin
         lThumbSize.X := Max(RectWidth(ARect), ThumbsManager.MaxThumbWidth);
         lThumbSize.Y := Max(RectHeight(ARect), ThumbsManager.MaxThumbHeight);
-        lSize := lThumbInfo.ThumbSize;
         if (lThumbInfo.ImageWidth = 0) or (lThumbInfo.ImageHeight = 0) then
           lSize := lThumbInfo.ThumbSize
         else
