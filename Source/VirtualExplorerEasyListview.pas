@@ -844,7 +844,7 @@ type
     procedure DoItemGetTileDetailCount(Item: TEasyItem; var Count: Integer); override;
     procedure DoItemPaintText(Item: TEasyItem; Position: Integer; ACanvas: TCanvas); override;
     procedure DoItemSetCaption(Item: TEasyItem; Column: Integer; const Caption: string); override;
-    procedure DoItemThumbnailDraw(Item: TEasyItem; ACanvas: TCanvas; ARect: TRect; AlphaBlender: TEasyAlphaBlender; var DoDefault: Boolean); override;
+    procedure DoItemThumbnailDraw(AItem: TEasyItem; ACanvas: TCanvas; ARect: TRect; AAlphaBlender: TEasyAlphaBlender; var ADoDefault: Boolean); override;
     procedure DoKeyAction(var CharCode: Word; var Shift: TShiftState; var DoDefault: Boolean); override;
     procedure DoLoadStorageToRoot(StorageNode: TNodeStorage); virtual;
     procedure DoNamespaceStructureChange(Item: TExplorerItem; ChangeType: TNamespaceStructureChange); virtual;
@@ -4874,76 +4874,78 @@ begin
   inherited DoScrollEnd(ScrollBar);
 end;
 
-procedure TCustomVirtualExplorerEasyListview.DoItemThumbnailDraw(Item: TEasyItem; ACanvas: TCanvas; ARect: TRect; AlphaBlender: TEasyAlphaBlender; var DoDefault: Boolean);
+procedure TCustomVirtualExplorerEasyListview.DoItemThumbnailDraw(AItem: TEasyItem; ACanvas: TCanvas; ARect: TRect; AAlphaBlender: TEasyAlphaBlender; var ADoDefault: Boolean);
 var
-  NS: TNamespace;
-  T: TThumbInfo;
-  VFF: TValidImageFileFormat;
-  ThumbSize, Sz: TPoint;
-  ExplorerItem: TExplorerItem;
+  lExplorerItem: TExplorerItem;
+  lFileFormat: TValidImageFileFormat;
+  lNS: TNamespace;
+  lSize: TPoint;
+  lThumbInfo: TThumbInfo;
+  lThumbSize: TPoint;
 begin
   if Assigned(FOnBeforeItemThumbnailDraw) then
-    FOnBeforeItemThumbnailDraw(Item);
-  if ValidateNamespace(Item, NS) then
+    FOnBeforeItemThumbnailDraw(AItem);
+  if ValidateNamespace(AItem, lNS) then
   begin
-    if ThreadedThumbnailsEnabled and not ThumbsManager.Updating and (NS.States * [nsThreadedImageLoaded, nsThreadedImageLoading, nsThreadedImageResizing] = []) then
+    if ThreadedThumbnailsEnabled and not ThumbsManager.Updating and (lNS.States * [nsThreadedImageLoaded, nsThreadedImageLoading, nsThreadedImageResizing] = []) then
     begin
-      if not ThumbsManager.UseEndScrollDraw
-        or (ThumbsManager.UseEndScrollDraw and not (ebcsScrolling in States)) then
+      if not ThumbsManager.UseEndScrollDraw or
+        (ThumbsManager.UseEndScrollDraw and not (ebcsScrolling in States)) then
       begin
-      VFF := ThumbsManager.IsValidImageFileFormat(NS);
-      if VFF <> vffInvalid then
+      lFileFormat := ThumbsManager.IsValidImageFileFormat(lNS);
+      if lFileFormat <> vffInvalid then
       begin
-        ThumbSize.X := Max(RectWidth(ARect), ThumbsManager.MaxThumbWidth);
-        ThumbSize.Y := Max(RectHeight(ARect), ThumbsManager.MaxThumbHeight);
-        Enqueue(NS, Item, ThumbSize, VFF = vffUnknown, False);
+        lThumbSize.X := Max(RectWidth(ARect), ThumbsManager.MaxThumbWidth);
+        lThumbSize.Y := Max(RectHeight(ARect), ThumbsManager.MaxThumbHeight);
+        Enqueue(lNS, AItem, lThumbSize, lFileFormat = vffUnknown, False);
         end;
       end;
-    end else
+    end
+    else
     begin
-      if (ebcsPrinting in States) and not (nsThreadedImageLoaded in NS.States) then
+      if (ebcsPrinting in States) and not (nsThreadedImageLoaded in lNS.States) then
       begin
-        ExplorerItem := TExplorerItem( Item);
+        lExplorerItem := TExplorerItem( AItem);
         // Force the thumbnail loaded
-        ThumbSize.X := Max(RectWidth(ARect), ThumbsManager.MaxThumbWidth);
-        ThumbSize.Y := Max(RectHeight(ARect), ThumbsManager.MaxThumbHeight);
-        T := SpCreateThumbInfoFromFile(ExplorerItem.Namespace, ThumbSize.X, ThumbSize.Y, True, True, True, True, Color);
-        if Assigned(T) then
-        try
-          if not Assigned(ExplorerItem.ThumbInfo) then
-            ExplorerItem.ThumbInfo := TThumbInfo.Create;
-          if Assigned(ExplorerItem.ThumbInfo) then
-          begin
-            ExplorerItem.ThumbInfo.Assign(T);
-            ExplorerItem.Namespace.States := ExplorerItem.Namespace.States - [nsThreadedImageLoading, nsThreadedImageResizing] + [nsThreadedImageLoaded]
+        lThumbSize.X := Max(RectWidth(ARect), ThumbsManager.MaxThumbWidth);
+        lThumbSize.Y := Max(RectHeight(ARect), ThumbsManager.MaxThumbHeight);
+        lThumbInfo := SpCreateThumbInfoFromFile(lExplorerItem.Namespace, lThumbSize.X, lThumbSize.Y, True, True, True, True, Color);
+        if Assigned(lThumbInfo) then
+        begin
+          try
+            if not Assigned(lExplorerItem.ThumbInfo) then
+              lExplorerItem.ThumbInfo := TThumbInfo.Create;
+            if Assigned(lExplorerItem.ThumbInfo) then
+            begin
+              lExplorerItem.ThumbInfo.Assign(lThumbInfo);
+              lExplorerItem.Namespace.States := lExplorerItem.Namespace.States - [nsThreadedImageLoading, nsThreadedImageResizing] + [nsThreadedImageLoaded]
+            end
+          finally
+            lThumbInfo.Free;
           end
-        finally
-          T.Free
-        end
+        end;
       end;
-      if (nsThreadedImageLoaded in NS.States) and ValidateThumbnail(Item, T) then
+      if (nsThreadedImageLoaded in lNS.States) and ValidateThumbnail(AItem, lThumbInfo) then
       begin
-        ThumbSize.X := Max(RectWidth(ARect), ThumbsManager.MaxThumbWidth);
-        ThumbSize.Y := Max(RectHeight(ARect), ThumbsManager.MaxThumbHeight);
-        Sz := T.ThumbSize;
-        if (T.ImageWidth = 0) or (T.ImageHeight = 0) then
-          Sz := T.ThumbSize
+        lThumbSize.X := Max(RectWidth(ARect), ThumbsManager.MaxThumbWidth);
+        lThumbSize.Y := Max(RectHeight(ARect), ThumbsManager.MaxThumbHeight);
+        lSize := lThumbInfo.ThumbSize;
+        if (lThumbInfo.ImageWidth = 0) or (lThumbInfo.ImageHeight = 0) then
+          lSize := lThumbInfo.ThumbSize
         else
-          Sz := Point(T.ImageWidth, T.ImageHeight);
+          lSize := Point(lThumbInfo.ImageWidth, lThumbInfo.ImageHeight);
 
         // Do we need to resize the thumbnails?
         // ShellExtracted items will not be resized
-        if not (nsThreadedImageResizing in NS.States) and
-          (Sz.X < ThumbSize.X) and (Sz.Y < ThumbSize.Y) and
-          (Sz.X < T.ImageWidth) and (Sz.Y < T.ImageHeight) then
-        begin
-          Enqueue(NS, Item, ThumbSize, ThumbsManager.IsValidImageFileFormat(NS) = vffUnknown, True);
-        end;
+        if not (nsThreadedImageResizing in lNS.States) and
+          (lSize.X < lThumbSize.X) and (lSize.Y < lThumbSize.Y) and
+          (lSize.X < lThumbInfo.ImageWidth) and (lSize.Y < lThumbInfo.ImageHeight) then
+          Enqueue(lNS, AItem, lThumbSize, ThumbsManager.IsValidImageFileFormat(lNS) = vffUnknown, True);
 
-        //Some people have the problem that here T.ThumbBitmapStream is nil
+        //Some people have the problem that here lThumbInfo.ThumbBitmapStream is nil
         //I would like to test this workaround
-        if Assigned(T.ThumbBitmapStream) then
-          T.Draw(ACanvas, ARect, ThumbsManager.Alignment, ThumbsManager.Stretch);
+        if Assigned(lThumbInfo.ThumbBitmapStream) then
+          lThumbInfo.Draw(ACanvas, ARect, ThumbsManager.Alignment, ThumbsManager.Stretch);
 
         if ShowInactive then
         begin
@@ -4954,12 +4956,12 @@ begin
           else
             AlphaBlend(0, ACanvas.Handle, ARect, Point(0, 0), cbmConstantAlphaAndColor, 198, Color)
         end;
-        DoDefault := False;
+        ADoDefault := False;
       end;
     end;
   end;
 
-  inherited DoItemThumbnailDraw(Item, ACanvas, ARect, AlphaBlender, DoDefault);
+  inherited DoItemThumbnailDraw(AItem, ACanvas, ARect, AAlphaBlender, ADoDefault);
 end;
 
 procedure TCustomVirtualExplorerEasyListview.DoLoadStorageToRoot(StorageNode: TNodeStorage);
