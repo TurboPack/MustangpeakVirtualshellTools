@@ -289,12 +289,12 @@ function SpReadIntegerFromStream(ST: TStream): Integer;
 procedure SpWriteIntegerToStream(ST: TStream; I: Integer);
 function SpReadUnicodeStringFromStream(ST: TStream): string;
 procedure SpWriteUnicodeStringToStream(ST: TStream; WS: string);
-function SpReadMemoryStreamFromStream(ST: TStream; MS: TMemoryStream): Boolean;
-procedure SpWriteMemoryStreamToStream(ST: TStream; MS: TMemoryStream);
+function SpReadMemoryStreamFromStream(const AStream: TStream; AMemoryStream: TMemoryStream): Boolean;
+procedure SpWriteMemoryStreamToStream(const AStream: TStream; AMemoryStream: TMemoryStream);
 function SpReadBitmapFromStream(ST: TStream; B: TBitmap): Boolean;
 procedure SpWriteBitmapToStream(ST: TStream; B: TBitmap);
 procedure SpConvertBitmapStreamToJPGStream(MS: TMemoryStream; CompressionQuality: TJPEGQualityRange = 90);
-procedure SpConvertJPGStreamToBitmapStream(MS: TMemoryStream);
+procedure SpConvertJPGStreamToBitmapStream(const AStream: TMemoryStream);
 procedure SpConvertJPGStreamToBitmap(MS: TMemoryStream; OutBitmap: TBitmap);
 
 implementation
@@ -1269,26 +1269,27 @@ begin
   ST.WriteBuffer(PWideChar(WS)^, 2 * L);
 end;
 
-function SpReadMemoryStreamFromStream(ST: TStream; MS: TMemoryStream): Boolean;
+function SpReadMemoryStreamFromStream(const AStream: TStream; AMemoryStream: TMemoryStream): Boolean;
 var
-  L: Integer;
+  lSize: Integer;
 begin
   Result := False;
-  ST.ReadBuffer(L, SizeOf(L));
-  if L > 0 then begin
-    MS.Size := L;
-    ST.ReadBuffer(MS.Memory^, L);
+  AStream.ReadBuffer(lSize, SizeOf(lSize));
+  if lSize > 0 then
+  begin
+    AMemoryStream.Size := lSize;
+    AStream.ReadBuffer(AMemoryStream.Memory^, lSize);
     Result := True;
   end;
 end;
 
-procedure SpWriteMemoryStreamToStream(ST: TStream; MS: TMemoryStream);
+procedure SpWriteMemoryStreamToStream(const AStream: TStream; AMemoryStream: TMemoryStream);
 var
-  L: Integer;
+  lSize: Integer;
 begin
-  L := MS.Size;
-  ST.WriteBuffer(L, SizeOf(L));
-  ST.WriteBuffer(MS.Memory^, L);
+  lSize := AMemoryStream.Size;
+  AStream.WriteBuffer(lSize, SizeOf(lSize));
+  AStream.WriteBuffer(AMemoryStream.Memory^, lSize);
 end;
 
 function SpReadBitmapFromStream(ST: TStream; B: TBitmap): Boolean;
@@ -1352,23 +1353,24 @@ begin
   end;
 end;
 
-procedure SpConvertJPGStreamToBitmapStream(MS: TMemoryStream);
+procedure SpConvertJPGStreamToBitmapStream(const AStream: TMemoryStream);
 var
-  B: TBitmap;
-  J: TJPEGImage;
+  lBitmap: TBitmap;
+  lJpeg: TJPEGImage;
 begin
-  B := TBitmap.Create;
-  J := TJPEGImage.Create;
+  lBitmap := nil;
+  lJpeg := TJPEGImage.Create;
   try
-    MS.Position := 0;
-    J.LoadFromStream(MS);
-    B.Assign(J);
-    MS.Clear;
-    B.SaveToStream(MS);
-    MS.Position := 0;
+    lBitmap := TBitmap.Create;
+    AStream.Position := 0;
+    lJpeg.LoadFromStream(AStream);
+    lBitmap.Assign(lJpeg);
+    AStream.Clear;
+    lBitmap.SaveToStream(AStream);
+    AStream.Position := 0;
   finally
-    B.Free;
-    J.Free;
+    lBitmap.Free;
+    lJpeg.Free;
   end;
 end;
 
