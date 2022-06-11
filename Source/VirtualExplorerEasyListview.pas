@@ -4913,13 +4913,10 @@ begin
         try
           if Assigned(lThumbInfo) then
           begin
-            if not Assigned(lExplorerItem.ThumbInfo) then
+            if lExplorerItem.ThumbInfo = nil then
               lExplorerItem.ThumbInfo := TThumbInfo.Create;
-            if Assigned(lExplorerItem.ThumbInfo) then
-            begin
-              lExplorerItem.ThumbInfo.Assign(lThumbInfo);
-              lExplorerItem.Namespace.States := lExplorerItem.Namespace.States - [nsThreadedImageLoading, nsThreadedImageResizing] + [nsThreadedImageLoaded]
-            end;
+            lExplorerItem.ThumbInfo.Assign(lThumbInfo);
+            lExplorerItem.Namespace.States := lExplorerItem.Namespace.States - [nsThreadedImageLoading, nsThreadedImageResizing] + [nsThreadedImageLoaded]
           end;
         finally
           lThumbInfo.Free;
@@ -4941,10 +4938,7 @@ begin
           (lSize.X < lThumbInfo.ImageWidth) and (lSize.Y < lThumbInfo.ImageHeight) then
           Enqueue(lNS, AItem, lThumbSize, ThumbsManager.IsValidImageFileFormat(lNS) = vffUnknown, True);
 
-        //Some people have the problem that here lThumbInfo.ThumbBitmapStream is nil
-        //I would like to test this workaround
-        if Assigned(lThumbInfo.ThumbBitmapStream) then
-          lThumbInfo.Draw(ACanvas, ARect, ThumbsManager.Alignment, ThumbsManager.Stretch);
+        lThumbInfo.Draw(ACanvas, ARect, ThumbsManager.Alignment, ThumbsManager.Stretch);
 
         if ShowInactive then
         begin
@@ -5312,8 +5306,9 @@ begin
             begin
               NS.States := (NS.States - [nsThreadedImageLoading]) + [nsThreadedImageLoaded];
               // Clone the ThumbInfo
-              if Msg.Request.Tag > 0 then begin
-                if not Assigned(AnItem.ThumbInfo) then
+              if Msg.Request.Tag > 0 then
+              begin
+                if AnItem.ThumbInfo = nil then
                   AnItem.ThumbInfo := TThumbInfo.Create;
                 if nsThreadedImageResizing in NS.States then
                   NS.States := NS.States - [nsThreadedImageResizing];
@@ -7252,65 +7247,92 @@ begin
     FController := AOwner as TCustomVirtualExplorerEasyListview;
 end;
 
-procedure LoadThumbInfoFromAlbum(LV: TCustomVirtualExplorerEasyListview; Album: TThumbAlbum);
+procedure LoadThumbInfoFromAlbum(AListview: TCustomVirtualExplorerEasyListview; AAlbum: TThumbAlbum);
 var
-  J, I, X: Integer;
-  Items: TEasyItems;
-  NS: TNamespace;
-  AlbumT, T: TThumbInfo;
+  lAlbumT: TThumbInfo;
+  lExplorerItem: TExplorerItem;
+  lCount: Integer;
+  lIndex: Integer;
+  lInner: Integer;
+  lItem: TEasyItem;
+  lItems: TEasyItems;
+  lNamespace: TNamespace;
+  lThumbInfo: TThumbInfo;
 begin
-  for J := 0 to LV.Groups.Count - 1 do
+  for lCount := 0 to AListview.Groups.Count - 1 do
   begin
-    Items := LV.Groups[J].Items;
-    for I := 0 to Items.Count - 1 do
-      if LV.ValidateNamespace(Items[I], NS) then
-        if NS.States * [nsThreadedImageLoaded, nsThreadedImageLoading, nsThreadedImageResizing] = [] then
-          if not Assigned(TExplorerItem(Items[I]).ThumbInfo) then begin
-            X := Album.IndexOf(NS.NameForParsing);
-            if Album.Read(X, AlbumT) then
-              if (AlbumT.FileDateTime = NS.LastWriteDateTime) then begin
-                T := TThumbInfo.Create;
+    lItems := AListview.Groups[lCount].Items;
+    for lInner := 0 to lItems.Count - 1 do
+    begin
+      lItem := lItems[lInner];
+      if AListview.ValidateNamespace(lItem, lNamespace) then
+      begin
+        if lNamespace.States * [nsThreadedImageLoaded, nsThreadedImageLoading, nsThreadedImageResizing] = [] then
+        begin
+          lExplorerItem := lItem as TExplorerItem;
+          if lExplorerItem.ThumbInfo = nil then
+          begin
+            lIndex := AAlbum.IndexOf(lNamespace.NameForParsing);
+            if AAlbum.Read(lIndex, lAlbumT) then
+            begin
+              if lAlbumT.FileDateTime = lNamespace.LastWriteDateTime then
+              begin
+                lThumbInfo := TThumbInfo.Create;
                 try
-                  T.Assign(AlbumT);
-                  NS.States := (NS.States - [nsThreadedImageLoading]) + [nsThreadedImageLoaded];
-                  TExplorerItem(Items[I]).ThumbInfo := T;
-                  TExplorerItem(Items[I]).Invalidate(True);
+                  lThumbInfo.Assign(lAlbumT);
+                  lNamespace.States := (lNamespace.States - [nsThreadedImageLoading]) + [nsThreadedImageLoaded];
+                  lExplorerItem.ThumbInfo := lThumbInfo;
+                  lExplorerItem.Invalidate(True);
                 except
-                  T.Free;
+                  lThumbInfo.Free;
+                  lExplorerItem.ThumbInfo := nil;
                 end;
               end;
+            end;
           end;
+        end;
+      end;
+    end;
   end;
 end;
 
-procedure SaveThumbInfoToAlbum(LV: TCustomVirtualExplorerEasyListview; Album: TThumbAlbum);
+procedure SaveThumbInfoToAlbum(AListview: TCustomVirtualExplorerEasyListview; AAlbum: TThumbAlbum);
 var
-  J, I: Integer;
-  Items: TEasyItems;
-  NS: TNamespace;
-  T: TThumbInfo;
-  Compressed: Boolean;
+  lCompressed: Boolean;
+  lCount: Integer;
+  lExplorerItem: TExplorerItem;
+  lInner: Integer;
+  lItem: TEasyItem;
+  lItems: TEasyItems;
+  lNameSpace: TNamespace;
+  lThumbInfo: TThumbInfo;
 begin
-  Compressed := LV.ThumbsManager.StorageCompressed;
+  lCompressed := AListview.ThumbsManager.StorageCompressed;
 
-  Album.Clear;
-  for J := 0 to LV.Groups.Count - 1 do
+  AAlbum.Clear;
+  for lCount := 0 to AListview.Groups.Count - 1 do
   begin
-    Items := LV.Groups[J].Items;
-    for I := 0 to Items.Count - 1 do
-      if LV.ValidateNamespace(Items[I], NS) then
-        if Assigned(TExplorerItem(Items[I]).ThumbInfo) then
+    lItems := AListview.Groups[lCount].Items;
+    for lInner := 0 to lItems.Count - 1 do
+    begin
+      lItem := lItems[lInner];
+      if AListview.ValidateNamespace(lItem, lNameSpace) then
+      begin
+        lExplorerItem := lItem as TExplorerItem;
+        if Assigned(lExplorerItem.ThumbInfo) then
         begin
-          T := TThumbInfo.Create;
+          lThumbInfo := TThumbInfo.Create;
           try
-            T.Assign(TExplorerItem(Items[I]).ThumbInfo);
-            T.Filename := NS.NameForParsing;
-            T.UseCompression := Compressed and (T.ImageWidth > 250) and (T.ImageHeight > 250);
-            Album.Add(T);
+            lThumbInfo.Assign(lExplorerItem.ThumbInfo);
+            lThumbInfo.Filename := lNameSpace.NameForParsing;
+            lThumbInfo.UseCompression := lCompressed and (lThumbInfo.ImageWidth > 250) and (lThumbInfo.ImageHeight > 250);
           except
-            T.Free;
+            lThumbInfo.Free;
           end;
+          AAlbum.Add(lThumbInfo);
         end;
+      end;
+    end;
   end;
 end;
 
@@ -8567,21 +8589,20 @@ begin
       SetRect(FThumbRect, Result.Right + 6, ResizedResult.Top + 6, ResizedResult.Right - 6, ResizedResult.Bottom - 6);
 
       T := SpCreateThumbInfoFromFile(Item.Namespace, RectWidth(ThumbRect), RectHeight(ThumbRect), True, True, True, True, LV.Color);
-      if Assigned(T) then
       try
-        if not Assigned(Item.ThumbInfo) then
-          Item.ThumbInfo := TThumbInfo.Create;
-        if Assigned(Item.ThumbInfo) then
+        if Assigned(T) then
         begin
+          if Item.ThumbInfo = nil then
+            Item.ThumbInfo := TThumbInfo.Create;
           Item.ThumbInfo.Assign(T);
           if LV.ValidateThumbnail(Item, DummyT) then
-            Result := ResizedResult
-        end
+            Result := ResizedResult;
+        end;
       finally
-        T.Free
-      end
-    end
-  end
+        T.Free;
+      end;
+    end;
+  end;
 end;
 
 procedure TVirtualExplorerEasyListviewHintWindow.Paint;
