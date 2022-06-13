@@ -1815,7 +1815,7 @@ var
   UnknownFolderIconIndex: Integer = -1;
   UnknownFileIconIndex: Integer = -1;
 
-procedure AddThumbRequest(Window: TWinControl; Item: TExplorerItem; ThumbSize: TPoint; UseExifThumbnail, UseExifOrientation, UseShellExtraction, UseSubsampling, IsResizing: Boolean; ThumbRequestClassCallback: TThumbThreadCreateProc);
+procedure AddThumbRequest(AWindow: TWinControl; AItem: TExplorerItem; AThumbSize: TPoint; AUseExifThumbnail, AUseExifOrientation, AUseShellExtraction, AUseSubsampling, AIsResizing: Boolean; AThumbRequestClassCallback: TThumbThreadCreateProc);
 procedure LoadDefaultGroupingModifiedArray(var GroupingModifiedArray: TGroupingModifiedArray; CaptionsOnly: Boolean);
 procedure LoadDefaultGroupingFileSizeArray(var GroupingFileSizeArray: TGroupingFileSizeArray; CaptionsOnly: Boolean);
 function ListBinarySearch(Target: PItemIDList; List: TEasyItemArray; const ParentFolder: IShellFolder; Min, Max: Longint) : Longint;
@@ -2134,36 +2134,36 @@ begin
   end
 end;
 
-procedure AddThumbRequest(Window: TWinControl; Item: TExplorerItem;
-  ThumbSize: TPoint; UseExifThumbnail, UseExifOrientation, UseShellExtraction,
-  UseSubsampling, IsResizing: Boolean; ThumbRequestClassCallback: TThumbThreadCreateProc);
+procedure AddThumbRequest(AWindow: TWinControl; AItem: TExplorerItem; AThumbSize: TPoint; AUseExifThumbnail, AUseExifOrientation, AUseShellExtraction, AUseSubsampling, AIsResizing: Boolean; AThumbRequestClassCallback: TThumbThreadCreateProc);
 // Send a thumb request to the GlobalThreadManager
+const
+  cPriority = 50;
 var
-  ThumbRequest: TEasyThumbnailThreadRequest;
+  lThumbRequest: TEasyThumbnailThreadRequest;
 begin
-  if Assigned(Item) and Assigned(Item.Namespace) then
+  if Assigned(AItem) and Assigned(AItem.Namespace) then
   begin
-    ThumbRequest := nil;
-    if Assigned(ThumbRequestClassCallback) then
-      ThumbRequestClassCallback(ThumbRequest);
-    if not Assigned(ThumbRequest) then
-      ThumbRequest := TEasyThumbnailThreadRequest.Create;
-    ThumbRequest.Window := Window;
-    ThumbRequest.Item := Item;
-    ThumbRequest.ID := TID_THUMBNAIL;
-    ThumbRequest.Priority := 50;
-    ThumbRequest.BackgroundColor := TWinControlCracker(Window).Color;
-    ThumbRequest.ThumbSize := ThumbSize;
-    ThumbRequest.UseExifThumbnail := UseExifThumbnail;
-    ThumbRequest.UseExifOrientation := UseExifOrientation;
-    ThumbRequest.UseShellExtraction := UseShellExtraction;
-    ThumbRequest.UseSubsampling := UseSubsampling;
-    ThumbRequest.PIDL := PIDLMgr.CopyPIDL(Item.Namespace.AbsolutePIDL);
-    if IsResizing then
-      Item.Namespace.States := Item.Namespace.States + [nsThreadedImageResizing]
+    lThumbRequest := nil;
+    if Assigned(AThumbRequestClassCallback) then
+      AThumbRequestClassCallback(lThumbRequest);
+    if not Assigned(lThumbRequest) then
+      lThumbRequest := TEasyThumbnailThreadRequest.Create;
+    lThumbRequest.Window := AWindow;
+    lThumbRequest.Item := AItem;
+    lThumbRequest.ID := TID_THUMBNAIL;
+    lThumbRequest.Priority := cPriority;
+    lThumbRequest.BackgroundColor := TWinControlCracker(AWindow).Color;
+    lThumbRequest.ThumbSize := AThumbSize;
+    lThumbRequest.UseExifThumbnail := AUseExifThumbnail;
+    lThumbRequest.UseExifOrientation := AUseExifOrientation;
+    lThumbRequest.UseShellExtraction := AUseShellExtraction;
+    lThumbRequest.UseSubsampling := AUseSubsampling;
+    lThumbRequest.PIDL := PIDLMgr.CopyPIDL(AItem.Namespace.AbsolutePIDL);
+    if AIsResizing then
+      AItem.Namespace.States := AItem.Namespace.States + [nsThreadedImageResizing]
     else
-      Item.Namespace.States := Item.Namespace.States + [nsThreadedImageLoading];
-    GlobalThreadManager.AddRequest(ThumbRequest, True);
+      AItem.Namespace.States := AItem.Namespace.States + [nsThreadedImageLoading];
+    GlobalThreadManager.AddRequest(lThumbRequest, True);
   end;
 end;
 
