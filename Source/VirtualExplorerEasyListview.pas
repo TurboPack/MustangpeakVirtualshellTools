@@ -2162,7 +2162,7 @@ begin
     if AIsResizing then
       AItem.Namespace.States := AItem.Namespace.States + [nsThreadedImageResizing]
     else
-      AItem.Namespace.States := AItem.Namespace.States + [nsThreadedImageLoading];
+      AItem.Namespace.States := AItem.Namespace.States + [nsThreadedImageLoading] - [nsThreadedImageLoaded];
     GlobalThreadManager.AddRequest(lThumbRequest, True);
   end;
 end;
