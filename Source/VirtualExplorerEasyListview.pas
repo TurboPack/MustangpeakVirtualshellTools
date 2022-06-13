@@ -866,7 +866,7 @@ type
     procedure DoScrollEnd(ScrollBar: TEasyScrollbarDir); override;
     procedure DoShellExecute(Item: TEasyItem); virtual;
     procedure DoShellNotify(ShellEvent: TVirtualShellEvent); virtual;
-    procedure DoThreadCallback(var Msg: TWMThreadRequest); override;
+    procedure DoThreadCallback(var AMsg: TWMThreadRequest); override;
     function EnumFolderCallback(ParentWnd: HWnd; APIDL: PItemIDList; AParent: TNamespace; Data: pointer; var Terminate: Boolean): Boolean; virtual;
     procedure DoThumbThreadCreate(var ThumbRequest: TEasyThumbnailThreadRequest); virtual;
     procedure Enqueue(NS: TNamespace; Item: TEasyItem; ThumbSize: TPoint; UseShellExtraction, IsResizing: Boolean);
@@ -5274,63 +5274,63 @@ begin
     OnShellNotify(Self, ShellEvent)
 end;
 
-procedure TCustomVirtualExplorerEasyListview.DoThreadCallback(var Msg: TWMThreadRequest);
+procedure TCustomVirtualExplorerEasyListview.DoThreadCallback(var AMsg: TWMThreadRequest);
 var
-  NS: TNamespace;
-  AnItem: TExplorerItem;
+  lItem: TExplorerItem;
+  lNamespace: TNamespace;
 begin
   try
-    inherited;
-    AnItem := TExplorerItem(Msg.Request.Item);
+    inherited DoThreadCallback(AMsg);
+    lItem := TExplorerItem(AMsg.Request.Item);
     // this is not efficient but once in a while this will cause a problem
     // that seems like the items did not get flushed from the thread before the
-    // list is cleared.  It happens only once is a blue moon.  Can't seem to figure
+    // list is cleared. It happens only once is a blue moon. Can't seem to figure
     // it out.
-    if ItemBelongsToList(AnItem) then
+    if ItemBelongsToList(lItem) then
     begin
       // DON'T RELEASE THE REQUEST IN THE CALLBACK
       if Assigned(OnThreadCallback) then
-        OnThreadCallBack(Self, Msg);
-      case Msg.RequestID of
+        OnThreadCallBack(Self, AMsg);
+      case AMsg.RequestID of
         TID_ICON:
+        begin
+          if ValidateNamespace(lItem, lNamespace) then
           begin
-            if ValidateNamespace(AnItem, NS) then
-            begin
-              NS.SetIconIndexByThread(TShellIconThreadRequest( Msg.Request).ImageIndex, TShellIconThreadRequest( Msg.Request).OverlayIndex, True);
-              Groups.InvalidateItem(AnItem, False);
-            end
-          end;
+            lNamespace.SetIconIndexByThread(TShellIconThreadRequest( AMsg.Request).ImageIndex, TShellIconThreadRequest( AMsg.Request).OverlayIndex, True);
+            Groups.InvalidateItem(lItem, False);
+          end
+        end;
         TID_THUMBNAIL:
+        begin
+          if ValidateNamespace(AMsg.Request.Item, lNamespace) then
           begin
-            if ValidateNamespace(Msg.Request.Item, NS) then
+            lNamespace.States := (lNamespace.States - [nsThreadedImageLoading]) + [nsThreadedImageLoaded];
+            // Clone the ThumbInfo
+            if AMsg.Request.Tag > 0 then
             begin
-              NS.States := (NS.States - [nsThreadedImageLoading]) + [nsThreadedImageLoaded];
-              // Clone the ThumbInfo
-              if Msg.Request.Tag > 0 then
-              begin
-                if AnItem.ThumbInfo = nil then
-                  AnItem.ThumbInfo := TThumbInfo.Create;
-                if nsThreadedImageResizing in NS.States then
-                  NS.States := NS.States - [nsThreadedImageResizing];
-                AnItem.ThumbInfo.Assign(TThumbInfo(Msg.Request.Tag));
-                Groups.InvalidateItem(AnItem, False);
-              end;
+              if lItem.ThumbInfo = nil then
+                lItem.ThumbInfo := TThumbInfo.Create;
+              if nsThreadedImageResizing in lNamespace.States then
+                lNamespace.States := lNamespace.States - [nsThreadedImageResizing];
+              lItem.ThumbInfo.Assign(TThumbInfo(AMsg.Request.Tag));
+              Groups.InvalidateItem(lItem, False);
             end;
           end;
+        end;
         TID_DETAILS:
+        begin
+          if ValidateNamespace(lItem, lNamespace) then
           begin
-            if ValidateNamespace(AnItem, NS) then
-            begin
-              NS.TileDetail := TCommonIntegerDynArray(TEasyDetailsThreadRequest(Msg.Request).Details);
-              PackTileStrings(NS);
-              NS.States := (NS.States - [nsThreadedTileInfoLoading]) + [nsThreadedTileInfoLoaded];
-              Groups.InvalidateItem(AnItem, False);
-            end;
+            lNamespace.TileDetail := TCommonIntegerDynArray(TEasyDetailsThreadRequest(AMsg.Request).Details);
+            PackTileStrings(lNamespace);
+            lNamespace.States := (lNamespace.States - [nsThreadedTileInfoLoading]) + [nsThreadedTileInfoLoaded];
+            Groups.InvalidateItem(lItem, False);
           end;
-      end
-    end
+        end;
+      end;
+    end;
   finally
-    Msg.Request.Release;
+    AMsg.Request.Release;
   end
 end;
 
