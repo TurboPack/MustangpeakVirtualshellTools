@@ -5278,10 +5278,11 @@ procedure TCustomVirtualExplorerEasyListview.DoThreadCallback(var AMsg: TWMThrea
 var
   lItem: TExplorerItem;
   lNamespace: TNamespace;
+  lRequest: TShellIconThreadRequest;
 begin
   try
     inherited DoThreadCallback(AMsg);
-    lItem := TExplorerItem(AMsg.Request.Item);
+    lItem := TObject(AMsg.Request.Item) as TExplorerItem;
     // this is not efficient but once in a while this will cause a problem
     // that seems like the items did not get flushed from the thread before the
     // list is cleared. It happens only once is a blue moon. Can't seem to figure
@@ -5296,7 +5297,8 @@ begin
         begin
           if ValidateNamespace(lItem, lNamespace) then
           begin
-            lNamespace.SetIconIndexByThread(TShellIconThreadRequest( AMsg.Request).ImageIndex, TShellIconThreadRequest( AMsg.Request).OverlayIndex, True);
+            lRequest := AMsg.Request as TShellIconThreadRequest;
+            lNamespace.SetIconIndexByThread(lRequest.ImageIndex, lRequest.OverlayIndex, True);
             Groups.InvalidateItem(lItem, False);
           end
         end;
@@ -5304,7 +5306,7 @@ begin
         begin
           if ValidateNamespace(AMsg.Request.Item, lNamespace) then
           begin
-            lNamespace.States := (lNamespace.States - [nsThreadedImageLoading]) + [nsThreadedImageLoaded];
+            lNamespace.States := lNamespace.States - [nsThreadedImageLoading] + [nsThreadedImageLoaded];
             // Clone the ThumbInfo
             if AMsg.Request.Tag > 0 then
             begin
@@ -5312,7 +5314,7 @@ begin
                 lItem.ThumbInfo := TThumbInfo.Create;
               if nsThreadedImageResizing in lNamespace.States then
                 lNamespace.States := lNamespace.States - [nsThreadedImageResizing];
-              lItem.ThumbInfo.Assign(TThumbInfo(AMsg.Request.Tag));
+              lItem.ThumbInfo.Assign(TObject(AMsg.Request.Tag) as TThumbInfo);
               Groups.InvalidateItem(lItem, False);
             end;
           end;
@@ -5321,9 +5323,9 @@ begin
         begin
           if ValidateNamespace(lItem, lNamespace) then
           begin
-            lNamespace.TileDetail := TCommonIntegerDynArray(TEasyDetailsThreadRequest(AMsg.Request).Details);
+            lNamespace.TileDetail := (AMsg.Request as TEasyDetailsThreadRequest).Details;
             PackTileStrings(lNamespace);
-            lNamespace.States := (lNamespace.States - [nsThreadedTileInfoLoading]) + [nsThreadedTileInfoLoaded];
+            lNamespace.States := lNamespace.States - [nsThreadedTileInfoLoading] + [nsThreadedTileInfoLoaded];
             Groups.InvalidateItem(lItem, False);
           end;
         end;
