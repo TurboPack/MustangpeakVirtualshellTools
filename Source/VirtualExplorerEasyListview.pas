@@ -5306,7 +5306,6 @@ begin
         begin
           if ValidateNamespace(AMsg.Request.Item, lNamespace) then
           begin
-            lNamespace.States := lNamespace.States - [nsThreadedImageLoading] + [nsThreadedImageLoaded];
             // Clone the ThumbInfo
             if AMsg.Request.Tag > 0 then
             begin
@@ -5317,6 +5316,7 @@ begin
               lItem.ThumbInfo.Assign(TObject(AMsg.Request.Tag) as TThumbInfo);
               Groups.InvalidateItem(lItem, False);
             end;
+            lNamespace.States := lNamespace.States - [nsThreadedImageLoading] + [nsThreadedImageLoaded];
           end;
         end;
         TID_DETAILS:
