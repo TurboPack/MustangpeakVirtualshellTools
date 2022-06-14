@@ -111,6 +111,7 @@ type
     FImageWidth: Integer;
     FImageHeight: Integer;
     FStreamSignature: string;
+    FStreamSize: Int64;
     FSync: IReadWriteSync;
     FTag: NativeInt;
     FThumbBitmapStream: TBytesStream;
@@ -1546,6 +1547,7 @@ begin
     FThumbBitmapStream.Clear;
     if ABytes <> nil then
       FThumbBitmapStream.Write(ABytes, Length(ABytes));
+    FStreamSize := FThumbBitmapStream.Size;
   finally
     EndWrite;
   end;
@@ -1613,7 +1615,7 @@ end;
 
 procedure TThumbInfo.EndRead;
 begin
-  FSync.EndWrite;
+  FSync.EndRead;
 end;
 
 procedure TThumbInfo.EndWrite;
@@ -1723,11 +1725,11 @@ end;
 
 function TThumbInfo.IsEmpty: Boolean;
 begin
-  BeginWrite;
+  BeginRead;
   try
-    Result := FThumbBitmapStream.GetBytesReal = nil;
+    Result := FStreamSize = 0;
   finally
-    EndWrite;
+    EndRead;
   end;
 end;
 
@@ -1749,6 +1751,7 @@ begin
     SpReadMemoryStreamFromStream(AStream, FThumbBitmapStream);
     if FUseCompression then
       SpConvertJPGStreamToBitmapStream(FThumbBitmapStream);
+    FStreamSize := FThumbBitmapStream.Size;
   finally
     EndWrite;
   end;
@@ -1816,11 +1819,11 @@ begin
   begin
     lStream := nil;
     try
-      BeginRead;
+      BeginWrite;
       try
         lStream := TBytesStream.Create(FThumbBitmapStream.GetBytesReal);
       finally
-        EndRead;
+        EndWrite;
       end;
       AOutBitmap.LoadFromStream(lStream);
     finally
@@ -1930,6 +1933,7 @@ begin
     try
       FThumbBitmapStream.LoadFromStream(lStream);
       FThumbBitmapStream.Position := 0;
+      FStreamSize := FThumbBitmapStream.Size;
     finally
       EndWrite;
     end;
