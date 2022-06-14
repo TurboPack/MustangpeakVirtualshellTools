@@ -277,9 +277,7 @@ function SpMakeThumbFromFileImageEn(Filename: string; OutBitmap: TBitmap; ThumbW
 function SpMakeThumbFromFile(Filename: string; OutBitmap: TBitmap; ThumbW,
   ThumbH: Integer; BgColor: TColor; SubSampling, ExifThumbnail, ExifOrientation: Boolean;
   var ImageWidth, ImageHeight: Integer): Boolean;
-function SpCreateThumbInfoFromFile(NS: TNamespace; ThumbW, ThumbH: Integer;
-  UseSubsampling, UseShellExtraction, UseExifThumbnail, UseExifOrientation: Boolean;
-  BackgroundColor: TColor): TThumbInfo;
+function SpCreateThumbInfoFromFile(ANamespace: TNamespace; AThumbW, AThumbH: Integer; AUseSubsampling, AUseShellExtraction, AUseExifThumbnail, AUseExifOrientation: Boolean; ABackgroundColor: TColor): TThumbInfo;
   function SpReadExifThumbnail(FileName: string; Exif: TStringList): TJpegImage;
 
 { Stream helpers }
@@ -864,77 +862,90 @@ begin
   end;
 end;
 
-function SpCreateThumbInfoFromFile(NS: TNamespace; ThumbW, ThumbH: Integer;
-  UseSubsampling, UseShellExtraction, UseExifThumbnail, UseExifOrientation: Boolean;
-  BackgroundColor: TColor): TThumbInfo;
+function SpCreateThumbInfoFromFile(ANamespace: TNamespace; AThumbW, AThumbH: Integer; AUseSubsampling, AUseShellExtraction, AUseExifThumbnail, AUseExifOrientation: Boolean; ABackgroundColor: TColor): TThumbInfo;
 var
-  B: TBitmap;
-  W, H: Integer;
-  ThumbnailExtracted: Boolean;
+  lBitmap: TBitmap;
+  lHeight: Integer;
+  lThumbInfo: TThumbInfo;
+  lThumbnailExtracted: Boolean;
+  lWidth: Integer;
 begin
-  Result := nil;
-  if UseShellExtraction then begin
-    if Assigned(NS.ExtractImage) then begin
-      // IEIFLAG_OFFLINE: use only local content for rendering.
-      // IEIFLAG_ORIGSIZE: render the image to the approximate size passed in prgSize, but crop it if necessary.
-      NS.ExtractImage.Flags := NS.ExtractImage.Flags or IEIFLAG_OFFLINE or IEIFLAG_ORIGSIZE;
+  lBitmap := nil;
+  lThumbInfo := nil;
+  try
+    if AUseShellExtraction then
+    begin
+      if Assigned(ANamespace.ExtractImage) then
+      begin
+        // IEIFLAG_OFFLINE: use only local content for rendering.
+        // IEIFLAG_ORIGSIZE: render the image to the approximate size passed in prgSize, but crop it if necessary.
+        ANamespace.ExtractImage.Flags := ANamespace.ExtractImage.Flags or IEIFLAG_OFFLINE or IEIFLAG_ORIGSIZE;
 
-      if NS.Folder then begin
-        // The standard size for the folder image is 96x96
-        NS.ExtractImage.Width := 96;
-        NS.ExtractImage.Height := 96;
-      end
-      else begin
-        // Use the maximum size for a shell extracted image, 256x256
-        NS.ExtractImage.Width := 256; // ThumbW;
-        NS.ExtractImage.Height := 256; // ThumbH;
+        if ANamespace.Folder then
+        begin
+          // The standard size for the folder image is 96x96
+          ANamespace.ExtractImage.Width := 96;
+          ANamespace.ExtractImage.Height := 96;
+        end
+        else
+        begin
+          // Use the maximum size for a shell extracted image, 256x256
+          ANamespace.ExtractImage.Width := 256; // AThumbW;
+          ANamespace.ExtractImage.Height := 256; // AThumbH;
+        end;
+        ANamespace.ExtractImage.ImagePath;
+        lBitmap := ANamespace.ExtractImage.Image;
+        if Assigned(lBitmap) then
+        begin
+          // Use the ABackgroundColor to make the extracted bitmap transparent
+          if UsesAlphaChannel(lBitmap) then
+            ConvertBitmapEx(lBitmap, lBitmap, ABackgroundColor);
+          lThumbInfo := TThumbInfo.Create;
+          lThumbInfo.Fill(ANamespace.NameForParsing, '', '', ANamespace.LastWriteDateTime, lBitmap.Width, lBitmap.Height, nil, 0);
+          lThumbInfo.WriteBitmap(lBitmap);
+        end;
       end;
-      NS.ExtractImage.ImagePath;
-      B := NS.ExtractImage.Image;
-      if Assigned(B) then begin
-        // Use the BackgroundColor to make the extracted bitmap transparent
-        if UsesAlphaChannel(B) then
-          ConvertBitmapEx(B, B, BackgroundColor);
-        Result := TThumbInfo.Create;
-        Result.Fill(NS.NameForParsing, '', '', NS.LastWriteDateTime, B.Width, B.Height, nil, 0);
-        Result.WriteBitmap(B);
-        B.Free; // NS.ExtractImage doesn't free the extracted Image bitmap
-      end;
-    end;
-  end else
-  begin
-    ThumbnailExtracted := False;
-    B := TBitmap.Create;
-    {$IFNDEF USEIMAGEEN}
-    B.PixelFormat := pf32Bit; // Jim:  This needs to be done for images that use the Alpha Channel for Transparency
-    {$ENDIF}
-    B.Canvas.Lock;
-    try
+    end
+    else
+    begin
+      lThumbnailExtracted := False;
+      lBitmap := TBitmap.Create;
+      {$IFNDEF USEIMAGEEN}
+      lBitmap.PixelFormat := pf32Bit; // Jim:  This needs to be done for images that use the Alpha Channel for Transparency
+      {$ENDIF}
+      lBitmap.Canvas.Lock;
       try
-        {$IFDEF USEIMAGEEN}
-        ThumbnailExtracted := SpMakeThumbFromFileImageEn(NS.NameForParsing, B, ThumbW, ThumbH,
-          clRed, UseSubsampling, UseExifThumbnail, UseExifOrientation, W, H);
-        {$ELSE}
-        // Jim: Changed the Background so images that use the Alpha Channel for Transparency work correctly
-        ThumbnailExtracted := SpMakeThumbFromFile(NS.NameForParsing, B, ThumbW, ThumbH,
-          BackgroundColor, UseSubsampling, UseExifThumbnail, UseExifOrientation, W, H);
-        // Jim:  This needs to be done for images that use the Alpha Channel for Transparency
-        if ThumbnailExtracted and UsesAlphaChannel(B) then
-          ConvertBitmapEx(B, B, BackgroundColor);
-        {$ENDIF}
-      except
-        // Don't raise any image errors
-      end;
+        try
+          {$IFDEF USEIMAGEEN}
+          lThumbnailExtracted := SpMakeThumbFromFileImageEn(ANamespace.NameForParsing, lBitmap, AThumbW, AThumbH,
+            clRed, AUseSubsampling, AUseExifThumbnail, AUseExifOrientation, lWidth, lHeight);
+          {$ELSE}
+          // Jim: Changed the Background so images that use the Alpha Channel for Transparency work correctly
+          lThumbnailExtracted := SpMakeThumbFromFile(ANamespace.NameForParsing, lBitmap, AThumbW, AThumbH,
+            ABackgroundColor, AUseSubsampling, AUseExifThumbnail, AUseExifOrientation, lWidth, lHeight);
+          // Jim:  This needs to be done for images that use the Alpha Channel for Transparency
+          if lThumbnailExtracted and UsesAlphaChannel(lBitmap) then
+            ConvertBitmapEx(lBitmap, lBitmap, ABackgroundColor);
+          {$ENDIF}
+        except
+          // Don't raise any image errors
+        end;
 
-      if ThumbnailExtracted then begin
-        Result := TThumbInfo.Create;
-        Result.Fill(NS.NameForParsing, '', '', NS.LastWriteDateTime, W, H, nil, 0);
-        Result.WriteBitmap(B);
+        if lThumbnailExtracted then
+        begin
+          lThumbInfo := TThumbInfo.Create;
+          lThumbInfo.Fill(ANamespace.NameForParsing, '', '', ANamespace.LastWriteDateTime, lWidth, lHeight, nil, 0);
+          lThumbInfo.WriteBitmap(lBitmap);
+        end;
+      finally
+        lBitmap.Canvas.Unlock;
       end;
-    finally
-      B.Canvas.UnLock;
-      B.Free;
     end;
+    Result := lThumbInfo;
+    lThumbInfo := nil;
+  finally
+    lThumbInfo.Free;
+    lBitmap.Free;
   end;
 end;
 

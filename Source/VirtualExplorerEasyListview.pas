@@ -5307,13 +5307,13 @@ begin
           if ValidateNamespace(AMsg.Request.Item, lNamespace) then
           begin
             // Clone the ThumbInfo
-            if AMsg.Request.Tag > 0 then
+            if AMsg.Request.Tag <> 0 then
             begin
               if lItem.ThumbInfo = nil then
                 lItem.ThumbInfo := TThumbInfo.Create;
               if nsThreadedImageResizing in lNamespace.States then
                 lNamespace.States := lNamespace.States - [nsThreadedImageResizing];
-              lItem.ThumbInfo.Assign(TObject(AMsg.Request.Tag) as TThumbInfo);
+              lItem.ThumbInfo.Assign(TThumbInfo(AMsg.Request.Tag));
               Groups.InvalidateItem(lItem, False);
             end;
             lNamespace.States := lNamespace.States - [nsThreadedImageLoading] + [nsThreadedImageLoaded];
@@ -7188,37 +7188,38 @@ destructor TEasyThumbnailThreadRequest.Destroy;
 begin
   // FlushMessageCache will free the Request, the extracted data needs to be freed
   FreeAndNil(FInternalThumbInfo);
-  inherited;
+  Tag := 0;
+  inherited Destroy;
 end;
 
 function TEasyThumbnailThreadRequest.HandleRequest: Boolean;
 var
-  NS: TNamespace;
+  lNamespace: TNamespace;
 begin
   // It is a bad idea to return false here for any reason.  If the thumbnail is corrupt
   // and SpCreateThumbInfoFromFile crashes the thumbnail thread will keep trying forever
   // to load the thumbnail
   Result := True;
-  NS := TNamespace.Create(PIDL, nil);
+  lNamespace := TNamespace.Create(PIDL, nil);
   try
-    NS.FreePIDLOnDestroy := False;
+    lNamespace.FreePIDLOnDestroy := False;
     try
       if Assigned(CreateCustomThumbInfoProc) then
-        FInternalThumbInfo := CreateCustomThumbInfoProc(NS, Self);
+        FInternalThumbInfo := CreateCustomThumbInfoProc(lNamespace, Self);
       if not Assigned(FInternalThumbInfo) then
-      FInternalThumbInfo := SpCreateThumbInfoFromFile(NS, ThumbSize.X, ThumbSize.Y,
+      FInternalThumbInfo := SpCreateThumbInfoFromFile(lNamespace, ThumbSize.X, ThumbSize.Y,
         UseSubsampling, UseShellExtraction, UseExifThumbnail, UseExifOrientation, BackgroundColor);
 
-      if Assigned(FInternalThumbInfo) then
-        Tag := Integer(FInternalThumbInfo);
+      Tag := NativeInt(FInternalThumbInfo);
     except
       try
         FreeAndNil(FInternalThumbInfo);
+        Tag := 0;
       except
       end
     end;
   finally
-    NS.Free;
+    lNamespace.Free;
   end
 end;
 

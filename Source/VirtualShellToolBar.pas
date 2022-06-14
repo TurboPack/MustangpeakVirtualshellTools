@@ -1278,11 +1278,11 @@ procedure TCustomWideSpeedButton.PaintButton(DC: HDC; ForDragImage: Boolean = Fa
     C1:=ColorToRGB(Color1);
     C2:=ColorToRGB(Color2);
     R1:=PByte(@C1)^;
-    G1:=PByte(Integer(@C1)+1)^;
-    B1:=PByte(Integer(@C1)+2)^;
+    G1:=PByte(NativeInt(@C1)+1)^;
+    B1:=PByte(NativeInt(@C1)+2)^;
     R2:=PByte(@C2)^;
-    G2:=PByte(Integer(@C2)+1)^;
-    B2:=PByte(Integer(@C2)+2)^;
+    G2:=PByte(NativeInt(@C2)+1)^;
+    B2:=PByte(NativeInt(@C2)+2)^;
     if total<>0 then
       begin
         Nr:=(R1+(R2-R1)*weight2 div total);
@@ -2851,7 +2851,7 @@ procedure TCustomVirtualToolbar.StoreBackGndBitmap;
          // Shift the viewport so the area under the control is painted to the bitmap
          // at (0, 0)
           SetViewportOrgEx(BkGndDC, -Left, -Top, @OldPt);
-          Parent.Perform(WM_PRINT, Integer(BkGndDC), Integer(PrintFlags));
+          Parent.Perform(WM_PRINT, WPARAM(BkGndDC), LPARAM(PrintFlags));
           SetViewportOrgEx(BkGndDC, OldPt.x, OldPt.y, nil);
         end else
         begin
@@ -3794,7 +3794,7 @@ begin
             Request.Window := Parent;
             Request.PIDL := PIDLMgr.CopyPIDL(Namespace.AbsolutePIDL);
             Request.Priority := 0;
-            Request.Tag := Integer(Self);
+            Request.Tag := NativeInt(Self);
             GlobalThreadManager.AddRequest(Request, True);
             Result := 0
           end else
