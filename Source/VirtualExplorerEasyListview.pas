@@ -7119,7 +7119,7 @@ end;
 constructor TExplorerItem.Create(ACollection: TEasyCollection);
 begin
   inherited Create(ACollection);
-  FThumbInfo := ThumbInfo.Create;
+  FThumbInfo := TThumbInfo.Create;
 end;
 
 destructor TExplorerItem.Destroy;
