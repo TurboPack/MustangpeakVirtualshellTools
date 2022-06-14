@@ -147,7 +147,9 @@ type
     procedure Assign(AThumbInfo: TThumbInfo); virtual;
     procedure Draw(ACanvas: TCanvas; ARect: TRect; AAlignment: TThumbsAlignment; AStretch: Boolean = False);
     procedure Fill(const AFileName, AExif, AComment: string; const AFileDateTime: TDateTime; const AImageWidth, AImageHeight: Integer; const ABytes: TBytes; const ATag: Integer);
+    function IsEmpty: Boolean;
     function LoadFromStream(AStream: TStream): Boolean; virtual;
+    function NotIsEmpty: Boolean; inline;
     procedure SaveToStream(AStream: TStream); virtual;
     function ReadBitmap(AOutBitmap: TBitmap): Boolean;
     procedure WriteBitmap(ABitmap: TBitmap);
@@ -1719,6 +1721,16 @@ begin
   end;
 end;
 
+function TThumbInfo.IsEmpty: Boolean;
+begin
+  BeginWrite;
+  try
+    Result := FThumbBitmapStream.GetBytesReal = nil;
+  finally
+    EndWrite;
+  end;
+end;
+
 function TThumbInfo.LoadFromStream(AStream: TStream): Boolean;
 begin
   // Override this method to read the properties from the stream
@@ -1740,6 +1752,11 @@ begin
   finally
     EndWrite;
   end;
+end;
+
+function TThumbInfo.NotIsEmpty: Boolean;
+begin
+  Result := not IsEmpty;
 end;
 
 procedure TThumbInfo.SaveToStream(AStream: TStream);
