@@ -141,7 +141,7 @@ type
     constructor Create; virtual;
     destructor Destroy; override;
     procedure Assign(AThumbInfo: TThumbInfo); virtual;
-    procedure Draw(ACanvas: TCanvas; ARect: TRect; Alignment: TThumbsAlignment; AStretch: Boolean = False);
+    procedure Draw(ACanvas: TCanvas; ARect: TRect; AAlignment: TThumbsAlignment; AStretch: Boolean = False);
     procedure Fill(const AFileName, AExif, AComment: string; const AFileDateTime: TDateTime; const AImageWidth, AImageHeight: Integer; const ABytes: TBytes; const ATag: Integer);
     function LoadFromStream(AStream: TStream): Boolean; virtual;
     procedure SaveToStream(AStream: TStream); virtual;
@@ -1498,7 +1498,7 @@ begin
   inherited Destroy;
 end;
 
-procedure TThumbInfo.Draw(ACanvas: TCanvas; ARect: TRect; Alignment: TThumbsAlignment; AStretch: Boolean = False);
+procedure TThumbInfo.Draw(ACanvas: TCanvas; ARect: TRect; AAlignment: TThumbsAlignment; AStretch: Boolean = False);
 var
   lBitmap: TBitmap;
   lCellSize: TPoint;
@@ -1516,7 +1516,7 @@ begin
       if not AStretch then
         AStretch := DirectoryExists(FileName);
 
-      lDestR := SpRectAspectRatio(lBitmap.Width, lBitmap.Height, lCellSize.X, lCellSize.Y, Alignment, AStretch);
+      lDestR := SpRectAspectRatio(lBitmap.Width, lBitmap.Height, lCellSize.X, lCellSize.Y, AAlignment, AStretch);
       OffsetRect(lDestR, ARect.Left, ARect.Top);
       // StretchDraw is NOT THREADSAFE!!! Use SpStretchDraw instead
       SpStretchDraw(lBitmap, ACanvas, lDestR, True);
@@ -1592,8 +1592,7 @@ begin
   finally
     AThumbInfo.FSync.EndWrite;
   end;
-  Fill(lFileName, lExif, lComment, lFileDate, lImageWidth, lImageHeight,
-    lBytes, lTag);
+  Fill(lFileName, lExif, lComment, lFileDate, lImageWidth, lImageHeight, lBytes, lTag);
 end;
 
 function TThumbInfo.GetComment: string;
@@ -1721,24 +1720,32 @@ end;
 
 procedure TThumbInfo.SaveToStream(AStream: TStream);
 var
-  lStream: TMemoryStream;
+  lStream: TBytesStream;
+  lUseCompression: Boolean;
 begin
   // Override this method to write the properties to the stream
-  SpWriteUnicodeStringToStream(AStream, StreamSignature);
-  SpWriteUnicodeStringToStream(AStream, FileName);
-  SpWriteDateTimeToStream(AStream, FileDateTime);
-  SpWriteIntegerToStream(AStream, ImageWidth);
-  SpWriteIntegerToStream(AStream, ImageHeight);
-  SpWriteUnicodeStringToStream(AStream, Exif);
-  SpWriteUnicodeStringToStream(AStream, Comment);
-  SpWriteIntegerToStream(AStream, Integer(UseCompression));
-  if FUseCompression then
+  FSync.BeginRead;
+  try
+    SpWriteUnicodeStringToStream(AStream, FStreamSignature);
+    SpWriteUnicodeStringToStream(AStream, FFileName);
+    SpWriteDateTimeToStream(AStream, FFileDateTime);
+    SpWriteIntegerToStream(AStream, FImageWidth);
+    SpWriteIntegerToStream(AStream, FImageHeight);
+    SpWriteUnicodeStringToStream(AStream, FExif);
+    SpWriteUnicodeStringToStream(AStream, FComment);
+    SpWriteIntegerToStream(AStream, Integer(FUseCompression));
+    lUseCompression := FUseCompression;
+  finally
+    FSync.EndRead;
+  end;
+
+  if lUseCompression then
   begin
-    lStream := TMemoryStream.Create;
+    lStream := nil;
     try
       FSync.BeginWrite;
       try
-        lStream.LoadFromStream(FThumbBitmapStream);
+        lStream := TBytesStream.Create(FThumbBitmapStream.GetBytesReal);
       finally
         FSync.EndWrite;
       end;
