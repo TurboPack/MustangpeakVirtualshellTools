@@ -4141,7 +4141,7 @@ begin
     AThumbInfo := TExplorerItem(AItem).ThumbInfo
   else
     AThumbInfo := nil;
-  Result := Assigned(AThumbInfo);
+  Result := Assigned(AThumbInfo) and AThumbInfo.NotIsEmpty;
 end;
 
 function TCustomVirtualExplorerEasyListview.ValidRootNamespace: Boolean;
@@ -7268,7 +7268,7 @@ begin
         if lNamespace.States * [nsThreadedImageLoaded, nsThreadedImageLoading, nsThreadedImageResizing] = [] then
         begin
           lExplorerItem := lItem as TExplorerItem;
-          if lExplorerItem.ThumbInfo = nil then
+          if lExplorerItem.ThumbInfo.IsEmpty then
           begin
             lIndex := AAlbum.IndexOf(lNamespace.NameForParsing);
             if AAlbum.Read(lIndex, lAlbumT) then
@@ -7310,17 +7310,18 @@ begin
       if AListview.ValidateNamespace(lItem, lNameSpace) then
       begin
         lExplorerItem := lItem as TExplorerItem;
-        if Assigned(lExplorerItem.ThumbInfo) then
+        if lExplorerItem.ThumbInfo.NotIsEmpty then
         begin
           lThumbInfo := TThumbInfo.Create;
           try
             lThumbInfo.Assign(lExplorerItem.ThumbInfo);
             lThumbInfo.Filename := lNameSpace.NameForParsing;
             lThumbInfo.UseCompression := lCompressed and (lThumbInfo.ImageWidth > 250) and (lThumbInfo.ImageHeight > 250);
-          except
+            AAlbum.Add(lThumbInfo);
+            lThumbInfo := nil;
+          finally
             lThumbInfo.Free;
           end;
-          AAlbum.Add(lThumbInfo);
         end;
       end;
     end;
