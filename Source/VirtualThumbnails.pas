@@ -115,6 +115,10 @@ type
     FTag: NativeInt;
     FThumbBitmapStream: TBytesStream;
     FUseCompression: Boolean;
+    procedure BeginRead; inline;
+    procedure BeginWrite; inline;
+    procedure EndRead; inline;
+    procedure EndWrite; inline;
     function GetComment: string;
     function GetExif: string;
     function GetFileDateTime: TDateTime;
@@ -1489,11 +1493,11 @@ end;
 
 destructor TThumbInfo.Destroy;
 begin
-  FSync.BeginWrite;
+  BeginWrite;
   try
     FThumbBitmapStream.Free;
   finally
-    FSync.EndWrite;
+    EndWrite;
   end;
   inherited Destroy;
 end;
@@ -1528,7 +1532,7 @@ end;
 
 procedure TThumbInfo.Fill(const AFileName, AExif, AComment: string; const AFileDateTime: TDateTime; const AImageWidth, AImageHeight: Integer; const ABytes: TBytes; const ATag: Integer);
 begin
-  FSync.BeginWrite;
+  BeginWrite;
   try
     FFileName := AFileName;
     FFileDateTime := AFileDateTime;
@@ -1541,7 +1545,7 @@ begin
     if ABytes <> nil then
       FThumbBitmapStream.Write(ABytes, Length(ABytes));
   finally
-    FSync.EndWrite;
+    EndWrite;
   end;
 end;
 
@@ -1579,7 +1583,7 @@ var
   lTag: NativeInt;
 begin
   // Override this method to Assign the custom properties.
-  AThumbInfo.FSync.BeginWrite;
+  AThumbInfo.BeginWrite;
   try
     lBytes := AThumbInfo.FThumbBitmapStream.GetBytesReal;
     lComment := AThumbInfo.FComment;
@@ -1590,108 +1594,128 @@ begin
     lImageWidth := AThumbInfo.FImageWidth;
     lTag := AThumbInfo.FTag;
   finally
-    AThumbInfo.FSync.EndWrite;
+    AThumbInfo.EndWrite;
   end;
   Fill(lFileName, lExif, lComment, lFileDate, lImageWidth, lImageHeight, lBytes, lTag);
 end;
 
-function TThumbInfo.GetComment: string;
+procedure TThumbInfo.BeginRead;
 begin
   FSync.BeginRead;
+end;
+
+procedure TThumbInfo.BeginWrite;
+begin
+  FSync.BeginWrite;
+end;
+
+procedure TThumbInfo.EndRead;
+begin
+  FSync.EndWrite;
+end;
+
+procedure TThumbInfo.EndWrite;
+begin
+  FSync.EndWrite;
+end;
+
+function TThumbInfo.GetComment: string;
+begin
+  BeginRead;
   try
     Result := FComment;
   finally
-    FSync.EndRead;
+    EndRead;
   end;
 end;
 
 function TThumbInfo.GetExif: string;
 begin
-  FSync.BeginRead;
+  BeginRead;
   try
     Result := FExif;
   finally
-    FSync.EndRead;
+    EndRead;
   end;
 end;
 
 function TThumbInfo.GetFileDateTime: TDateTime;
 begin
-  FSync.BeginRead;
+  BeginRead;
   try
     Result := FFileDateTime;
   finally
-    FSync.EndRead;
+    EndRead;
   end;
 end;
 
 function TThumbInfo.GetFileName: string;
 begin
-  FSync.BeginRead;
+  BeginRead;
   try
     Result := FFileName;
   finally
-    FSync.EndRead;
+    EndRead;
   end;
 end;
 
 function TThumbInfo.GetImageHeight: Integer;
 begin
-  FSync.BeginRead;
+  BeginRead;
   try
     Result := FImageHeight;
   finally
-    FSync.EndRead;
+    EndRead;
   end;
 end;
 
 function TThumbInfo.GetImageWidth: Integer;
 begin
-  FSync.BeginRead;
+  BeginRead;
   try
     Result := FImageWidth;
   finally
-    FSync.EndRead;
+    EndRead;
   end;
 end;
 
 function TThumbInfo.GetStreamSignature: string;
 begin
-  FSync.BeginRead;
+  BeginRead;
   try
     Result := FStreamSignature;
   finally
-    FSync.EndRead;
+    EndRead;
   end;
 end;
 
 function TThumbInfo.GetStreamSize: Integer;
 begin
-  FSync.BeginWrite;
+  BeginWrite;
   try
     Result := FThumbBitmapStream.Size;
   finally
-    FSync.EndWrite;
+    EndWrite;
   end;
 end;
 
 function TThumbInfo.GetTag: NativeInt;
 begin
-  FSync.BeginRead;
+  BeginRead;
   try
     Result := FTag;
   finally
-    FSync.EndRead;
+    EndRead;
   end;
 end;
 
 function TThumbInfo.GetUseCompression: Boolean;
 begin
-  FSync.BeginRead;
+  BeginRead;
   try
     Result := FUseCompression;
   finally
-    FSync.EndRead;
+    EndRead;
   end;
 end;
 
@@ -1699,7 +1723,7 @@ function TThumbInfo.LoadFromStream(AStream: TStream): Boolean;
 begin
   // Override this method to read the properties from the stream
   // Use the StreamSignature to load or not the custom properties
-  FSync.BeginWrite;
+  BeginWrite;
   try
     Result := True;
     FStreamSignature := SpReadUnicodeStringFromStream(AStream);
@@ -1714,7 +1738,7 @@ begin
     if FUseCompression then
       SpConvertJPGStreamToBitmapStream(FThumbBitmapStream);
   finally
-    FSync.EndWrite;
+    EndWrite;
   end;
 end;
 
@@ -1724,7 +1748,7 @@ var
   lUseCompression: Boolean;
 begin
   // Override this method to write the properties to the stream
-  FSync.BeginRead;
+  BeginRead;
   try
     SpWriteUnicodeStringToStream(AStream, FStreamSignature);
     SpWriteUnicodeStringToStream(AStream, FFileName);
@@ -1736,18 +1760,18 @@ begin
     SpWriteIntegerToStream(AStream, Integer(FUseCompression));
     lUseCompression := FUseCompression;
   finally
-    FSync.EndRead;
+    EndRead;
   end;
 
   if lUseCompression then
   begin
     lStream := nil;
     try
-      FSync.BeginWrite;
+      BeginWrite;
       try
         lStream := TBytesStream.Create(FThumbBitmapStream.GetBytesReal);
       finally
-        FSync.EndWrite;
+        EndWrite;
       end;
       SpConvertBitmapStreamToJPGStream(lStream); // JPEG compressed
       SpWriteMemoryStreamToStream(AStream, lStream);
@@ -1757,11 +1781,11 @@ begin
   end
   else
   begin
-    FSync.BeginWrite;
+    BeginWrite;
     try
       SpWriteMemoryStreamToStream(AStream, FThumbBitmapStream);
     finally
-      FSync.EndWrite;
+      EndWrite;
     end;
   end;
 end;
@@ -1775,11 +1799,11 @@ begin
   begin
     lStream := nil;
     try
-      FSync.BeginRead;
+      BeginRead;
       try
         lStream := TBytesStream.Create(FThumbBitmapStream.GetBytesReal);
       finally
-        FSync.EndRead;
+        EndRead;
       end;
       AOutBitmap.LoadFromStream(lStream);
     finally
@@ -1790,91 +1814,91 @@ end;
 
 procedure TThumbInfo.SetComment(const AValue: string);
 begin
-  FSync.BeginWrite;
+  BeginWrite;
   try
     FComment := AValue;
   finally
-    FSync.EndWrite;
+    EndWrite;
   end;
 end;
 
 procedure TThumbInfo.SetExif(const AValue: string);
 begin
-  FSync.BeginWrite;
+  BeginWrite;
   try
     FExif := AValue;
   finally
-    FSync.EndWrite;
+    EndWrite;
   end;
 end;
 
 procedure TThumbInfo.SetFileDateTime(const AValue: TDateTime);
 begin
-  FSync.BeginWrite;
+  BeginWrite;
   try
     FFileDateTime := AValue;
   finally
-    FSync.EndWrite;
+    EndWrite;
   end;
 end;
 
 procedure TThumbInfo.SetFileName(const AValue: string);
 begin
-  FSync.BeginWrite;
+  BeginWrite;
   try
     FFileName := AValue;
   finally
-    FSync.EndWrite;
+    EndWrite;
   end;
 end;
 
 procedure TThumbInfo.SetImageHeight(const AValue: Integer);
 begin
-  FSync.BeginWrite;
+  BeginWrite;
   try
     FImageHeight := AValue;
   finally
-    FSync.EndWrite;
+    EndWrite;
   end;
 end;
 
 procedure TThumbInfo.SetImageWidth(const AValue: Integer);
 begin
-  FSync.BeginWrite;
+  BeginWrite;
   try
     FImageWidth := AValue;
   finally
-    FSync.EndWrite;
+    EndWrite;
   end;
 end;
 
 procedure TThumbInfo.SetStreamSignature(const AValue: string);
 begin
-  FSync.BeginWrite;
+  BeginWrite;
   try
     FStreamSignature := AValue;
   finally
-    FSync.EndWrite;
+    EndWrite;
   end;
 end;
 
 procedure TThumbInfo.SetTag(const AValue: NativeInt);
 begin
-  FSync.BeginWrite;
+  BeginWrite;
   try
     FTag := AValue;
   finally
-    FSync.EndWrite;
+    EndWrite;
   end;
 end;
 
 procedure TThumbInfo.SetUseCompression(const AValue: Boolean);
 begin
-  FSync.BeginWrite;
+  BeginWrite;
   try
     FUseCompression := AValue;
   finally
-    FSync.EndWrite;
+    EndWrite;
   end;
 end;
 
@@ -1885,12 +1909,12 @@ begin
   lStream := TBytesStream.Create;
   try
     ABitmap.SaveToStream(lStream);
-    FSync.BeginWrite;
+    BeginWrite;
     try
       FThumbBitmapStream.LoadFromStream(lStream);
       FThumbBitmapStream.Position := 0;
     finally
-      FSync.EndWrite;
+      EndWrite;
     end;
   finally
     lStream.Free;
