@@ -467,14 +467,14 @@ type
   // An EasyItemVirtual that has a TNamespace associated with it
   // ***************************************************************
   TExplorerItem = class(TEasyItemVirtual)
-  private
+  strict private
     FNamespace: TNamespace;
     FThumbInfo: TThumbInfo;
   public
     constructor Create(ACollection: TEasyCollection); override;
     destructor Destroy; override;
     property Namespace: TNamespace read FNamespace write FNamespace;
-    property ThumbInfo: TThumbInfo read FThumbInfo write FThumbInfo;
+    property ThumbInfo: TThumbInfo read FThumbInfo;
   end;
   TExplorerItemClass = class of TExplorerItem;
 
@@ -4905,7 +4905,7 @@ begin
     begin
       if (ebcsPrinting in States) and not (nsThreadedImageLoaded in lNS.States) then
       begin
-        lExplorerItem := TExplorerItem( AItem);
+        lExplorerItem := AItem as TExplorerItem;
         // Force the thumbnail loaded
         lThumbSize.X := Max(RectWidth(ARect), ThumbsManager.MaxThumbWidth);
         lThumbSize.Y := Max(RectHeight(ARect), ThumbsManager.MaxThumbHeight);
@@ -4913,8 +4913,6 @@ begin
         try
           if Assigned(lThumbInfo) then
           begin
-            if lExplorerItem.ThumbInfo = nil then
-              lExplorerItem.ThumbInfo := TThumbInfo.Create;
             lExplorerItem.ThumbInfo.Assign(lThumbInfo);
             lExplorerItem.Namespace.States := lExplorerItem.Namespace.States - [nsThreadedImageLoading, nsThreadedImageResizing] + [nsThreadedImageLoaded]
           end;
@@ -5309,8 +5307,6 @@ begin
             // Clone the ThumbInfo
             if AMsg.Request.Tag > 0 then
             begin
-              if lItem.ThumbInfo = nil then
-                lItem.ThumbInfo := TThumbInfo.Create;
               if nsThreadedImageResizing in lNamespace.States then
                 lNamespace.States := lNamespace.States - [nsThreadedImageResizing];
               lItem.ThumbInfo.Assign(TObject(AMsg.Request.Tag) as TThumbInfo);
@@ -5905,7 +5901,7 @@ begin
           if Compare = 0 then
           begin
             if eloFullFlushItemsOnChangeNotify in Options then
-              TNamespaceHack(TExplorerItem( ItemArray[j]).FNamespace).ReplacePIDL(PIDLArray[i], RootFolderNamespace);
+              TNamespaceHack(TExplorerItem(ItemArray[j]).Namespace).ReplacePIDL(PIDLArray[i], RootFolderNamespace);
             Inc(j);  // Node exists move on
             Inc(i)
           end else
@@ -7123,6 +7119,7 @@ end;
 constructor TExplorerItem.Create(ACollection: TEasyCollection);
 begin
   inherited Create(ACollection);
+  FThumbInfo := ThumbInfo.Create;
 end;
 
 destructor TExplorerItem.Destroy;
@@ -7259,7 +7256,6 @@ var
   lItem: TEasyItem;
   lItems: TEasyItems;
   lNamespace: TNamespace;
-  lThumbInfo: TThumbInfo;
 begin
   for lCount := 0 to AListview.Groups.Count - 1 do
   begin
@@ -7279,16 +7275,9 @@ begin
             begin
               if lAlbumT.FileDateTime = lNamespace.LastWriteDateTime then
               begin
-                lThumbInfo := TThumbInfo.Create;
-                try
-                  lThumbInfo.Assign(lAlbumT);
-                  lNamespace.States := (lNamespace.States - [nsThreadedImageLoading]) + [nsThreadedImageLoaded];
-                  lExplorerItem.ThumbInfo := lThumbInfo;
-                  lExplorerItem.Invalidate(True);
-                except
-                  lThumbInfo.Free;
-                  lExplorerItem.ThumbInfo := nil;
-                end;
+                lNamespace.States := (lNamespace.States - [nsThreadedImageLoading]) + [nsThreadedImageLoaded];
+                lExplorerItem.ThumbInfo.Assign(lAlbumT);
+                lExplorerItem.Invalidate(True);
               end;
             end;
           end;
@@ -8594,8 +8583,6 @@ begin
       try
         if Assigned(T) then
         begin
-          if Item.ThumbInfo = nil then
-            Item.ThumbInfo := TThumbInfo.Create;
           Item.ThumbInfo.Assign(T);
           if LV.ValidateThumbnail(Item, DummyT) then
             Result := ResizedResult;
