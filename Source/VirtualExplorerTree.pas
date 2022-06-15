@@ -1420,7 +1420,7 @@ type
     procedure DoHeaderMouseUp(Button: TMouseButton; Shift: TShiftState; X, Y: Integer); override;
     procedure DoHeaderRebuild; virtual;
     function DoInitChildren(Node: PVirtualNode; var ChildCount: Cardinal):boolean;  override;
-    procedure DoInitNode(Parent, Node: PVirtualNode; var InitStates: TVirtualNodeInitStates); override;
+    procedure DoInitNode(AParent, ANode: PVirtualNode; var AInitStates: TVirtualNodeInitStates); override;
     function DoKeyAction(var CharCode: Word; var Shift: TShiftState): Boolean; override;
     procedure DoNamespaceStructureChange(Node: PVirtualNode; NS: TNamespace; ChangeType: TNamespaceStructureChange); virtual;
     procedure DoNewText(Node: PVirtualNode; Column: TColumnIndex; const Text: UnicodeString); override;
@@ -4548,39 +4548,37 @@ begin
   Result := inherited DoInitChildren(Node, ChildCount);
 end;
 
-procedure TCustomVirtualExplorerTree.DoInitNode(Parent, Node: PVirtualNode;
-  var InitStates: TVirtualNodeInitStates);
-{ Called by VT when the node needs to be initialized in order to display it or  }
+procedure TCustomVirtualExplorerTree.DoInitNode(AParent, ANode: PVirtualNode; var AInitStates: TVirtualNodeInitStates);
+{ Called by VT when the ANode needs to be initialized in order to display it or  }
 { if it has been forced to be initialized when saving to the tree, etc.         }
 var
-  Data: PNodeData;
-{  WS: string; }
-  ParentNode: PVirtualNode;
-  NS: TNamespace;
-  StorageNode: TNodeStorage;
-  Request: TExpandMarkThreadRequest;
- { DriveType: UINT;    }
+{  lWS: string; }
+ { lDriveType: UINT;    }
+  lData: PNodeData;
+  lNamespace: TNamespace;
+  lParentNode: PVirtualNode;
+  lRequest: TExpandMarkThreadRequest;
+  lStorageNode: TNodeStorage;
 begin
-  Data := InternalData(Node);
-  if Assigned(Data) then
+  lData := InternalData(ANode);
+  if Assigned(lData) then
   begin
-    if not Assigned(Parent) and (RootNodeCount < 2) and
-      not(toHideRootFolder in TreeOptions.VETFolderOptions)
-    then begin
-      if Assigned(Data.Namespace) then
-        FreeAndNil(Data.Namespace);
-      if Assigned(Data.ColumnManager) then
-        FreeAndNil(Data.ColumnManager);
-      { If it is the root node create the desktop namespace }
+    if not Assigned(AParent) and (RootNodeCount < 2) and not (toHideRootFolder in TreeOptions.VETFolderOptions) then
+    begin
+      if Assigned(lData.Namespace) then
+        FreeAndNil(lData.Namespace);
+      if Assigned(lData.ColumnManager) then
+        FreeAndNil(lData.ColumnManager);
+      { If it is the root ANode create the desktop namespace }
       if Assigned(FRootFolderNamespace) then
-        Data.Namespace := FRootFolderNamespace.Clone(True)
+        lData.Namespace := FRootFolderNamespace.Clone(True)
       else
-        Data.Namespace := TNamespace.Create(nil, nil);
-      Data.ColumnManager := TColumnManager.Create(Self);
-      Include(InitStates, ivsExpanded);
+        lData.Namespace := TNamespace.Create(nil, nil);
+      lData.ColumnManager := TColumnManager.Create(Self);
+      Include(AInitStates, ivsExpanded);
     end;
 
-    if Assigned(Data.Namespace) then
+    if Assigned(lData.Namespace) then
     begin
       // Namespace.Valid will pump on the disk drive so don't use it if
       // the disk is removable.
@@ -4588,80 +4586,91 @@ begin
       if ThreadedExpandMarkEnabled then
       begin
         // PIDL is not valid until the mapped drive is logged into
-        if {not Data.Namespace.Browsable and} not Data.Namespace.Removable {and Data.Namespace.Folder} and not Data.Namespace.Link then // Vista Websites on MSDN is annoying and show a log in dialog, it is a Folder and a Link....
+        if {not lData.Namespace.Browsable and} not lData.Namespace.Removable {and lData.Namespace.Folder} and not lData.Namespace.Link then // Vista Websites on MSDN is annoying and show a log in dialog, it is a Folder and a Link....
         begin
-          Include(InitStates, ivsHasChildren);
+          Include(AInitStates, ivsHasChildren);
           //  In Vista all "+" are threaded
-          Request := TExpandMarkThreadRequest.Create;
-          Request.ID := TID_EXPANDMARK;
-          Request.Window := Self;
-          Request.PIDL := PIDLMgr.CopyPIDL(Data.Namespace.AbsolutePIDL);
-          Request.EnumFlags := BuildEnumFlags;
-          Request.Priority := 1; // Icons are most important
-          Request.Item := Node;
-          ExpandMarkThreadManager.AddRequest(Request, True)
-        end else
-          Include(InitStates, ivsHasChildren);
-      end else
-      begin
-        if Data.Namespace.Removable and (toFoldersExpandable in TreeOptions.VETFolderOptions) then
-        begin
-          if Data.Namespace.HasSubFolder then
-            Include(InitStates, ivsHasChildren)
-          else
-          if foNonFolders in FileObjects then
-          begin
-            if Data.Namespace.SubItemsEx then
-              Include(InitStates, ivsHasChildren);
-          end
-        end else
-        begin
-          if (ItemHasChildren(Data.Namespace, Node, Parent) and (toFoldersExpandable in TreeOptions.VETFolderOptions)) then
-            Include(InitStates, ivsHasChildren);
+          lRequest := TExpandMarkThreadRequest.Create;
+          try
+            lRequest.ID := TID_EXPANDMARK;
+            lRequest.Window := Self;
+            lRequest.PIDL := PIDLMgr.CopyPIDL(lData.Namespace.AbsolutePIDL);
+            lRequest.EnumFlags := BuildEnumFlags;
+            lRequest.Priority := 1; // Icons are most important
+            lRequest.Item := ANode;
+            ExpandMarkThreadManager.AddRequest(lRequest, True);
+            lRequest := nil;
+          finally
+            lRequest.Free;
+          end;
         end
+        else
+          Include(AInitStates, ivsHasChildren);
       end
-    end
+      else
+      begin
+        if lData.Namespace.Removable and (toFoldersExpandable in TreeOptions.VETFolderOptions) then
+        begin
+          if lData.Namespace.HasSubFolder then
+            Include(AInitStates, ivsHasChildren)
+          else if foNonFolders in FileObjects then
+          begin
+            if lData.Namespace.SubItemsEx then
+              Include(AInitStates, ivsHasChildren);
+          end;
+        end
+        else
+        begin
+          if (ItemHasChildren(lData.Namespace, ANode, AParent) and (toFoldersExpandable in TreeOptions.VETFolderOptions)) then
+            Include(AInitStates, ivsHasChildren);
+        end;
+      end;
+    end;
   end;
-  inherited;
+  inherited DoInitNode(AParent, ANode, AInitStates);
 
   { Persistent checkbox support. Do it after inhertied in case the Application  }
   { manually changed the check state.                                           }
-  if (toCheckSupport in TreeOptions.MiscOptions) then
+  if toCheckSupport in TreeOptions.MiscOptions then
   begin
     // This is to fix a bug with VT 3.04 not checking newly initialized nodes when
     // they are expanded. Only effects the last initialized level.
-    if (toAutoTristateTracking in TreeOptions.AutoOptions) and Assigned(Parent) and (Parent <> RootNode) then
-      if CheckState[Parent] = csCheckedNormal then
+    if (toAutoTristateTracking in TreeOptions.AutoOptions) and Assigned(AParent) and (AParent <> RootNode) then
+    begin
+      if CheckState[AParent] = csCheckedNormal then
       begin
-        Node.CheckState := csCheckedNormal;
-        if ValidateNamespace(Node, NS) then
+        ANode.CheckState := csCheckedNormal;
+        if ValidateNamespace(ANode, lNamespace) then
         begin
-          StorageNode := Storage.Store(NS.AbsolutePIDL, [stChecks]);
-          StorageNode.Storage.Check.CheckState := Node.CheckState;
+          lStorageNode := Storage.Store(lNamespace.AbsolutePIDL, [stChecks]);
+          lStorageNode.Storage.Check.CheckState := ANode.CheckState;
           // Next step is already done
-          Exit
+          Exit;
         end;
       end;
+    end;
 
     { See if there is a stored state for the checkbox  }
-    if ValidateNamespace(Node, NS) then
+    if ValidateNamespace(ANode, lNamespace) then
     begin
-       StorageNode := Storage.Find(NS.AbsolutePIDL, [stChecks]);
-       if Assigned(StorageNode) then
+       lStorageNode := Storage.Find(lNamespace.AbsolutePIDL, [stChecks]);
+       if Assigned(lStorageNode) then
        begin
-         Node.CheckState := StorageNode.Storage.Check.CheckState;
-         Node.CheckType := StorageNode.Storage.Check.CheckType;
-         ParentNode := Node.Parent;
-         if Assigned(ParentNode) and (toAutoTristateTracking in TreeOptions.AutoOptions) then
-           if ParentNode.CheckState = csUncheckedNormal then
-           while Assigned(ParentNode) and (ParentNode <> RootNode) do
+         ANode.CheckState := lStorageNode.Storage.Check.CheckState;
+         ANode.CheckType := lStorageNode.Storage.Check.CheckType;
+         lParentNode := ANode.Parent;
+         if Assigned(lParentNode) and (toAutoTristateTracking in TreeOptions.AutoOptions) then
+         begin
+           if lParentNode.CheckState = csUncheckedNormal then
+           while Assigned(lParentNode) and (lParentNode <> RootNode) do
            begin
-             ParentNode.CheckState := csMixedNormal;
-             ParentNode := ParentNode.Parent
-           end
+             lParentNode.CheckState := csMixedNormal;
+             lParentNode := lParentNode.Parent
+           end;
+         end;
        end;
-    end
-  end
+    end;
+  end;
 end;
 
 function TCustomVirtualExplorerTree.DoKeyAction(var CharCode: Word;
