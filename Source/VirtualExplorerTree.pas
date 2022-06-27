@@ -9544,7 +9544,7 @@ begin
     begin
       if toImages in Value then
         {$IF CompilerVersion >= 33}
-        Owner.Images := Owner.FScaledSmallSysImages
+        Owner.Images := SmallSysImagesCommon
         {$ELSE}
         Owner.Images := Owner.SmallSysImages
         {$IFEND}
@@ -9555,13 +9555,13 @@ begin
     if BitChanged(Value, OldOptions, toLargeImages) then
       if toLargeImages in Value then
         {$IF CompilerVersion >= 33}
-        Owner.Images := Owner.FScaledLargeSysImages
+        Owner.Images := LargeSysImagesCommon
         {$ELSE}
         Owner.Images := LargeSysImages
         {$IFEND}
       else
         {$IF CompilerVersion >= 33}
-        Owner.Images := Owner.FScaledSmallSysImages;
+        Owner.Images := SmallSysImagesCommon;
         {$ELSE}
         Owner.Images := Owner.SmallSysImages;
         {$IFEND}
