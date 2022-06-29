@@ -1471,6 +1471,7 @@ type
     function OkToExpandNode(Node: PVirtualNode): Boolean;
     function PathofNameSpace(NS: TNameSpace): string;
     procedure Notify(var Msg: TMessage);
+    procedure PaintImage(var APaintInfo: TVTPaintInfo; AImageInfoIndex: TVTImageInfoIndex; ADoOverlay: Boolean); override;
     procedure ReadChildNodes(Node: PVirtualNode; var ANodeArray: TNodeSearchArray; Sorted: Boolean; var ValidNodesRead: Integer);
     procedure RebuildRootNamespace; virtual;
     procedure RebuildRootNamespaceBeginUpdate;
@@ -8559,6 +8560,19 @@ begin
   inherited;
 end;
 
+procedure TCustomVirtualExplorerTree.PaintImage(var APaintInfo: TVTPaintInfo; AImageInfoIndex: TVTImageInfoIndex; ADoOverlay: Boolean);
+var
+  lNewImages: TCustomImageList;
+begin
+  if (not Enabled) and (APaintInfo.ImageInfo[AImageInfoIndex].Images is TCommonVirtualImageList) then
+  begin
+    lNewImages := TCommonVirtualImageList(APaintInfo.ImageInfo[AImageInfoIndex].Images).GetImageListWidth;
+    if Assigned(lNewImages) then
+      APaintInfo.ImageInfo[AImageInfoIndex].Images := lNewImages;
+  end;
+  inherited PaintImage(APaintInfo, AImageInfoIndex, ADoOverlay);
+end;
+
 function TCustomVirtualExplorerTree.ValidRootNamespace: Boolean;
 begin
   Result := False;
@@ -9544,7 +9558,7 @@ begin
     begin
       if toImages in Value then
         {$IF CompilerVersion >= 33}
-        Owner.Images := SmallSysImages
+        Owner.Images := Owner.FScaledSmallSysImages
         {$ELSE}
         Owner.Images := Owner.SmallSysImages
         {$IFEND}
@@ -9555,13 +9569,13 @@ begin
     if BitChanged(Value, OldOptions, toLargeImages) then
       if toLargeImages in Value then
         {$IF CompilerVersion >= 33}
-        Owner.Images := LargeSysImages
+        Owner.Images := Owner.FScaledLargeSysImages
         {$ELSE}
         Owner.Images := LargeSysImages
         {$IFEND}
       else
         {$IF CompilerVersion >= 33}
-        Owner.Images := SmallSysImages;
+        Owner.Images := Owner.FScaledSmallSysImages;
         {$ELSE}
         Owner.Images := Owner.SmallSysImages;
         {$IFEND}
