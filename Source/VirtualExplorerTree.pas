@@ -350,7 +350,7 @@ type
     toImages,                 // Use images associated with files
     toThreadedImages,         // Create a thread to retrieve the images if used
     toLargeImages,            // Use the 32x32 system images
-    toMarkCutAndCopy         // Draw the imags differently if the items are cut or copied
+    toMarkCutAndCopy          // Draw the imags differently if the items are cut or copied
   );
   TVETImageOptions = set of TVETImageOption;
 
@@ -9544,7 +9544,7 @@ begin
     begin
       if toImages in Value then
         {$IF CompilerVersion >= 33}
-        Owner.Images := SmallSysImagesCommon
+        Owner.Images := SmallSysImages
         {$ELSE}
         Owner.Images := Owner.SmallSysImages
         {$IFEND}
@@ -9555,13 +9555,13 @@ begin
     if BitChanged(Value, OldOptions, toLargeImages) then
       if toLargeImages in Value then
         {$IF CompilerVersion >= 33}
-        Owner.Images := LargeSysImagesCommon
+        Owner.Images := LargeSysImages
         {$ELSE}
         Owner.Images := LargeSysImages
         {$IFEND}
       else
         {$IF CompilerVersion >= 33}
-        Owner.Images := SmallSysImagesCommon;
+        Owner.Images := SmallSysImages;
         {$ELSE}
         Owner.Images := Owner.SmallSysImages;
         {$IFEND}
