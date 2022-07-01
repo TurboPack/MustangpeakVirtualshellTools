@@ -1471,7 +1471,6 @@ type
     function OkToExpandNode(Node: PVirtualNode): Boolean;
     function PathofNameSpace(NS: TNameSpace): string;
     procedure Notify(var Msg: TMessage);
-    procedure PaintImage(var APaintInfo: TVTPaintInfo; AImageInfoIndex: TVTImageInfoIndex; ADoOverlay: Boolean); override;
     procedure ReadChildNodes(Node: PVirtualNode; var ANodeArray: TNodeSearchArray; Sorted: Boolean; var ValidNodesRead: Integer);
     procedure RebuildRootNamespace; virtual;
     procedure RebuildRootNamespaceBeginUpdate;
@@ -8558,19 +8557,6 @@ end;
 procedure TCustomVirtualExplorerTree.DoEdit;
 begin
   inherited;
-end;
-
-procedure TCustomVirtualExplorerTree.PaintImage(var APaintInfo: TVTPaintInfo; AImageInfoIndex: TVTImageInfoIndex; ADoOverlay: Boolean);
-var
-  lNewImages: TCustomImageList;
-begin
-  if (not Enabled) and (APaintInfo.ImageInfo[AImageInfoIndex].Images is TCommonVirtualImageList) then
-  begin
-    lNewImages := TCommonVirtualImageList(APaintInfo.ImageInfo[AImageInfoIndex].Images).GetImageListWidth;
-    if Assigned(lNewImages) then
-      APaintInfo.ImageInfo[AImageInfoIndex].Images := lNewImages;
-  end;
-  inherited PaintImage(APaintInfo, AImageInfoIndex, ADoOverlay);
 end;
 
 function TCustomVirtualExplorerTree.ValidRootNamespace: Boolean;
