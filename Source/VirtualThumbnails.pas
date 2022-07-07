@@ -1603,9 +1603,13 @@ begin
   Result := Assigned(AOutBitmap);
   if Result then
   begin
-    FThumbBitmapStream.Position := 0;
-    AOutBitmap.LoadFromStream(FThumbBitmapStream);
-    FThumbBitmapStream.Position := 0;
+    try
+      FThumbBitmapStream.Position := 0;
+      AOutBitmap.LoadFromStream(FThumbBitmapStream);
+      FThumbBitmapStream.Position := 0;
+    except
+      Result := False;
+    end;
   end;
 end;
 

@@ -5281,59 +5281,62 @@ var
   lRequest: TShellIconThreadRequest;
 begin
   try
-    inherited DoThreadCallback(AMsg);
-    lItem := TObject(AMsg.Request.Item) as TExplorerItem;
-    // this is not efficient but once in a while this will cause a problem
-    // that seems like the items did not get flushed from the thread before the
-    // list is cleared. It happens only once is a blue moon. Can't seem to figure
-    // it out.
-    if ItemBelongsToList(lItem) then
-    begin
-      // DON'T RELEASE THE REQUEST IN THE CALLBACK
-      if Assigned(OnThreadCallback) then
-        OnThreadCallBack(Self, AMsg);
-      case AMsg.RequestID of
-        TID_ICON:
-        begin
-          if ValidateNamespace(lItem, lNamespace) then
+    try
+      inherited DoThreadCallback(AMsg);
+      lItem := TObject(AMsg.Request.Item) as TExplorerItem;
+      // this is not efficient but once in a while this will cause a problem
+      // that seems like the items did not get flushed from the thread before the
+      // list is cleared. It happens only once is a blue moon. Can't seem to figure
+      // it out.
+      if ItemBelongsToList(lItem) then
+      begin
+        // DON'T RELEASE THE REQUEST IN THE CALLBACK
+        if Assigned(OnThreadCallback) then
+          OnThreadCallBack(Self, AMsg);
+        case AMsg.RequestID of
+          TID_ICON:
           begin
-            lRequest := AMsg.Request as TShellIconThreadRequest;
-            lNamespace.SetIconIndexByThread(lRequest.ImageIndex, lRequest.OverlayIndex, True);
-            Groups.InvalidateItem(lItem, False);
-          end
-        end;
-        TID_THUMBNAIL:
-        begin
-          if ValidateNamespace(AMsg.Request.Item, lNamespace) then
-          begin
-            // Clone the ThumbInfo
-            if AMsg.Request.Tag <> 0 then
+            if ValidateNamespace(lItem, lNamespace) then
             begin
-              if lItem.ThumbInfo = nil then
-                lItem.ThumbInfo := TThumbInfo.Create;
-              if nsThreadedImageResizing in lNamespace.States then
-                lNamespace.States := lNamespace.States - [nsThreadedImageResizing];
-              lItem.ThumbInfo.Assign(TThumbInfo(AMsg.Request.Tag));
+              lRequest := AMsg.Request as TShellIconThreadRequest;
+              lNamespace.SetIconIndexByThread(lRequest.ImageIndex, lRequest.OverlayIndex, True);
+              Groups.InvalidateItem(lItem, False);
+            end
+          end;
+          TID_THUMBNAIL:
+          begin
+            if ValidateNamespace(AMsg.Request.Item, lNamespace) then
+            begin
+              // Clone the ThumbInfo
+              if AMsg.Request.Tag <> 0 then
+              begin
+                if lItem.ThumbInfo = nil then
+                  lItem.ThumbInfo := TThumbInfo.Create;
+                if nsThreadedImageResizing in lNamespace.States then
+                  lNamespace.States := lNamespace.States - [nsThreadedImageResizing];
+                lItem.ThumbInfo.Assign(TThumbInfo(AMsg.Request.Tag));
+                Groups.InvalidateItem(lItem, False);
+              end;
+              lNamespace.States := lNamespace.States - [nsThreadedImageLoading] + [nsThreadedImageLoaded];
+            end;
+          end;
+          TID_DETAILS:
+          begin
+            if ValidateNamespace(lItem, lNamespace) then
+            begin
+              lNamespace.TileDetail := (AMsg.Request as TEasyDetailsThreadRequest).Details;
+              PackTileStrings(lNamespace);
+              lNamespace.States := lNamespace.States - [nsThreadedTileInfoLoading] + [nsThreadedTileInfoLoaded];
               Groups.InvalidateItem(lItem, False);
             end;
-            lNamespace.States := lNamespace.States - [nsThreadedImageLoading] + [nsThreadedImageLoaded];
-          end;
-        end;
-        TID_DETAILS:
-        begin
-          if ValidateNamespace(lItem, lNamespace) then
-          begin
-            lNamespace.TileDetail := (AMsg.Request as TEasyDetailsThreadRequest).Details;
-            PackTileStrings(lNamespace);
-            lNamespace.States := lNamespace.States - [nsThreadedTileInfoLoading] + [nsThreadedTileInfoLoaded];
-            Groups.InvalidateItem(lItem, False);
           end;
         end;
       end;
-    end;
-  finally
-    AMsg.Request.Release;
-  end
+    finally
+      AMsg.Request.Release;
+    end
+  except
+  end;
 end;
 
 function TCustomVirtualExplorerEasyListview.FindItemByPath(Path: string): TEasyItem;

@@ -7523,33 +7523,36 @@ var
   IconRequest: TShellIconThreadRequest;
 begin
   try
-    case Msg.RequestID of
-      TID_ICON:
-        begin
-          IconRequest := Msg.Request as TShellIconThreadRequest;
-          if ValidateNamespace(IconRequest.Item, NS) then
+    try
+      case Msg.RequestID of
+        TID_ICON:
           begin
-            NS.SetIconIndexByThread(IconRequest.ImageIndex, IconRequest.OverlayIndex, True);
-            IsDragging := Dragging;
-            InvalidateNode(IconRequest.Item);
-            { The window has changed make sure drag image knows about it.}
-            if IsDragging then
-              UpdateWindowAndDragImage(Self, GetClientRect, False, True);
-          end
-        end;
-      TID_EXPANDMARK:
-        begin
-          MarkRequest := Msg.Request as TExpandMarkThreadRequest;
-          if ValidateNamespace(MarkRequest.Item, NS) then
-          begin
-            HasChildren[MarkRequest.Item] := MarkRequest.ShowMark;
-            InvalidateNode(MarkRequest.Item)
+            IconRequest := Msg.Request as TShellIconThreadRequest;
+            if ValidateNamespace(IconRequest.Item, NS) then
+            begin
+              NS.SetIconIndexByThread(IconRequest.ImageIndex, IconRequest.OverlayIndex, True);
+              IsDragging := Dragging;
+              InvalidateNode(IconRequest.Item);
+              { The window has changed make sure drag image knows about it.}
+              if IsDragging then
+                UpdateWindowAndDragImage(Self, GetClientRect, False, True);
+            end
           end;
-        end
-    end;
-  finally
-    Msg.Request.Release
-  end
+        TID_EXPANDMARK:
+          begin
+            MarkRequest := Msg.Request as TExpandMarkThreadRequest;
+            if ValidateNamespace(MarkRequest.Item, NS) then
+            begin
+              HasChildren[MarkRequest.Item] := MarkRequest.ShowMark;
+              InvalidateNode(MarkRequest.Item)
+            end;
+          end
+      end;
+    finally
+      Msg.Request.Release
+    end
+  except
+  end;
 end;
 
 procedure TCustomVirtualExplorerTree.WMContextMenu(var Msg: TWMContextMenu);
