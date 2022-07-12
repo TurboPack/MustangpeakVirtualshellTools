@@ -1337,6 +1337,7 @@ type
     FChangeNotifierCount: integer;
     FSortHelper: TShellSortHelper;
     FMalloc: IMalloc;
+    FNamespace: TNamespace;
     FOnNamespaceStructureChange: TNamespaceStructureChangeEvent;
     FOnInvalidRootNamespace: TNotifyEvent;
     function GetContextMenuShown: Boolean;
@@ -4273,7 +4274,11 @@ begin
   inherited;
   // Keep the TNamespace and TColumnManager valid in the FreeNode Event
   if Assigned(NS) then
+  begin
+    if NS = FNamespace then
+      FNamespace := nil;
     NS.Free;
+  end;
   if Assigned(CM) then
     CM.Free;
 end;
@@ -6228,6 +6233,8 @@ begin
           if not(toHideRootFolder in TreeOptions.VETFolderOptions) then
           begin
             NewNodeData := InternalData(RootNode);
+            if NewNodeData.Namespace = FNamespace then
+              FNamespace := nil;
             FreeAndNil(NewNodeData.Namespace);
             RootNodeCount := 1;
           end else
@@ -6235,8 +6242,11 @@ begin
             NewNodeData := InternalData(RootNode);
             if Assigned(NewNodeData) then
             begin
-              FreeAndNil(NewNodeData.Namespace);
-              NewNodeData.Namespace := TNamespace.Create(PIDLMgr.CopyPIDL(FRootFolderNamespace.AbsolutePIDL), nil);
+              if NewNodeData.Namespace <> FNamespace then
+                FreeAndNil(NewNodeData.Namespace);
+              FNamespace.Free;
+              FNamespace := TNamespace.Create(PIDLMgr.CopyPIDL(FRootFolderNamespace.AbsolutePIDL), nil);
+              NewNodeData.Namespace := FNamespace;
               ExpandNamespaceFolder(RootNode);
             end
           end;
@@ -7119,6 +7129,8 @@ begin
         if toHideRootFolder in TreeOptions.VETFolderOptions then
         begin
           NewNodeData := InternalData(RootNode);
+          if NewNodeData.Namespace = FNamespace then
+            FNamespace := nil;
           FreeAndNil(NewNodeData.Namespace);
         end;
           { TempRootNamespace was created in the property setters for the custom  }
