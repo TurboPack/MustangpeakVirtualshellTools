@@ -573,7 +573,11 @@ begin
 
             lContentR := ScrollArea(saThumbClient);
             lColor := BkGndBrush.Color;
-            lColorNew := lServices.GetSystemColor(clScrollBar);
+            if lServices.IsSystemStyle then
+              lColorNew := lServices.GetSystemColor(clBtnFace)
+            else
+              lColorNew := lServices.GetSystemColor(clScrollBar);
+            BkGndBrush.Bitmap.Free;
             BkGndBrush.Color := lColorNew;
             FillRect(ADC, lContentR, BkGndBrush.Handle);
             BkGndBrush.Color := lColor;
