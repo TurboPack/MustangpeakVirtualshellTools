@@ -15625,9 +15625,13 @@ initialization
   TCustomStyleEngine.RegisterStyleHook(TVirtualExplorerListview, TVclStyleScrollBarsHook);
 
 finalization
-  TCustomStyleEngine.UnregisterStyleHook(TVirtualExplorerTree, TVclStyleScrollBarsHook);
-  TCustomStyleEngine.UnregisterStyleHook(TVirtualExplorerTreeview, TVclStyleScrollBarsHook);
-  TCustomStyleEngine.UnregisterStyleHook(TVirtualExplorerListview, TVclStyleScrollBarsHook);
+  //Added an ugly workaround for a Vcl bug.
+  try
+    TCustomStyleEngine.UnregisterStyleHook(TVirtualExplorerTree, TVclStyleScrollBarsHook);
+    TCustomStyleEngine.UnregisterStyleHook(TVirtualExplorerTreeview, TVclStyleScrollBarsHook);
+    TCustomStyleEngine.UnregisterStyleHook(TVirtualExplorerListview, TVclStyleScrollBarsHook);
+  except
+  end;
 
   FreeAndNil(ViewManager);
   FreeThemeLibrary;
