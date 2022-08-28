@@ -341,7 +341,7 @@ type
     function ChangeInSpecialFolder(PIDL: PItemIDList): Integer;
     procedure Execute; override;
     function GenerateVirtualFolderPathPIDL(PhysicalPIDL: PItemIdList; RegisteredSpecialFolderIndex: Integer; APIDLMgr: TCommonPIDLManager): PItemIDList;
-    function PathToPIDL(APath: string): PItemIDList;
+    function PathToPIDL(const APath: string): PItemIDList;
 
     property SpecialFolderVirtualPIDLs: TCommonPIDLList read FSpecialFolderVirtualPIDLs write FSpecialFolderVirtualPIDLs;
     property SpecialFolderPhysicalPIDL: TCommonPIDLList read FSpecialFolderPhysicalPIDL write FSpecialFolderPhysicalPIDL;
@@ -1797,20 +1797,9 @@ begin
   end
 end;
 
-function TVirtualKernelChangeThread.PathToPIDL(APath: string): PItemIDList;
-var
-  Desktop: IShellFolder;
-  pchEaten, dwAttributes: ULONG;
+function TVirtualKernelChangeThread.PathToPIDL(const APath: string): PItemIDList;
 begin
-  SHGetDesktopFolder(Desktop);
-  dwAttributes := 0;
-  if Assigned(Desktop) then
-  begin
-    if Desktop.ParseDisplayName(0, nil, PWideChar(APath), pchEaten, Result, dwAttributes) <> NOERROR
-    then
-      Result := nil
-  end else
-    Result := nil
+  Result := TPIDLCache.ForcePIDL(APath, 0);
 end;
 
 procedure TVirtualKernelChangeThread.TriggerEvent;
@@ -2303,7 +2292,7 @@ var
   Folder: IShellFolder;
   PIDL: PItemIDList;
   Malloc: IMalloc;
-  Drives, ParsedCount, Attribs: LongWord;
+  Drives: LongWord;
   i: integer;
   Drive: string;
   DriveW, RecycleFolder: string;
@@ -2326,14 +2315,15 @@ begin
       DriveW := Drive;
       if GetDriveType(PChar(Drive)) = DRIVE_FIXED then
       begin
-        Attribs := 0;
         RecycleFolder := Drive + 'Recycled';
-        if Succeeded(Folder.ParseDisplayName(0, nil, PWideChar(RecycleFolder), ParsedCount, PIDL, Attribs)) then
+        PIDL := TPIDLCache.ForcePIDL(RecycleFolder, 0);
+        if Assigned(PIDL) then
           RecycleFolderPIDLs.Add(PIDL)
-        else begin
-          Attribs := 0;
+        else
+        begin
           RecycleFolder := Drive + 'Recycler';
-          if Succeeded(Folder.ParseDisplayName(0, nil, PWideChar(RecycleFolder), ParsedCount, PIDL, Attribs)) then
+          PIDL := TPIDLCache.ForcePIDL(RecycleFolder, 0);
+          if Assigned(PIDL) then
             RecycleFolderPIDLs.Add(PIDL)
         end
       end

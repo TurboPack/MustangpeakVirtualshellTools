@@ -743,7 +743,7 @@ type
     function GetCheckedPIDLs: TCommonPIDLList;
     procedure SetCheckedPIDLs(const Value: TCommonPIDLList);
     function GetCheckedFileNames: TStrings;
-    procedure SetCheckFileNames(const Value: TStrings);
+    procedure SetCheckFileNames(const AValue: TStrings);
     function GetResolvedFileNames: TStrings;
   protected
     function ProcessNode(RelativePIDL: PItemIDList; CurrentNode: TNodeStorage; Force, MarkCheckMixed: Boolean): TNodeStorage;
@@ -758,7 +758,7 @@ type
     procedure Delete(APIDL: PItemIDList; StorageTypes: TStorageTypes; Force: Boolean = False; FreeUserData: Boolean = False);
     function Find(APIDL: PItemIDList; StorageTypes: TStorageTypes): TNodeStorage; overload; virtual;
     function Find(APIDL: PItemIDList; StorageTypes: TStorageTypes; var StorageNode: TNodeStorage): Boolean; overload; virtual;
-    function SetFileChecked(FileName: string; CheckBoxType: TCheckType): Boolean;
+    function SetFileChecked(const AFileName: string; const ACheckBoxType: TCheckType): Boolean;
     function SetPIDLChecked(PIDL: PItemIDList; CheckBoxType: TCheckType): Boolean;
     function Store(APIDL: PItemIDList; StorageTypes: TStorageTypes): TNodeStorage; virtual;
 
@@ -1379,7 +1379,7 @@ type
     function CanShowDragImage: Boolean; override;
     function ShowBkGndContextMenu(Point: TPoint): Integer; virtual;
     procedure ActivateTree(Activate: Boolean);
-    procedure AddMyDocumentsFolder(FolderNode: PVirtualNode; DesktopFolderOnly: Boolean);
+    procedure AddMyDocumentsFolder(AFolderNode: PVirtualNode; ADesktopFolderOnly: Boolean);
     procedure AfterValidEnumIDList(Sender: TObject);
     procedure CollapseNamespaceFolder(Node: PVirtualNode);
     procedure CreateWnd; override;
@@ -3271,50 +3271,45 @@ begin
   DoNamespaceStructureChange(Result, NewNodeData.Namespace, nscAdd);
 end;
 
-procedure TCustomVirtualExplorerTree.AddMyDocumentsFolder(
-  FolderNode: PVirtualNode; DesktopFolderOnly: Boolean);
+procedure TCustomVirtualExplorerTree.AddMyDocumentsFolder(AFolderNode: PVirtualNode; ADesktopFolderOnly: Boolean);
+const
+  cLS = '::{450d8fba-ad25-11d0-98a8-0800361b1103}';
 var
-  MyDocuments, NS: TNamespace;
-  Desktop: IShellFolder;
-  LS: string;
-  chEaten, Attrib: ULONG;
-  PIDL: PItemIDList;
-  Child: PVirtualNode;
-  Duplicate, AddMyDocuments: Boolean;
+  lChild: PVirtualNode;
+  lDuplicate, lAddMyDocuments: Boolean;
+  lMyDocuments: TNamespace;
+  lNS: TNamespace;
+  lPIDL: PItemIDList;
 begin
-  Duplicate := False;
-  if ValidateNamespace(FolderNode, NS) then
+  lDuplicate := False;
+  if ValidateNamespace(AFolderNode, lNS) then
   begin
-    AddMyDocuments := (DesktopFolderOnly and NS.IsDesktop) or not DesktopFolderOnly;
-    if AddMyDocuments then
+    lAddMyDocuments := (ADesktopFolderOnly and lNS.IsDesktop) or not ADesktopFolderOnly;
+    if lAddMyDocuments then
     begin
-
-      if NS.Folder then
+      if lNS.Folder then
       begin
-        LS := '::{450d8fba-ad25-11d0-98a8-0800361b1103}';
-        SHGetDesktopFolder(Desktop);
-        Attrib := 0;
-        if Desktop.ParseDisplayName(0, nil, PWideChar(LS), chEaten, PIDL,
-          Attrib) = S_OK
-        then begin
-          MyDocuments := TNamespace.Create(PIDL, nil);
-          Child := GetFirstChild(FolderNode);
-          while not Duplicate and Assigned(Child) do
+        lPIDL := TPIDLCache.ForcePIDL(cLS, 0);
+        if Assigned(lPIDL) then
+        begin
+          lMyDocuments := TNamespace.Create(lPIDL, nil);
+          lChild := GetFirstChild(AFolderNode);
+          while not lDuplicate and Assigned(lChild) do
           begin
-            if ValidateNamespace(Child, NS) then
+            if ValidateNamespace(lChild, lNS) then
             begin
-              Duplicate := ILIsEqual(MyDocuments.AbsolutePIDL, NS.AbsolutePIDL) = True;
-              Child := GetNextSibling(Child);
+              lDuplicate := ILIsEqual(lMyDocuments.AbsolutePIDL, lNS.AbsolutePIDL) = True;
+              lChild := GetNextSibling(lChild);
             end
           end;
-          if not Duplicate then
-            AddCustomNode(FolderNode, MyDocuments, toCheckSupport in TreeOptions.MiscOptions)
+          if not lDuplicate then
+            AddCustomNode(AFolderNode, lMyDocuments, toCheckSupport in TreeOptions.MiscOptions)
           else
-            MyDocuments.Free
-        end
-      end
-    end
-  end
+            lMyDocuments.Free;
+        end;
+      end;
+    end;
+  end;
 end;
 
 function TCustomVirtualExplorerTree.AddNodeToTree(
@@ -11250,55 +11245,48 @@ begin
   end;
 end;
 
-procedure TRootNodeStorage.SetCheckFileNames(const Value: TStrings);
+procedure TRootNodeStorage.SetCheckFileNames(const AValue: TStrings);
 var
-  Desktop: IShellFolder;
-  i: integer;
-  WS: string;
-  pchEaten, pdwAttributes: LongWord;
-  PIDL: PItemIdList;
-  Storage: TNodeStorage;
+  lCount: Integer;
+  lPIDL: PItemIdList;
+  lStorage: TNodeStorage;
+  lWS: string;
 begin
   Clear;
-  SHGetDesktopfolder(Desktop);
-  pdwAttributes := 0;
-  for i := 0 to Value.Count - 1 do
+  for lCount := 0 to AValue.Count - 1 do
   begin
-    WS := Value[i];
-    if Succeeded(Desktop.ParseDisplayName(Application.Handle, nil, PWideChar(WS), pchEaten, PIDL, pdwAttributes)) then
+    lWS := AValue[lCount];
+    lPIDL := TPIDLCache.ForcePIDL(lWS, Application.Handle);
+    if Assigned(lPIDL) then
     begin
-      Storage := Store(PIDL, [stChecks]);
-      if Assigned(Storage) then
+      lStorage := Store(lPIDL, [stChecks]);
+      if Assigned(lStorage) then
       begin
-        Storage.Storage.Check.CheckState := csCheckedNormal;
-        Storage.Storage.Check.CheckType := ctTriStateCheckBox;
+        lStorage.Storage.Check.CheckState := csCheckedNormal;
+        lStorage.Storage.Check.CheckType := ctTriStateCheckBox;
       end;
-      PIDLMgr.FreePIDL(PIDL);
-    end
+      PIDLMgr.FreePIDL(lPIDL);
+    end;
   end;
 end;
 
-function TRootNodeStorage.SetFileChecked(FileName: string;
-  CheckBoxType: TCheckType): Boolean;
+function TRootNodeStorage.SetFileChecked(const AFileName: string; const ACheckBoxType: TCheckType): Boolean;
 var
-  Desktop: IShellFolder;
-  pchEaten, pdwAttributes: LongWord;
-  PIDL: PItemIdList;
-  Storage: TNodeStorage;
+  lPIDL: PItemIdList;
+  lStorage: TNodeStorage;
 begin
   Result := False;
-  SHGetDesktopfolder(Desktop);
-  pdwAttributes := 0;
-  if Succeeded(Desktop.ParseDisplayName(Application.Handle, nil, PWideChar(FileName), pchEaten, PIDL, pdwAttributes)) then
+  lPIDL := TPIDLCache.ForcePIDL(AFileName, Application.Handle);
+  if Assigned(lPIDL) then
   begin
-    Storage := Store(PIDL, [stChecks]);
-    if Assigned(Storage) then
+    lStorage := Store(lPIDL, [stChecks]);
+    if Assigned(lStorage) then
     begin
-      Storage.Storage.Check.CheckState := csCheckedNormal;
-      Storage.Storage.Check.CheckType := CheckBoxType;
-      Result := True
+      lStorage.Storage.Check.CheckState := csCheckedNormal;
+      lStorage.Storage.Check.CheckType := ACheckBoxType;
+      Result := True;
     end;
-    PIDLMgr.FreePIDL(PIDL);
+    PIDLMgr.FreePIDL(lPIDL);
   end
 end;
 
