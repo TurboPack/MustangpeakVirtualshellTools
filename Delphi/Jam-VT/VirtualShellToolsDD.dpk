@@ -1,7 +1,7 @@
 package VirtualShellToolsDD;
 
 {$R *.res}
-{$R '..\Design\VirtualShellToolsReg.dcr'}
+{$R '..\..\Design\VirtualShellToolsReg.dcr'}
 {$IFDEF IMPLICITBUILDING This IFDEF should not be used by users}
 {$ALIGN 8}
 {$ASSERTIONS ON}
@@ -27,9 +27,9 @@ package VirtualShellToolsDD;
 {$DEFINE RELEASE}
 {$ENDIF IMPLICITBUILDING}
 {$DESCRIPTION 'Virtual Shell Tools Delphi Designtime Package'}
+{$LIBSUFFIX AUTO}
 {$DESIGNONLY}
 {$IMPLICITBUILD OFF}
-{$LIBSUFFIX AUTO}
 
 requires
   vcl,
