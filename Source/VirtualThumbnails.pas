@@ -268,7 +268,7 @@ function SpRectAspectRatio(ImageW, ImageH, ThumbW, ThumbH: Integer; Alignment: T
 function SpIsIncompleteJPGError(E: Exception): Boolean;
 function SpGetGraphicClass(Filename: string): TGraphicClass;
 function SpLoadGraphicFile(Filename: string; outP: TPicture; CatchIncompleteJPGErrors: Boolean = True): Boolean;
-procedure SpPixelRotate(InOutB: TBitmap; Angle: Integer);
+procedure SpPixelRotate(const AInOutB: TBitmap; const AAngle: Integer);
 procedure SpStretchDraw(G: TGraphic; ACanvas: TCanvas; DestR: TRect; UseSubsampling: Boolean);
 {$IFDEF USEIMAGEEN}
 function SpMakeThumbFromFileImageEn(Filename: string; OutBitmap: TBitmap; ThumbW, ThumbH: Integer;
@@ -300,8 +300,7 @@ implementation
 uses
 {$IFDEF USEIMAGEEN} ImageEnIo, ImageEnProc, hyieutils, iexBitmaps, iexHelperFunctions,{$ENDIF}
   Types,
-  Math,
-  SysStyles;
+  Math;
 
 //WMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWM
 { Image manipulation helpers }
@@ -515,13 +514,67 @@ begin
   end;
 end;
 
-procedure SpPixelRotate(InOutB: TBitmap; Angle: Integer);
+procedure SpPixelRotate(const AInOutB: TBitmap; const AAngle: Integer);
 // Performs a clockwise rotation
+var
+  lBitmap: TBitmap;
+  lCol: Integer;
+  lDestHeight: Integer;
+  lDestWidth: Integer;
+  lOrigHeight: Integer;
+  lOrigWidth: Integer;
+  lRow: Integer;
 begin
-  if not Assigned(InOutB) or InOutB.Empty then
+  if not Assigned(AInOutB) or AInOutB.Empty then
     Exit;
 
-  RotateBitmap(InOutB, Angle, False);
+  lOrigWidth := AInOutB.Width;
+  lOrigHeight := AInOutB.Height;
+  case AAngle of
+    90:  begin
+           // Horizontal
+           lDestWidth := lOrigHeight;
+           lDestHeight := lOrigWidth;
+         end;
+    180: begin
+           // Vertical
+           lDestWidth := lOrigWidth;
+           lDestHeight := lOrigHeight;
+         end;
+    270: begin
+           // Horizontal
+           lDestWidth := lOrigHeight;
+           lDestHeight := lOrigWidth;
+         end;
+  else
+    Exit;
+  end;
+
+  lBitmap := TBitmap.Create;
+  try
+    lBitmap.Width := lDestWidth;
+    lBitmap.Height := lDestHeight;
+    lBitmap.Canvas.Lock;
+    try
+    for lRow := 0 to lOrigWidth - 1 do
+    begin
+      for lCol := 0 to lOrigHeight - 1 do
+      begin
+        case AAngle of
+          90: lBitmap.Canvas.Pixels[lOrigHeight - lCol - 1, lRow] := AInOutB.Canvas.Pixels[lRow, lCol];
+          180: lBitmap.Canvas.Pixels[lOrigWidth - lRow - 1, lOrigHeight - lCol - 1] := AInOutB.Canvas.Pixels[lRow, lCol];
+          270:  lBitmap.Canvas.Pixels[lCol, lOrigWidth - lRow - 1] := AInOutB.Canvas.Pixels[lRow, lCol];
+        end;
+      end;
+    end;
+
+    finally
+      lBitmap.Canvas.Unlock;
+    end;
+    AInOutB.Assign(lBitmap);
+  finally
+    lBitmap.Free;
+  end;
 end;
 
 procedure SpStretchDraw(G: TGraphic; ACanvas: TCanvas; DestR: TRect;
