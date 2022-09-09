@@ -300,7 +300,8 @@ implementation
 uses
 {$IFDEF USEIMAGEEN} ImageEnIo, ImageEnProc, hyieutils, iexBitmaps, iexHelperFunctions,{$ENDIF}
   Types,
-  Math;
+  Math,
+  SysStyles;
 
 //WMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWM
 { Image manipulation helpers }
@@ -516,53 +517,11 @@ end;
 
 procedure SpPixelRotate(InOutB: TBitmap; Angle: Integer);
 // Performs a clockwise rotation
-var
-  I, J: integer;
-  OrigWidth, OrigHeight, DestWidth, DestHeight: Integer;
-  B: TBitmap;
 begin
-  if not Assigned(InOutB) or InOutB.Empty then Exit;
-
-  OrigWidth := InOutB.Width;
-  OrigHeight := InOutB.Height;
-  case Angle of
-    90:  begin
-           // Horizontal
-           DestWidth := OrigHeight;
-           DestHeight := OrigWidth;
-         end;
-    180: begin
-           // Vertical
-           DestWidth := OrigWidth;
-           DestHeight := OrigHeight;
-         end;
-    270: begin
-           // Horizontal
-           DestWidth := OrigHeight;
-           DestHeight := OrigWidth;
-         end;
-  else
+  if not Assigned(InOutB) or InOutB.Empty then
     Exit;
-  end;
 
-  B := TBitmap.Create;
-  try
-    B.Width := DestWidth;
-    B.Height := DestHeight;
-
-    for I := 0 to OrigWidth do
-      for J := 0 to OrigHeight do begin
-        case Angle of
-          90: B.Canvas.Pixels[OrigHeight-J-1, I] := InOutB.Canvas.Pixels[I, J];
-          180: B.Canvas.Pixels[OrigWidth-I-1, OrigHeight-J-1] := InOutB.Canvas.Pixels[I, J];
-          270:  B.Canvas.Pixels[J, OrigWidth-I-1] := InOutB.Canvas.Pixels[I, J];
-        end;
-      end;
-
-    InOutB.Assign(B);
-  finally
-    B.Free;
-  end;
+  RotateBitmap(InOutB, Angle, False);
 end;
 
 procedure SpStretchDraw(G: TGraphic; ACanvas: TCanvas; DestR: TRect;
