@@ -26,9 +26,9 @@ package VirtualShellToolsD;
 {$DEFINE RELEASE}
 {$ENDIF IMPLICITBUILDING}
 {$DESCRIPTION 'VirtualShellTools Delphi Runtime Package'}
+{$LIBSUFFIX AUTO}
 {$RUNONLY}
 {$IMPLICITBUILD OFF}
-{$LIBSUFFIX AUTO}
 
 requires
   rtl,
@@ -39,22 +39,22 @@ requires
   VirtualTreesR;
 
 contains
-  AppletsAndWizards in '..\Source\AppletsAndWizards.pas',
-  VirtualCommandLine in '..\Source\VirtualCommandLine.pas',
-  VirtualExplorerTree in '..\Source\VirtualExplorerTree.pas',
-  VirtualRedirector in '..\Source\VirtualRedirector.pas',
-  VirtualResources in '..\Source\VirtualResources.pas',
-  VirtualScrollbars in '..\Source\VirtualScrollbars.pas',
-  VirtualSendToMenu in '..\Source\VirtualSendToMenu.pas',
-  VirtualShellAutoComplete in '..\Source\VirtualShellAutoComplete.pas',
-  VirtualShellHistory in '..\Source\VirtualShellHistory.pas',
-  VirtualShellNewMenu in '..\Source\VirtualShellNewMenu.pas',
-  VirtualShellNotifier in '..\Source\VirtualShellNotifier.pas',
-  VirtualShellToolBar in '..\Source\VirtualShellToolBar.pas',
-  VirtualThumbnails in '..\Source\VirtualThumbnails.pas',
-  VirtualExplorerEasyListview in '..\Source\VirtualExplorerEasyListview.pas',
-  VirtualExplorerEasyListModeview in '..\Source\VirtualExplorerEasyListModeview.pas',
-  VirtualFileSearch in '..\Source\VirtualFileSearch.pas',
-  ColumnForm in '..\Source\ColumnForm.pas' {FormColumnSettings};
+  AppletsAndWizards in '..\..\Source\AppletsAndWizards.pas',
+  VirtualCommandLine in '..\..\Source\VirtualCommandLine.pas',
+  VirtualExplorerTree in '..\..\Source\VirtualExplorerTree.pas',
+  VirtualRedirector in '..\..\Source\VirtualRedirector.pas',
+  VirtualResources in '..\..\Source\VirtualResources.pas',
+  VirtualScrollbars in '..\..\Source\VirtualScrollbars.pas',
+  VirtualSendToMenu in '..\..\Source\VirtualSendToMenu.pas',
+  VirtualShellAutoComplete in '..\..\Source\VirtualShellAutoComplete.pas',
+  VirtualShellHistory in '..\..\Source\VirtualShellHistory.pas',
+  VirtualShellNewMenu in '..\..\Source\VirtualShellNewMenu.pas',
+  VirtualShellNotifier in '..\..\Source\VirtualShellNotifier.pas',
+  VirtualShellToolBar in '..\..\Source\VirtualShellToolBar.pas',
+  VirtualThumbnails in '..\..\Source\VirtualThumbnails.pas',
+  VirtualExplorerEasyListview in '..\..\Source\VirtualExplorerEasyListview.pas',
+  VirtualExplorerEasyListModeview in '..\..\Source\VirtualExplorerEasyListModeview.pas',
+  VirtualFileSearch in '..\..\Source\VirtualFileSearch.pas',
+  ColumnForm in '..\..\Source\ColumnForm.pas' {FormColumnSettings};
 
 end.
