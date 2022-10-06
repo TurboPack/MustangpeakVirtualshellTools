@@ -4621,7 +4621,7 @@ procedure TCustomVirtualExplorerEasyListview.DoItemContextMenu(
   var Handled: Boolean);
 begin
   inherited DoItemContextMenu(HitInfo, WindowPoint, Menu, Handled);
-  if not Handled and (HitInfo.HitInfo * [ehtOnText, ehtOnIcon] <> []) and (eloShellContextMenus in Options) then
+  if not Handled and (eloShellContextMenus in Options) then
   begin
     FContextMenuItem := HitInfo.Item;
     try
