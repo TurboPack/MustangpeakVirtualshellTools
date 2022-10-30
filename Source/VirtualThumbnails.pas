@@ -1148,9 +1148,7 @@ function SpReadExifThumbnail(FileName: string; Exif: TStringList): TJpegImage;
     Result := '';
 
     // FFD8 marker is the SOI (Start Of Image), we need to LeftTrim the buffer
-    BeginMark := Pos(#$ff#$d8#$ff#$db, ThumbBuffer); // Quantization table
-    if BeginMark = 0 then
-      BeginMark := Pos(#$ff#$d8#$ff#$c4, ThumbBuffer); // Huffman table
+    BeginMark := Pos(#$ff#$d8, ThumbBuffer);
     if BeginMark <= 0 then
       Exit;
 
