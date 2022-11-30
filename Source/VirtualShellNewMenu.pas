@@ -398,141 +398,150 @@ end;
 procedure TVirtualShellNewItemList.BuildList;
 
     { Only handle the first level extension keys, except for the lnk files }
-    function IsValidExtKey(Key: string): Boolean;
+    function IsValidExtKey(const AKey: string): Boolean;
     begin
       Result := False;
-      if Length(Key) > 0 then
-        Result := ((Key[1] = '.') or (Key[1] = '*')) and
-          (WideStrIComp(PWideChar(Key), '.lnk') <> 0)
+      if AKey <> '' then
+        Result := ((AKey[1] = '.') or (AKey[1] = '*')) and
+          not AnsiSameText(AKey, '.lnk')
     end;
 
 var
-  Reg: TRegistry;
-  RegList: TStringList;
-  i, j: integer;
-  MenuText, DefaultKey, FileCreateType, ShellNewKeyPath: string;
-  OldCursor: hCursor;
-  NewShellNewItem: TVirtualShellNewItem;
-  FileInfoW: TSHFileInfoW;
-  NewShellLink: TNewShellKind;
-  DataSize: integer;
-  Data: Pointer;
+  lCount: Integer;
+  lData: Pointer;
+  lDataSize: Integer;
+  lDefaultKey: string;
+  lFileCreateType: string;
+  lFileInfoW: TSHFileInfoW;
+  lMenuText: string;
+  lNewShellLink: TNewShellKind;
+  lNewShellNewItem: TVirtualShellNewItem;
+  lOldCursor: TCursor;
+  lReg: TRegistry;
+  lRegList: TStringList;
+  lRegStr: string;
+  lShellNewKeyPath: string;
 begin
   Clear;
-  OldCursor := Screen.Cursor;
+  lReg := nil;
+  lRegList := nil;
+  lOldCursor := Screen.Cursor;
   Screen.Cursor := crHourGlass;
-  Reg := TRegistry.Create;
-  RegList := TStringList.Create;
-  if Assigned(Reg) then
   try
-    Reg.RootKey := HKEY_CLASSES_ROOT;
-    if Reg.OpenKeyReadOnly('') then
+    lReg := TRegistry.Create;
+    lRegList := TStringList.Create;
+    lReg.RootKey := HKEY_CLASSES_ROOT;
+    if lReg.OpenKeyReadOnly('') then
     begin
       { Read in all the level 1 keys under HKEY_CLASSES_ROOT }
-      Reg.GetKeyNames(RegList);
-      Reg.CloseKey;
-      RegList.Sorted := True;
-      for i := 0 to RegList.Count - 1  do
+      lReg.GetKeyNames(lRegList);
+      lReg.CloseKey;
+      lRegList.Sorted := True;
+      for lRegStr in lRegList  do
+      begin
         { Only work on extension keys not the extention type keys }
-        if IsValidExtKey(RegList[i]) then
+        if not IsValidExtKey(lRegStr) then
+          Continue;
+       { Open the extension key }
+        lShellNewKeyPath := lRegStr;
+        if lReg.OpenKeyReadOnly(lShellNewKeyPath) then
         begin
-          { Open the extension key }
-          ShellNewKeyPath := RegList[i];
-          if Reg.OpenKeyReadOnly(ShellNewKeyPath) then
+          { Read the default text. This is the pointer to the extension type  }
+          { key further down in the list OR it may be another key that        }
+          { contains the ShellNew key                                         }
+          lDefaultKey := lReg.ReadString('');
+          lReg.CloseKey;
+          { Try to open the extension type pointed to by the extension type   }
+          { key, and read the File Type Name to be used for creating the new  }
+          { file and for use for the menu text.                               }
+          if lReg.OpenKeyReadOnly(lDefaultKey) then
           begin
-            { Read the default text. This is the pointer to the extension type  }
-            { key further down in the list OR it may be another key that        }
-            { contains the ShellNew key                                         }
-            DefaultKey := Reg.ReadString('');
-            Reg.CloseKey;
-            { Try to open the extension type pointed to by the extension type   }
-            { key, and read the File Type Name to be used for creating the new  }
-            { file and for use for the menu text.                               }
-            if Reg.OpenKeyReadOnly(DefaultKey) then
+            lMenuText := lReg.ReadString('');
+            lReg.CloseKey;
+          end
+          else
+            lMenuText := '';
+          { Check to see if it was a pointer to a sub key, with a saftety out }
+          lCount := 0;
+          while (lDefaultKey <> '') and (lCount < 20) do
+          begin
+            if lReg.OpenKeyReadOnly(lShellNewKeyPath + '\' + lDefaultKey) then
             begin
-              MenuText := Reg.ReadString('');
-              Reg.CloseKey;
-            end else
-              MenuText := '';
-            { Check to see if it was a pointer to a sub key, with a saftety out }
-            j := 0;
-            while (DefaultKey <> '') and (j < 20) do
+              lShellNewKeyPath := lShellNewKeyPath +  '\' + lDefaultKey;
+              lDefaultKey := lReg.ReadString('');
+              lReg.CloseKey;
+            end
+            else
+              lDefaultKey := '';
+            Inc(lCount);
+          end;
+          { Try to open the ShellNew subkey under the lShellNewKeyPath key     }
+          if lMenuText <> '' then
+          begin
+            if lReg.OpenKeyReadOnly(lShellNewKeyPath + S_SHELLNEW_PATH) then
             begin
-              if Reg.OpenKeyReadOnly(ShellNewKeyPath + '\' + DefaultKey) then
-              begin
-                ShellNewKeyPath := ShellNewKeyPath +  '\' + DefaultKey;
-                DefaultKey := Reg.ReadString('');
-                Reg.CloseKey;
-              end else
-                DefaultKey := '';
-              Inc(j);
-            end;
-            { Try to open the ShellNew subkey under the ShellNewKeyPath key     }
-            if (MenuText <> '') then
-              if Reg.OpenKeyReadOnly(ShellNewKeyPath + S_SHELLNEW_PATH) then
-              begin
-                NewShellLink := nmk_Unknown;
-                FileCreateType := '';
-                Data := nil;
-                DataSize := 0;
+              lNewShellLink := nmk_Unknown;
+              lFileCreateType := '';
+              lData := nil;
+              lDataSize := 0;
 
-                if Reg.GetDataType(S_NULLFILE) = rdString then
-                begin
-                  FileCreateType := Reg.ReadString(S_NULLFILE);
-                  NewShellLink := nmk_Null
-                end else
-                if Reg.GetDataType(S_FILENAME) = rdString then
-                begin
-                  FileCreateType := Reg.ReadString(S_FILENAME);
-                  NewShellLink := nmk_FileName
-                end else
-                if Reg.GetDataType(S_COMMAND) = rdString then
-                begin
-                  FileCreateType := Reg.ReadString(S_COMMAND);
-                  NewShellLink := nmk_Command
-                end else
-                if Reg.GetDataType(S_COMMAND) = rdExpandString  then
-                begin
-                  FileCreateType := Reg.ReadString(S_COMMAND);
-                  NewShellLink := nmk_Command
-                end else
-                if Reg.GetDataType(S_DATA) = rdBinary then
-                begin
-                  DataSize := Reg.GetDataSize(S_DATA);
-                  GetMem(Data, DataSize);
-                  if DataSize = Reg.ReadBinaryData(S_DATA, Data^, DataSize) then
-                  NewShellLink := nmk_Data
-                end;
-                if NewShellLink <> nmk_Unknown then
-                begin
-
-                  NewShellNewItem := TVirtualShellNewItem.Create;
-                  NewShellNewItem.Extension := RegList[i];
-                  NewShellNewItem.FileType := MenuText;
-                  NewShellNewItem.NewShellKind := NewShellLink;
-                  NewShellNewItem.NewShellKindStr := FileCreateType;
-                  NewShellNewItem.Data := Data;
-                  NewShellNewItem.DataSize := DataSize;
-                  if SHGetFileInfo(PWideChar(NewShellNewItem.Extension),
-                                   FILE_ATTRIBUTE_NORMAL,
-                                   FileInfoW,
-                                   SizeOf( FileInfoW),
-                                   SHGFI_USEFILEATTRIBUTES or
-                                   SHGFI_SHELLICONSIZE or
-                                   SHGFI_ICON or
-                                   SHGFI_SYSICONINDEX) > 0 then
-                    NewShellNewItem.SystemImageIndex := FileInfoW.iIcon;
-                  Add(NewShellNewItem);
-                end;
-                Reg.CloseKey;
+              if lReg.GetDataType(S_NULLFILE) = rdString then
+              begin
+                lFileCreateType := lReg.ReadString(S_NULLFILE);
+                lNewShellLink := nmk_Null
+              end
+              else if lReg.GetDataType(S_FILENAME) = rdString then
+              begin
+                lFileCreateType := lReg.ReadString(S_FILENAME);
+                lNewShellLink := nmk_FileName
+              end
+              else if lReg.GetDataType(S_COMMAND) = rdString then
+              begin
+                lFileCreateType := lReg.ReadString(S_COMMAND);
+                lNewShellLink := nmk_Command
+              end
+              else if lReg.GetDataType(S_COMMAND) = rdExpandString  then
+              begin
+                lFileCreateType := lReg.ReadString(S_COMMAND);
+                lNewShellLink := nmk_Command
+              end
+              else if lReg.GetDataType(S_DATA) = rdBinary then
+              begin
+                lDataSize := lReg.GetDataSize(S_DATA);
+                GetMem(lData, lDataSize);
+                if lDataSize = lReg.ReadBinaryData(S_DATA, lData^, lDataSize) then
+                  lNewShellLink := nmk_Data
               end;
+              if lNewShellLink <> nmk_Unknown then
+              begin
+                lNewShellNewItem := TVirtualShellNewItem.Create;
+                lNewShellNewItem.Extension := lRegStr;
+                lNewShellNewItem.FileType := lMenuText;
+                lNewShellNewItem.NewShellKind := lNewShellLink;
+                lNewShellNewItem.NewShellKindStr := lFileCreateType;
+                lNewShellNewItem.Data := lData;
+                lNewShellNewItem.DataSize := lDataSize;
+                if SHGetFileInfo(PWideChar(lNewShellNewItem.Extension),
+                                 FILE_ATTRIBUTE_NORMAL,
+                                 lFileInfoW,
+                                 SizeOf( lFileInfoW),
+                                 SHGFI_USEFILEATTRIBUTES or
+                                 SHGFI_SHELLICONSIZE or
+                                 SHGFI_ICON or
+                                 SHGFI_SYSICONINDEX) > 0 then
+                  lNewShellNewItem.SystemImageIndex := lFileInfoW.iIcon;
+                Add(lNewShellNewItem);
+              end;
+              lReg.CloseKey;
+            end;
           end;
         end;
       end;
+    end;
   finally
-    Screen.Cursor := OldCursor;
-    Reg.Free;
-    RegList.Free;
+    Screen.Cursor := lOldCursor;
+    lReg.Free;
+    lRegList.Free;
   end;
 end;
 
