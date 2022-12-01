@@ -2694,7 +2694,7 @@ type
     procedure SetOnEnter(const Value: TNotifyEvent);
     procedure SetOnExit(const Value: TNotifyEvent);
     procedure SetOptions(const Value: TVETComboOptions);
-    procedure SetPath(const Value: string);
+    procedure SetPath(const AValue: string);
     procedure SetStyle(const Value: TShellComboStyle);
     procedure SetTabStop(const Value: Boolean);
     procedure SetTextType(const Value: TExplorerComboboxText);
@@ -12585,26 +12585,31 @@ begin
 end;
 
 
-procedure TCustomVirtualExplorerCombobox.SetPath(const Value: string);
+procedure TCustomVirtualExplorerCombobox.SetPath(const AValue: string);
 var
-  PIDL: PItemIdList;
-  NS: TNamespace;
+  lNS: TNamespace;
+  lPIDL: PItemIdList;
 begin
-  if (csDesigning in ComponentState) and (Value = '') then
+  if (csDesigning in ComponentState) and (AValue = '') then
   begin
     EditNamespace := nil;
     ComboEdit.Text := Name
-  end else
-  begin
-    PIDL := PathToPIDL(Value);
-    if Assigned(PIDL) then
-    begin
-      NS := TNamespace.Create(PIDL, nil);
-      EditNamespace := NS;
-      NS.Free
-    end else
-      PIDLMgr.FreeAndNilPIDL(PIDL)
   end
+  else
+  begin
+    lPIDL := PathToPIDL(AValue);
+    if Assigned(lPIDL) then
+    begin
+      lNS := TNamespace.Create(lPIDL, nil);
+      try
+        EditNamespace := lNS;
+      finally
+        lNS.Free;
+      end;
+    end
+    else
+      PIDLMgr.FreeAndNilPIDL(lPIDL);
+  end;
 end;
 
 function TCustomVirtualExplorerCombobox.GetPopupExplorerTree: TPopupExplorerTree;
