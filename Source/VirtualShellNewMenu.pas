@@ -403,7 +403,7 @@ procedure TVirtualShellNewItemList.BuildList;
       Result := False;
       if AKey <> '' then
         Result := ((AKey[1] = '.') or (AKey[1] = '*')) and
-          not AnsiSameText(AKey, '.lnk')
+          not SameText(AKey, '.lnk')
     end;
 
 var
