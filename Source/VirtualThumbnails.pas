@@ -767,7 +767,8 @@ var
   I, Orientation: Integer;
 begin
   Result := False;
-  if not Assigned(OutBitmap) then Exit;
+  if not Assigned(OutBitmap) then
+    Exit;
 
   Ext := SysUtils.AnsiLowerCase(WideExtractFileExt(Filename));
   HasExifThumb := False;
@@ -776,40 +777,51 @@ begin
   P := TPicture.Create;
   try
     // Try to load the EXIF thumbnail
-    if ExifThumbnail and ((Ext = '.jpg') or (Ext = '.jpeg') or (Ext = '.jif')) or (Ext = '.jpe') then begin
-        Exif := TStringList.Create;
+    if ExifThumbnail and ((Ext = '.jpg') or (Ext = '.jpeg') or (Ext = '.jif')) or (Ext = '.jpe') then
+    begin
+      Exif := TStringList.Create;
       try
         J := SpReadExifThumbnail(Filename, Exif);
 
-        if Assigned(J) then begin
+        if Assigned(J) then
+        begin
           HasExifThumb := True;
           P.Assign(J);
           // Get ImageWidth
           I := Exif.IndexOfName('$A002');
-          if I > -1 then begin
+          if I > -1 then
+          begin
             S := Exif.ValueFromIndex[I];
             if S <> '' then
               ImageWidth := StrToIntDef(S, 0);
           end;
           // Get ImageHeight
           I := Exif.IndexOfName('$A003');
-          if I > -1 then begin
+          if I > -1 then
+          begin
             S := Exif.ValueFromIndex[I];
             if S <> '' then
               ImageHeight := StrToIntDef(S, 0);
           end;
-          // Get the Orientation
-          if ExifOrientation then begin
-            I := Exif.IndexOfName('$112');
-            if I > -1 then begin
-              S := Exif.ValueFromIndex[I];
-              Orientation := 0;
-              if S = '6' then Orientation := 90
-              else if S = '3' then Orientation := 180
-              else if S = '8' then Orientation := 270;
-            end;
+        end;
+
+        // Get the Orientation
+        if ExifOrientation then
+        begin
+          I := Exif.IndexOfName('$112');
+          if I > -1 then
+          begin
+            S := Exif.ValueFromIndex[I];
+            Orientation := 0;
+            if S = '6' then
+              Orientation := 90
+            else if S = '3' then
+              Orientation := 180
+            else if S = '8' then
+              Orientation := 270;
           end;
         end;
+
       finally
         FreeAndNil(J);
         Exif.Free;
