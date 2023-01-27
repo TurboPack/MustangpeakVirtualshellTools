@@ -1375,6 +1375,7 @@ type
     property OnOLEDragOver;
     property OnOLEDragLeave;
     property OnOLEDragDrop;
+    property OnOLEAfterDragDrop;
     property OnOLEGetData;
     property OnOLEGetDataObject;
     property OnOLEQueryContineDrag;
