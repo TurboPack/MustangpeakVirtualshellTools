@@ -4648,6 +4648,7 @@ procedure TCustomVirtualExplorerEasyListview.DoItemGetCaption(AItem: TEasyItem; 
 var
   lCount: Integer;
   lDetailsOfRequest: TEasyDetailStringsThreadRequest;
+  lLoaded: Boolean;
   lNamespace: TNamespace;
 begin
   if ValidateNamespace(AItem, lNamespace) and not (csDestroying in ComponentState) then
@@ -4658,7 +4659,12 @@ begin
         DoCustomColumnGetCaption(TExplorerColumn(Header.Columns[AColumn]), TExplorerItem(AItem), ACaption)
       else
       begin
-        if ThreadedDetailsEnabled and (not lNamespace.ThreadedDetailLoaded[AColumn]) and (not lNamespace.ThreadedDetailLoading[AColumn]) and (csSlow in RootFolderNamespace.DetailsGetDefaultColumnState(AColumn)) then
+        try
+          lLoaded := ThreadedDetailsEnabled and (not lNamespace.ThreadedDetailLoaded[AColumn]) and (not lNamespace.ThreadedDetailLoading[AColumn]) and (csSlow in RootFolderNamespace.DetailsGetDefaultColumnState(AColumn));
+        except
+          lLoaded := False;
+        end;
+        if lLoaded then
         begin
           lDetailsOfRequest := TEasyDetailStringsThreadRequest.Create;
           lDetailsOfRequest.AddTitleColumnCaption := True;
