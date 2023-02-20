@@ -837,7 +837,7 @@ type
     procedure DoItemCreateEditor(Item: TEasyItem; var Editor: IEasyCellEditor); override;
     procedure DoItemCustomView(Item: TEasyItem; ViewStyle: TEasyListStyle; var View: TEasyViewItemClass); override;
     procedure DoItemDblClick(Button: TCommonMouseButton; MousePos: TPoint; HitInfo: TEasyHitInfoItem); override;
-    procedure DoItemGetCaption(Item: TEasyItem; Column: Integer; var ACaption: string); override;
+    procedure DoItemGetCaption(AItem: TEasyItem; AColumn: Integer; var ACaption: string); override;
     procedure DoItemGetEditCaption(Item: TEasyItem; Column: TEasyColumn; var Caption: string); override;
     procedure DoItemGetImageIndex(Item: TEasyItem; Column: Integer; ImageKind: TEasyImageKind; var ImageIndex: TCommonImageIndexInteger); override;
     procedure DoItemGetTileDetail(Item: TEasyItem; Line: Integer; var Detail: Integer); override;
@@ -4644,33 +4644,32 @@ begin
     DoShellExecute(Selection.First);
 end;
 
-procedure TCustomVirtualExplorerEasyListview.DoItemGetCaption(Item: TEasyItem; Column: Integer; var ACaption: string);
+procedure TCustomVirtualExplorerEasyListview.DoItemGetCaption(AItem: TEasyItem; AColumn: Integer; var ACaption: string);
 var
-  NS: TNamespace;
-  DetailsOfRequest: TEasyDetailStringsThreadRequest;
-  i: Integer;
+  lCount: Integer;
+  lDetailsOfRequest: TEasyDetailStringsThreadRequest;
+  lNamespace: TNamespace;
 begin
-  if ValidateNamespace(Item, NS) and not (csDestroying in ComponentState) then
+  if ValidateNamespace(AItem, lNamespace) and not (csDestroying in ComponentState) then
   begin
-    if (Header.Columns.Count > 0) and (Column < Header.Columns.Count) then
+    if (Header.Columns.Count > 0) and (AColumn < Header.Columns.Count) then
     begin
-      if TExplorerColumn( Header.Columns[Column]).IsCustom then
+      if TExplorerColumn(Header.Columns[AColumn]).IsCustom then
+        DoCustomColumnGetCaption(TExplorerColumn(Header.Columns[AColumn]), TExplorerItem(AItem), ACaption)
+      else
       begin
-        DoCustomColumnGetCaption(TExplorerColumn( Header.Columns[Column]), TExplorerItem( Item), ACaption)
-      end else
-      begin
-        if ThreadedDetailsEnabled and (not NS.ThreadedDetailLoaded[Column]) and (not NS.ThreadedDetailLoading[Column]) and (csSlow in RootFolderNamespace.DetailsGetDefaultColumnState(Column)) then
+        if ThreadedDetailsEnabled and (not lNamespace.ThreadedDetailLoaded[AColumn]) and (not lNamespace.ThreadedDetailLoading[AColumn]) and (csSlow in RootFolderNamespace.DetailsGetDefaultColumnState(AColumn)) then
         begin
-          DetailsOfRequest := TEasyDetailStringsThreadRequest.Create;
-          DetailsOfRequest.AddTitleColumnCaption := True;
-          DetailsOfRequest.PIDL := PIDLMgr.CopyPIDL((Item as TExplorerItem).Namespace.AbsolutePIDL);
-          DetailsOfRequest.Window := Self;
-          SetLength(DetailsOfRequest.FDetailRequest, 1);
-          DetailsOfRequest.DetailRequest[0] := Column;
-          DetailsOfRequest.Item := Item;
-          DetailsOfRequest.AddTitleColumnCaption := False;
-          DetailsOfRequest.Priority := 90;
-          DetailsOfRequest.ID := TID_DETAILSOF;
+          lDetailsOfRequest := TEasyDetailStringsThreadRequest.Create;
+          lDetailsOfRequest.AddTitleColumnCaption := True;
+          lDetailsOfRequest.PIDL := PIDLMgr.CopyPIDL((AItem as TExplorerItem).Namespace.AbsolutePIDL);
+          lDetailsOfRequest.Window := Self;
+          SetLength(lDetailsOfRequest.FDetailRequest, 1);
+          lDetailsOfRequest.DetailRequest[0] := AColumn;
+          lDetailsOfRequest.Item := AItem;
+          lDetailsOfRequest.AddTitleColumnCaption := False;
+          lDetailsOfRequest.Priority := 90;
+          lDetailsOfRequest.ID := TID_DETAILSOF;
           if not Assigned(DetailsOfThread) then
           begin
             DetailsOfThread := TCommonEventThread.Create(True);
@@ -4679,43 +4678,46 @@ begin
             DetailsOfThread.TargetWndNotifyMsg := WM_DETAILSOF_THREAD;
             DetailsOfThread.Suspended := False;
           end;
-          AddDetailsOfRequest(DetailsOfRequest);
-          NS.ThreadedDetailLoading[Column] := True;
+          AddDetailsOfRequest(lDetailsOfRequest);
+          lNamespace.ThreadedDetailLoading[AColumn] := True;
           ACaption := ''
-        end else
+        end
+        else
         begin
-          if NS.ThreadedDetailLoading[Column] then
+          if lNamespace.ThreadedDetailLoading[AColumn] then
             ACaption := ''
-          else begin
-            if Column = ID_SIZE_COLUMN then
+          else
+          begin
+            if AColumn = ID_SIZE_COLUMN then
             begin
               case FileSizeFormat of
-                vfsfDefault: ACaption := NS.DetailsOf(Column);
-                vfsfExplorer: ACaption := NS.SizeOfFileKB;
-                vfsfActual: ACaption := NS.SizeOfFile;
-                vfsfDiskUsage: ACaption := NS.SizeOfFileDiskUsage;
+                vfsfDefault: ACaption := lNamespace.DetailsOf(AColumn);
+                vfsfExplorer: ACaption := lNamespace.SizeOfFileKB;
+                vfsfActual: ACaption := lNamespace.SizeOfFile;
+                vfsfDiskUsage: ACaption := lNamespace.SizeOfFileDiskUsage;
                 vfsfText:
+                begin
+                  lCount := 0;
+                  while (lCount < Length(GroupingFileSizeArray)) do
                   begin
-                    i := 0;
-                    while (i < Length(GroupingFileSizeArray)) do
+                    if GroupingFileSizeArray[lCount].FileSize > lNamespace.SizeOfFileInt64  then
                     begin
-                      if GroupingFileSizeArray[i].FileSize > NS.SizeOfFileInt64  then
-                      begin
-                        ACaption := GroupingFileSizeArray[i].Caption;
-                        Exit
-                      end;
-                      Inc(i);
-                    end
-                  end
+                      ACaption := GroupingFileSizeArray[lCount].Caption;
+                      Exit
+                    end;
+                    Inc(lCount);
+                  end;
+                end;
               end;
-            end else
-              ACaption := NS.DetailsOf(Column);
-          end
-        end
-      end
-    end
+            end
+            else
+              ACaption := lNamespace.DetailsOf(AColumn);
+          end;
+        end;
+      end;
+    end;
   end;
-  inherited DoItemGetCaption(Item, Column, ACaption);
+  inherited DoItemGetCaption(AItem, AColumn, ACaption);
 end;
 
 procedure TCustomVirtualExplorerEasyListview.DoItemGetImageIndex(Item: TEasyItem; Column: Integer; ImageKind: TEasyImageKind; var ImageIndex: TCommonImageIndexInteger);
