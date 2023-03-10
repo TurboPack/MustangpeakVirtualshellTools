@@ -1031,22 +1031,18 @@ var
       ABuf := lA or lB;
   end;
 
-  function ReadString(ACount: Int32): AnsiString;
+  function ReadString(ACount: Int32): string;
   const
     cSpace = #$20;
   var
-    lCountInner : Integer;
-    lBufferInner: AnsiString;
+    lBuffer: TBytes;
   begin
     Result := '';
-    SetLength(lBufferInner, ACount);
-    AStream.ReadBuffer(PAnsiChar(lBufferInner)^, ACount);
+    SetLength(lBuffer, ACount);
+    AStream.ReadBuffer(lBuffer, ACount);
+    Result := TEncoding.ANSI.GetString(lBuffer);
     // Clean it
-    for lCountInner := 1 to Length(lBufferInner) do
-    begin
-      if lBufferInner[lCountInner] >= cSpace then
-        Result := Result + lBufferInner[lCountInner];
-    end;
+    Result := Result.Replace(cSpace, '');
   end;
 
   procedure ReadExifDirectory(AOffset: LongWord; out AIFD_Exif_Offset: UInt32);
@@ -1065,7 +1061,7 @@ var
     cTagRecordSize = 12;
     cTagShort = 3;
   var
-    lBuffer: AnsiString;
+    lBuffer: string;
     lCnt2: Integer;
     lCount: UInt16;
     lInner: Integer;
@@ -1125,10 +1121,10 @@ var
               AStream.Seek(lExifMarker_Offset + lMyValue, soBeginning);
             for lCnt2 := 1 To lMyCount do
             begin
-              if lBuffer <> '' then
+              if not lBuffer.IsEmpty then
                 lBuffer := lBuffer + cDeli;
               readit(lWord);
-              lBuffer := lBuffer + AnsiString(IntToStr(lWord));
+              lBuffer := lBuffer + IntToStr(lWord);
             end;
           end;
           cTagLong: // Long
@@ -1138,16 +1134,16 @@ var
               // in this section they are stored in the
               // Value/Offset area
               if lMyCount <= cLongMagicNumber1 then
-                lBuffer := AnsiString(IntToStr(lMyValue))
+                lBuffer := IntToStr(lMyValue)
               else
               begin
                 AStream.Seek(lExifMarker_Offset + lMyValue, soBeginning);
                 for lCnt2 := 1 To lMyCount do
                 begin
-                  if lBuffer <> '' then
+                  if not lBuffer.IsEmpty then
                     lBuffer := lBuffer + cDeli;
                   readit(lLong);
-                  lBuffer := lBuffer + AnsiString(IntToStr(lLong));
+                  lBuffer := lBuffer + IntToStr(lLong);
                 end;
               end;
             end;
@@ -1191,7 +1187,7 @@ begin
     end;
 
     readit(lWord);
-    lStringBuffer := string(ReadString(cStringEXIF.Length));
+    lStringBuffer := ReadString(cStringEXIF.Length);
     if lStringBuffer <> cStringEXIF then
       Exit;
     readit(lWord);
