@@ -274,9 +274,7 @@ procedure SpStretchDraw(G: TGraphic; ACanvas: TCanvas; DestR: TRect; UseSubsampl
 function SpMakeThumbFromFileImageEn(Filename: string; OutBitmap: TBitmap; ThumbW, ThumbH: Integer;
   BgColor: TColor; Subsampling, ExifThumbnail, ExifOrientation: Boolean; var ImageWidth, ImageHeight: Integer): Boolean;
 {$ENDIF}
-function SpMakeThumbFromFile(Filename: string; OutBitmap: TBitmap; ThumbW,
-  ThumbH: Integer; BgColor: TColor; SubSampling, ExifThumbnail, ExifOrientation: Boolean;
-  var ImageWidth, ImageHeight: Integer): Boolean;
+function SpMakeThumbFromFile(const AFileName: string; const AOutBitmap: TBitmap; const AThumbW, AThumbH: Integer; const ABgColor: TColor; const ASubSampling, AExifThumbnail, AExifOrientation: Boolean; var AImageWidth, AImageHeight: Integer): Boolean;
 function SpCreateThumbInfoFromFile(ANamespace: TNamespace; AThumbW, AThumbH: Integer; AUseSubsampling, AUseShellExtraction, AUseExifThumbnail, AUseExifOrientation: Boolean; ABackgroundColor: TColor): TThumbInfo;
   function SpReadExifThumbnail(FileName: string; Exif: TStringList): TJpegImage;
 
@@ -298,9 +296,8 @@ procedure SpConvertJPGStreamToBitmap(MS: TMemoryStream; OutBitmap: TBitmap);
 implementation
 
 uses
-{$IFDEF USEIMAGEEN} ImageEnIo, ImageEnProc, hyieutils, iexBitmaps, iexHelperFunctions,{$ENDIF}
-  Types,
-  Math;
+  System.Types, System.Math, System.IOUtils
+{$IFDEF USEIMAGEEN}, ImageEnIo, ImageEnProc, hyieutils, iexBitmaps, iexHelperFunctions{$ENDIF};
 
 //WMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWM
 { Image manipulation helpers }
@@ -753,136 +750,157 @@ begin
 end;
 {$ENDIF}
 
-function SpMakeThumbFromFile(Filename: string; OutBitmap: TBitmap; ThumbW,
-  ThumbH: Integer; BgColor: TColor; SubSampling, ExifThumbnail, ExifOrientation: Boolean;
-  var ImageWidth, ImageHeight: Integer): Boolean;
+function SpMakeThumbFromFile(const AFileName: string; const AOutBitmap: TBitmap; const AThumbW, AThumbH: Integer; const ABgColor: TColor; const ASubSampling, AExifThumbnail, AExifOrientation: Boolean; var AImageWidth, AImageHeight: Integer): Boolean;
+const
+  cDegree180 = 180;
+  cDegree270 = 270;
+  cDegree90 = 90;
+  cExtEMF = '.emf';
+  cExtJIF = '.jif';
+  cExtJPE = '.jpe';
+  cExtJPEG = '.jpeg';
+  cExtJPG = '.jpg';
+  cExtWMF = '.wmf';
+  cValue180Degree = '3';
+  cValue270Degree = '8';
+  cValue90Degree = '6';
+  cValueImageHeight = '$A003';
+  cValueImageWidth = '$A002';
+  cValueOrientation = '$112';
 var
-  P: TPicture;
-  J: TJpegImage;
-  WMFScale: Single;
-  DestR: TRect;
-  Ext, S: string;
-  Exif: TStringList;
-  HasExifThumb: Boolean;
-  I, Orientation: Integer;
+  lBuffer: string;
+  lCount: Integer;
+  lDestR: TRect;
+  lExif: TStringList;
+  lExt: string;
+  lHasExifThumb: Boolean;
+  lJpeg: TJpegImage;
+  lOrientation: Integer;
+  lPicture: TPicture;
+  lWMFScale: Single;
 begin
   Result := False;
-  if not Assigned(OutBitmap) then
+  if not Assigned(AOutBitmap) then
     Exit;
 
-  Ext := SysUtils.AnsiLowerCase(WideExtractFileExt(Filename));
-  HasExifThumb := False;
-  Orientation := 0;
+  lExt := TPath.GetExtension(AFileName).ToLower;
+  lHasExifThumb := False;
+  lOrientation := 0;
 
-  P := TPicture.Create;
+  lPicture := TPicture.Create;
   try
-    // Try to load the EXIF thumbnail
-    if ExifThumbnail and ((Ext = '.jpg') or (Ext = '.jpeg') or (Ext = '.jif')) or (Ext = '.jpe') then
+    // Try to load the lExif thumbnail
+    if AExifThumbnail and ((lExt = cExtJPG) or (lExt = cExtJPEG) or (lExt = cEXTJIF)) or (lExt = cExtJPE) then
     begin
-      Exif := TStringList.Create;
+      lExif := TStringList.Create;
       try
-        J := SpReadExifThumbnail(Filename, Exif);
+        lJpeg := SpReadExifThumbnail(AFileName, lExif);
 
-        if Assigned(J) then
+        if Assigned(lJpeg) then
         begin
-          HasExifThumb := True;
-          P.Assign(J);
+          lHasExifThumb := True;
+          lPicture.Assign(lJpeg);
           // Get ImageWidth
-          I := Exif.IndexOfName('$A002');
-          if I > -1 then
+          lCount := lExif.IndexOfName(cValueImageWidth);
+          if lCount > -1 then
           begin
-            S := Exif.ValueFromIndex[I];
-            if S <> '' then
-              ImageWidth := StrToIntDef(S, 0);
+            lBuffer := lExif.ValueFromIndex[lCount];
+            if not lBuffer.IsEmpty then
+              AImageWidth := StrToIntDef(lBuffer, 0);
           end;
           // Get ImageHeight
-          I := Exif.IndexOfName('$A003');
-          if I > -1 then
+          lCount := lExif.IndexOfName(cValueImageHeight);
+          if lCount > -1 then
           begin
-            S := Exif.ValueFromIndex[I];
-            if S <> '' then
-              ImageHeight := StrToIntDef(S, 0);
+            lBuffer := lExif.ValueFromIndex[lCount];
+            if not lBuffer.IsEmpty then
+              AImageHeight := StrToIntDef(lBuffer, 0);
           end;
         end;
 
         // Get the Orientation
-        if ExifOrientation then
+        if AExifOrientation then
         begin
-          I := Exif.IndexOfName('$112');
-          if I > -1 then
+          lCount := lExif.IndexOfName(cValueOrientation);
+          if lCount > -1 then
           begin
-            S := Exif.ValueFromIndex[I];
-            Orientation := 0;
-            if S = '6' then
-              Orientation := 90
-            else if S = '3' then
-              Orientation := 180
-            else if S = '8' then
-              Orientation := 270;
+            lBuffer := lExif.ValueFromIndex[lCount];
+            lOrientation := 0;
+            if lBuffer = cValue90Degree then
+              lOrientation := cDegree90
+            else if lBuffer = cValue180Degree then
+              lOrientation := cDegree180
+            else if lBuffer = cValue270Degree then
+              lOrientation := cDegree270;
           end;
         end;
 
       finally
-        FreeAndNil(J);
-        Exif.Free;
+        FreeAndNil(lJpeg);
+        lExif.Free;
       end;
     end;
 
-    if not HasExifThumb then begin
-      SpLoadGraphicFile(Filename, P, False);
-      ImageWidth := P.Graphic.Width;
-      ImageHeight := P.Graphic.Height;
-      if (Ext = '.jpg') or (Ext = '.jpeg') or (Ext = '.jif') or (Ext = '.jpe') then begin
+    if not lHasExifThumb then
+    begin
+      SpLoadGraphicFile(AFileName, lPicture, False);
+      AImageWidth := lPicture.Graphic.Width;
+      AImageHeight := lPicture.Graphic.Height;
+      if (lExt = cExtJPG) or (lExt = cExtJPEG) or (lExt = cExtJIF) or (lExt = cExtJPE) then
+      begin
         try
           // Try to load just the minimum possible jpg
           // 5x faster loading jpegs, from Danny Thorpe:
           // http://groups.google.com/groups?hl=en&frame=right&th=69a64eafb3ee2b12&seekm=01bdee71%24e5a5ded0%247e018f0a%40agamemnon#link6
-          J := TJpegImage(P.Graphic);
-          J.Performance := jpBestSpeed;
-          J.Scale := jsFullSize;
-          while ((J.Width > ThumbW) or (J.Height > ThumbH)) and (J.Scale < jsEighth) do
-            J.Scale := Succ(J.Scale);
-          if J.Scale <> jsFullSize then
-            J.Scale := Pred(J.Scale);
-          J.DibNeeded; // Now load the JPG
+          lJpeg := TJpegImage(lPicture.Graphic);
+          lJpeg.Performance := jpBestSpeed;
+          lJpeg.Scale := jsFullSize;
+          while ((lJpeg.Width > AThumbW) or (lJpeg.Height > AThumbH)) and (lJpeg.Scale < jsEighth) do
+            lJpeg.Scale := Succ(lJpeg.Scale);
+          if lJpeg.Scale <> jsFullSize then
+            lJpeg.Scale := Pred(lJpeg.Scale);
+          lJpeg.DibNeeded; // Now load the JPG
         except
-          on E:Exception do
+          on E: Exception do
+          begin
             if not SpIsIncompleteJPGError(E) then
-              Raise;
+              raise;
+          end;
         end;
       end
-      else
         // We need to scale down the metafile images
-        if (Ext = '.wmf') or (Ext = '.emf') then begin
-          WMFScale := Min(1, Min(ThumbW/P.Graphic.Width, ThumbH/P.Graphic.Height));
-          P.Graphic.Width := Round(P.Graphic.Width * WMFScale);
-          P.Graphic.Height := Round(P.Graphic.Height * WMFScale);
-        end;
+      else if (lExt = cExtWMF) or (lExt = cExtEMF) then
+      begin
+        lWMFScale := Min(1, Min(AThumbW/lPicture.Graphic.Width, AThumbH/lPicture.Graphic.Height));
+        lPicture.Graphic.Width := Round(lPicture.Graphic.Width * lWMFScale);
+        lPicture.Graphic.Height := Round(lPicture.Graphic.Height * lWMFScale);
+      end;
     end;
 
     // Resize the thumb
-    if P.Graphic <> nil then begin
+    if lPicture.Graphic <> nil then
+    begin
       // Need to lock/unlock the canvas here
-      OutBitmap.Canvas.Lock;
+      AOutBitmap.Canvas.Lock;
       try
-        DestR := SpRectAspectRatio(ImageWidth, ImageHeight, ThumbW, ThumbH, talNone);
-        SpInitBitmap(OutBitmap, DestR.Right, DestR.Bottom, BgColor);
+        lDestR := SpRectAspectRatio(AImageWidth, AImageHeight, AThumbW, AThumbH, talNone);
+        SpInitBitmap(AOutBitmap, lDestR.Right, lDestR.Bottom, ABgColor);
         // StretchDraw is NOT THREADSAFE!!! Use SpStretchDraw instead
-        SpStretchDraw(P.Graphic, OutBitmap.Canvas, DestR, Subsampling);
+        SpStretchDraw(lPicture.Graphic, AOutBitmap.Canvas, lDestR, ASubSampling);
 
-        // Rotate the thumbnail based on the Exif Orientation value
+        // Rotate the thumbnail based on the Exif lOrientation value
         // Modern cameras have an option to auto rotate the image
         // when the photo is saved in this case Orientation = 0
-        if ExifOrientation and (Orientation > 0) then
-          SpPixelRotate(OutBitmap, Orientation);
+        if AExifOrientation and (lOrientation > 0) then
+          SpPixelRotate(AOutBitmap, lOrientation);
 
         Result := True;
       finally
-        OutBitmap.Canvas.UnLock;
+        AOutBitmap.Canvas.UnLock;
       end;
     end;
   finally
-    P.Free;
+    lPicture.Free;
   end;
 end;
 
