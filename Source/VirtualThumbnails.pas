@@ -276,7 +276,7 @@ function SpMakeThumbFromFileImageEn(Filename: string; OutBitmap: TBitmap; ThumbW
 {$ENDIF}
 function SpMakeThumbFromFile(const AFileName: string; const AOutBitmap: TBitmap; const AThumbW, AThumbH: Integer; const ABgColor: TColor; const ASubSampling, AExifThumbnail, AExifOrientation: Boolean; var AImageWidth, AImageHeight: Integer): Boolean;
 function SpCreateThumbInfoFromFile(ANamespace: TNamespace; AThumbW, AThumbH: Integer; AUseSubsampling, AUseShellExtraction, AUseExifThumbnail, AUseExifOrientation: Boolean; ABackgroundColor: TColor): TThumbInfo;
-  function SpReadExifThumbnail(FileName: string; Exif: TStringList): TJpegImage;
+function SpReadExifThumbnail(const AFileName: string; const AExif: TStringList): TJpegImage;
 
 { Stream helpers }
 function SpReadDateTimeFromStream(ST: TStream): TDateTime;
@@ -1236,44 +1236,47 @@ begin
   end;
 end;
 
-function SpReadExifThumbnail(FileName: string; Exif: TStringList): TJpegImage;
+function SpReadExifThumbnail(const AFileName: string; const AExif: TStringList): TJpegImage;
 
-  function CorrectThumbnailBuffer(ThumbBuffer: String): String;
+  function CorrectThumbnailBuffer(AThumbBuffer: string): string;
   var
-    BeginMark, EndMark: Integer;
+    lBeginMark: Integer;
+    lEndMark: Integer;
   begin
     Result := '';
 
     // FFD8 marker is the SOI (Start Of Image), we need to LeftTrim the buffer
-    BeginMark := Pos(#$ff#$d8, ThumbBuffer);
-    if BeginMark <= 0 then
+    lBeginMark := Pos(#$ff#$d8, AThumbBuffer);
+    if lBeginMark <= 0 then
       Exit;
 
     // FFD9 marker is the end of JPEG, we need to RightTrim the buffer
-    ThumbBuffer := Copy(ThumbBuffer, BeginMark, Length(ThumbBuffer));
-    EndMark := Pos(#$ff#$d9, ThumbBuffer) + 2;
-    ThumbBuffer := Copy(ThumbBuffer, 1, EndMark);
-    if Length(ThumbBuffer) > 3 then
-      Result := ThumbBuffer;
+    AThumbBuffer := Copy(AThumbBuffer, lBeginMark, Length(AThumbBuffer));
+    lEndMark := Pos(#$ff#$d9, AThumbBuffer) + 2;
+    AThumbBuffer := Copy(AThumbBuffer, 1, lEndMark);
+    if AThumbBuffer.Length > 3 then
+      Result := AThumbBuffer;
   end;
 
 var
-  F: TVirtualFileStream;
-  ThumbOffset, ThumbSize: LongWord;
-  I: Integer;
-  Ofs: LongWord;
-  S: string;
-  StringStream: TStringStream;
-  ThumbBuffer: string;
+  lBuffer: string;
+  lCount: Integer;
+  lOfs: UInt32;
+  lStream: TVirtualFileStream;
+  lStringStream: TStringStream;
+  lThumbBuffer: string;
+  lThumbOffset: UInt32;
+  lThumbSize: UInt32;
 begin
   Result := nil;
-  ThumbOffset := 0;
-  ThumbSize := 0;
+  lThumbOffset := 0;
+  lThumbSize := 0;
 
-  F := TVirtualFileStream.Create(Filename, fmOpenRead or fmShareDenyNone);
+  lStream := TVirtualFileStream.Create(AFileName, fmOpenRead or fmShareDenyNone);
   try
-    Ofs := 0;
-    if not SpReadExif(F, Exif, Ofs) then Exit;
+    lOfs := 0;
+    if not SpReadExif(lStream, AExif, lOfs) then
+      Exit;
 
     // For thumbnail extraction
     // $103 = Compression, (when Value = 6 it is Jpeg compressed)
@@ -1290,56 +1293,62 @@ begin
     // $A002 = ImageWidth (Integer)
     // $A003 = ImageHeight (Integer)
 
-    I := Exif.IndexOfName('$103');
-    if I > -1 then begin
-      S := Exif.ValueFromIndex[I];
-      if S <> '' then begin
-        I := StrToIntDef(S, 0);
-        if I <> 6 then
+    lCount := AExif.IndexOfName('$103');
+    if lCount > -1 then
+    begin
+      lBuffer := AExif.ValueFromIndex[lCount];
+      if not lBuffer.IsEmpty then
+      begin
+        lCount := StrToIntDef(lBuffer, 0);
+        if lCount <> 6 then
           Exit; // Thumbnail is not in JPEG format
       end;
     end;
 
-    I := Exif.IndexOfName('$201');
-    if I > -1 then begin
-      S := Exif.ValueFromIndex[I];
-      if S <> '' then
-        ThumbOffset := StrToIntDef(S, 0);
+    lCount := AExif.IndexOfName('$201');
+    if lCount > -1 then
+    begin
+      lBuffer := AExif.ValueFromIndex[lCount];
+      if not lBuffer.IsEmpty then
+        lThumbOffset := StrToIntDef(lBuffer, 0);
     end;
 
-    I := Exif.IndexOfName('$202');
-    if I > -1 then begin
-      S := Exif.ValueFromIndex[I];
-      if S <> '' then
-        ThumbSize := StrToIntDef(S, 0);
+    lCount := AExif.IndexOfName('$202');
+    if lCount > -1 then
+    begin
+      lBuffer := AExif.ValueFromIndex[lCount];
+      if not lBuffer.IsEmpty then
+        lThumbSize := StrToIntDef(lBuffer, 0);
     end;
 
-    if (ThumbOffset > 0) and (ThumbSize > 0) then begin
-      F.Seek(Ofs + ThumbOffset + 12, soBeginning);
-      StringStream := TStringStream.Create('');
+    if (lThumbOffset > 0) and (lThumbSize > 0) then
+    begin
+      lStream.Seek(lOfs + lThumbOffset + 12, soBeginning);
+      lStringStream := TStringStream.Create;
       try
-        StringStream.CopyFrom(F, ThumbSize);
-        StringStream.Position := 0;
-        ThumbBuffer := CorrectThumbnailBuffer(StringStream.DataString);
-        if Length(ThumbBuffer) > 0 then begin
-          StringStream.Size := 0;
-          StringStream.WriteString(ThumbBuffer);
-          StringStream.Position := 0;
+        lStringStream.CopyFrom(lStream, lThumbSize);
+        lStringStream.Position := 0;
+        lThumbBuffer := CorrectThumbnailBuffer(lStringStream.DataString);
+        if not lThumbBuffer.IsEmpty then
+        begin
+          lStringStream.Size := 0;
+          lStringStream.WriteString(lThumbBuffer);
+          lStringStream.Position := 0;
           Result := TJpegImage.Create;
           try
             Result.Performance := jpBestSpeed;
-            Result.LoadFromStream(StringStream);
+            Result.LoadFromStream(lStringStream);
             Result.DIBNeeded; // Now load the JPG
           except
             FreeAndNil(Result);
           end;
         end;
       finally
-        StringStream.Free;
+        lStringStream.Free;
       end;
     end;
   finally
-    F.free;
+    lStream.Free;
   end;
 end;
 
