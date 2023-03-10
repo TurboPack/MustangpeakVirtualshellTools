@@ -773,6 +773,8 @@ var
   lDestR: TRect;
   lExif: TStringList;
   lExt: string;
+  lFoundHeight: Boolean;
+  lFoundWidth: Boolean;
   lHasExifThumb: Boolean;
   lJpeg: TJpegImage;
   lOrientation: Integer;
@@ -786,6 +788,8 @@ begin
   lExt := TPath.GetExtension(AFileName).ToLower;
   lHasExifThumb := False;
   lOrientation := 0;
+  lFoundHeight := False;
+  lFoundWidth := False;
 
   lPicture := TPicture.Create;
   try
@@ -806,7 +810,10 @@ begin
           begin
             lBuffer := lExif.ValueFromIndex[lCount];
             if not lBuffer.IsEmpty then
+            begin
               AImageWidth := StrToIntDef(lBuffer, 0);
+              lFoundWidth := AImageWidth > 0;
+            end;
           end;
           // Get ImageHeight
           lCount := lExif.IndexOfName(cValueImageHeight);
@@ -814,7 +821,10 @@ begin
           begin
             lBuffer := lExif.ValueFromIndex[lCount];
             if not lBuffer.IsEmpty then
+            begin
               AImageHeight := StrToIntDef(lBuffer, 0);
+              lFoundHeight := AImageHeight > 0;
+            end;
           end;
         end;
 
@@ -839,6 +849,13 @@ begin
         FreeAndNil(lJpeg);
         lExif.Free;
       end;
+    end;
+
+    if lHasExifThumb and (not lFoundHeight) and (not lFoundWidth) then
+    begin
+      SpLoadGraphicFile(AFileName, lPicture, False);
+      AImageWidth := lPicture.Graphic.Width;
+      AImageHeight := lPicture.Graphic.Height;
     end;
 
     if not lHasExifThumb then
