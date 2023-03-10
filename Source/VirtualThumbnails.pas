@@ -1058,12 +1058,16 @@ var
     cTAG_EXIF_OFFSET = $8769;
     cTagASCII = 2;
     cTagLong = 4;
+    cTagRational64u = 5;
     cTagRecordSize = 12;
     cTagShort = 3;
   var
     lBuffer: string;
+    lCardinal1: UInt32;
+    lCardinal2: UInt32;
     lCnt2: Integer;
     lCount: UInt16;
+    lDouble: Double;
     lInner: Integer;
     lLong: UInt16;
     lMyCount: UInt32;
@@ -1099,7 +1103,7 @@ var
         AIFD_Exif_Offset := lMyValue // TAG_EXIF_OFFSET
       else
       begin
-        lBuffer := '';
+        lBuffer := string.Empty;
         case lMyType of
           cTagASCII: // ASCII
           begin
@@ -1146,6 +1150,17 @@ var
                   lBuffer := lBuffer + IntToStr(lLong);
                 end;
               end;
+            end;
+          cTagRational64u: // Rational 64 u
+            begin
+              AStream.Seek(lExifMarker_Offset + lMyValue, soBeginning);
+              readit(lCardinal1);
+              readit(lCardinal2);
+              if lCardinal2 <> 0 then
+                lDouble := lCardinal1 / lCardinal2
+              else
+                lDouble := 0;
+              lBuffer := IntToStr(Round(lDouble));
             end;
         end;
 
