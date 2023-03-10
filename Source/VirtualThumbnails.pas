@@ -991,181 +991,237 @@ begin
   end;
 end;
 
-function SpReadExif(F: TVirtualFileStream; Exif: TStringList; var Ofs: LongWord): Boolean;
+function SpReadExif(const AStream: TVirtualFileStream; const AExif: TStringList; var Ofs: LongWord): Boolean;
+const
+  cMagicNumber1 = $002A;
+  cMagicNumberEXIF = 18;
+  cMagicNumberJFIF = 16;
+  cMarkerEXIF = $E1FF;
+  cMarkerJFIF = $E0FF;
+  cMarkerJPEG = $D8FF;
+  cMarkerMotorola = $4D4D;
+  cStringEXIF = 'Exif';
 var
-  W: Word;
-  L, ExifMarker_Offset, IFD1_Offset, IFD_Exif_Offset, dummy: LongWord;
-  IsMotorola: Boolean; // BigEndian
-  S: string;
+  lDummy: UInt32;
+  lExifMarker_Offset: UInt32;
+  lIFD_Exif_Offset: UInt32;
+  lIFD1_Offset: UInt32;
+  lIsMotorola: Boolean; // BigEndian
+  lLong: UInt32;
+  lStringBuffer: string;
+  lWord: UInt16;
 
-  procedure readit(var Buf: Word); overload;
+  procedure readit(var ABuf: UInt16); overload;
   begin
-    F.Read(Buf, 2);
-    if isMotorola then
-       Buf := Swap(Buf);
+    AStream.Read(ABuf, 2);
+    if lIsMotorola then
+       ABuf := Swap(ABuf);
   end;
 
-  procedure readit(var Buf: LongWord); overload;
+  procedure readit(var ABuf: UInt32); overload;
   var
-    A, B: Word;
+    lA: UInt16;
+    lB: UInt16;
   begin
-    readit(A);
-    readit(B);
-    if isMotorola then
-      Buf := B or A
+    readit(lA);
+    readit(lB);
+    if lIsMotorola then
+      ABuf := lB or lA
     else
-      Buf := A or B;
+      ABuf := lA or lB;
   end;
 
-  function ReadString(Count: Longint): AnsiString;
+  function ReadString(ACount: Int32): AnsiString;
+  const
+    cSpace = #$20;
   var
-    I : Integer;
-    S: AnsiString;
+    lCountInner : Integer;
+    lBufferInner: AnsiString;
   begin
     Result := '';
-    SetLength(S, Count);
-    F.ReadBuffer(PAnsiChar(S)^, Count);
+    SetLength(lBufferInner, ACount);
+    AStream.ReadBuffer(PAnsiChar(lBufferInner)^, ACount);
     // Clean it
-    for I := 1 to Length(S) do
-      if S[I] >= #$20 then
-        Result := Result + S[I];
+    for lCountInner := 1 to Length(lBufferInner) do
+    begin
+      if lBufferInner[lCountInner] >= cSpace then
+        Result := Result + lBufferInner[lCountInner];
+    end;
   end;
 
-  procedure ReadExifDirectory(Offset: LongWord; out IFD_Exif_Offset: LongWord);
+  procedure ReadExifDirectory(AOffset: LongWord; out AIFD_Exif_Offset: UInt32);
+  const
+    cASCIIMagicNumber1 = 4;
+    cASCIIMagicNumber2 = 8;
+    cDeli = ',';
+    cExifFormat = '$%x=%s';
+    cLongMagicNumber1 = 1;
+    cMaxNumberEntries = 128;
+    cShortMagicNumber1 = 2;
+    cShortMagicNumber2 = 8;
+    cTAG_EXIF_OFFSET = $8769;
+    cTagASCII = 2;
+    cTagLong = 4;
+    cTagRecordSize = 12;
+    cTagShort = 3;
   var
-    MyTag, MyType, Count, W, L: Word;
-    MyPos, MyCount, MyValue: LongWord;
-    I, Cnt2: Integer;
-    S: AnsiString;
+    lBuffer: AnsiString;
+    lCnt2: Integer;
+    lCount: UInt16;
+    lInner: Integer;
+    lLong: UInt16;
+    lMyCount: UInt32;
+    lMyPos: UInt32;
+    lMyTag: UInt16;
+    lMyType: UInt16;
+    lMyValue: UInt32;
+    lWord: UInt16;
   begin
-    IFD_Exif_Offset := 0;
-    if Offset = 0 then Exit;
-
-    Offset := Offset + 12; // 12 is the "tag record size"
-    if Offset >= F.Size then Exit;
-
-    F.Seek(Offset, soBeginning);
-
-    readit(Count); // Number of entries
-    if Count > 128 then
+    AIFD_Exif_Offset := 0;
+    if AOffset = 0 then
       Exit;
 
-    for I := 0 to Count - 1 do begin
-      MyPos := F.Position;
-      readit(MyTag);   // Tag
-      readit(MyType);  // Type
-      readit(MyCount); // Count
-      readit(MyValue); // Value
+    AOffset := AOffset + cTagRecordSize; // 12 is the "tag record size"
+    if AOffset >= AStream.Size then
+      Exit;
 
-      if MyTag = $8769 then
-        IFD_Exif_Offset := MyValue // TAG_EXIF_OFFSET
-      else begin
-        S := '';
-        case MyType of
-          2: // ASCII
+    AStream.Seek(AOffset, soBeginning);
+
+    readit(lCount); // Number of entries
+    if lCount > cMaxNumberEntries then
+      Exit;
+
+    for lInner := 0 to lCount - 1 do
+    begin
+      lMyPos := AStream.Position;
+      readit(lMyTag);   // Tag
+      readit(lMyType);  // Type
+      readit(lMyCount); // lCount
+      readit(lMyValue); // Value
+
+      if lMyTag = cTAG_EXIF_OFFSET then
+        AIFD_Exif_Offset := lMyValue // TAG_EXIF_OFFSET
+      else
+      begin
+        lBuffer := '';
+        case lMyType of
+          cTagASCII: // ASCII
+          begin
+            if lMyCount <= cASCIIMagicNumber1 then
+              AStream.Seek(lMyPos + cASCIIMagicNumber2, soBeginning)
+            else
+              AStream.Seek(lExifMarker_Offset + lMyValue, soBeginning);
+            lBuffer := ReadString(lMyCount);
+          end;
+          cTagShort: // Short
+          begin
+            // We can store two words in a 4 byte area.
+            // So if there is less (or equal) than two items
+            // in this section they are stored in the
+            // Value/Offset area
+            if lMyCount <= cShortMagicNumber1 Then
+              AStream.Seek(lMyPos + cShortMagicNumber2, soBeginning)
+            else
+              AStream.Seek(lExifMarker_Offset + lMyValue, soBeginning);
+            for lCnt2 := 1 To lMyCount do
             begin
-              if MyCount <= 4 then
-                F.Seek(MyPos + 8, soBeginning)
-              else
-                F.Seek(ExifMarker_Offset + MyValue, soBeginning);
-              S := ReadString(MyCount);
+              if lBuffer <> '' then
+                lBuffer := lBuffer + cDeli;
+              readit(lWord);
+              lBuffer := lBuffer + AnsiString(IntToStr(lWord));
             end;
-          3: // Short
-            begin
-              // We can store two words in a 4 byte area.
-              // So if there is less (or equal) than two items
-              // in this section they are stored in the
-              // Value/Offset area
-              if MyCount <= 2 Then
-                F.Seek(MyPos + 8, soBeginning)
-              else
-                F.Seek(ExifMarker_Offset + MyValue, soBeginning);
-              for Cnt2 := 1 To MyCount do begin
-                if S <> '' then S := S + ',';
-                readit(W);
-                S := S + AnsiString(IntToStr(W));
-              end;
-            end;
-          4: // Long
+          end;
+          cTagLong: // Long
             begin
               // We can store one long in a 4 byte area.
               // So if there is less (or equal) than one item
               // in this section they are stored in the
               // Value/Offset area
-              if MyCount <= 1 Then
-                S := AnsiString(IntToStr(MyValue))
-              else begin
-                F.Seek(ExifMarker_Offset + MyValue, soBeginning);
-                for Cnt2 := 1 To MyCount do begin
-                  if S <> '' Then S := S + ',';
-                  readit(L);
-                  S := S + AnsiString(IntToStr(L));
+              if lMyCount <= cLongMagicNumber1 then
+                lBuffer := AnsiString(IntToStr(lMyValue))
+              else
+              begin
+                AStream.Seek(lExifMarker_Offset + lMyValue, soBeginning);
+                for lCnt2 := 1 To lMyCount do
+                begin
+                  if lBuffer <> '' then
+                    lBuffer := lBuffer + cDeli;
+                  readit(lLong);
+                  lBuffer := lBuffer + AnsiString(IntToStr(lLong));
                 end;
               end;
             end;
         end;
 
-        Exif.Add(Format('$%x=%s', [MyTag, S]))
+        AExif.Add(string.Format(cExifFormat, [lMyTag, lBuffer]))
       end;
 
-      F.Seek(MyPos + 12, soBeginning); // The 12 is the "tag record size"
+      AStream.Seek(lMyPos + cTagRecordSize, soBeginning); // The 12 is the "tag record size"
     end;
   end;
 
 begin
   Ofs := 0;
   Result := False;
-  Exif.Clear;
+  AExif.Clear;
 
-  F.Position := 0;
+  AStream.Position := 0;
   try
-    F.Read(W, 2);
-    if W <> $D8FF then Exit; // Not JPEG file
+    AStream.Read(lWord, 2);
+    if lWord <> cMarkerJPEG then
+      Exit; // Not JPEG file
 
     // $E1 marker is for Exif
     // $E0 marker is for JFIF
     // $ED marker is for IPTC, Photoshop
-    F.Read(W, 2);
-    if (W <> $E1FF) and (W <> $E0FF) then Exit; // Doesn't have Exif
+    AStream.Read(lWord, 2);
+    if (lWord <> cMarkerEXIF) and (lWord <> cMarkerJFIF) then
+      Exit; // Doesn't have Exif
 
     // Skip JFIF header if available:
     // http://www.mustangpeak.net/phpBB2/viewtopic.php?t=1371&highlight=exif
-    if W = $E0FF then begin
-      F.Seek(16, soFromCurrent);
-      F.Read(W, 2);
-      if W = $E1FF then
-        Ofs := 18
+    if lWord = cMarkerJFIF then
+    begin
+      AStream.Seek(cMagicNumberJFIF, soFromCurrent);
+      AStream.Read(lWord, SizeOf(lWord));
+      if lWord = cMarkerEXIF then
+        Ofs := cMagicNumberEXIF
       else
         Exit;
     end;
 
-    readit(W);
-    S := string(ReadString(4));
-    if S <> 'Exif' then Exit;
-    readit(W);
-    if W <> $0000 then Exit;
-    ExifMarker_Offset := F.Position; // This is our reference marker
+    readit(lWord);
+    lStringBuffer := string(ReadString(cStringEXIF.Length));
+    if lStringBuffer <> cStringEXIF then
+      Exit;
+    readit(lWord);
+    if lWord <> 0 then
+      Exit;
+    lExifMarker_Offset := AStream.Position; // This is our reference marker
 
-    readit(W);
-    isMotorola := (W = $4D4D); // Alignment type
-    readit(W);
-    if W <> $002A then Exit; // Check for $002A magic number
+    readit(lWord);
+    lIsMotorola := lWord = cMarkerMotorola; // Alignment type
+    readit(lWord);
+    if lWord <> cMagicNumber1 then
+      Exit; // Check for $002A magic number
 
     // We are ready to read the Exif tags
     // Note: 12 is the "tag record size"
-    readit(L); // IFD0
-    ReadExifDirectory(Ofs + L, IFD_Exif_Offset);
-    if IFD_Exif_Offset = 0 then Exit;
-    readit(IFD1_Offset); // IFD1
-    if IFD1_Offset = 0 then Exit;
+    readit(lLong); // IFD0
+    ReadExifDirectory(Ofs + lLong, lIFD_Exif_Offset);
+    if lIFD_Exif_Offset = 0 then
+      Exit;
+    readit(lIFD1_Offset); // IFD1
+    if lIFD1_Offset = 0 then
+      Exit;
 
     // Now that we have IFD0 and IFD1 read the Exif
     // in the following order: IFD0, Exif, IFD1
-    ReadExifDirectory(Ofs + IFD_Exif_Offset, dummy);
-    ReadExifDirectory(Ofs + IFD1_Offset, dummy);
+    ReadExifDirectory(Ofs + lIFD_Exif_Offset, lDummy);
+    ReadExifDirectory(Ofs + lIFD1_Offset, lDummy);
     Result := True;
   finally
-    F.Position := 0;
+    AStream.Position := 0;
   end;
 end;
 
