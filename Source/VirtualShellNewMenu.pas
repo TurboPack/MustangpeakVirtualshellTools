@@ -81,17 +81,18 @@ type
 
 
   TVirtualShellNewItem = class(TObject)
-  private
+  strict private
     FData: Pointer;                // If the file is created using Data in the registry
     FDataSize: integer;            // Size of the Data
     FExtension: string;        // Extension of the file
     FFileType: string;         // String used for the Menu Text
     FNewShellKind: TNewShellKind;  // The method to create the new file
+    FSpecialTxt: Boolean;
     FSystemImageIndex: integer;    // Index of the associated icon in the system imagelist
     FNewShellKindStr: string;  // The string associate with the create method, depends on FNewShellKind
     FOwner: TVirtualShellNewMenuItem;
   public
-    procedure CreateNewDocument(PopupMenu: TVirtualShellNewMenu; NewFileTargetPath, FileName: string);
+    procedure CreateNewDocument(const APopupMenu: TVirtualShellNewMenu; ANewFileTargetPath: string; const AFileName: string);
     procedure FreeData;
     function IsBriefcase: Boolean;
     function IsCreateLink: Boolean;
@@ -104,6 +105,7 @@ type
     property NewShellKind: TNewShellKind read FNewShellKind write FNewShellKind;
     property NewShellKindStr: string read FNewShellKindStr write FNewShellKindStr;
     property Owner: TVirtualShellNewMenuItem read FOwner write FOwner;
+    property SpecialTxt: Boolean read FSpecialTxt write FSpecialTxt;
     property SystemImageIndex: integer read FSystemImageIndex write FSystemImageIndex;
   end;
 
@@ -202,171 +204,186 @@ type
 
 implementation
 
+uses
+  System.IOUtils;
+
+resourcestring
+  STextDocument = 'Text Document';
+
 { TVirtualShellNewItem }
 
-procedure TVirtualShellNewItem.CreateNewDocument(PopupMenu: TVirtualShellNewMenu; NewFileTargetPath, FileName: string);
+procedure TVirtualShellNewItem.CreateNewDocument(const APopupMenu: TVirtualShellNewMenu; ANewFileTargetPath: string; const AFileName: string);
 var
-  Handle: THandle;
-  TemplateFound: Boolean;
-  Skip: Boolean;
-  Path, ShellCmd, Params, NewFileSourcePath: string;
-  Tail: PWideChar;
-  OldChar: WideChar;
+  lHandle: THandle;
+  lNewFileSourcePath: string;
+  lOldChar: WideChar;
+  lParams: string;
+  lPath: string;
+  lShellCmd: string;
+  lSkip: Boolean;
+  lTail: PWideChar;
+  lTemplateFound: Boolean;
 begin
-  if DirectoryExists(NewFileTargetPath) then
+  if not DirectoryExists(ANewFileTargetPath) then
+    Exit;
+
+  ANewFileTargetPath := IncludeTrailingPathDelimiter(ANewFileTargetPath);
+  if AFileName.IsEmpty then
   begin
-    NewFileTargetPath := IncludeTrailingPathDelimiter(NewFileTargetPath);
-    if FileName = '' then
-    begin
-      if NewShellKind <> nmk_Folder then
-        NewFileTargetPath := UniqueFileName(NewFileTargetPath + S_NEW + FileType + Extension)
-      else
-        NewFileTargetPath := UniqueDirName(NewFileTargetPath + S_NEW + FileType)
-    end else
-    begin
-      if NewShellKind <> nmk_Folder then
-        NewFileTargetPath := NewFileTargetPath + WideStripExt(FileName) + Extension
-      else
-        NewFileTargetPath := NewFileTargetPath + FileName
-    end;
-
-    Skip := False;
-    if PopupMenu.WarnOnOverwrite then
-    begin
-      if FileExists(NewFileTargetPath) then
-        Skip := MessageBox(Application.Handle, PWideChar(S_WARNING),
-          PWideChar(S_OVERWRITE_EXISTING_FILE), MB_OKCANCEL or MB_ICONWARNING) = IDCANCEL
-    end;
-    if not Skip then
-    begin
-      case NewShellKind of
-        nmk_Null:
-          begin
-            Handle := FileCreate(NewFileTargetPath);
-            if Handle <> INVALID_HANDLE_VALUE then
-            begin
-              SHChangeNotify(SHCNE_CREATE, SHCNF_PATHW, PWideChar(NewFileTargetPath), nil);
-              FileClose(Handle);
-            end;
-          end;
-        nmk_FileName:
-          begin
-            TemplateFound := False;
-            { This is where the template should be }
-            if Assigned(TemplatesFolder) then
-            begin
-              NewFileSourcePath := TemplatesFolder.NameParseAddress + '\' + NewShellKindStr;
-              TemplateFound := FileExists(NewFileSourcePath);
-            end;
-
-            {NEW: Some Programs like WinRAR store the templates elsewhere (like in their own programdirectory)}
-            {So check if NewShellKindStr points directly to a template and - if yes - use it ...}
-            if not TemplateFound then
-            begin
-              NewFileSourcePath := NewShellKindStr;
-              TemplateFound := FileExists(NewFileSourcePath);
-            end;
-
-            { Microsoft can't seem to even get its applications to follow the rules   }
-            { Some Templates are in the old ShellNew folder in the Windows directory. }
-            if not TemplateFound then
-            begin
-              NewFileSourcePath := WindowsDirectory + '\ShellNew\' + NewShellKindStr;
-              TemplateFound := FileExists(NewFileSourcePath);
-            end;
-            if TemplateFound then
-            begin
-              CopyFile(PWideChar( NewFileSourcePath), PWideChar( NewFileTargetPath), True);
-              SHChangeNotify(SHCNE_CREATE, SHCNF_PATHW, PWideChar(NewFileTargetPath), nil);
-            end;
-          end;
-        nmk_Data:
-          begin
-            Handle := FileCreate(NewFileTargetPath);
-
-            if Handle <> INVALID_HANDLE_VALUE then
-            try
-              // should work for Unicode
-              FileWrite(Handle, Data^, DataSize)
-            finally
-              FileClose(Handle);
-              SHChangeNotify(SHCNE_CREATE, SHCNF_PATHW, PWideChar(NewFileTargetPath), nil);
-            end
-          end;
-        nmk_Command:
-          begin
-            if IsBriefcase then
-            { The Briefcase is a special case that we need to be careful with     }
-            begin
-              { Strip the *.bfc extension from the file name }
-              NewFileTargetPath := WideStripExt(NewFileTargetPath);
-              { This is a bit of a hack.  The true Command string in Win2k looks  }
-              { like:                                                             }
-              {  %SystemRoot%\system32\rundll32.exe %SystemRoot%\system32\syncui.dll,Briefcase_Create %2!d! %1 }
-              { This is undocumented as the the parameters but in Win2k and XP if }
-              { You pass a path of the new Briefcase for %1 and then set %2 to a  }
-              { number > 0 then a Briefcase will be created in the passed folder. }
-              { In Win9x the param are reversed and the string is filled in:      }
-              { c:\Windows\System\rundll32.exe c:\Windows\System\\syncui.dll,Briefcase_Create %1!d! %2 }
-              { In this OS it is not necessary to change the %1 to 1? Oh well     }
-              { Undocumented Shell fun at its best.                               }
-              Path := SystemDirectory + S_RUNDLL32;
-              if not FileExists(Path) then
-                Path := WindowsDirectory + S_RUNDLL32;
-              WideShellExecute(Application.Handle, S_OPEN, Path,
-                S_BRIEFCASE_HACK_STRING + NewFileTargetPath, '')
-            end else
-            begin
-              NewShellKindStr := Trim(NewShellKindStr);
-              if Length(NewShellKindStr) > 1 then
-              begin
-                if NewShellKindStr[1] = '"' then
-                begin
-                  Tail := @NewShellKindStr[2];
-                  while (Tail^ <> string('"')) and (Tail^ <> WideNull) do
-                    Inc(Tail, 1);
-                  if Tail^ = string('"') then
-                  begin
-                    Inc(Tail, 1);
-                    OldChar := Tail^;
-                    Tail^ := WideNull;
-                    ShellCmd := PWideChar( NewShellKindStr);
-                    Params := '';
-                    Tail^ := OldChar;
-                    if Tail^ <> WideNull then
-                    begin
-                      Params := Tail;
-                      Params := Trim(Params)
-                    end
-                  end;
-                end;  
-              end;
-              Params := StringReplace(Params, '%1', ExtractFilePath(NewFileTargetPath), [rfReplaceAll, rfIgnoreCase]);
-              SpecialVariableReplacePath(ShellCmd);
-              WideShellExecute(Application.Handle, S_OPEN, ShellCmd, Params, '')
-            end
-          end;
-        nmk_Folder:
-          begin
-            CreateDir(NewFileTargetPath);
-          end;
-        nmk_Shortcut:
-          begin
-            NewFileTargetPath := IncludeTrailingPathDelimiter( ExtractFilePath(NewFileTargetPath)) + S_NEW + S_SHORTCUT + '.lnk';
-            Handle := FileCreate(NewFileTargetPath);
-            if Handle <> INVALID_HANDLE_VALUE then
-            begin
-              SHChangeNotify(SHCNE_CREATE, SHCNF_PATHW, PWideChar(NewFileTargetPath), nil);
-              FileClose(Handle);
-            end;
-            WideShellExecute(Application.Handle, 'open', 'rundll32.exe', 'appwiz.cpl,NewLinkHere ' + NewFileTargetPath, '')
-          end;
-      end;
-      if Assigned(Owner) then
-        if Assigned(Owner.OwnerMenu) then
-          Owner.OwnerMenu.DoAfterFileCreate(Self, NewFileTargetPath);
-    end
+    if NewShellKind <> nmk_Folder then
+      ANewFileTargetPath := UniqueFileName(ANewFileTargetPath + S_NEW + FileType + Extension)
+    else
+      ANewFileTargetPath := UniqueDirName(ANewFileTargetPath + S_NEW + FileType)
   end
+  else
+  begin
+    if NewShellKind <> nmk_Folder then
+      ANewFileTargetPath := ANewFileTargetPath + WideStripExt(AFileName) + Extension
+    else
+      ANewFileTargetPath := ANewFileTargetPath + AFileName;
+  end;
+
+  lSkip := False;
+  if APopupMenu.WarnOnOverwrite then
+  begin
+    if FileExists(ANewFileTargetPath) then
+      lSkip := MessageBox(Application.Handle, PWideChar(S_WARNING),
+        PWideChar(S_OVERWRITE_EXISTING_FILE), MB_OKCANCEL or MB_ICONWARNING) = IDCANCEL
+  end;
+  if lSkip then
+    Exit;
+
+  case NewShellKind of
+    nmk_Null:
+    begin
+      lHandle := FileCreate(ANewFileTargetPath);
+      if lHandle <> INVALID_HANDLE_VALUE then
+      begin
+        SHChangeNotify(SHCNE_CREATE, SHCNF_PATHW, PWideChar(ANewFileTargetPath), nil);
+        FileClose(lHandle);
+      end;
+    end;
+    nmk_FileName:
+    begin
+      lTemplateFound := False;
+      { This is where the template should be }
+      if Assigned(TemplatesFolder) then
+      begin
+        lNewFileSourcePath := TemplatesFolder.NameParseAddress + '\' + NewShellKindStr;
+        lTemplateFound := FileExists(lNewFileSourcePath);
+      end;
+
+      {NEW: Some Programs like WinRAR store the templates elsewhere (like in their own programdirectory)}
+      {So check if NewShellKindStr points directly to a template and - if yes - use it ...}
+      if not lTemplateFound then
+      begin
+        lNewFileSourcePath := NewShellKindStr;
+        lTemplateFound := FileExists(lNewFileSourcePath);
+      end;
+
+      { Microsoft can't seem to even get its applications to follow the rules   }
+      { Some Templates are in the old ShellNew folder in the Windows directory. }
+      if not lTemplateFound then
+      begin
+        lNewFileSourcePath := WindowsDirectory + '\ShellNew\' + NewShellKindStr;
+        lTemplateFound := FileExists(lNewFileSourcePath);
+      end;
+      if lTemplateFound then
+      begin
+        CopyFile(PWideChar( lNewFileSourcePath), PWideChar( ANewFileTargetPath), True);
+        SHChangeNotify(SHCNE_CREATE, SHCNF_PATHW, PWideChar(ANewFileTargetPath), nil);
+      end
+      else if SpecialTxt then
+      begin
+        TFile.Create(ANewFileTargetPath).Free;
+        SHChangeNotify(SHCNE_CREATE, SHCNF_PATHW, PWideChar(ANewFileTargetPath), nil);
+      end;
+    end;
+    nmk_Data:
+    begin
+      lHandle := FileCreate(ANewFileTargetPath);
+
+      if lHandle <> INVALID_HANDLE_VALUE then
+      try
+        // should work for Unicode
+        FileWrite(lHandle, Data^, DataSize)
+      finally
+        FileClose(lHandle);
+        SHChangeNotify(SHCNE_CREATE, SHCNF_PATHW, PWideChar(ANewFileTargetPath), nil);
+      end
+    end;
+    nmk_Command:
+    begin
+      if IsBriefcase then
+      { The Briefcase is a special case that we need to be careful with     }
+      begin
+        { Strip the *.bfc extension from the file name }
+        ANewFileTargetPath := WideStripExt(ANewFileTargetPath);
+        { This is a bit of a hack.  The true Command string in Win2k looks  }
+        { like:                                                             }
+        {  %SystemRoot%\system32\rundll32.exe %SystemRoot%\system32\syncui.dll,Briefcase_Create %2!d! %1 }
+        { This is undocumented as the the parameters but in Win2k and XP if }
+        { You pass a lPath of the new Briefcase for %1 and then set %2 to a  }
+        { number > 0 then a Briefcase will be created in the passed folder. }
+        { In Win9x the param are reversed and the string is filled in:      }
+        { c:\Windows\System\rundll32.exe c:\Windows\System\\syncui.dll,Briefcase_Create %1!d! %2 }
+        { In this OS it is not necessary to change the %1 to 1? Oh well     }
+        { Undocumented Shell fun at its best.                               }
+        lPath := SystemDirectory + S_RUNDLL32;
+        if not FileExists(lPath) then
+          lPath := WindowsDirectory + S_RUNDLL32;
+        WideShellExecute(Application.Handle, S_OPEN, lPath,
+          S_BRIEFCASE_HACK_STRING + ANewFileTargetPath, '')
+      end 
+	  else
+      begin
+        NewShellKindStr := Trim(NewShellKindStr);
+        if Length(NewShellKindStr) > 1 then
+        begin
+          if NewShellKindStr[1] = '"' then
+          begin
+            lTail := @NewShellKindStr[2];
+            while (lTail^ <> string('"')) and (lTail^ <> WideNull) do
+              Inc(lTail, 1);
+            if lTail^ = string('"') then
+            begin
+              Inc(lTail, 1);
+              lOldChar := lTail^;
+              lTail^ := WideNull;
+              lShellCmd := PWideChar( NewShellKindStr);
+              lParams := '';
+              lTail^ := lOldChar;
+              if lTail^ <> WideNull then
+              begin
+                lParams := lTail;
+                lParams := Trim(lParams)
+              end
+            end;
+          end;
+        end;
+        lParams := StringReplace(lParams, '%1', ExtractFilePath(ANewFileTargetPath), [rfReplaceAll, rfIgnoreCase]);
+        SpecialVariableReplacePath(lShellCmd);
+        WideShellExecute(Application.Handle, S_OPEN, lShellCmd, lParams, '')
+      end;
+    end;
+    nmk_Folder:
+    begin
+      CreateDir(ANewFileTargetPath);
+    end;
+    nmk_Shortcut:
+    begin
+      ANewFileTargetPath := IncludeTrailingPathDelimiter( ExtractFilePath(ANewFileTargetPath)) + S_NEW + S_SHORTCUT + '.lnk';
+      lHandle := FileCreate(ANewFileTargetPath);
+      if lHandle <> INVALID_HANDLE_VALUE then
+      begin
+        SHChangeNotify(SHCNE_CREATE, SHCNF_PATHW, PWideChar(ANewFileTargetPath), nil);
+        FileClose(lHandle);
+      end;
+      WideShellExecute(Application.Handle, 'open', 'rundll32.exe', 'appwiz.cpl,NewLinkHere ' + ANewFileTargetPath, '')
+    end;
+  end;
+  if Assigned(Owner) and Assigned(Owner.OwnerMenu) then
+    Owner.OwnerMenu.DoAfterFileCreate(Self, ANewFileTargetPath);
 end;
 
 destructor TVirtualShellNewItem.Destroy;
@@ -396,17 +413,27 @@ end;
 { TVirtualShellNewItemList }
 
 procedure TVirtualShellNewItemList.BuildList;
+const
+  cExtLnk = '.lnk';
+  cExtTxt = '.txt';
+  cPathDelim = '\';
+  cThreshold = 20;
 
     { Only handle the first level extension keys, except for the lnk files }
     function IsValidExtKey(const AKey: string): Boolean;
+    const
+      cWildCard = '*';
     begin
       Result := False;
-      if AKey <> '' then
-        Result := ((AKey[1] = '.') or (AKey[1] = '*')) and
-          not SameText(AKey, '.lnk')
+      if not AKey.IsEmpty then
+      begin
+        Result := ((AKey.Chars[0] = '.') or (AKey.Chars[0] = cWildCard)) and
+          not SameText(AKey, cExtLnk)
+      end;
     end;
 
 var
+  lAddedTxt: Boolean;
   lCount: Integer;
   lData: Pointer;
   lDataSize: Integer;
@@ -414,6 +441,7 @@ var
   lFileCreateType: string;
   lFileInfoW: TSHFileInfoW;
   lMenuText: string;
+  lMenuTextTxt: string;
   lNewShellLink: TNewShellKind;
   lNewShellNewItem: TVirtualShellNewItem;
   lOldCursor: TCursor;
@@ -431,113 +459,148 @@ begin
     lReg := TRegistry.Create;
     lRegList := TStringList.Create;
     lReg.RootKey := HKEY_CLASSES_ROOT;
-    if lReg.OpenKeyReadOnly('') then
-    begin
-      { Read in all the level 1 keys under HKEY_CLASSES_ROOT }
-      lReg.GetKeyNames(lRegList);
-      lReg.CloseKey;
-      lRegList.Sorted := True;
-      for lRegStr in lRegList  do
-      begin
-        { Only work on extension keys not the extention type keys }
-        if not IsValidExtKey(lRegStr) then
-          Continue;
-       { Open the extension key }
-        lShellNewKeyPath := lRegStr;
-        if lReg.OpenKeyReadOnly(lShellNewKeyPath) then
-        begin
-          { Read the default text. This is the pointer to the extension type  }
-          { key further down in the list OR it may be another key that        }
-          { contains the ShellNew key                                         }
-          lDefaultKey := lReg.ReadString('');
-          lReg.CloseKey;
-          { Try to open the extension type pointed to by the extension type   }
-          { key, and read the File Type Name to be used for creating the new  }
-          { file and for use for the menu text.                               }
-          if lReg.OpenKeyReadOnly(lDefaultKey) then
-          begin
-            lMenuText := lReg.ReadString('');
-            lReg.CloseKey;
-          end
-          else
-            lMenuText := '';
-          { Check to see if it was a pointer to a sub key, with a saftety out }
-          lCount := 0;
-          while (lDefaultKey <> '') and (lCount < 20) do
-          begin
-            if lReg.OpenKeyReadOnly(lShellNewKeyPath + '\' + lDefaultKey) then
-            begin
-              lShellNewKeyPath := lShellNewKeyPath +  '\' + lDefaultKey;
-              lDefaultKey := lReg.ReadString('');
-              lReg.CloseKey;
-            end
-            else
-              lDefaultKey := '';
-            Inc(lCount);
-          end;
-          { Try to open the ShellNew subkey under the lShellNewKeyPath key     }
-          if lMenuText <> '' then
-          begin
-            if lReg.OpenKeyReadOnly(lShellNewKeyPath + S_SHELLNEW_PATH) then
-            begin
-              lNewShellLink := nmk_Unknown;
-              lFileCreateType := '';
-              lData := nil;
-              lDataSize := 0;
+    if not lReg.OpenKeyReadOnly(string.Empty) then
+      Exit;
 
-              if lReg.GetDataType(S_NULLFILE) = rdString then
-              begin
-                lFileCreateType := lReg.ReadString(S_NULLFILE);
-                lNewShellLink := nmk_Null
-              end
-              else if lReg.GetDataType(S_FILENAME) = rdString then
-              begin
-                lFileCreateType := lReg.ReadString(S_FILENAME);
-                lNewShellLink := nmk_FileName
-              end
-              else if lReg.GetDataType(S_COMMAND) = rdString then
-              begin
-                lFileCreateType := lReg.ReadString(S_COMMAND);
-                lNewShellLink := nmk_Command
-              end
-              else if lReg.GetDataType(S_COMMAND) = rdExpandString  then
-              begin
-                lFileCreateType := lReg.ReadString(S_COMMAND);
-                lNewShellLink := nmk_Command
-              end
-              else if lReg.GetDataType(S_DATA) = rdBinary then
-              begin
-                lDataSize := lReg.GetDataSize(S_DATA);
-                GetMem(lData, lDataSize);
-                if lDataSize = lReg.ReadBinaryData(S_DATA, lData^, lDataSize) then
-                  lNewShellLink := nmk_Data
-              end;
-              if lNewShellLink <> nmk_Unknown then
-              begin
-                lNewShellNewItem := TVirtualShellNewItem.Create;
-                lNewShellNewItem.Extension := lRegStr;
-                lNewShellNewItem.FileType := lMenuText;
-                lNewShellNewItem.NewShellKind := lNewShellLink;
-                lNewShellNewItem.NewShellKindStr := lFileCreateType;
-                lNewShellNewItem.Data := lData;
-                lNewShellNewItem.DataSize := lDataSize;
-                if SHGetFileInfo(PWideChar(lNewShellNewItem.Extension),
-                                 FILE_ATTRIBUTE_NORMAL,
-                                 lFileInfoW,
-                                 SizeOf( lFileInfoW),
-                                 SHGFI_USEFILEATTRIBUTES or
-                                 SHGFI_SHELLICONSIZE or
-                                 SHGFI_ICON or
-                                 SHGFI_SYSICONINDEX) > 0 then
-                  lNewShellNewItem.SystemImageIndex := lFileInfoW.iIcon;
-                Add(lNewShellNewItem);
-              end;
-              lReg.CloseKey;
-            end;
-          end;
-        end;
+    { Read in all the level 1 keys under HKEY_CLASSES_ROOT }
+    lReg.GetKeyNames(lRegList);
+    lReg.CloseKey;
+    lRegList.Sorted := True;
+    lAddedTxt := False;
+    lMenuTextTxt := string.Empty;
+    for lRegStr in lRegList  do
+    begin
+      { Only work on extension keys not the extention type keys }
+      if not IsValidExtKey(lRegStr) then
+        Continue;
+     { Open the extension key }
+      lShellNewKeyPath := lRegStr;
+      if not lReg.OpenKeyReadOnly(lShellNewKeyPath) then
+        Continue;
+
+      { Read the default text. This is the pointer to the extension type  }
+      { key further down in the list OR it may be another key that        }
+      { contains the ShellNew key                                         }
+      lDefaultKey := lReg.ReadString(string.Empty);
+      lReg.CloseKey;
+      { Try to open the extension type pointed to by the extension type   }
+      { key, and read the File Type Name to be used for creating the new  }
+      { file and for use for the menu text.                               }
+      if lReg.OpenKeyReadOnly(lDefaultKey) then
+      begin
+        lMenuText := lReg.ReadString(string.Empty);
+        lReg.CloseKey;
+      end
+      else
+        lMenuText := string.Empty;
+
+      if SameText(lRegStr, cExtTxt) then
+        lMenuTextTxt := lMenuText;
+
+      { Check to see if it was a pointer to a sub key, with a saftety out }
+      lCount := 0;
+      while (not lDefaultKey.IsEmpty) and (lCount < cThreshold) do
+      begin
+        if lReg.OpenKeyReadOnly(lShellNewKeyPath + cPathDelim + lDefaultKey) then
+        begin
+          lShellNewKeyPath := lShellNewKeyPath + cPathDelim + lDefaultKey;
+          lDefaultKey := lReg.ReadString(string.Empty);
+          lReg.CloseKey;
+        end
+        else
+          lDefaultKey := string.Empty;
+        Inc(lCount);
       end;
+
+      { Try to open the ShellNew subkey under the lShellNewKeyPath key     }
+      if lMenuText.IsEmpty then
+        Continue;
+
+      if not lReg.OpenKeyReadOnly(lShellNewKeyPath + S_SHELLNEW_PATH) then
+        Continue;
+
+      lNewShellLink := nmk_Unknown;
+      lFileCreateType := string.Empty;
+      lData := nil;
+      lDataSize := 0;
+
+      if lReg.GetDataType(S_NULLFILE) = rdString then
+      begin
+        lFileCreateType := lReg.ReadString(S_NULLFILE);
+        lNewShellLink := nmk_Null
+      end
+      else if lReg.GetDataType(S_FILENAME) = rdString then
+      begin
+        lFileCreateType := lReg.ReadString(S_FILENAME);
+        lNewShellLink := nmk_FileName
+      end
+      else if lReg.GetDataType(S_COMMAND) = rdString then
+      begin
+        lFileCreateType := lReg.ReadString(S_COMMAND);
+        lNewShellLink := nmk_Command
+      end
+      else if lReg.GetDataType(S_COMMAND) = rdExpandString  then
+      begin
+        lFileCreateType := lReg.ReadString(S_COMMAND);
+        lNewShellLink := nmk_Command
+      end
+      else if lReg.GetDataType(S_DATA) = rdBinary then
+      begin
+        lDataSize := lReg.GetDataSize(S_DATA);
+        GetMem(lData, lDataSize);
+        if lDataSize = lReg.ReadBinaryData(S_DATA, lData^, lDataSize) then
+          lNewShellLink := nmk_Data
+      end;
+      if lNewShellLink <> nmk_Unknown then
+      begin
+        lNewShellNewItem := TVirtualShellNewItem.Create;
+        lNewShellNewItem.Extension := lRegStr;
+        lNewShellNewItem.FileType := lMenuText;
+        lNewShellNewItem.NewShellKind := lNewShellLink;
+        lNewShellNewItem.NewShellKindStr := lFileCreateType;
+        lNewShellNewItem.Data := lData;
+        lNewShellNewItem.DataSize := lDataSize;
+        if SHGetFileInfo(PWideChar(lNewShellNewItem.Extension),
+                         FILE_ATTRIBUTE_NORMAL,
+                         lFileInfoW,
+                         SizeOf(lFileInfoW),
+                         SHGFI_USEFILEATTRIBUTES or
+                         SHGFI_SHELLICONSIZE or
+                         SHGFI_ICON or
+                         SHGFI_SYSICONINDEX) > 0 then
+          lNewShellNewItem.SystemImageIndex := lFileInfoW.iIcon;
+        Add(lNewShellNewItem);
+        if SameText(lRegStr, cExtTxt) then
+          lAddedTxt := True;
+      end;
+      lReg.CloseKey;
     end;
+
+    //Special case for .txt files
+    if lAddedTxt then
+      Exit;
+
+    lNewShellNewItem := TVirtualShellNewItem.Create;
+    lNewShellNewItem.Extension := cExtTxt;
+    if lMenuTextTxt.IsEmpty then
+      lMenuTextTxt := STextDocument;
+    lNewShellNewItem.FileType := lMenuTextTxt;
+    lNewShellNewItem.NewShellKind := TNewShellKind.nmk_FileName;
+    lNewShellNewItem.NewShellKindStr := string.Empty;
+    lNewShellNewItem.Data := nil;
+    lNewShellNewItem.DataSize := 0;
+    lNewShellNewItem.SpecialTxt := True;
+    if SHGetFileInfo(PWideChar(lNewShellNewItem.Extension),
+                     FILE_ATTRIBUTE_NORMAL,
+                     lFileInfoW,
+                     SizeOf(lFileInfoW),
+                     SHGFI_USEFILEATTRIBUTES or
+                     SHGFI_SHELLICONSIZE or
+                     SHGFI_ICON or
+                     SHGFI_SYSICONINDEX) > 0 then
+      lNewShellNewItem.SystemImageIndex := lFileInfoW.iIcon;
+    Add(lNewShellNewItem);
+
   finally
     Screen.Cursor := lOldCursor;
     lReg.Free;
