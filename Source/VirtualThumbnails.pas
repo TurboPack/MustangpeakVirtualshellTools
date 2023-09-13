@@ -902,8 +902,20 @@ begin
       try
         lDestR := SpRectAspectRatio(AImageWidth, AImageHeight, AThumbW, AThumbH, talNone);
         SpInitBitmap(AOutBitmap, lDestR.Right, lDestR.Bottom, ABgColor);
-        // StretchDraw is NOT THREADSAFE!!! Use SpStretchDraw instead
-        SpStretchDraw(lPicture.Graphic, AOutBitmap.Canvas, lDestR, ASubSampling);
+        AOutBitmap.Canvas.Lock;
+        if lPicture.Graphic is TBitmap then
+          TBitmap(lPicture.Graphic).Canvas.Lock
+        else if lPicture.Graphic is TJpegImage then
+          TJpegImage(lPicture.Graphic).Canvas.Lock;
+        try
+          AOutBitmap.Canvas.StretchDraw(lDestR, lPicture.Graphic);
+        finally
+          AOutBitmap.Canvas.Unlock;
+          if lPicture.Graphic is TBitmap then
+            TBitmap(lPicture.Graphic).Canvas.Unlock
+          else if lPicture.Graphic is TJpegImage then
+            TJpegImage(lPicture.Graphic).Canvas.Unlock;
+        end;
 
         // Rotate the thumbnail based on the Exif lOrientation value
         // Modern cameras have an option to auto rotate the image
