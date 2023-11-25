@@ -176,11 +176,11 @@ begin
     lMenu := Sender as TComponent;
     if lMenu.Tag > -1 then
     begin
-      DoSendTo(SendToItems[lMenu.Tag], lDataObject);
+      DoSendTo(TNamespace(SendToItems[lMenu.Tag]), lDataObject);
       if Assigned(lDataObject) then
       begin
         lDropEffect := DROPEFFECT_COPY or DROPEFFECT_MOVE or DROPEFFECT_LINK;
-        lDropTarget := SendToItems[lMenu.Tag].DropTargetInterface;
+        lDropTarget := TNamespace(SendToItems[lMenu.Tag]).DropTargetInterface;
         if Assigned(lDropTarget) then
         begin
           if Succeeded(lDropTarget.DragEnter(lDataObject, MK_LBUTTON, Point(0, 0), lDropEffect)) then

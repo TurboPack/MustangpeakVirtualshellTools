@@ -2530,7 +2530,7 @@ begin
       // button won't let the toolbar height change!
       CaptionButton.Align := alNone;
       if ButtonList.Count > 0 then
-        CaptionButton.Height := ButtonList[ButtonList.Count - 1].Bottom
+        CaptionButton.Height := TCustomWideSpeedButton(ButtonList[ButtonList.Count - 1]).Bottom
       else begin
         CaptionButton.Height := 24 - BorderWidth * 2;
       end;
@@ -3110,7 +3110,7 @@ begin
   begin
     CaptionButton.Width := Size.cx;
     if ButtonList.Count > 0 then
-      CaptionButton.Height := ButtonList[ButtonList.Count - 1].Bottom
+      CaptionButton.Height := TCustomWideSpeedButton(ButtonList[ButtonList.Count - 1]).Bottom
     else
       CaptionButton.Height := Size.cy
   end;
