@@ -166,25 +166,30 @@ end;
 
 procedure TVirtualSendToMenu.OnMenuItemClick(Sender: TObject);
 var
-  M: TComponent;
-  DataObject: IDataObject;
-  DropTarget: IDropTarget;
-  DropEffect: Longint;
+  lDataObject: IDataObject;
+  lDropEffect: Longint;
+  lDropTarget: IDropTarget;
+  lMenu: TComponent;
 begin
-  if (Sender is TComponent) then begin
-    M := Sender as TComponent;
-    if M.Tag > -1 then begin
-      DoSendTo(SendToItems[M.Tag], DataObject);
-      if Assigned(DataObject) then begin
-        DropEffect := DROPEFFECT_COPY or DROPEFFECT_MOVE or DROPEFFECT_LINK;
-        DropTarget := SendToItems[M.Tag].DropTargetInterface;
-        if Assigned(DropTarget) then
-          if Succeeded(DropTarget.DragEnter(DataObject, MK_LBUTTON, Point(0, 0), DropEffect)) then
+  if (Sender is TComponent) then
+  begin
+    lMenu := Sender as TComponent;
+    if lMenu.Tag > -1 then
+    begin
+      DoSendTo(SendToItems[lMenu.Tag], lDataObject);
+      if Assigned(lDataObject) then
+      begin
+        lDropEffect := DROPEFFECT_COPY or DROPEFFECT_MOVE or DROPEFFECT_LINK;
+        lDropTarget := SendToItems[lMenu.Tag].DropTargetInterface;
+        if Assigned(lDropTarget) then
+        begin
+          if Succeeded(lDropTarget.DragEnter(lDataObject, MK_LBUTTON, Point(0, 0), lDropEffect)) then
           begin
-            DropEffect := DROPEFFECT_COPY or DROPEFFECT_MOVE or DROPEFFECT_LINK;
-            DropTarget.Drop(DataObject, 0, Point(0, 0), DropEffect)
-          end
-      end
+            lDropEffect := DROPEFFECT_COPY or DROPEFFECT_MOVE or DROPEFFECT_LINK;
+            lDropTarget.Drop(lDataObject, 0, Point(0, 0), lDropEffect)
+          end;
+        end;
+      end;
     end;
   end;
 end;
