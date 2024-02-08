@@ -1001,52 +1001,52 @@ end;
 
 procedure TVirtualChangeNotifier.ListenerWndProc(var AMsg: TMessage);
 
-       procedure PackMessages(EventList: TVirtualShellEventList);
-       // PackMessages Peeks all the WM_SHELLNOTIFY messages out of the Message
-       // Queue and combines all like messages
-       var
-         lCount: Integer;
-         lEvents: TList;
-         lList: TList;
-         lMsg: TMsg;
-         lRePostQuit: Boolean;
-         lRePostQuitCode: Integer;
-       begin
-         lEvents := EventList.LockList;
-         try
-           lRePostQuit := False;
-           lRePostQuitCode := 0;
-           while PeekMessage(lMsg, FListener, WM_SHELLNOTIFY, WM_SHELLNOTIFY, PM_REMOVE) do
-           begin
-             if lMsg.Message = WM_QUIT then
-             begin
-               lRePostQuit := True;
-               lRePostQuitCode := lMsg.wParam;
-             end
-             else
-             begin
-               lList := TVirtualShellEventList(lMsg.wParam).LockList;
-               try
-                 for lCount := 0 to lList.Count - 1 do
-                   lEvents.Add(lList[lCount]);
-               finally
-                 // We have given the lEvents to the EventList so don't free them
-                 TVirtualShellEventList(lMsg.wParam).Clear;
-                 TVirtualShellEventList(lMsg.wParam).UnLockList;
-                 // tried to just free but caused problems. Allow each control to
-                 // simpify its lList
-                 TVirtualShellEventList(lMsg.wParam).Release;
-               end
-             end
-           end;
-           if lRePostQuit then
-             PostQuitMessage(lRePostQuitCode)
-         finally
-           StripDuplicates(lEvents);
-           lEvents.Pack;
-           EventList.UnLockList;
-         end
-       end;
+//       procedure PackMessages(EventList: TVirtualShellEventList);
+//       // PackMessages Peeks all the WM_SHELLNOTIFY messages out of the Message
+//       // Queue and combines all like messages
+//       var
+//         lCount: Integer;
+//         lEvents: TList;
+//         lList: TList;
+//         lMsg: TMsg;
+//         lRePostQuit: Boolean;
+//         lRePostQuitCode: Integer;
+//       begin
+//         lEvents := EventList.LockList;
+//         try
+//           lRePostQuit := False;
+//           lRePostQuitCode := 0;
+//           while PeekMessage(lMsg, FListener, WM_SHELLNOTIFY, WM_SHELLNOTIFY, PM_REMOVE) do
+//           begin
+//             if lMsg.Message = WM_QUIT then
+//             begin
+//               lRePostQuit := True;
+//               lRePostQuitCode := lMsg.wParam;
+//             end
+//             else
+//             begin
+//               lList := TVirtualShellEventList(lMsg.wParam).LockList;
+//               try
+//                 for lCount := 0 to lList.Count - 1 do
+//                   lEvents.Add(lList[lCount]);
+//               finally
+//                 // We have given the lEvents to the EventList so don't free them
+//                 TVirtualShellEventList(lMsg.wParam).Clear;
+//                 TVirtualShellEventList(lMsg.wParam).UnLockList;
+//                 // tried to just free but caused problems. Allow each control to
+//                 // simpify its lList
+//                 TVirtualShellEventList(lMsg.wParam).Release;
+//               end
+//             end
+//           end;
+//           if lRePostQuit then
+//             PostQuitMessage(lRePostQuitCode)
+//         finally
+//           StripDuplicates(lEvents);
+//           lEvents.Pack;
+//           EventList.UnLockList;
+//         end
+//       end;
 
 var
   lControl: TVirtualChangeControl;
