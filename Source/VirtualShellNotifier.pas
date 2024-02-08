@@ -404,7 +404,7 @@ type
     procedure FreeShellNotifyThread;
     procedure FreeKernelNotifyThread;
     procedure FreeChangeDispatchThread;
-    procedure ListenerWndProc(var Msg: TMessage);
+    procedure ListenerWndProc(var AMsg: TMessage);
 
     property ChangeDispatchThread: TVirtualChangeDispatchThread read GetChangeDispatchThead;
     property ControlList: TThreadList read FControlList write FControlList;
@@ -999,94 +999,95 @@ begin
   Result := FShellChangeThread;
 end;
 
-procedure TVirtualChangeNotifier.ListenerWndProc(var Msg: TMessage);
+procedure TVirtualChangeNotifier.ListenerWndProc(var AMsg: TMessage);
 
        procedure PackMessages(EventList: TVirtualShellEventList);
        // PackMessages Peeks all the WM_SHELLNOTIFY messages out of the Message
        // Queue and combines all like messages
        var
-         Msg: TMsg;
-         i: integer;
-         List, Events: TList;
-         RePostQuitCode: Integer;
-         RePostQuit: Boolean;
+         lCount: Integer;
+         lEvents: TList;
+         lList: TList;
+         lMsg: TMsg;
+         lRePostQuit: Boolean;
+         lRePostQuitCode: Integer;
        begin
-         Events := EventList.LockList;
+         lEvents := EventList.LockList;
          try
-           RePostQuit := False;
-           RePostQuitCode := 0;
-           while PeekMessage(Msg, FListener, WM_SHELLNOTIFY, WM_SHELLNOTIFY, PM_REMOVE) do
+           lRePostQuit := False;
+           lRePostQuitCode := 0;
+           while PeekMessage(lMsg, FListener, WM_SHELLNOTIFY, WM_SHELLNOTIFY, PM_REMOVE) do
            begin
-             if Msg.Message = WM_QUIT then
+             if lMsg.Message = WM_QUIT then
              begin
-               RepostQuit := True;
-               RePostQuitCode := Msg.wParam;
-             end else
+               lRePostQuit := True;
+               lRePostQuitCode := lMsg.wParam;
+             end
+             else
              begin
-               List := TVirtualShellEventList( Msg.wParam).LockList;
+               lList := TVirtualShellEventList(lMsg.wParam).LockList;
                try
-                 for i := 0 to List.Count - 1 do
-                   Events.Add(List[i]);
+                 for lCount := 0 to lList.Count - 1 do
+                   lEvents.Add(lList[lCount]);
                finally
-                 // We have given the events to the EventList so don't free them
-                 TVirtualShellEventList( Msg.wParam).Clear;
-                 TVirtualShellEventList( Msg.wParam).UnLockList;
+                 // We have given the lEvents to the EventList so don't free them
+                 TVirtualShellEventList(lMsg.wParam).Clear;
+                 TVirtualShellEventList(lMsg.wParam).UnLockList;
                  // tried to just free but caused problems. Allow each control to
-                 // simpify its list
-                 TVirtualShellEventList( Msg.wParam).Release;
+                 // simpify its lList
+                 TVirtualShellEventList(lMsg.wParam).Release;
                end
              end
            end;
-           if RepostQuit then
-             PostQuitMessage(RePostQuitCode)
+           if lRePostQuit then
+             PostQuitMessage(lRePostQuitCode)
          finally
-           StripDuplicates(Events);
-           Events.Pack;
+           StripDuplicates(lEvents);
+           lEvents.Pack;
            EventList.UnLockList;
          end
        end;
 
 var
-  List: TList;
-  i: integer;
-  Control: TWinControl;
-  TempList: TVirtualShellEventList;
+  lControl: TVirtualChangeControl;
+  lCount: Integer;
+  lList: TList;
+  lTempList: TVirtualShellEventList;
 begin
-    case Msg.Msg of
-  WM_NCCREATE: Msg.Result := 1;
-  WM_SHELLNOTIFY:
+  case AMsg.Msg of
+    WM_NCCREATE: AMsg.Result := 1;
+    WM_SHELLNOTIFY:
     begin
-      TempList := TVirtualShellEventList(Msg.wParam);
-      if Assigned(TempList) then
+      lTempList := TVirtualShellEventList(AMsg.WParam);
+      if Assigned(lTempList) then
       begin
         // Had some strange AV's that may be related to this call
         // See if this fixes it. 1/22/03
-        //PackMessages(TempList);
-        List := ControlList.LockList;
+        //PackMessages(lTempList);
+        lList := ControlList.LockList;
         try
-          TempList.ID := IDCounter;
-          Inc(TempList.FRefCount, List.Count);
-          for i := 0 to List.Count - 1 do
+          lTempList.ID := IDCounter;
+          Inc(lTempList.FRefCount, lList.Count);
+          for lCount := 0 to lList.Count - 1 do
           begin
-            Control := TVirtualChangeControl(List[i]).Control;
+            lControl := TVirtualChangeControl(lList[lCount]);
             // Send Message only to controls registered for Shell changes
-            if TVirtualChangeControl(List[i]).ShellChangeRegistered and Control.HandleAllocated then
+            if lControl.ShellChangeRegistered and lControl.Control.HandleAllocated then
             begin
-              if not PostMessage(Control.Handle, WM_SHELLNOTIFY, WPARAM(TempList), 0) then
-                TempList.Release
+              if not PostMessage(lControl.Control.Handle, WM_SHELLNOTIFY, WPARAM(lTempList), 0) then
+                lTempList.Release;
             end
             else
-              TempList.Release;
+              lTempList.Release;
           end;
         finally
           ControlList.UnlockList;
         end;
-        TempList.Release;
+        lTempList.Release;
       end
     end;
   else
-    with Msg do
-      Result := DefWindowProc(Listener, Msg, wParam, lParam);
+    AMsg.Result := DefWindowProc(Listener, AMsg.Msg, AMsg.WParam, AMsg.LParam);
   end
 end;
 
