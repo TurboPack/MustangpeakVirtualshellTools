@@ -773,8 +773,8 @@ type
 
   TNodeStorageList = class(TStreamableList)
   protected
-    function GetItems(Index: integer): TNodeStorage;
-    procedure SetItems(Index: integer; const Value: TNodeStorage);
+    function GetItems(Index: NativeInt): TNodeStorage;
+    procedure SetItems(Index: NativeInt; const Value: TNodeStorage);
   public
     procedure Clear; override;
     procedure LoadFromFile(FileName: string; Version: integer = VETStreamStorageVer; ReadVerFromStream: Boolean = False); override;
@@ -782,7 +782,7 @@ type
     procedure SaveToFile(FileName: string; Version: integer = VETStreamStorageVer; ReadVerFromStream: Boolean = False); override;
     procedure SaveToStream(S: TStream; Version: integer = VETStreamStorageVer; WriteVerToStream: Boolean = False); override;
 
-    property Items[Index: integer]: TNodeStorage read GetItems write SetItems; default;
+    property Items[Index: NativeInt]: TNodeStorage read GetItems write SetItems; default;
   end;
 
   TLeafNode = class(TStreamableClass)
@@ -802,8 +802,8 @@ type
   TLeafNodeList = class(TStreamableList)
   private
     FShareNodes: Boolean;
-    function GetItems(Index: Integer): TLeafNode;
-    procedure SetItems(Index: Integer; const Value: TLeafNode);
+    function GetItems(Index: NativeInt): TLeafNode;
+    procedure SetItems(Index: NativeInt; const Value: TLeafNode);
   public
     procedure AddLeafNode(LeafPIDL: PItemIDList; IsExpanded: Boolean);
     procedure Clear; override;
@@ -811,7 +811,7 @@ type
     procedure SaveToStream(S: TStream; Version: integer = VETStreamStorageVer; WriteVerToStream: Boolean = False); override;
 
     property ShareNodes: Boolean read FShareNodes write FShareNodes;
-    property Items[Index: Integer]: TLeafNode read GetItems write SetItems; default;
+    property Items[Index: NativeInt]: TLeafNode read GetItems write SetItems; default;
   end;
 
   { Stores a VETs state so it may be recreated.  It stores the PIDLs associated }
@@ -881,8 +881,8 @@ type
   { Implements a TList that can handle TView Objects.                           }
   TViewList = class(TStreamableList)
   private
-    function GetItems(Index: Integer): TView;
-    procedure SetItems(Index: Integer; const Value: TView);
+    function GetItems(Index: NativeInt): TView;
+    procedure SetItems(Index: NativeInt; const Value: TView);
   public
     destructor Destroy; override;
     procedure LoadFromFile(FileName: string; Version: integer = VETStreamStorageVer; ReadVerFromStream: Boolean = False); override;
@@ -890,7 +890,7 @@ type
     procedure SaveToStream(S: TStream; Version: integer = VETStreamStorageVer; WriteVerToStream: Boolean = False); override;
     procedure SaveToFile(FileName: string; Version: integer = VETStreamStorageVer; ReadVerFromStream: Boolean = False); override;
 
-    property Items[Index: Integer]: TView read GetItems write SetItems;
+    property Items[Index: NativeInt]: TView read GetItems write SetItems;
   end;
 
   { Implements a Manager that knows how to handle a TViewList.  It is the       }
@@ -1612,7 +1612,7 @@ type
     procedure DeleteNode(Node: PVirtualNode; Reindex: Boolean = True); reintroduce;
     procedure DeleteSelectedNodes(ShiftKeyState: TExecuteVerbShift = evsCurrent); reintroduce;
     function DoCancelEdit: Boolean; override;
-    function DoEndEdit: Boolean; override;
+    function DoEndEdit(pCancel: Boolean = False): Boolean; override;
     function FindDesktopFolderByName(AName: string; var Namespace: TNamespace): Boolean;
     function FindNode(APath: string): PVirtualNode;
     function FindNodeByPIDL(APIDL: PItemIDList): PVirtualNode;
@@ -3605,7 +3605,7 @@ end;
 
 constructor TCustomVirtualExplorerTree.Create(AOwner: TComponent);
 var
-  CF: VirtualTrees.TClipboardFormats;
+  CF: VirtualTrees.BaseTree.TClipboardFormats;
 begin
   inherited;
   AllocateInternalDataArea(SizeOf(TNodeData));
@@ -3645,7 +3645,7 @@ begin
 
   { Remove any weird clipboard formats.  The IDataObject will handle that.      }
   { Still need the virtual tree internal formats though.                        }
-  CF := VirtualTrees.TClipboardFormats.Create(Self);
+  CF := VirtualTrees.BaseTree.TClipboardFormats.Create(Self);
   CF.Add(CFSTR_VIRTUALTREE);
   CF.Add(CFSTR_VTREFERENCE);
   ClipboardFormats := CF;
@@ -4182,7 +4182,7 @@ begin
   Update
 end;
 
-function TCustomVirtualExplorerTree.DoEndEdit: Boolean;
+function TCustomVirtualExplorerTree.DoEndEdit(pCancel: Boolean = False): Boolean;
 var
   Msg: TMsg;
   NS: TNamespace;
@@ -4678,13 +4678,13 @@ function TCustomVirtualExplorerTree.DoKeyAction(var CharCode: Word;
 
     function FindLastDisplayed: PVirtualNode;
     var
-      i: Cardinal;
+      i: Integer;
     begin
       Result := TopNode;
       if Assigned(Result) then
       begin
         i := NodeHeight[Result];
-        while Assigned(Result) and (i < Cardinal(ClientHeight)) do
+        while Assigned(Result) and (i < ClientHeight) do
         begin
           i := i + NodeHeight[Result];
           Result := Result.NextSibling
@@ -7525,7 +7525,6 @@ end;
 procedure TCustomVirtualExplorerTree.WMCommonThreadCallback(var Msg: TWMThreadRequest);
 var
   NS: TNamespace;
-  IsDragging: Boolean;
   MarkRequest: TExpandMarkThreadRequest;
   IconRequest: TShellIconThreadRequest;
 begin
@@ -7538,11 +7537,7 @@ begin
             if ValidateNamespace(IconRequest.Item, NS) then
             begin
               NS.SetIconIndexByThread(IconRequest.ImageIndex, IconRequest.OverlayIndex, True);
-              IsDragging := Dragging;
               InvalidateNode(IconRequest.Item);
-              { The window has changed make sure drag image knows about it.}
-              if IsDragging then
-                UpdateWindowAndDragImage(Self, GetClientRect, False, True);
             end
           end;
         TID_EXPANDMARK:
@@ -8589,7 +8584,7 @@ begin
   inherited;
 end;
 
-function TViewList.GetItems(Index: Integer): TView;
+function TViewList.GetItems(Index: NativeInt): TView;
 begin
   Result := TView( inherited Items[Index])
 end;
@@ -8613,7 +8608,7 @@ begin
   {   read new data                     }
 end;
 
-procedure TViewList.SetItems(Index: Integer; const Value: TView);
+procedure TViewList.SetItems(Index: NativeInt; const Value: TView);
 begin
   inherited Items[Index] := Value
 end;
@@ -8832,7 +8827,7 @@ begin
   inherited;
 end;
 
-function TLeafNodeList.GetItems(Index: Integer): TLeafNode;
+function TLeafNodeList.GetItems(Index: NativeInt): TLeafNode;
 begin
   Result := TLeafNode( inherited Items[Index])
 end;
@@ -8854,7 +8849,7 @@ begin
   {   read new data                     }
 end;
 
-procedure TLeafNodeList.SetItems(Index: Integer;
+procedure TLeafNodeList.SetItems(Index: NativeInt;
   const Value: TLeafNode);
 begin
   inherited Items[Index] := Value
@@ -9295,7 +9290,7 @@ end;
 function TVETDataObject.EnumFormatEtc(Direction: Integer;
   out EnumFormatEtc: IEnumFormatEtc): HResult;
 var
-  Temp: VirtualTrees.TFormatEtcArray;
+  Temp: VirtualTrees.BaseTree.TFormatEtcArray;
   TempEnumFormatEtc: IEnumFormatEtc;
   pceltFetched: Longint;
   elt: TeltArray;
@@ -10913,7 +10908,7 @@ begin
   inherited;
 end;
 
-function TNodeStorageList.GetItems(Index: integer): TNodeStorage;
+function TNodeStorageList.GetItems(Index: NativeInt): TNodeStorage;
 begin
   Result := TNodeStorage( inherited Items[Index]);
 end;
@@ -10997,7 +10992,7 @@ begin
     Items[i].SaveToStream(S, Version, WriteVerToStream);
 end;
 
-procedure TNodeStorageList.SetItems(Index: integer; const Value: TNodeStorage);
+procedure TNodeStorageList.SetItems(Index: NativeInt; const Value: TNodeStorage);
 begin
   inherited Items[Index] := Value
 end;

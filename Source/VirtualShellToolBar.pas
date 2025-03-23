@@ -178,8 +178,8 @@ type
     FToolbar: TCustomVirtualToolbar;  // Toolbar associated with this list
     FUpdateCount: integer;       // Used to stop any screen updates until EndUpdate is call and FUpdateCount goes to 0
 
-    function GetItems(Index: integer): TCustomWideSpeedButton;
-    procedure SetItems(Index: integer; const Value: TCustomWideSpeedButton);
+    function GetItems(Index: NativeInt): TCustomWideSpeedButton;
+    procedure SetItems(Index: NativeInt; const Value: TCustomWideSpeedButton);
   protected
     function CreateToolButton: TCustomWideSpeedButton; virtual;
   public
@@ -190,21 +190,21 @@ type
 
     procedure Clear; override;
 
-    property Items[Index: integer]: TCustomWideSpeedButton read GetItems write SetItems; default;
+    property Items[Index: NativeInt]: TCustomWideSpeedButton read GetItems write SetItems; default;
     property Toolbar: TCustomVirtualToolbar read FToolbar write FToolbar;
   end;
 
   TVirtualShellButtonList = class(TVirtualButtonList)
   private
-    function GetItems(Index: integer): TShellToolButton;
-    procedure SetItems(Index: integer; const Value: TShellToolButton);
+    function GetItems(Index: NativeInt): TShellToolButton;
+    procedure SetItems(Index: NativeInt; const Value: TShellToolButton);
   protected
     function CreateToolButton: TCustomWideSpeedButton; override;
 
   public
     function AddButton(Index: integer = -1): TCustomWideSpeedButton; override;
 
-    property Items[Index: integer]: TShellToolButton read GetItems write SetItems; default;
+    property Items[Index: NativeInt]: TShellToolButton read GetItems write SetItems; default;
   end;
 
   // Basic Toolbutton that can be created an placed on a TVirtualToolbar
@@ -3386,7 +3386,7 @@ begin
     Toolbar.RebuildToolbar
 end;
 
-function TVirtualButtonList.GetItems(Index: integer): TCustomWideSpeedButton;
+function TVirtualButtonList.GetItems(Index: NativeInt): TCustomWideSpeedButton;
 
 // Override of TList to return a TCustomWideSpeedButton type
 
@@ -3403,7 +3403,7 @@ begin
   end
 end;
 
-procedure TVirtualButtonList.SetItems(Index: integer; const Value: TCustomWideSpeedButton);
+procedure TVirtualButtonList.SetItems(Index: NativeInt; const Value: TCustomWideSpeedButton);
 
 // Override of TList to set a TCustomWideSpeedButton type (not necessary but good practice
 // in overriding properties)
@@ -3437,7 +3437,7 @@ begin
   Result.Parent := Toolbar;
 end;
 
-function TVirtualShellButtonList.GetItems(Index: integer): TShellToolButton;
+function TVirtualShellButtonList.GetItems(Index: NativeInt): TShellToolButton;
 
 // Override of TVirtualButtonList to return a TCustomWideSpeedButton type decendant, TShellToolButton
 
@@ -3445,7 +3445,7 @@ begin
   Result := TShellToolButton( inherited Items[Index])
 end;
 
-procedure TVirtualShellButtonList.SetItems(Index: integer; const Value: TShellToolButton);
+procedure TVirtualShellButtonList.SetItems(Index: NativeInt; const Value: TShellToolButton);
 
 // Override of TVirtualButtonList to set a TShellToolButton type (not necessary but
 // good practice in overriding properties)

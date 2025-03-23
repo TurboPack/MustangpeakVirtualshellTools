@@ -126,13 +126,13 @@ type
 
   TVirtualShellNewItemList = class(TObjectList)
   private
-    function GetItems(Index: Integer): TVirtualShellNewItem;
-    procedure PutItems(Index: Integer; const Value: TVirtualShellNewItem);
+    function GetItems(Index: NativeInt): TVirtualShellNewItem;
+    procedure PutItems(Index: NativeInt; const Value: TVirtualShellNewItem);
   public
     procedure BuildList;
     function IsDuplicate(TestItem: TVirtualShellNewItem): Boolean;
     procedure StripDuplicates;
-    property Items[Index: Integer]: TVirtualShellNewItem read GetItems write PutItems; default;
+    property Items[Index: NativeInt]: TVirtualShellNewItem read GetItems write PutItems; default;
   end;
 
   TOnAddMenuItem = procedure(Sender: TPopupMenu; const NewMenuItem: TVirtualShellNewItem; var Allow: Boolean) of object;
@@ -608,12 +608,12 @@ begin
   end;
 end;
 
-function TVirtualShellNewItemList.GetItems(Index: Integer): TVirtualShellNewItem;
+function TVirtualShellNewItemList.GetItems(Index: NativeInt): TVirtualShellNewItem;
 begin
   Result := TVirtualShellNewItem(inherited Items[Index]);
 end;
 
-procedure TVirtualShellNewItemList.PutItems(Index: Integer;
+procedure TVirtualShellNewItemList.PutItems(Index: NativeInt;
   const Value: TVirtualShellNewItem);
 begin
   inherited Items[Index] := Value

@@ -86,7 +86,7 @@ implementation
 {$R *.dfm}
 
 uses
-  VirtualResources;
+  VirtualTrees.Types, VirtualResources;
 
 { TFormColumnSettings }
 
