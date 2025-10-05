@@ -625,7 +625,6 @@ function SpMakeThumbFromFileImageEn(Filename: string; OutBitmap: TBitmap;
 var
   AttachedIEBitmap: TIEBitmap;
   ImageEnIO: TImageEnIO;
-  ImageEnProc: TImageEnProc;
   TempBitmap: TBitmap;
   F: TVirtualFileStream;
   DestR: TRect;
@@ -640,30 +639,26 @@ begin
   if not Assigned(OutBitmap) then Exit;
   Ext := WideLowerCase(ExtractFileExt(Filename));
 
-  IsRaw := (ext = '.crw') or (ext = '.cr2') or (ext = '.dng')
-        or (ext = '.nef') or (ext = '.raw') or (ext = '.raf')
-        or (ext = '.x3f') or (ext = '.orf') or (ext = '.srf')
-        or (ext = '.mrw') or (ext = '.dcr') or (ext = '.bay')
-        or (ext = '.pef') or (ext = '.sr2') or (ext = '.arw')
-        or (ext = '.kdc') or (ext = '.mef') or (ext = '.3fr')
-        or (ext = '.k25') or (ext = '.erf') or (ext = '.cam')
-        or (ext = '.cs1') or (ext = '.dc2') or (ext = '.dcs')
-        or (ext = '.fff') or (ext = '.mdc') or (ext = '.mos')
-        or (ext = '.nrw') or (ext = '.ptx') or (ext = '.pxn')
-        or (ext = '.rdc') or (ext = '.rw2') or (ext = '.rwl')
-        or (ext = '.iiq') or (ext = '.srw');
+  IsRaw := (ext = '.crw') or (ext = '.cr2') or (ext = '.cr3') or (ext = '.dng')
+        or (ext = '.nef') or (ext = '.raw') or (ext = '.raf') or (ext = '.x3f')
+        or (ext = '.orf') or (ext = '.srf') or (ext = '.mrw') or (ext = '.dcr')
+        or (ext = '.bay') or (ext = '.pef') or (ext = '.sr2') or (ext = '.arw')
+        or (ext = '.kdc') or (ext = '.mef') or (ext = '.3fr') or (ext = '.k25')
+        or (ext = '.erf') or (ext = '.cam') or (ext = '.cs1') or (ext = '.dc2')
+        or (ext = '.dcs') or (ext = '.fff') or (ext = '.mdc') or (ext = '.mos')
+        or (ext = '.nrw') or (ext = '.ptx') or (ext = '.pxn') or (ext = '.rdc')
+        or (ext = '.rw2') or (ext = '.rwl') or (ext = '.iiq') or (ext = '.srw');
 
   IsVideo := (ext = '.avi') or (ext = '.mpg') or (ext = '.mpeg') or (ext = '.wmv');
 
   TempBitmap := TBitmap.Create;
   TempBitmap.Canvas.Lock;
   try
+    ImageEnIO := nil;
     AttachedIEBitmap := TIEBitmap.Create;
-    ImageEnIO := TImageEnIO.Create(nil);
-    ImageEnProc := TImageEnProc.Create(Nil);
     try
+      ImageEnIO := TImageEnIO.Create(nil);
       ImageEnIO.AttachedIEBitmap := AttachedIEBitmap;
-      ImageEnProc.AttachedIEBitmap := AttachedIEBitmap;
       ImageEnIO.Params.Width := ThumbW;
       ImageEnIO.Params.Height := ThumbH;
       ImageEnIO.Params.JPEG_Scale := ioJPEG_AUTOCALC;
@@ -695,12 +690,13 @@ begin
             ImageEnIO.Params.GetThumbnail := True;
             ImageEnIO.LoadFromStreamRAW(F);
             if ExifOrientation then
+            begin
               if (ext = '.crw') then
-                Orientation := GetCrwOrientation(F) // CRW doesn't have Exif, read the CIFF data
-              else
-                Orientation := ImageEnIO.Params.EXIF_Orientation;
-            if (Orientation = 6) or (Orientation = 8) then
-              IEAdjustEXIFOrientation(AttachedIEBitmap, Orientation);
+              begin
+                Orientation := GetCrwOrientation(F); // CRW doesn't have Exif, read the CIFF data
+                IEAdjustEXIFOrientation(AttachedIEBitmap, Orientation);
+              end;
+            end;
             ImageWidth := AttachedIEBitmap.Width;
             ImageHeight := AttachedIEBitmap.Height;
           end
@@ -727,7 +723,6 @@ begin
       end;
     finally
       ImageEnIO.Free;
-      ImageEnProc.Free;
       AttachedIEBitmap.Free;
     end;
     // Resize the thumb
