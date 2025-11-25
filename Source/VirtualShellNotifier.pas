@@ -39,29 +39,6 @@ const
   // Literal translations of TVirtualShellNotifyEvent type.  Useful when using the
   // OnShellNotify event to print out what event occured.  VirtualShellUtilities.pas
   // has a helper function ShellNotifyEventToStr that uses these.
-  SHELL_NOTIFY_EVENTS: array[0..19] of string = (
-    'Assocciation Changed',
-    'Attributes',
-    'Item Create',
-    'Item Delete',
-    'Drive Add',
-    'Drive Add GUI',
-    'Drive Removed',
-    'Free Space',
-    'Media Inserted',
-    'Media Removed',
-    'Make Directory',
-    'Network Share',
-    'Network Unshare',
-    'Folder Rename',
-    'Item Rename',
-    'Remove Directory',
-    'Server Disconnect',
-    'Update Directory',
-    'Update Image',
-    'Update Item'
-  );
-
 type
   // Ordered in a particular way to sort on ordinal
   TVirtualShellNotifyEvent = (
@@ -88,6 +65,32 @@ type
     vsneNone
   );
 
+const
+  SHELL_NOTIFY_EVENTS: array[TVirtualShellNotifyEvent] of string = (
+    'Folder Rename',
+    'Item Rename',
+    'Assocciation Changed',
+    'Attributes',
+    'Item Create',
+    'Item Delete',
+    'Drive Add',
+    'Drive Add GUI',
+    'Drive Removed',
+    'Free Space',
+    'Media Inserted',
+    'Media Removed',
+    'Make Directory',
+    'Network Share',
+    'Network Unshare',
+    'Remove Directory',
+    'Server Disconnect',
+    'Update Directory',
+    'Update Image',
+    'Update Item',
+    'None'
+  );
+
+type
   TVirtualKernelNotifyEvent = (
     vkneFileName,         // Trigger when File Name changes
     vkneDirName,          // Trigger when Dir Name changes
@@ -474,7 +477,7 @@ type
 
 
 
-function VirtualShellNotifyEventToStr(ShellNotifyEvent: TVirtualShellNotifyEvent): string;
+function VirtualShellNotifyEventToStr(const AShellNotifyEvent: TVirtualShellNotifyEvent): string;
 function FreeSpaceNotifyToDrive(dwWord: DWORD): WideChar;
 function ShellEventSort(Item1, Item2: Pointer): Integer;
 
@@ -531,30 +534,9 @@ begin
     Result := ' ';
 end;
 
-function VirtualShellNotifyEventToStr(ShellNotifyEvent: TVirtualShellNotifyEvent): string;
+function VirtualShellNotifyEventToStr(const AShellNotifyEvent: TVirtualShellNotifyEvent): string;
 begin
-  case ShellNotifyEvent of
-    vsneAssoccChanged: Result := SHELL_NOTIFY_EVENTS[0];
-    vsneAttributes: Result := SHELL_NOTIFY_EVENTS[1];
-    vsneCreate: Result := SHELL_NOTIFY_EVENTS[2];
-    vsneDelete: Result := SHELL_NOTIFY_EVENTS[3];
-    vsneDriveAdd: Result := SHELL_NOTIFY_EVENTS[4];
-    vsneDriveAddGUI: Result := SHELL_NOTIFY_EVENTS[5];
-    vsneDriveRemoved: Result := SHELL_NOTIFY_EVENTS[6];
-    vsneFreeSpace: Result := SHELL_NOTIFY_EVENTS[7];
-    vsneMediaInserted: Result := SHELL_NOTIFY_EVENTS[8];
-    vsneMediaRemoved: Result := SHELL_NOTIFY_EVENTS[9];
-    vsneMkDir: Result := SHELL_NOTIFY_EVENTS[10];
-    vsneNetShare: Result := SHELL_NOTIFY_EVENTS[11];
-    vsneNetUnShare: Result := SHELL_NOTIFY_EVENTS[12];
-    vsneRenameFolder: Result := SHELL_NOTIFY_EVENTS[13];
-    vsneRenameItem: Result := SHELL_NOTIFY_EVENTS[14];
-    vsneRmDir: Result := SHELL_NOTIFY_EVENTS[15];
-    vsneServerDisconnect: Result := SHELL_NOTIFY_EVENTS[16];
-    vsneUpdateDir: Result := SHELL_NOTIFY_EVENTS[17];
-    vsneUpdateImage: Result := SHELL_NOTIFY_EVENTS[18];
-    vsneUpdateItem: Result := SHELL_NOTIFY_EVENTS[19];
-  end
+  Result := SHELL_NOTIFY_EVENTS[AShellNotifyEvent];
 end;
 
 function ILIsEqual(PIDL1: PItemIDList; PIDL2: PItemIDList): LongBool;
@@ -1295,7 +1277,7 @@ begin
       begin
         ChangeControl.ShellChangeRegistered := True;
         // Notify the thread there is a change in the contol list;
-        ShellChangeThread.AddRef;     
+        ShellChangeThread.AddRef;
       end else
       begin
         // Had an error adding it to the list
@@ -2577,7 +2559,7 @@ begin
   // actions that kept pumping messages to the app
   Result := True;
   Exit;
-  
+
 
 //  // Does not work on floppy drives and such
 //  if Assigned(ParentShellFolder) then
