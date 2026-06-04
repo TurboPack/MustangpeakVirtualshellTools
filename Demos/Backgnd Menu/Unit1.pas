@@ -220,7 +220,7 @@ begin
   begin
     // The change notifier has not fired yet so add it ourselves
     // Don't forget to make a COPY of the PIDL as TNamespace takes over the PIDL
-    NewNS := TNamespace.Create( PIDLMgr.CopyPIDL(NS.AbsolutePIDL), nil);
+    NewNS := TNamespace.Create( TCommonPIDLManager.CopyPIDL(NS.AbsolutePIDL), nil);
     // Create the new item and don't let it resort automatically
     Item := VirtualExplorerEasyListview1.AddCustomItem(nil, NewNS, True);
   end;
@@ -238,7 +238,7 @@ begin
   begin
     // The change notifier has not fired yet so add it ourselves
     // Don't forget to make a COPY of the PIDL as TNamespace takes over the PIDL
-    NewNS := TNamespace.Create( PIDLMgr.CopyPIDL(NS.AbsolutePIDL), nil);
+    NewNS := TNamespace.Create( TCommonPIDLManager.CopyPIDL(NS.AbsolutePIDL), nil);
     // Create the new item and don't let it resort automatically
     Node := VirtualExplorerListview1.AddCustomNode(VirtualExplorerListview1.RootNode, NewNS, False);
   end;

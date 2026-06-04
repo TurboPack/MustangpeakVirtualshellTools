@@ -3159,7 +3159,7 @@ begin
   Result := nil;
   if ValidateNamespace(GetFirstSelected, NS) then
     if NS.FileSystem then
-      Result := PIDLMgr.CopyPIDL( NS.AbsolutePIDL)
+      Result := TCommonPIDLManager.CopyPIDL( NS.AbsolutePIDL)
 end;
 
 function TCustomVirtualExplorerTree.GetThreadedExpandMarkEnabled: Boolean;
@@ -3396,7 +3396,7 @@ begin
     if Assigned(PIDL) then
       Result := BrowseToByPIDL(PIDL, ExpandTarget, SelectTarget, SetFocusToVET, CollapseAllFirst);
   finally
-    PIDLMgr.FreePIDL(PIDL);
+    TCommonPIDLManager.FreePIDL(PIDL);
   end
 end;
 
@@ -3674,7 +3674,7 @@ var
 begin
   PIDL := PathToPIDL(TargetPath);
   Result := InternalCreateNewFolder(PIDL, '') <> '';
-  PIDLMgr.FreePIDL(PIDL);
+  TCommonPIDLManager.FreePIDL(PIDL);
 end;
 
 function TCustomVirtualExplorerTree.CreateNewFolder(TargetPath: string; var NewFolder: string): Boolean;
@@ -3683,7 +3683,7 @@ var
 begin
   PIDL := PathToPIDL(TargetPath);
   NewFolder := InternalCreateNewFolder(PIDL, '');
-  PIDLMgr.FreePIDL(PIDL);
+  TCommonPIDLManager.FreePIDL(PIDL);
   Result := NewFolder <> ''
 end;
 
@@ -3694,7 +3694,7 @@ var
 begin
   PIDL := PathToPIDL(TargetPath);
   NewFolder := InternalCreateNewFolder(PIDL, SuggestedFolderName);
-  PIDLMgr.FreePIDL(PIDL);
+  TCommonPIDLManager.FreePIDL(PIDL);
   Result := NewFolder <> ''
 end;
 
@@ -3850,8 +3850,7 @@ begin
   ThreadedExpandMarkEnabled := False;
   Clear; // Must be after threaded are killed
   // Support Halt( );
-  if Assigned(PIDLMgr) then
-    PIDLMgr.FreeAndNilPIDL(FRootFolderCustomPIDL);
+  TCommonPIDLManager.FreeAndNilPIDL(FRootFolderCustomPIDL);
   FreeAndNil(FRootFolderNamespace);
   FreeAndNil(FVETPersistent);
   FreeAndNil(FViewManager);
@@ -4308,7 +4307,7 @@ begin
             NS.ThreadIconLoading := True;
             Request := TShellIconThreadRequest.Create;
             Request.ID := TID_ICON;
-            Request.PIDL := PIDLMgr.CopyPIDL(NS.AbsolutePIDL);
+            Request.PIDL := TCommonPIDLManager.CopyPIDL(NS.AbsolutePIDL);
             Request.Window := Self;
             Request.Item := Node;
             Request.Large := toLargeImages in TreeOptions.VETImageOptions;
@@ -4595,7 +4594,7 @@ begin
           try
             lRequest.ID := TID_EXPANDMARK;
             lRequest.Window := Self;
-            lRequest.PIDL := PIDLMgr.CopyPIDL(lData.Namespace.AbsolutePIDL);
+            lRequest.PIDL := TCommonPIDLManager.CopyPIDL(lData.Namespace.AbsolutePIDL);
             lRequest.EnumFlags := BuildEnumFlags;
             lRequest.Priority := 1; // Icons are most important
             lRequest.Item := ANode;
@@ -4876,11 +4875,11 @@ begin
         // Update the storage with the new name
         if Assigned(StorageNode) then
         begin
-          PIDLMgr.FreeAndNilPIDL(StorageNode.FAbsolutePIDL);
+          TCommonPIDLManager.FreeAndNilPIDL(StorageNode.FAbsolutePIDL);
           StorageNode.FRelativePIDL := nil;;
           StorageNode.FShellFolder := nil;
-          StorageNode.FAbsolutePIDL := PIDLMgr.CopyPIDL(NS.AbsolutePIDL);
-          StorageNode.FRelativePIDL := PIDLMgr.GetPointerToLastID(StorageNode.AbsolutePIDL);
+          StorageNode.FAbsolutePIDL := TCommonPIDLManager.CopyPIDL(NS.AbsolutePIDL);
+          StorageNode.FRelativePIDL := TCommonPIDLManager.GetPointerToLastID(StorageNode.AbsolutePIDL);
         end;
         InvalidateNode(Node);
         inherited;
@@ -5428,7 +5427,7 @@ var
 begin
   PIDL := PathToPIDL(APath);
   Result := FindNodeByPIDL(PIDL);
-  PIDLMgr.FreePIDL(PIDL);
+  TCommonPIDLManager.FreePIDL(PIDL);
 end;
 
 function TCustomVirtualExplorerTree.FindNodeByPIDL(APIDL: PItemIDList): PVirtualNode;
@@ -5466,7 +5465,7 @@ var
 begin
   PIDL := PathToPIDL(APath);
   Result := ForceNodeByPIDL(PIDL, Expand);
-  PIDLMgr.FreePIDL(PIDL);
+  TCommonPIDLManager.FreePIDL(PIDL);
 end;
 
 function TCustomVirtualExplorerTree.ForceNodeByPIDL(APIDL: PItemIDList; Expand: Boolean;
@@ -5484,11 +5483,11 @@ var
 begin
   Result := True;
   FindData := PFindSpecialFolderByNameData(Data);
-  NS := TNamespace.Create(PIDLMgr.CopyPIDL(APIDL), AParent);
+  NS := TNamespace.Create(TCommonPIDLManager.CopyPIDL(APIDL), AParent);
   try
     Terminate := WideStrIComp(PWideChar(FindData.Name), PWideChar(NS.NameNormal)) = 0;
     if Terminate then
-      FindData.PIDL := PIDLMgr.CopyPIDL(NS.AbsolutePIDL);
+      FindData.PIDL := TCommonPIDLManager.CopyPIDL(NS.AbsolutePIDL);
   finally
     NS.Free
   end;
@@ -5720,14 +5719,14 @@ function TCustomVirtualExplorerTree.InternalCreateNewFolder(TargetPIDL: PItemIDL
          Parent.ShellFolder.EnumObjects(0, EnumFlags, EnumIDList);
            while not Found and (EnumIDList.Next(1, PIDL, Fetched) = NOERROR) do
            begin
-             ChildNS := TNamespace.Create(PIDLMgr.AppendPIDL(Parent.AbsolutePIDL, PIDL), nil);
+             ChildNS := TNamespace.Create(TCommonPIDLManager.AppendPIDL(Parent.AbsolutePIDL, PIDL), nil);
              if ChildName = ChildNS.NameForParsing then
              begin
-               Result := PIDLMgr.CopyPIDL(ChildNS.AbsolutePIDL);
+               Result := TCommonPIDLManager.CopyPIDL(ChildNS.AbsolutePIDL);
                Found := True;
              end;
              ChildNS.Free;
-             PIDLMgr.FreePIDL(PIDL);
+             TCommonPIDLManager.FreePIDL(PIDL);
            end;
        finally
          Wow64RedirectRevert(OldWow64)
@@ -5838,13 +5837,13 @@ begin
          // Kernel Notifier test very difficult for Listview
           Head := PIDL;
 
-          RootIDCount := PIDLMgr.IDCount(NS.AbsolutePIDL);
+          RootIDCount := TCommonPIDLManager.IDCount(NS.AbsolutePIDL);
           { The tree is not rooted off the desktop but off some sub-folder }
           { We know it is a child of the root PIDL from above so it is ok  }
           { to skip past that portion of the PIDL.                         }
           if RootIDCount > 0 then
             for i := 0 to RootIDCount - 1 do
-              Head := PIDLMgr.NextID(Head);
+              Head := TCommonPIDLManager.NextID(Head);
 
           { Walk to the next tree level }
           Child := Root.FirstChild;
@@ -6241,7 +6240,7 @@ begin
               if NewNodeData.Namespace <> FNamespace then
                 FreeAndNil(NewNodeData.Namespace);
               FNamespace.Free;
-              FNamespace := TNamespace.Create(PIDLMgr.CopyPIDL(FRootFolderNamespace.AbsolutePIDL), nil);
+              FNamespace := TNamespace.Create(TCommonPIDLManager.CopyPIDL(FRootFolderNamespace.AbsolutePIDL), nil);
               NewNodeData.Namespace := FNamespace;
               ExpandNamespaceFolder(RootNode);
             end
@@ -6554,7 +6553,7 @@ begin
           begin
             // Must be a new node, don't Inc j
             Allow := True;
-            NewNS := TNamespace.Create(PIDLMgr.CopyPIDL(PIDLArray[i]), NS);
+            NewNS := TNamespace.Create(TCommonPIDLManager.CopyPIDL(PIDLArray[i]), NS);
             // Need to make sure any additions are ok'ed by the application
             if Assigned(OnEnumFolder) then
               OnEnumFolder(Self, NewNS, Allow);
@@ -6583,7 +6582,7 @@ begin
         while i < PIDLArrayLen do
         begin
           Allow := True;
-          NewNS := TNamespace.Create(PIDLMgr.CopyPIDL(PIDLArray[i]), NS);
+          NewNS := TNamespace.Create(TCommonPIDLManager.CopyPIDL(PIDLArray[i]), NS);
           { Need to make sure any additions are ok'ed by the application }
           if Assigned(OnEnumFolder) then
             OnEnumFolder(Self, NewNS, Allow);
@@ -6609,7 +6608,7 @@ begin
         end;
 
         for i := 0 to Length(PIDLArray) - 1 do
-          PIDLMgr.FreePIDL(PIDLArray[i])
+          TCommonPIDLManager.FreePIDL(PIDLArray[i])
       finally
         EndUpdate
       end;
@@ -7084,7 +7083,7 @@ procedure TCustomVirtualExplorerTree.SetRootFolder(const Value: TRootFolder);
         rfTemplate: Result := CreateSpecialNamespace(CSIDL_TEMPLATES);
         rfWindows: Result := CreateSpecialNamespace(CSIDL_WINDOWS);
         rfCustom: Result := TNamespace.Create(PathToPIDL(RootFolderCustomPath), nil);
-        rfCustomPIDL: Result := TNamespace.Create(PIDLMgr.CopyPIDL(RootFolderCustomPIDL), nil);
+        rfCustomPIDL: Result := TNamespace.Create(TCommonPIDLManager.CopyPIDL(RootFolderCustomPIDL), nil);
       else
         Result := nil;
       end;
@@ -7113,7 +7112,7 @@ begin
         if not (Value = rfCustom) then
           FRootFolderCustomPath := '';
         if not (Value = rfCustomPIDL) then
-          PIDLMgr.FreeAndNilPIDL(FRootFolderCustomPIDL);
+          TCommonPIDLManager.FreeAndNilPIDL(FRootFolderCustomPIDL);
 
         try
         FreeAndNil(FRootFolderNamespace);
@@ -7188,7 +7187,7 @@ begin
   if Assigned(Value) then
   begin
     Allow := True;
-    TempRootNamespace := TNamespace.Create(PIDLMgr.CopyPIDL(Value), nil);
+    TempRootNamespace := TNamespace.Create(TCommonPIDLManager.CopyPIDL(Value), nil);
     try
       DoRootChanging(rfCustomPIDL, TempRootNamespace, Allow);
       if Allow then
@@ -7196,8 +7195,8 @@ begin
         TerminateEnumThread;
         if FRootFolderCustomPIDL <> Value then
         begin
-          PIDLMgr.FreeAndNilPIDL(FRootFolderCustomPIDL);
-          FRootFolderCustomPIDL := PIDLMgr.CopyPIDL(Value);
+          TCommonPIDLManager.FreeAndNilPIDL(FRootFolderCustomPIDL);
+          FRootFolderCustomPIDL := TCommonPIDLManager.CopyPIDL(Value);
           { TempRootNamespace will be used in RootFolder Setter }
           RootFolder := rfCustomPIDL
         end
@@ -7448,19 +7447,19 @@ begin
         { If the PIDL is not a child of the root node it is a hopeless attempt }
         if ILIsParent(NS.AbsolutePIDL, AnAbsolutePIDL, False) then
         begin
-          RootIDCount := PIDLMgr.IDCount(NS.AbsolutePIDL);
+          RootIDCount := TCommonPIDLManager.IDCount(NS.AbsolutePIDL);
           { The tree is not rooted off the desktop but off some sub-folder }
           { We know it is a child of the root PIDL from above so it is ok  }
           { to skip past that portion of the PIDL.                         }
           if RootIDCount > 0 then
             for i := 0 to RootIDCount - 1 do
-              Head := PIDLMgr.NextID(Head);
+              Head := TCommonPIDLManager.NextID(Head);
 
           { Head should now point to the PIDL that represents the root of the }
           { tree regardless of where in the namspace it is rooted from.       }
           while (Root <> nil) and not Done do
           begin
-            Tail := PIDLMgr.NextID(Head); { Temporarily trim the PIDL so it can be compared }
+            Tail := TCommonPIDLManager.NextID(Head); { Temporarily trim the PIDL so it can be compared }
             Oldcb := Tail.mkid.cb;
             Tail.mkid.cb := 0;
             Done := Oldcb = 0;           { cb = 0 terminates the PIDL so this the the last ItemID }
@@ -7493,7 +7492,7 @@ begin
             // Ignoring the checkbox stuff is ok as the app will fill it in when
             // VT calls OnInitNode
             if not Match and ILIsParent(NetworkNeighborhoodFolder.AbsolutePIDL, AnAbsolutePIDL, False) then
-              Child := AddCustomNode(Root, TNamespace.Create(PIDLMgr.CopyPIDL(AnAbsolutePIDL), nil), False);
+              Child := AddCustomNode(Root, TNamespace.Create(TCommonPIDLManager.CopyPIDL(AnAbsolutePIDL), nil), False);
             Root := Child; { Make the child node the new Root }
             Tail.mkid.cb := Oldcb;
             Head := Tail;
@@ -8145,10 +8144,10 @@ begin
   { TCommonPIDLLists know how to free the PIDL's automaticlly }
   SelectedPIDLs.Clear;
   LeafNodes.Clear;
-  PIDLMgr.FreePIDL(SelectedPIDLsParent);
-  PIDLMgr.FreeAndNilPIDL(FRootFolderCustomPIDL);
-  PIDLMgr.FreeAndNilPIDL(FFocusPIDL);
-  PIDLMgr.FreeAndNilPIDL(FTopNodePIDL);
+  TCommonPIDLManager.FreePIDL(SelectedPIDLsParent);
+  TCommonPIDLManager.FreeAndNilPIDL(FRootFolderCustomPIDL);
+  TCommonPIDLManager.FreeAndNilPIDL(FFocusPIDL);
+  TCommonPIDLManager.FreeAndNilPIDL(FTopNodePIDL);
   RootFolderCustomPath := '';
   Storage.Clear;
 end;
@@ -8167,13 +8166,10 @@ begin
   SelectedPIDLs.Free;
   LeafNodes.Free;
   // Support for Halt()
-  if Assigned(PIDLMgr) then
-  begin
-    PIDLMgr.FreePIDL(SelectedPIDLsParent);
-    PIDLMgr.FreeAndNilPIDL(FRootFolderCustomPIDL);
-    PIDLMgr.FreeAndNilPIDL(FFocusPIDL);
-    PIDLMgr.FreeAndNilPIDL(FTopNodePIDL);
-  end;
+  TCommonPIDLManager.FreePIDL(SelectedPIDLsParent);
+  TCommonPIDLManager.FreeAndNilPIDL(FRootFolderCustomPIDL);
+  TCommonPIDLManager.FreeAndNilPIDL(FFocusPIDL);
+  TCommonPIDLManager.FreeAndNilPIDL(FTopNodePIDL);
   Storage.Free;
   inherited;
 end;
@@ -8201,13 +8197,13 @@ begin
   inherited;
   { BaseLine Stream, always read }
   LeafNodes.LoadFromStream(S, Version, ReadVerFromStream);
-  PIDLMgr.FreePIDL(FSelectedPIDLsParent);
-  FSelectedPIDLsParent := PIDLMgr.LoadFromStream(S);
+  TCommonPIDLManager.FreePIDL(FSelectedPIDLsParent);
+  FSelectedPIDLsParent := TCommonPIDLManager.LoadFromStream(S);
   SelectedPIDLs.LoadFromStream(S);
-  PIDLMgr.FreePIDL(FRootFolderCustomPIDL);
-  FRootFolderCustomPIDL := PIDLMgr.LoadFromStream(S);
-  FTopNodePIDL := PIDLMgr.LoadFromStream(S);
-  FFocusPIDL := PIDLMgr.LoadFromStream(S);
+  TCommonPIDLManager.FreePIDL(FRootFolderCustomPIDL);
+  FRootFolderCustomPIDL := TCommonPIDLManager.LoadFromStream(S);
+  FTopNodePIDL := TCommonPIDLManager.LoadFromStream(S);
+  FFocusPIDL := TCommonPIDLManager.LoadFromStream(S);
   S.ReadBuffer(FRootFolder, SizeOf(RootFolder));
 
   // Bug fix. If the stream is earlier than version 3 read in the path the
@@ -8280,7 +8276,7 @@ begin
     begin
       if Assigned(SelectedPIDLsParent) then
       begin
-        if not PIDLMgr.IsDesktopFolder(SelectedPIDLsParent) then
+        if not TCommonPIDLManager.IsDesktopFolder(SelectedPIDLsParent) then
           Desktop.BindToObject(SelectedPIDLsParent, nil, IShellFolder, Pointer(Folder))
         else
           Folder := Desktop;
@@ -8337,7 +8333,7 @@ begin
       ExpandMarkThreadManager.FlushMessageCache(VET, TID_EXPANDMARK);
     VET.ClearSelection;
     VET.RootFolderCustomPath := RootFolderCustomPath;
-    VET.RootFolderCustomPIDL := PIDLMgr.CopyPIDL(RootFolderCustomPIDL);
+    VET.RootFolderCustomPIDL := TCommonPIDLManager.CopyPIDL(RootFolderCustomPIDL);
     { Custom Path or PIDL will implicitly set the RootFolder and trigger events }
     if (RootFolderCustomPath = '') and not Assigned(RootFolderCustomPIDL) then
       VET.RootFolder := RootFolder;
@@ -8388,11 +8384,11 @@ var
 begin
   inherited;
   LeafNodes.SaveToStream(S, Version, WriteVerToStream);
-  PIDLMgr.SaveToStream(S, FSelectedPIDLsParent);
+  TCommonPIDLManager.SaveToStream(S, FSelectedPIDLsParent);
   SelectedPIDLs.SaveToStream(S);
-  PIDLMgr.SaveToStream(S, FRootFolderCustomPIDL);
-  PIDLMgr.SaveToStream(S, TopNodePIDL);
-  PIDLMgr.SaveToStream(S, FocusPIDL);
+  TCommonPIDLManager.SaveToStream(S, FRootFolderCustomPIDL);
+  TCommonPIDLManager.SaveToStream(S, TopNodePIDL);
+  TCommonPIDLManager.SaveToStream(S, FocusPIDL);
   S.WriteBuffer(FRootFolder, SizeOf(RootFolder));
   Count := Length(RootFolderCustomPath);
   S.WriteBuffer(Count, SizeOf(Count));
@@ -8412,33 +8408,33 @@ begin
   begin
     FullInitTree(VET, True);
     try
-      PIDLMgr.FreeAndNilPIDL(FFocusPIDL);
-      PIDLMgr.FreeAndNilPIDL(FTopNodePIDL);
-      PIDLMgr.FreeAndNilPIDL(FRootFolderCustomPIDL);
+      TCommonPIDLManager.FreeAndNilPIDL(FFocusPIDL);
+      TCommonPIDLManager.FreeAndNilPIDL(FTopNodePIDL);
+      TCommonPIDLManager.FreeAndNilPIDL(FRootFolderCustomPIDL);
 
       // Save the top node
       if VET.ValidateNamespace(VET.TopNode, NS) then
       begin
         if NS.Valid then
-          FTopNodePIDL := PIDLMgr.CopyPIDL(NS.AbsolutePIDL)
+          FTopNodePIDL := TCommonPIDLManager.CopyPIDL(NS.AbsolutePIDL)
         else begin
           NextNode := VET.NextSelectedNode(VET.TopNode, False, ResultIsParent);
           if VET.ValidateNamespace(NextNode, NextNS) then
-            FTopNodePIDL := PIDLMgr.CopyPIDL(NextNS.AbsolutePIDL)
+            FTopNodePIDL := TCommonPIDLManager.CopyPIDL(NextNS.AbsolutePIDL)
         end
       end;
 
       // Save the focused node.  If the node is invalid then don't save anything
       if SaveFocus and VET.ValidateNamespace(VET.FocusedNode, NS) then
         if NS.Valid then
-          FocusPIDL := PIDLMgr.CopyPIDL(NS.AbsolutePIDL);
+          FocusPIDL := TCommonPIDLManager.CopyPIDL(NS.AbsolutePIDL);
 
       if toHideRootFolder in VET.TreeOptions.VETFolderOptions then
         SaveTreeBranch(VET, VET.RootNode, SaveSelection)
       else
         SaveTreeBranch(VET, VET.GetFirst, SaveSelection);
 
-      FRootFolderCustomPIDL := PIDLMgr.CopyPIDL(VET.RootFolderCustomPIDL);
+      FRootFolderCustomPIDL := TCommonPIDLManager.CopyPIDL(VET.RootFolderCustomPIDL);
       FRootFolder := VET.RootFolder;
       FRootFolderCustomPath := VET.RootFolderCustomPath;
     finally
@@ -8516,14 +8512,14 @@ var
   NS: TNamespace;
 begin
   SelectedPIDLs.Clear;
-  PIDLMgr.FreeAndNilPIDL(FSelectedPIDLsParent);
+  TCommonPIDLManager.FreeAndNilPIDL(FSelectedPIDLsParent);
   SelNode := VET.GetFirstSelected;
 
   if VET.ValidateNamespace(SelNode, NS) then
   begin
     // We make the assumption the parent is valid even if the child is not
     if not NS.IsDesktop then
-      FSelectedPIDLsParent := PIDLMgr.StripLastID(PIDLMgr.CopyPIDL(NS.AbsolutePIDL))
+      FSelectedPIDLsParent := TCommonPIDLManager.StripLastID(TCommonPIDLManager.CopyPIDL(NS.AbsolutePIDL))
     else
       FSelectedPIDLsParent := nil
   end;
@@ -8811,7 +8807,7 @@ begin
   Leaf := TLeafNode.Create;
   if Assigned(Leaf) then
   begin
-    Leaf.PIDL := PIDLMgr.CopyPIDL(LeafPIDL);
+    Leaf.PIDL := TCommonPIDLManager.CopyPIDL(LeafPIDL);
     Leaf.Expanded := IsExpanded;
     Leaf.Owner := Self;
     Add(Leaf);
@@ -8876,7 +8872,7 @@ begin
   inherited;
   { Baseline Stream format PersistentVersion_0}
   S.ReadBuffer(FExpanded, SizeOf(FExpanded));
-  FPIDL := PIDLMgr.LoadFromStream(S);
+  FPIDL := TCommonPIDLManager.LoadFromStream(S);
   { Add new stream data here }
   { if StreamVersion >= PersistentVersion_0 then }
   {   read new data                              }
@@ -8887,7 +8883,7 @@ begin
   inherited;
   { No conditional statement needed, always write the stream in the latest format }
   S.WriteBuffer(FExpanded, SizeOf(FExpanded));
-  PIDLMgr.SaveToStream(S, PIDL);
+  TCommonPIDLManager.SaveToStream(S, PIDL);
 end;
 
 { TColumnManager }
@@ -9707,13 +9703,13 @@ begin
         P := APIDL;
 
       // Don't change the rootfolder if it's not necessary
-      if not PIDLMgr.EqualPIDL(FRootFolderCustomPIDL, P) then
+      if not TCommonPIDLManager.EqualPIDL(FRootFolderCustomPIDL, P) then
       begin
         OldPIDL := FRootFolderCustomPIDL;
         FRootFolderCustomPIDL := nil;
         RootFolderCustomPIDL := P;
         if Assigned(RootFolderCustomPIDL) then
-          PIDLMgr.FreeAndNilPIDL(OldPIDL)
+          TCommonPIDLManager.FreeAndNilPIDL(OldPIDL)
         else
           FRootFolderCustomPIDL := OldPIDL;
       end;
@@ -9738,11 +9734,11 @@ begin
   if ValidateNamespace(GetFirstSelected, NS) then
     if NS.Folder then
     begin
-      PIDL := PIDLMgr.CopyPIDL(NS.AbsolutePIDL);
+      PIDL := TCommonPIDLManager.CopyPIDL(NS.AbsolutePIDL);
       try
         Result := BrowseToByPIDL(PIDL, False, False, False, False)
       finally
-        PIDLMgr.FreePIDL(PIDL);
+        TCommonPIDLManager.FreePIDL(PIDL);
       end;
     end
 end;
@@ -9755,12 +9751,12 @@ begin
   begin
     if not FRootFolderNamespace.IsDesktop then
     begin
-      PIDL := PIDLMgr.CopyPIDL(FRootFolderNamespace.AbsolutePIDL);
+      PIDL := TCommonPIDLManager.CopyPIDL(FRootFolderNamespace.AbsolutePIDL);
       try
-        PIDLMgr.StripLastID(PIDL);
+        TCommonPIDLManager.StripLastID(PIDL);
         BrowseToByPIDL(PIDL, False, False, False, False)
       finally
-        PIDLMgr.FreePIDL(PIDL);
+        TCommonPIDLManager.FreePIDL(PIDL);
       end
     end
   end;
@@ -10630,15 +10626,15 @@ begin
     if (Source is TRootNodeStorage) and (Self is TRootNodeStorage) then
       TRootNodeStorage(Self).Stored := TRootNodeStorage( Source).Stored;
 
-    PIDLMgr.FreePIDL(AbsolutePIDL);
+    TCommonPIDLManager.FreePIDL(AbsolutePIDL);
     FreeAndNil(FChildNodeList);
     AbsolutePIDL := nil;
     AbsolutePIDL := nil;
     FShellFolder := nil;
     ParentNode := nil;
 
-    AbsolutePIDL := PIDLMgr.CopyPIDL(Source.AbsolutePIDL);
-    RelativePIDL := PIDLMgr.GetPointerToLastID(AbsolutePIDL);
+    AbsolutePIDL := TCommonPIDLManager.CopyPIDL(Source.AbsolutePIDL);
+    RelativePIDL := TCommonPIDLManager.GetPointerToLastID(AbsolutePIDL);
     if Assigned(Source.ChildNodeList) then
     begin
       ChildNodeList := TNodeStorageList.Create;
@@ -10672,8 +10668,7 @@ end;
 procedure TNodeStorage.Clear(FreeUserData: Boolean = False);
 begin
   // Support for Halt()
-  if Assigned(PIDLMgr) then
-    PIDLMgr.FreePIDL(AbsolutePIDL);
+  TCommonPIDLManager.FreePIDL(AbsolutePIDL);
   AbsolutePIDL := nil;
   RelativePIDL := nil;
   FShellFolder := nil;
@@ -10686,7 +10681,7 @@ end;
 constructor TNodeStorage.Create(AnAbsolutePIDL: PItemIDList; AnOwnerNode: TNodeStorage);
 begin
   AbsolutePIDL := AnAbsolutePIDL;
-  RelativePIDL := PIDLMgr.GetPointerToLastID(AbsolutePIDL);
+  RelativePIDL := TCommonPIDLManager.GetPointerToLastID(AbsolutePIDL);
   ParentNode := AnOwnerNode;
   Inc(NodeCount);
 end;
@@ -10753,9 +10748,9 @@ var
   UserClass: TPersistentClass;
 begin
   inherited LoadFromStream(S, Version, ReadVerFromStream);
-  PIDLMgr.FreePIDL(AbsolutePIDL);
-  FAbsolutePIDL := PIDLMgr.LoadFromStream(S);
-  FRelativePIDL := PIDLMgr.GetPointerToLastID(AbsolutePIDL);
+  TCommonPIDLManager.FreePIDL(AbsolutePIDL);
+  FAbsolutePIDL := TCommonPIDLManager.LoadFromStream(S);
+  FRelativePIDL := TCommonPIDLManager.GetPointerToLastID(AbsolutePIDL);
 
   S.read(ChildNodes, SizeOf(ChildNodes));
   if ChildNodes then
@@ -10844,7 +10839,7 @@ var
   Str: AnsiString;
 begin
   inherited;
-  PIDLMgr.SaveToStream(S, FAbsolutePIDL);
+  TCommonPIDLManager.SaveToStream(S, FAbsolutePIDL);
 
   ChildNodes := Assigned(ChildNodeList);
   S.write(ChildNodes, SizeOf(ChildNodes));
@@ -10940,10 +10935,10 @@ begin
     Node := TNodeStorage.Create(nil, nil);
     Node.LoadFromStream(S, Version, ReadVerFromStream);
     Exists := True;
-    if not PIDLMgr.IsDesktopFolder(Node.AbsolutePIDL) then
+    if not TCommonPIDLManager.IsDesktopFolder(Node.AbsolutePIDL) then
     begin
       { Flush out objects that no longer exist }
-      PIDLMgr.StripLastID(Node.AbsolutePIDL, OldCB, OldPIDL);
+      TCommonPIDLManager.StripLastID(Node.AbsolutePIDL, OldCB, OldPIDL);
       try
 
         { Node is direct decendant of desktop, special case }
@@ -11196,7 +11191,7 @@ begin
     if Force then
     begin
       { Yes force it, create a new node }
-      NewNode := TNodeStorage.Create(PIDLMgr.AppendPIDL(CurrentNode.AbsolutePIDL, RelativePIDL), CurrentNode);
+      NewNode := TNodeStorage.Create(TCommonPIDLManager.AppendPIDL(CurrentNode.AbsolutePIDL, RelativePIDL), CurrentNode);
       if MarkCheckMixed and (Storage.Check.CheckType = ctTriStateCheckBox) then
       begin
         { These are intermediate levels so they will be checked as mixed }
@@ -11261,7 +11256,7 @@ begin
         lStorage.Storage.Check.CheckState := csCheckedNormal;
         lStorage.Storage.Check.CheckType := ctTriStateCheckBox;
       end;
-      PIDLMgr.FreePIDL(lPIDL);
+      TCommonPIDLManager.FreePIDL(lPIDL);
     end;
   end;
 end;
@@ -11282,7 +11277,7 @@ begin
       lStorage.Storage.Check.CheckType := ACheckBoxType;
       Result := True;
     end;
-    PIDLMgr.FreePIDL(lPIDL);
+    TCommonPIDLManager.FreePIDL(lPIDL);
   end
 end;
 
@@ -11319,7 +11314,7 @@ var
   CurrentNode: TNodeStorage;
 begin
   Result := nil;
-  if PIDLMgr.IsDesktopFolder(PIDL) then
+  if TCommonPIDLManager.IsDesktopFolder(PIDL) then
     Result := Self
   else
   begin
@@ -11327,7 +11322,7 @@ begin
     if Assigned(CacheNode) then
     begin
       { Strip off the last ID }
-      Tail := PIDLMgr.GetPointerToLastID(PIDL);
+      Tail := TCommonPIDLManager.GetPointerToLastID(PIDL);
       OldCB := Tail.mkid.cb;
       Tail.mkid.cb := 0;
       try
@@ -11510,7 +11505,7 @@ begin
 
         PopupExplorerDropDown.SelectOnDropDown := vcboSelectPathOnDropDown in Options;
         if Assigned(EditNamespace) then
-          PopupExplorerDropDown.TargetPIDL := PIDLMgr.CopyPIDL(EditNamespace.AbsolutePIDL)
+          PopupExplorerDropDown.TargetPIDL := TCommonPIDLManager.CopyPIDL(EditNamespace.AbsolutePIDL)
         else
           PopupExplorerDropDown.TargetPIDL := nil;
 
@@ -12604,7 +12599,7 @@ begin
       end;
     end
     else
-      PIDLMgr.FreeAndNilPIDL(lPIDL);
+      TCommonPIDLManager.FreeAndNilPIDL(lPIDL);
   end;
 end;
 
@@ -13134,8 +13129,7 @@ end;
 destructor TPopupExplorerDropDown.Destroy;
 begin
   // Support Halt( );
-  if Assigned(PIDLMgr) then
-    PIDLMgr.FreeAndNilPIDL(FTargetPIDL);
+  TCommonPIDLManager.FreeAndNilPIDL(FTargetPIDL);
   inherited;
 end;
 
@@ -13143,7 +13137,7 @@ procedure TPopupExplorerDropDown.DoRollUp(Selected: Boolean);
 var
   NS: TNamespace;
 begin
-  PIDLMgr.FreeAndNilPIDL(FTargetPIDL);
+  TCommonPIDLManager.FreeAndNilPIDL(FTargetPIDL);
   if Selected then
   begin
     if PopupExplorerTree.ValidateNamespace(PopupExplorerTree.GetFirstSelected, NS) then
@@ -14444,11 +14438,11 @@ begin
   if AllowAsChild then
   begin
     if Assigned(PopupExplorerDropDown) and Assigned(PopupExplorerDropDown.TargetPIDL) then
-      AllowAsChild := (PIDLMgr.IDCount(Namespace.AbsolutePIDL) < 3) or
-        PIDLMgr.IsSubPIDL(PopupExplorerDropDown.TargetPIDL, Namespace.AbsolutePIDL) or
+      AllowAsChild := (TCommonPIDLManager.IDCount(Namespace.AbsolutePIDL) < 3) or
+        TCommonPIDLManager.IsSubPIDL(PopupExplorerDropDown.TargetPIDL, Namespace.AbsolutePIDL) or
         (PopupExplorerDropDown.ComboBoxStyle = cbsVETEnhanced)
     else
-      AllowAsChild := (PIDLMgr.IDCount(Namespace.AbsolutePIDL) < 3) or
+      AllowAsChild := (TCommonPIDLManager.IDCount(Namespace.AbsolutePIDL) < 3) or
         (PopupExplorerDropDown.ComboBoxStyle = cbsVETEnhanced)
   end
 end;
@@ -15419,7 +15413,7 @@ constructor TVirtualBackGndEnumThread.Create(Suspended: Boolean; ForceHideRecycl
 begin
   inherited Create(Suspended);
   // Given to the Namespace from within the thread context
-  ParentPIDL := PIDLMgr.CopyPIDL(AParentPIDL);
+  ParentPIDL := TCommonPIDLManager.CopyPIDL(AParentPIDL);
   FileObject := AFileObjects;
   ValidateFileObjects(FFileObjects);
   List := TCommonPIDLList.Create;
@@ -15435,7 +15429,7 @@ end;
 destructor TVirtualBackGndEnumThread.Destroy;
 begin
   BkGndEnumThreadList.Remove(Self);
-  PIDLMgr.FreePIDL(FParentPIDL);
+  TCommonPIDLManager.FreePIDL(FParentPIDL);
   FreeAndNil(FList);
   inherited Destroy;
 end;

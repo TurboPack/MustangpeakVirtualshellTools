@@ -43,8 +43,8 @@ var
 begin
   Result := nil;
   if Assigned(NS) and (not NS.IsDesktop) then begin
-    PIDL := PIDLMgr.CopyPIDL(NS.AbsolutePIDL);
-    PIDLMgr.StripLastID(PIDL);
+    PIDL := TCommonPIDLManager.CopyPIDL(NS.AbsolutePIDL);
+    TCommonPIDLManager.StripLastID(PIDL);
     Result := TNamespace.Create(PIDL, nil);
     Result.FreePIDLOnDestroy := True; // TNamespace will destroy the PIDL
   end;

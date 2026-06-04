@@ -113,7 +113,7 @@ const
 type
   IVirtualChangeNotifier = interface(IUnknown)
   ['{7F1E9F93-87C2-49E1-8AD5-F5A2E057122C}']
-    procedure AddEvent(ShellNotifyEvent: TVirtualShellNotifyEvent; PIDL1, PIDL2: PItemIdList; APIDLMgr: TCommonPIDLManager);
+    procedure AddEvent(ShellNotifyEvent: TVirtualShellNotifyEvent; PIDL1, PIDL2: PItemIdList);
     function GetFilterEvents: Boolean;
     function GetMapVirtualFolders: Boolean;
     procedure LockNotifier;
@@ -270,9 +270,9 @@ type
     procedure FindRecycleFolders;
     function IsInRecycleBinFolder(PIDL: PItemIDList): Boolean;
     function IsRedundant(ShellNotifyEvent: TVirtualShellNotifyEvent; PIDL1, PIDL2: PItemIDList; DoubleWord1, DoubleWord2: LongWord): Boolean;
-    procedure ReduceCreateDeleteEvents(ShellNotifyEvent: TVirtualShellNotifyEvent; PIDL1, PIDL2: PItemIdList; APIDLMgr: TCommonPIDLManager);
-    procedure ReduceRenameEvents(ShellNotifyEvent: TVirtualShellNotifyEvent; PIDL1, PIDL2: PItemIdList; APIDLMgr: TCommonPIDLManager);
-    function ReduceRecycleBinEvent(ShellNotifyEvent: TVirtualShellNotifyEvent; PIDL1, PIDL2: PItemIdList; APIDLMgr: TCommonPIDLManager): Boolean;
+    procedure ReduceCreateDeleteEvents(ShellNotifyEvent: TVirtualShellNotifyEvent; PIDL1, PIDL2: PItemIdList);
+    procedure ReduceRenameEvents(ShellNotifyEvent: TVirtualShellNotifyEvent; PIDL1, PIDL2: PItemIdList);
+    function ReduceRecycleBinEvent(ShellNotifyEvent: TVirtualShellNotifyEvent; PIDL1, PIDL2: PItemIdList): Boolean;
 
     property RecycleFolderPIDLs: TList read FRecycleFolderPIDLs write FRecycleFolderPIDLs;
   public
@@ -280,8 +280,8 @@ type
     destructor Destroy; override;
 
     procedure AddEvent(AShellEvent: TVirtualShellEvent); overload;
-    procedure AddEvent(ShellNotifyEvent: TVirtualShellNotifyEvent; PIDL1, PIDL2: PItemIdList; APIDLMgr: TCommonPIDLManager; InvalidNamespace: Boolean); overload;
-    procedure AddEvent(ShellNotifyEvent: TVirtualShellNotifyEvent; PIDL1, PIDL2: PItemIdList; DoubleWord1, DoubleWord2: LongWord; APIDLMgr: TCommonPIDLManager; InvalidNamespace: Boolean); overload;
+    procedure AddEvent(ShellNotifyEvent: TVirtualShellNotifyEvent; PIDL1, PIDL2: PItemIdList; InvalidNamespace: Boolean); overload;
+    procedure AddEvent(ShellNotifyEvent: TVirtualShellNotifyEvent; PIDL1, PIDL2: PItemIdList; DoubleWord1, DoubleWord2: LongWord; InvalidNamespace: Boolean); overload;
     procedure TriggerEvent;
     property AddingEvents: Boolean read FAddingEvents write FAddingEvents;
     property AddLock: TRTLCriticalSection read FAddLock write FAddLock;
@@ -298,7 +298,6 @@ type
   TVirtualShellChangeThread = class(TCommonThread)
   private
     FChangeNotifyHandle: THandle;
-    FThreadPIDLMgr: TCommonPIDLManager;
     FMyDocsDeskPIDL: PItemIDList;
     FMyDocsPIDL: PItemIDList;
     FMapVirtualFolders: Boolean;
@@ -321,7 +320,6 @@ type
     property MyDocsDeskPIDL: PItemIDList read FMyDocsDeskPIDL write FMyDocsDeskPIDL;
     property MyDocsPIDL: PItemIDList read FMyDocsPIDL write FMyDocsPIDL;
     property NotifyWndProcStub: ICallbackStub read FNotifyWndProcStub write FNotifyWndProcStub;
-    property ThreadPIDLMgr: TCommonPIDLManager read FThreadPIDLMgr write FThreadPIDLMgr;
   public
     constructor Create(CreateSuspended: Boolean; AChangeNotifier: TVirtualChangeNotifier); reintroduce; virtual;
     destructor Destroy; override;
@@ -343,7 +341,7 @@ type
   protected
     function ChangeInSpecialFolder(PIDL: PItemIDList): Integer;
     procedure Execute; override;
-    function GenerateVirtualFolderPathPIDL(PhysicalPIDL: PItemIdList; RegisteredSpecialFolderIndex: Integer; APIDLMgr: TCommonPIDLManager): PItemIDList;
+    function GenerateVirtualFolderPathPIDL(PhysicalPIDL: PItemIdList; RegisteredSpecialFolderIndex: Integer): PItemIDList;
     function PathToPIDL(const APath: string): PItemIDList;
 
     property SpecialFolderVirtualPIDLs: TCommonPIDLList read FSpecialFolderVirtualPIDLs write FSpecialFolderVirtualPIDLs;
@@ -389,7 +387,6 @@ type
     FChangeDispatchThread: TVirtualChangeDispatchThread;
     FListener: HWND;
     FSpecialFolderRegisterLock: TRTLCriticalSection;
-    FPIDLMgr: TCommonPIDLManager;
     FListenerWndProcStub: Pointer;
     FIDCounter: Cardinal;
     function GetIDCounter: Cardinal;
@@ -415,7 +412,6 @@ type
     property Listener: hWnd read FListener write FListener;
     property ListenerWndProcStub: Pointer read FListenerWndProcStub write FListenerWndProcStub;
     property KernelChangeThread: TVirtualKernelChangeThread read GetKernelChangeThread;
-    property PIDLMgr: TCommonPIDLManager read FPIDLMgr write FPIDLMgr;
     property ShellChangeThread: TVirtualShellChangeThread read GetShellChangeThread;
     property SpecialFolderRegisterLock: TRTLCriticalSection read FSpecialFolderRegisterLock write FSpecialFolderRegisterLock;
 
@@ -423,7 +419,7 @@ type
     constructor Create;
     destructor Destroy; override;
 
-    procedure AddEvent(ShellNotifyEvent: TVirtualShellNotifyEvent; PIDL1, PIDL2: PItemIdList; APIDLMgr: TCommonPIDLManager);
+    procedure AddEvent(ShellNotifyEvent: TVirtualShellNotifyEvent; PIDL1, PIDL2: PItemIdList);
     procedure LockNotifier;
     function NotifyWatchFolder(Control: TWinControl; WatchFolder: string): Boolean;
     procedure PostShellNotifyEvent(NotifyType: LPARAM; PIDL1, PIDL2: PItemIDList);
@@ -746,9 +742,9 @@ end;
 
 
 procedure TVirtualChangeNotifier.AddEvent(
-  ShellNotifyEvent: TVirtualShellNotifyEvent; PIDL1, PIDL2: PItemIdList; APIDLMgr: TCommonPIDLManager);
+  ShellNotifyEvent: TVirtualShellNotifyEvent; PIDL1, PIDL2: PItemIdList);
 begin
-  ChangeDispatchThread.AddEvent(ShellNotifyEvent, PIDL1, PIDL2, APIDLMgr, False)
+  ChangeDispatchThread.AddEvent(ShellNotifyEvent, PIDL1, PIDL2, False)
 end;
 
 procedure TVirtualChangeNotifier.CheckForAutoRelease;
@@ -779,7 +775,6 @@ begin
   ControlList := TThreadList.Create;
   Listener := Classes.AllocateHWnd(ListenerWndProc);
   InitializeCriticalSection(FSpecialFolderRegisterLock);
-  PIDLMgr := TCommonPIDLManager.Create;
 end;
 
 destructor TVirtualChangeNotifier.Destroy;
@@ -795,7 +790,6 @@ begin
     Classes.DeallocateHWnd(FListener);
   inherited;
   DeleteCriticalSection(FSpecialFolderRegisterLock);
-  PIDLMgr.Free;
 end;
 
 function TVirtualChangeNotifier.FindControlIndex(const Control: TVirtualChangeControl): integer;
@@ -1106,8 +1100,8 @@ begin
   if Assigned(FShellChangeThread) then
   begin
     New(SNR);
-    SNR.PIDL1 := PIDLMgr.CopyPIDL(PIDL1);
-    SNR.PIDL2 := PIDLMgr.CopyPIDL(PIDL2);
+    SNR.PIDL1 := TCommonPIDLManager.CopyPIDL(PIDL1);
+    SNR.PIDL2 := TCommonPIDLManager.CopyPIDL(PIDL2);
     PostMessage(FShellChangeThread.NotifyWindowHandle, WM_CHANGENOTIFY_CUSTOM, WPARAM(SNR), NotifyType);
   end
 end;
@@ -1178,7 +1172,6 @@ var
   DeskPIDL, ParentPIDL, PIDL: PItemIDList;
   WS: string;
   Desktop, Folder, DeskFolder: IShellFolder;
-  PIDLMgr: TCommonPIDLManager;
   StrRet: TStrRet;
 begin
   Assert(KernelChangeThread.RefCount > 0, S_KERNELSPECIALFOLDERWATCH);
@@ -1188,15 +1181,14 @@ begin
     SHGetSpecialFolderLocation(0, SpecialFolder, PIDL);
     if Assigned(PIDL) then
     begin
-      PIDLMgr := TCommonPIDLManager.Create;
       SHGetDesktopFolder(Desktop);
-      if PIDLMgr.IDCount(PIDL) < 2 then
+      if TCommonPIDLManager.IDCount(PIDL) < 2 then
         Folder := Desktop
       else begin
         SHGetDesktopFolder(Desktop);
-        ParentPIDL := PIDLMgr.StripLastID(PIDLMgr.CopyPIDL(PIDL));
+        ParentPIDL := TCommonPIDLManager.StripLastID(TCommonPIDLManager.CopyPIDL(PIDL));
         Desktop.BindToObject(ParentPIDL, nil, IID_IShellFolder, Pointer(Folder));
-        PIDLMgr.FreePIDL(ParentPIDL);
+        TCommonPIDLManager.FreePIDL(ParentPIDL);
       end;
       if Assigned(Folder) then
       begin
@@ -1205,16 +1197,16 @@ begin
           // Virtual Desktop on NT4 and Win95 does not return the path with
           // SHGDN_FORPARSING for the virtual desktop
           SHGetSpecialFolderLocation(0, CSIDL_DESKTOPDIRECTORY, DeskPIDL);
-          ParentPIDL := PIDLMgr.StripLastID(PIDLMgr.CopyPIDL(DeskPIDL));
+          ParentPIDL := TCommonPIDLManager.StripLastID(TCommonPIDLManager.CopyPIDL(DeskPIDL));
           Desktop.BindToObject(ParentPIDL, nil, IID_IShellFolder, Pointer(DeskFolder));
-          PIDLMgr.FreePIDL(ParentPIDL);
-          DeskFolder.GetDisplayNameOf(PIDLMgr.GetPointerToLastID(DeskPIDL), SHGDN_FORPARSING, StrRet);
-          WS := StrRetToStr(StrRet, PIDLMgr.GetPointerToLastID(DeskPIDL));
-          PIDLMgr.FreePIDL(DeskPIDL)
+          TCommonPIDLManager.FreePIDL(ParentPIDL);
+          DeskFolder.GetDisplayNameOf(TCommonPIDLManager.GetPointerToLastID(DeskPIDL), SHGDN_FORPARSING, StrRet);
+          WS := StrRetToStr(StrRet, TCommonPIDLManager.GetPointerToLastID(DeskPIDL));
+          TCommonPIDLManager.FreePIDL(DeskPIDL)
         end else
         begin
-          Folder.GetDisplayNameOf(PIDLMgr.GetPointerToLastID(PIDL), SHGDN_FORPARSING, StrRet);
-          WS := StrRetToStr(StrRet, PIDLMgr.GetPointerToLastID(PIDL));
+          Folder.GetDisplayNameOf(TCommonPIDLManager.GetPointerToLastID(PIDL), SHGDN_FORPARSING, StrRet);
+          WS := StrRetToStr(StrRet, TCommonPIDLManager.GetPointerToLastID(PIDL));
         end;
         KernelChangeThread.SpecialFolderPhysicalPath.Add(WS);
         KernelChangeThread.SpecialFolderPhysicalPIDL.Add(KernelChangeThread.PathToPIDL(WS));
@@ -1226,15 +1218,14 @@ begin
         if SpecialFolder = CSIDL_PERSONAL then
         begin
           KernelChangeThread.SpecialFolderVirtualPIDLs.Add(GetMyDocumentsVirtualFolder);
-          PIDLMgr.FreePIDL(PIDL);
+          TCommonPIDLManager.FreePIDL(PIDL);
         end else
         begin
           KernelChangeThread.SpecialFolderVirtualPIDLs.Add(nil);
-          PIDLMgr.FreePIDL(PIDL);
+          TCommonPIDLManager.FreePIDL(PIDL);
         end;
         KernelChangeThread.TriggerEvent;
       end;
-      PIDLMgr.Free;
     end
   finally
     LeaveCriticalSection(FSpecialFolderRegisterLock);
@@ -1564,7 +1555,7 @@ type
     end
   end;
 
-  function RebuildWatchNotify(var RegisteredCount: Integer; APIDLMgr: TCommonPIDLManager): TKernelWatchRec;
+  function RebuildWatchNotify(var RegisteredCount: Integer): TKernelWatchRec;
   const
     Special = FILE_NOTIFY_CHANGE_FILE_NAME or FILE_NOTIFY_CHANGE_DIR_NAME or FILE_NOTIFY_CHANGE_ATTRIBUTES or
       FILE_NOTIFY_CHANGE_SIZE or FILE_NOTIFY_CHANGE_LAST_WRITE;
@@ -1654,101 +1645,93 @@ var
   Malloc: IMalloc;
   Index: Integer;
   VPIDL, PIDL: PItemIDList;
-  LocalPIDLMgr: TCommonPIDLManager;
   InvalidNamespace: Boolean;
 begin
   // MUST be created in context of thread since the PIDL manager retrives an
   // IMalloc interface and we can't use interfaces across threads without
   // marshalling
-  LocalPIDLMgr := TCommonPIDLManager.Create;
+  SHGetMalloc(Malloc);
+  while not Terminated do
   try
-    SHGetMalloc(Malloc);
-    while not Terminated do
-    try
-      // Reset Flags
-      RunLoop := True;
-      ResetEvent(KernelChangeEvent);
+    // Reset Flags
+    RunLoop := True;
+    ResetEvent(KernelChangeEvent);
 
-      WatchArray := RebuildWatchNotify(RegisteredCount, LocalPIDLMgr);
+    WatchArray := RebuildWatchNotify(RegisteredCount);
 
-      if RegisteredCount > 0 then
+    if RegisteredCount > 0 then
+    begin
+      while RunLoop and not Terminated do
       begin
-        while RunLoop and not Terminated do
+        WaitIndex := WaitForMultipleObjects(Length(WatchArray.Handles),
+          PWOHandleArray(@WatchArray.Handles[0]), False, INFINITE);
+        if not Terminated then
         begin
-          WaitIndex := WaitForMultipleObjects(Length(WatchArray.Handles),
-            PWOHandleArray(@WatchArray.Handles[0]), False, INFINITE);
-          if not Terminated then
+          InvalidNamespace := False;
+          // As long as it is not the Event trigging the Wait keep looping waiting for change notifications
+          if WaitIndex - WAIT_OBJECT_0 > 0 then
           begin
-            InvalidNamespace := False;
-            // As long as it is not the Event trigging the Wait keep looping waiting for change notifications
-            if WaitIndex - WAIT_OBJECT_0 > 0 then
+            if Assigned(WatchArray.Controls[WaitIndex]) then
             begin
-              if Assigned(WatchArray.Controls[WaitIndex]) then
-              begin
-                // The control has not registered for Shell notifications (see RebuildWatchNotify).
-                // It will receive a WM_FOLDERCHANGENOTIFY message without further processing
-                if WatchArray.Controls[WaitIndex].HandleAllocated then
-                  PostMessage(WatchArray.Controls[WaitIndex].Handle, WM_FOLDERCHANGENOTIFY, 0, 0);
-              end
-              else
-              begin
-                PIDL := LocalPIDLMgr.CopyPIDL(WatchArray.NSs[WaitIndex].AbsolutePIDL);
-                if not WatchArray.NSs[WaitIndex].Valid then
-                  InvalidNamespace := True;
+              // The control has not registered for Shell notifications (see RebuildWatchNotify).
+              // It will receive a WM_FOLDERCHANGENOTIFY message without further processing
+              if WatchArray.Controls[WaitIndex].HandleAllocated then
+                PostMessage(WatchArray.Controls[WaitIndex].Handle, WM_FOLDERCHANGENOTIFY, 0, 0);
+            end
+            else
+            begin
+              PIDL := TCommonPIDLManager.CopyPIDL(WatchArray.NSs[WaitIndex].AbsolutePIDL);
+              if not WatchArray.NSs[WaitIndex].Valid then
+                InvalidNamespace := True;
 
-                ChangeNotifier.ChangeDispatchThread.AddEvent(vsneUpdateDir, PIDL, PIDL, LocalPIDLMgr, InvalidNamespace);
+              ChangeNotifier.ChangeDispatchThread.AddEvent(vsneUpdateDir, PIDL, PIDL, InvalidNamespace);
 
-                // Generate PIDLs rooted from the Virtual Namespace as well and dispatch them.
-                Index := ChangeInSpecialFolder(PIDL);
-                if Index > -1 then
+              // Generate PIDLs rooted from the Virtual Namespace as well and dispatch them.
+              Index := ChangeInSpecialFolder(PIDL);
+              if Index > -1 then
+              begin
+                VPIDL := GenerateVirtualFolderPathPIDL(PIDL, Index);
+                if Assigned(VPIDL) then
                 begin
-                  VPIDL := GenerateVirtualFolderPathPIDL(PIDL, Index, LocalPIDLMgr);
-                  if Assigned(VPIDL) then
-                  begin
-                    ChangeNotifier.ChangeDispatchThread.AddEvent(vsneUpdateDir, VPIDL, VPIDL, LocalPIDLMgr, InvalidNamespace);
-                    LocalPIDLMgr.FreeAndNilPIDL(VPIDL);
-                  end
-                end;
-                LocalPIDLMgr.FreeAndNilPIDL(PIDL);
-                {$IFDEF VIRTUALNOTIFYDEBUG}
-                NotifyDebug.KernelEvents  := NotifyDebug.KernelEvents + 1;
-                {$ENDIF}
+                  ChangeNotifier.ChangeDispatchThread.AddEvent(vsneUpdateDir, VPIDL, VPIDL, InvalidNamespace);
+                  TCommonPIDLManager.FreeAndNilPIDL(VPIDL);
+                end
               end;
+              TCommonPIDLManager.FreeAndNilPIDL(PIDL);
+              {$IFDEF VIRTUALNOTIFYDEBUG}
+              NotifyDebug.KernelEvents  := NotifyDebug.KernelEvents + 1;
+              {$ENDIF}
+            end;
 
-              if InvalidNamespace then
-                RemoveEventFromWatchArray(WatchArray, WaitIndex)
-              else
-                FindNextChangeNotification(WatchArray.Handles[WaitIndex]);
-            end else
-              RunLoop := False
+            if InvalidNamespace then
+              RemoveEventFromWatchArray(WatchArray, WaitIndex)
+            else
+              FindNextChangeNotification(WatchArray.Handles[WaitIndex]);
           end else
             RunLoop := False
-        end;
+        end else
+          RunLoop := False
+      end;
 
-        // Free all the notification handles
-        for i := 1 to Length(WatchArray.Handles) - 1 do
-        begin
-          FindCloseChangeNotification(WatchArray.Handles[i]);
-          WatchArray.NSs[i].Free
-        end;
+      // Free all the notification handles
+      for i := 1 to Length(WatchArray.Handles) - 1 do
+      begin
+        FindCloseChangeNotification(WatchArray.Handles[i]);
+        WatchArray.NSs[i].Free
+      end;
 
-        // Keep the Event handle
-        SetLength(WatchArray.Handles, 1);
-        SetLength(WatchArray.NSs, 1);
-        SetLength(WatchArray.Controls, 1);
-      end
-    except
-      // catch all exceptions
-    end;
-  finally
-    LocalPIDLMgr.Free;
-    Malloc := nil;
-  end
+      // Keep the Event handle
+      SetLength(WatchArray.Handles, 1);
+      SetLength(WatchArray.NSs, 1);
+      SetLength(WatchArray.Controls, 1);
+    end
+  except
+    // catch all exceptions
+  end;
 end;
 
 function TVirtualKernelChangeThread.GenerateVirtualFolderPathPIDL(
-  PhysicalPIDL: PItemIdList; RegisteredSpecialFolderIndex: Integer;
-  APIDLMgr: TCommonPIDLManager): PItemIDList;
+  PhysicalPIDL: PItemIdList; RegisteredSpecialFolderIndex: Integer): PItemIDList;
 //
 // This MUST be called from within a FSpecialFolderRegisterLock section. Currently
 // it is called from the RebuildWatchNotify local function in the Exectute method
@@ -1768,14 +1751,14 @@ begin
     begin
       i := 0;
       PIDL := PhysicalPIDL;
-      Root := APIDLMgr.IDCount(SpecialFolderPhysicalPIDL[RegisteredSpecialFolderIndex]);
+      Root := TCommonPIDLManager.IDCount(SpecialFolderPhysicalPIDL[RegisteredSpecialFolderIndex]);
       while Assigned(PIDL) and (i < Root) do
       begin
-        PIDL := APIDLMgr.NextID(PIDL);
+        PIDL := TCommonPIDLManager.NextID(PIDL);
         Inc(i)
       end;
       if Assigned(PIDL) then
-        Result := APIDLMgr.AppendPIDL(SpecialFolderVirtualPIDLs[RegisteredSpecialFolderIndex], PIDL)
+        Result := TCommonPIDLManager.AppendPIDL(SpecialFolderVirtualPIDLs[RegisteredSpecialFolderIndex], PIDL)
     end
   end
 end;
@@ -1858,7 +1841,6 @@ procedure TVirtualShellChangeThread.Execute;
 var
   Msg: TMsg;
 begin
-  ThreadPIDLMgr := TCommonPIDLManager.Create;
   // Win9x does not send Shell Notifies to the My Document folder
   if Win32Platform = VER_PLATFORM_WIN32_WINDOWS then
   begin
@@ -1890,9 +1872,8 @@ begin
   finally
     UnRegisterChangeNotify;
     DestroyNotifyWindow;
-    ThreadPIDLMgr.FreePIDL(FMyDocsDeskPIDL);
-    ThreadPIDLMgr.FreePIDL(FMyDocsPIDL);
-    ThreadPIDLMgr.Free;
+    TCommonPIDLManager.FreePIDL(FMyDocsDeskPIDL);
+    TCommonPIDLManager.FreePIDL(FMyDocsPIDL);
   end
 end;
 
@@ -1904,66 +1885,66 @@ function TVirtualShellChangeThread.NotifyWndProc(Wnd: HWND; Msg: UINT; wParam: W
         case Event of
           SHCNE_ASSOCCHANGED:
             ChangeNotifier.ChangeDispatchThread.AddEvent(
-              vsneAssoccChanged, SNR.PIDL1, SNR.PIDL2, W1, W2, ThreadPIDLMgr, False);
+              vsneAssoccChanged, SNR.PIDL1, SNR.PIDL2, W1, W2, False);
           SHCNE_ATTRIBUTES:
             ChangeNotifier.ChangeDispatchThread.AddEvent(
-              vsneAttributes, SNR.PIDL1, SNR.PIDL2, W1, W2, ThreadPIDLMgr, False);
+              vsneAttributes, SNR.PIDL1, SNR.PIDL2, W1, W2, False);
           SHCNE_CREATE:
             ChangeNotifier.ChangeDispatchThread.AddEvent(
-              vsneCreate, SNR.PIDL1, SNR.PIDL2, W1, W2, ThreadPIDLMgr, False);
+              vsneCreate, SNR.PIDL1, SNR.PIDL2, W1, W2, False);
           SHCNE_DELETE:
             ChangeNotifier.ChangeDispatchThread.AddEvent(
-              vsneDelete, SNR.PIDL1, SNR.PIDL2, W1, W2, ThreadPIDLMgr, False);
+              vsneDelete, SNR.PIDL1, SNR.PIDL2, W1, W2, False);
           SHCNE_DRIVEADD:
             ChangeNotifier.ChangeDispatchThread.AddEvent(
-              vsneDriveAdd, SNR.PIDL1, SNR.PIDL2, W1, W2, ThreadPIDLMgr, False);
+              vsneDriveAdd, SNR.PIDL1, SNR.PIDL2, W1, W2, False);
           SHCNE_DRIVEADDGUI:
             ChangeNotifier.ChangeDispatchThread.AddEvent(
-              vsneDriveAddGUI, SNR.PIDL1, SNR.PIDL2, W1, W2, ThreadPIDLMgr, False);
+              vsneDriveAddGUI, SNR.PIDL1, SNR.PIDL2, W1, W2, False);
           SHCNE_DRIVEREMOVED:
             ChangeNotifier.ChangeDispatchThread.AddEvent(
-              vsneDriveRemoved, SNR.PIDL1, SNR.PIDL2, W1, W2, ThreadPIDLMgr, False);
+              vsneDriveRemoved, SNR.PIDL1, SNR.PIDL2, W1, W2, False);
           SHCNE_FREESPACE:
             ChangeNotifier.ChangeDispatchThread.AddEvent(
               vsneFreeSpace, nil, nil, PDWordItemID(SNR.PIDL1).dwItem1,
-                PDWordItemID(SNR.PIDL1).dwItem2, ThreadPIDLMgr, False);
+                PDWordItemID(SNR.PIDL1).dwItem2, False);
           SHCNE_MEDIAINSERTED:
             ChangeNotifier.ChangeDispatchThread.AddEvent(
-              vsneMediaInserted, SNR.PIDL1, SNR.PIDL2, W1, W2, ThreadPIDLMgr, False);
+              vsneMediaInserted, SNR.PIDL1, SNR.PIDL2, W1, W2, False);
           SHCNE_MEDIAREMOVED:
             ChangeNotifier.ChangeDispatchThread.AddEvent(
-              vsneMediaRemoved, SNR.PIDL1, SNR.PIDL2, W1, W2, ThreadPIDLMgr, False);
+              vsneMediaRemoved, SNR.PIDL1, SNR.PIDL2, W1, W2, False);
           SHCNE_MKDIR:
             ChangeNotifier.ChangeDispatchThread.AddEvent(
-              vsneMkDir, SNR.PIDL1, SNR.PIDL2, W1, W2, ThreadPIDLMgr, False);
+              vsneMkDir, SNR.PIDL1, SNR.PIDL2, W1, W2, False);
           SHCNE_NETSHARE:
             ChangeNotifier.ChangeDispatchThread.AddEvent(
-              vsneNetShare, SNR.PIDL1, SNR.PIDL2, W1, W2, ThreadPIDLMgr, False);
+              vsneNetShare, SNR.PIDL1, SNR.PIDL2, W1, W2, False);
           SHCNE_NETUNSHARE:
             ChangeNotifier.ChangeDispatchThread.AddEvent(
-              vsneNetUnShare, SNR.PIDL1, SNR.PIDL2, W1, W2, ThreadPIDLMgr, False);
+              vsneNetUnShare, SNR.PIDL1, SNR.PIDL2, W1, W2, False);
           SHCNE_RENAMEFOLDER:
             ChangeNotifier.ChangeDispatchThread.AddEvent(
-              vsneRenameFolder, SNR.PIDL1, SNR.PIDL2, W1, W2, ThreadPIDLMgr, False);
+              vsneRenameFolder, SNR.PIDL1, SNR.PIDL2, W1, W2, False);
           SHCNE_RENAMEITEM:
             ChangeNotifier.ChangeDispatchThread.AddEvent(
-              vsneRenameItem, SNR.PIDL1, SNR.PIDL2, W1, W2, ThreadPIDLMgr, False);
+              vsneRenameItem, SNR.PIDL1, SNR.PIDL2, W1, W2, False);
           SHCNE_RMDIR:
             ChangeNotifier.ChangeDispatchThread.AddEvent(
-              vsneRmDir, SNR.PIDL1, SNR.PIDL2, W1, W2, ThreadPIDLMgr, False);
+              vsneRmDir, SNR.PIDL1, SNR.PIDL2, W1, W2, False);
           SHCNE_SERVERDISCONNECT:
             ChangeNotifier.ChangeDispatchThread.AddEvent(
-              vsneServerDisconnect, SNR.PIDL1, SNR.PIDL2, W1, W2, ThreadPIDLMgr, False);
+              vsneServerDisconnect, SNR.PIDL1, SNR.PIDL2, W1, W2, False);
           SHCNE_UPDATEDIR:
             ChangeNotifier.ChangeDispatchThread.AddEvent(
-              vsneUpdateDir, SNR.PIDL1, SNR.PIDL2, W1, W2, ThreadPIDLMgr, False);
+              vsneUpdateDir, SNR.PIDL1, SNR.PIDL2, W1, W2, False);
           SHCNE_UPDATEIMAGE:
             ChangeNotifier.ChangeDispatchThread.AddEvent(
               vsneUpdateImage, nil, nil, PDWordItemID(SNR.PIDL1).dwItem1,
-                PDWordItemID(SNR.PIDL1).dwItem2, ThreadPIDLMgr, False);
+                PDWordItemID(SNR.PIDL1).dwItem2, False);
           SHCNE_UPDATEITEM:
             ChangeNotifier.ChangeDispatchThread.AddEvent(
-              vsneUpdateItem, SNR.PIDL1, SNR.PIDL2, W1, W2, ThreadPIDLMgr, False);
+              vsneUpdateItem, SNR.PIDL1, SNR.PIDL2, W1, W2, False);
         end;
       end;
 
@@ -2007,31 +1988,31 @@ begin
           begin
             OwnP1 := False;
             OwnP2 := False;
-            i := ThreadPIDLMgr.IDCount(MyDocsPIDL);
+            i := TCommonPIDLManager.IDCount(MyDocsPIDL);
             Rec := PShellNotifyRec(wParam)^;
             if ILIsParent(MyDocsPIDL, PShellNotifyRec(wParam).PIDL1, False) then
             begin
               PIDL := PShellNotifyRec(wParam).PIDL1;
               for j := 0 to i - 1 do
-                PIDL := ThreadPIDLMgr.NextID(PIDL);
-              Rec.PIDL1 := ThreadPIDLMgr.AppendPIDL(MyDocsDeskPIDL, PIDL);
+                PIDL := TCommonPIDLManager.NextID(PIDL);
+              Rec.PIDL1 := TCommonPIDLManager.AppendPIDL(MyDocsDeskPIDL, PIDL);
               OwnP1 := True;
             end;
             if ILIsParent(MyDocsPIDL, PShellNotifyRec(wParam).PIDL2, False) then
             begin
               PIDL := PShellNotifyRec(wParam).PIDL2;
               for j := 0 to i - 1 do
-                PIDL := ThreadPIDLMgr.NextID(PIDL);
-              Rec.PIDL2 := ThreadPIDLMgr.AppendPIDL(MyDocsDeskPIDL, PIDL);
+                PIDL := TCommonPIDLManager.NextID(PIDL);
+              Rec.PIDL2 := TCommonPIDLManager.AppendPIDL(MyDocsDeskPIDL, PIDL);
               OwnP2 := True;
             end;
             if OwnP1 or OwnP2 then
             begin
               AddEventToList(lParam, @Rec, 0, 0);
               if OwnP1 then
-                ThreadPIDLMgr.FreePIDL(Rec.PIDL1);
+                TCommonPIDLManager.FreePIDL(Rec.PIDL1);
               if OwnP2 then
-                ThreadPIDLMgr.FreePIDL(Rec.PIDL2);
+                TCommonPIDLManager.FreePIDL(Rec.PIDL2);
             end
           end
         end;
@@ -2109,9 +2090,9 @@ end;
 
 procedure TVirtualChangeDispatchThread.AddEvent(
   ShellNotifyEvent: TVirtualShellNotifyEvent; PIDL1, PIDL2: PItemIdList;
-  APIDLMgr: TCommonPIDLManager; InvalidNamespace: Boolean);
+  InvalidNamespace: Boolean);
 begin
-  AddEvent(ShellNotifyEvent, PIDL1, PIDL2, 0, 0, APIDLMgr, InvalidNamespace);
+  AddEvent(ShellNotifyEvent, PIDL1, PIDL2, 0, 0, InvalidNamespace);
 
   EnterCriticalSection(FAddLock);
   try
@@ -2123,8 +2104,7 @@ end;
 
 procedure TVirtualChangeDispatchThread.AddEvent(
   ShellNotifyEvent: TVirtualShellNotifyEvent; PIDL1, PIDL2: PItemIdList;
-  DoubleWord1, DoubleWord2: LongWord; APIDLMgr: TCommonPIDLManager;
-  InvalidNamespace: Boolean);
+  DoubleWord1, DoubleWord2: LongWord; InvalidNamespace: Boolean);
 var
   Handled: Boolean;
 begin
@@ -2135,17 +2115,17 @@ begin
     // to be reduced to a single event for multiple operation, i.e. deleting 10,000
     // files.  The last thing we want is 10,000 tree refreshes.
     if ShellNotifyEvent in [vsneRenameFolder, vsneRenameItem] then
-      ReduceRenameEvents(ShellNotifyEvent, PIDL1, PIDL2, APIDLMgr)
+      ReduceRenameEvents(ShellNotifyEvent, PIDL1, PIDL2)
     else
     if ShellNotifyEvent in [vsneCreate, vsneDelete, vsneMkDir, vsneRmDir] then
-      ReduceCreateDeleteEvents(ShellNotifyEvent, PIDL1, PIDL2, APIDLMgr)
+      ReduceCreateDeleteEvents(ShellNotifyEvent, PIDL1, PIDL2)
     else begin
       Handled := False;
       // NT4 sends a lot of UpdateItems in the RecycleBin. Normally we let these pass
       // through untouched but in the case of Updates in the Recycle Bin we need to
       // filter them.
       if ShellNotifyEvent in [vsneUpdateDir] then
-        Handled := ReduceRecycleBinEvent(ShellNotifyEvent, PIDL1, PIDL2, APIDLMgr);
+        Handled := ReduceRecycleBinEvent(ShellNotifyEvent, PIDL1, PIDL2);
       // UpdateItem events in the recycle bin cause more events, endlessly....
       if not Handled and (ShellNotifyEvent in [vsneUpdateItem]) then
         Handled := IsInRecycleBinFolder(PIDL1);
@@ -2202,65 +2182,59 @@ var
   i: integer;
   DoneAdding: Boolean;
   WList, List: TList;
-  LocalPIDLMgr: TCommonPIDLManager;
 begin
   // MUST be created in context of thread since the PIDL manager retrives an
   // IMalloc interface and we can't use interfaces across threads without
   // marshalling
-  LocalPIDLMgr := TCommonPIDLManager.Create;
+  FindRecycleFolders;
+  while not Terminated do
   try
-    FindRecycleFolders;
-    while not Terminated do
-    try
-      WaitForSingleObject(WorkerChangeEvent, INFINITE);
-      if not Terminated then
+    WaitForSingleObject(WorkerChangeEvent, INFINITE);
+    if not Terminated then
+    begin
+      // Let the threads pile up as many events as possible without a noticeable delay
+
+      DoneAdding := False;
+      // Update when no more items are being added or a reasonable amount of time has elapsed
+      while not DoneAdding do
       begin
-        // Let the threads pile up as many events as possible without a noticeable delay
-
-        DoneAdding := False;
-        // Update when no more items are being added or a reasonable amount of time has elapsed
-        while not DoneAdding do
-        begin
-          Sleep(VirtualShellNotifyRefreshRate);
-          EnterCriticalSection(FAddLock);
-          try
-            DoneAdding := not AddingEvents;
-            AddingEvents := False;
-
-            // for debugging
-            //DoneAdding := True;
-          finally
-            LeaveCriticalSection(FAddLock);
-          end;
-        end;
-
-        WList := WorkingList.LockList;
+        Sleep(VirtualShellNotifyRefreshRate);
+        EnterCriticalSection(FAddLock);
         try
-          // Reset ourselves, by doing this in the locked list we ensure we don't
-          // miss an event since no more can be added while the list is locked
-          ResetEvent(WorkerChangeEvent);
+          DoneAdding := not AddingEvents;
+          AddingEvents := False;
 
-          TempList := TVirtualShellEventList.Create;
-          List := TempList.LockList;
-          try
-            List.Capacity := WList.Count;
-            for i := 0 to WList.Count - 1 do
-              List.Add(WList[i]);
-          finally
-            TempList.UnlockList
-          end;
-          WList.Clear;
+          // for debugging
+          //DoneAdding := True;
         finally
-          WorkingList.UnlockList
+          LeaveCriticalSection(FAddLock);
         end;
-        TempList.FRefCount := 1;
-        PostMessage(ChangeNotifier.Listener, WM_SHELLNOTIFY, WPARAM(TempList), 0)
-      end
-    except
-      // trap all exceptions
+      end;
+
+      WList := WorkingList.LockList;
+      try
+        // Reset ourselves, by doing this in the locked list we ensure we don't
+        // miss an event since no more can be added while the list is locked
+        ResetEvent(WorkerChangeEvent);
+
+        TempList := TVirtualShellEventList.Create;
+        List := TempList.LockList;
+        try
+          List.Capacity := WList.Count;
+          for i := 0 to WList.Count - 1 do
+            List.Add(WList[i]);
+        finally
+          TempList.UnlockList
+        end;
+        WList.Clear;
+      finally
+        WorkingList.UnlockList
+      end;
+      TempList.FRefCount := 1;
+      PostMessage(ChangeNotifier.Listener, WM_SHELLNOTIFY, WPARAM(TempList), 0)
     end
-  finally
-    LocalPIDLMgr.Free;
+  except
+    // trap all exceptions
   end
 end;
 
@@ -2381,7 +2355,7 @@ begin
 end;
 
 procedure TVirtualChangeDispatchThread.ReduceCreateDeleteEvents(
-  ShellNotifyEvent: TVirtualShellNotifyEvent; PIDL1, PIDL2: PItemIdList; APIDLMgr: TCommonPIDLManager);
+  ShellNotifyEvent: TVirtualShellNotifyEvent; PIDL1, PIDL2: PItemIdList);
 
 // Careful this assumes that ShellNotifyEvent is a Delete/Create event.
 
@@ -2390,18 +2364,18 @@ var
 begin
   // Make copies of the PIDLs then strip them back to their parent folders
   // We can't write to the PIDL's sent by the SHChangeNotifier subsystem
-  PIDL := APIDLMgr.StripLastID(APIDLMgr.CopyPIDL(PIDL1));
+  PIDL := TCommonPIDLManager.StripLastID(TCommonPIDLManager.CopyPIDL(PIDL1));
   try
     // Add an UpdateDir of the parent folder
-    AddEvent(vsneUpdateDir, PIDL, nil, APIDLMgr, False)
+    AddEvent(vsneUpdateDir, PIDL, nil, False)
   finally
-    APIDLMgr.FreePIDL(PIDL);
+    TCommonPIDLManager.FreePIDL(PIDL);
   end
 end;
 
 function TVirtualChangeDispatchThread.ReduceRecycleBinEvent(
   ShellNotifyEvent: TVirtualShellNotifyEvent; PIDL1,
-  PIDL2: PItemIdList; APIDLMgr: TCommonPIDLManager): Boolean;
+  PIDL2: PItemIdList): Boolean;
 var
   i: Integer;
 begin
@@ -2417,10 +2391,10 @@ begin
       if not IsRedundant(vsneUpdateDir, RecycleFolderPIDLs[i], nil, 0, 0) then
       begin
         // If it is unique then add it to the list
-        AddEvent(TVirtualShellEvent.Create(vsneUpdateDir, APIDLMgr.CopyPIDL(RecycleFolderPIDLs[i]), nil, 0, 0, False));
+        AddEvent(TVirtualShellEvent.Create(vsneUpdateDir, TCommonPIDLManager.CopyPIDL(RecycleFolderPIDLs[i]), nil, 0, 0, False));
         // Now generate a Virtual RecycleBin event if necessary
         if not IsRedundant(vsneUpdateDir, RecycleFolderPIDLs[0], nil, 0, 0) then
-          AddEvent(TVirtualShellEvent.Create(vsneUpdateDir, APIDLMgr.CopyPIDL(RecycleFolderPIDLs[0]), nil, 0, 0, False));
+          AddEvent(TVirtualShellEvent.Create(vsneUpdateDir, TCommonPIDLManager.CopyPIDL(RecycleFolderPIDLs[0]), nil, 0, 0, False));
         Result := True
       end
     end;
@@ -2429,8 +2403,7 @@ begin
 end;
 
 procedure TVirtualChangeDispatchThread.ReduceRenameEvents(
-  ShellNotifyEvent: TVirtualShellNotifyEvent; PIDL1, PIDL2: PItemIdList;
-  APIDLMgr: TCommonPIDLManager);
+  ShellNotifyEvent: TVirtualShellNotifyEvent; PIDL1, PIDL2: PItemIdList);
 
 // Careful this assumes that ShellNotifyEvent is a Rename event.
 
@@ -2439,8 +2412,8 @@ var
 begin
   // Make copies of the PIDLs then strip them back to their parent folders
   // We can't write to the PIDL's sent by the SHChangeNotifier subsystem
-  NewPIDL1 := APIDLMgr.StripLastID(APIDLMgr.CopyPIDL(PIDL1));
-  NewPIDL2 := APIDLMgr.StripLastID(APIDLMgr.CopyPIDL(PIDL2));
+  NewPIDL1 := TCommonPIDLManager.StripLastID(TCommonPIDLManager.CopyPIDL(PIDL1));
+  NewPIDL2 := TCommonPIDLManager.StripLastID(TCommonPIDLManager.CopyPIDL(PIDL2));
   try
     // Are the parents are the same so it is only a rename of a file or folder?
 
@@ -2450,12 +2423,12 @@ begin
  //     AddEvent(vsneUpdateDir, NewPIDL1, nil, APIDLMgr, False)
     else begin
       // Nope it is a move so must update both folders
-      AddEvent(vsneUpdateDir, NewPIDL1, nil, APIDLMgr, False);
-      AddEvent(vsneUpdateDir, NewPIDL2, nil, APIDLMgr, False);
+      AddEvent(vsneUpdateDir, NewPIDL1, nil, False);
+      AddEvent(vsneUpdateDir, NewPIDL2, nil, False);
     end;
   finally
-    APIDLMgr.FreePIDL(NewPIDL1);
-    APIDLMgr.FreePIDL(NewPIDL2);
+    TCommonPIDLManager.FreePIDL(NewPIDL1);
+    TCommonPIDLManager.FreePIDL(NewPIDL2);
   end
 end;
 
@@ -2515,38 +2488,28 @@ end;
 { TChangeNamespaceArray}
 constructor TChangeNamespace.Create(AnAbsolutePIDL: PItemIDList);
 var
-  PIDLMgr: TCommonPIDLManager;
   Desktop: IShellFolder;
   PIDL: PItemIDList;
 begin
   inherited Create;
-  PIDLMgr := TCommonPIDLManager.Create;
-  try
-    FAbsolutePIDL := PIDLMgr.CopyPIDL(AnAbsolutePIDL);
-    FRelativePIDL := PIDLMgr.GetPointerToLastID(FAbsolutePIDL);
-    if SHGetDesktopFolder(Desktop) = S_OK then
-    begin
-      if PIDLMgr.IDCount(FAbsolutePIDL) = 1 then
-        FParentShellFolder := Desktop
-      else begin
-        PIDL := PIDLMgr.CopyPIDL(FAbsolutePIDL);
-        PIDL := PIDLMgr.StripLastID(PIDL);
-        Desktop.BindToObject(PIDL, nil, IShellFolder, Pointer(FParentShellFolder));
-        PIDLMgr.FreePIDL(PIDL);
-      end
+  FAbsolutePIDL := TCommonPIDLManager.CopyPIDL(AnAbsolutePIDL);
+  FRelativePIDL := TCommonPIDLManager.GetPointerToLastID(FAbsolutePIDL);
+  if SHGetDesktopFolder(Desktop) = S_OK then
+  begin
+    if TCommonPIDLManager.IDCount(FAbsolutePIDL) = 1 then
+      FParentShellFolder := Desktop
+    else begin
+      PIDL := TCommonPIDLManager.CopyPIDL(FAbsolutePIDL);
+      PIDL := TCommonPIDLManager.StripLastID(PIDL);
+      Desktop.BindToObject(PIDL, nil, IShellFolder, Pointer(FParentShellFolder));
+      TCommonPIDLManager.FreePIDL(PIDL);
     end
-  finally
-    PIDLMgr.Free
   end
 end;
 
 destructor TChangeNamespace.Destroy;
-var
-  PIDLMgr: TCommonPIDLManager;
 begin
-  PIDLMgr := TCommonPIDLManager.Create;
-  PIDLMgr.FreePIDL(FAbsolutePIDL);
-  PIDLMgr.Free;
+  TCommonPIDLManager.FreePIDL(FAbsolutePIDL);
   inherited Destroy;
 end;
 

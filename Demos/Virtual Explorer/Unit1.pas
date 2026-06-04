@@ -89,8 +89,8 @@ var
 begin
   ParsedName.Clear;
   NormalName.Clear;
-  TempPIDL := PIDLMgr.CopyPIDL(PIDL);
-  if PIDLMgr.IsDesktopFolder(PIDL) then
+  TempPIDL := TCommonPIDLManager.CopyPIDL(PIDL);
+  if TCommonPIDLManager.IsDesktopFolder(PIDL) then
   begin
     NS := TNamespace.Create(PIDL, nil);
     NS.FreePIDLOnDestroy := False;
@@ -98,16 +98,16 @@ begin
     NormalName.Add(NS.NameNormal);
     NS.Free;
   end else
-    for i := 0 to PIDLMgr.IDCount(TempPIDL) - 1 do
+    for i := 0 to TCommonPIDLManager.IDCount(TempPIDL) - 1 do
     begin
       NS := TNamespace.Create(TempPIDL, nil);
       NS.FreePIDLOnDestroy := False;
       ParsedName.Add(NS.NameForParsing);
       NormalName.Add(NS.NameNormal);
       NS.Free;
-      PIDLMgr.StripLastID(TempPIDL);
+      TCommonPIDLManager.StripLastID(TempPIDL);
     end;
-  PIDLMgr.FreePIDL(TempPIDL)
+  TCommonPIDLManager.FreePIDL(TempPIDL)
 end;
 
 procedure TForm1.VirtualExplorerListview1Change(Sender: TBaseVirtualTree;
@@ -140,7 +140,7 @@ var
 begin
   PopupMenu := nil;
   if (Sender as TVirtualExplorerListview).ValidateNamespace(Sender.RootNode, NS) then
-    if DirectoryExists(NS.NameParseAddress) or (PIDLMgr.IsDesktopFolder(NS.AbsolutePIDL)) then
+    if DirectoryExists(NS.NameParseAddress) or (TCommonPIDLManager.IsDesktopFolder(NS.AbsolutePIDL)) then
       PopupMenu := VirtualShellNewMenu1;
 end;
 

@@ -367,6 +367,9 @@ var
 
 implementation
 
+uses
+  MPCommonObjects;
+
 var
   FormatDrive: function(Owner: HWND; Drive: UINT; FormatID: UINT; OptionFlags: UINT): DWORD; stdcall;
   PickIconDlg: function(Owner: HWND; FileName: Pointer; MaxFileNameChars: DWORD; var IconIndex: DWORD): LongBool; stdcall;
@@ -604,11 +607,11 @@ begin
       PIDL1 := Root.AbsolutePIDL;
     { Per Holderness, Shell keeps second PIDL unless of an error }
     if Assigned(FilterSample) then
-      PIDL2 := PIDLMgr.CopyPIDL(FilterSample.AbsolutePIDL);
+      PIDL2 := TCommonPIDLManager.CopyPIDL(FilterSample.AbsolutePIDL);
     Result := FindFiles(PIDL1, PIDL2);
     { Per Holderness, if error we must free second PIDL }
     if not Result then
-      PIDLMgr.FreePIDL(PIDL2);
+      TCommonPIDLManager.FreePIDL(PIDL2);
   end else
     Result := False;
 end;

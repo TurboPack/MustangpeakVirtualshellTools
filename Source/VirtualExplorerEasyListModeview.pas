@@ -987,7 +987,7 @@ begin
       if ChangePath then
       begin
         ClearSelections;
-        Path := TNamespace.Create(PIDLMgr.CopyPIDL(APIDL), nil);
+        Path := TNamespace.Create(TCommonPIDLManager.CopyPIDL(APIDL), nil);
         HilightPath(Path.AbsolutePIDL);
         HeaderBar.Invalidate;
         HeaderBar.Update;
@@ -1034,7 +1034,7 @@ begin
       if Assigned(NewPIDL) and Assigned(Path) and not(csDesigning in ComponentState) then
       begin
         SHGetDesktopFolder(Desktop);
-        PIDLMgr.StripLastID(NewPIDL, OldCB, LastID);
+        TCommonPIDLManager.StripLastID(NewPIDL, OldCB, LastID);
         try
           DoBrowse := ShortInt(Desktop.CompareIDs(0, Path.AbsolutePIDL, NewPIDL)) <> 0;
           if DoBrowse then
@@ -1400,9 +1400,9 @@ begin
   PIDLList := TCommonPIDLList.Create;
   try
     if Assigned(PIDL) then
-      PIDLMgr.ParsePIDL(PIDL, PIDLList, True)
+      TCommonPIDLManager.ParsePIDL(PIDL, PIDLList, True)
     else
-      PIDLMgr.ParsePIDL(Path.AbsolutePIDL, PIDLList, True);
+      TCommonPIDLManager.ParsePIDL(Path.AbsolutePIDL, PIDLList, True);
 
     for i := 0 to PIDLList.Count - 1 do
     begin
@@ -1540,7 +1540,7 @@ var
 begin
   PIDL := nil;
   if Assigned(Path) then
-    PIDL := PIDLMgr.CopyPIDL(Path.AbsolutePIDL);
+    PIDL := TCommonPIDLManager.CopyPIDL(Path.AbsolutePIDL);
 
   // TODO Rebuild Columns Here
   for i := 0 to ViewCount - 1 do
@@ -1866,7 +1866,7 @@ procedure TCustomVirtualColumnModeView.RebuildView;
     begin
 
       // A Desktop PIDL is length 0 but shows in column one so must add 2
-      PathLength := PIDLMgr.IDCount(Path.AbsolutePIDL) + 2;
+      PathLength := TCommonPIDLManager.IDCount(Path.AbsolutePIDL) + 2;
       if PathLength <= ViewCount then
       begin
         PathWidth := 0;
@@ -1955,7 +1955,7 @@ procedure TCustomVirtualColumnModeView.RebuildView;
     begin
       PIDLList := TCommonPIDLList.Create;
       try
-        PIDLMgr.ParsePIDL(Path.AbsolutePIDL, PIDLList, True);
+        TCommonPIDLManager.ParsePIDL(Path.AbsolutePIDL, PIDLList, True);
 
         // The first view is the Desktop that is always available
         Views[0].Active := CanFocus and Active;
@@ -2036,7 +2036,7 @@ procedure TCustomVirtualColumnModeView.RebuildView;
             ThumbSize.Y := ThumbSize.X;
             AddThumbRequest(Self, SelectedItem, ThumbSize, True, True, True, True, False, nil);
             IconRequest := TShellIconThreadRequest.Create;
-            IconRequest.PIDL := PIDLMgr.CopyPIDL(SelectedItem.Namespace.AbsolutePIDL);
+            IconRequest.PIDL := TCommonPIDLManager.CopyPIDL(SelectedItem.Namespace.AbsolutePIDL);
             IconRequest.Window := Self;
             IconRequest.Item := SelectedItem;
             IconRequest.ID := TID_ICON;
@@ -2049,7 +2049,7 @@ procedure TCustomVirtualColumnModeView.RebuildView;
             // Send a tile request to the GlobalThreadManager
             TileRequest := TEasyDetailStringsThreadRequest.Create;
             TileRequest.AddTitleColumnCaption := True;
-            TileRequest.PIDL := PIDLMgr.CopyPIDL(SelectedItem.Namespace.AbsolutePIDL);
+            TileRequest.PIDL := TCommonPIDLManager.CopyPIDL(SelectedItem.Namespace.AbsolutePIDL);
             TileRequest.Window := Self;
             SetLength(TileRequest.FDetailRequest, Path.DetailsSupportedColumns);
             for i := 0 to Path.DetailsSupportedColumns - 1 do
@@ -2087,7 +2087,7 @@ begin
 
       // A Desktop PIDL is length 0 but shows in column one so must add 2
       if Assigned(Path) then
-        PathLength := PIDLMgr.IDCount(Path.AbsolutePIDL) + 2
+        PathLength := TCommonPIDLManager.IDCount(Path.AbsolutePIDL) + 2
       else
         PathLength := 0;
       VerifyMinViewCount;

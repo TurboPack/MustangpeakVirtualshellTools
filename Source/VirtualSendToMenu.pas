@@ -90,7 +90,7 @@ type
 implementation
 
 uses
-  TypInfo, System.Types;
+  TypInfo, System.Types, System.Generics.Defaults;
 
 {$IFDEF USE_TOOLBAR_TB2K}
 procedure SetTBItemCaption(Item: TTBCustomItem; Caption: string);
@@ -107,10 +107,10 @@ begin
 end;
 {$ENDIF}
 
-function SendToMenuSort(Item1, Item2: Pointer): Integer;
+function SendToMenuSort(Item1, Item2: TNamespace): Integer;
 begin
   if Assigned(Item1) and Assigned(Item2) then
-    Result := TNamespace(Item2).ComparePIDL(TNamespace(Item1).RelativePIDL, False)
+    Result := Item2.ComparePIDL(Item1.RelativePIDL, False)
   else
     Result := 0
 end;
@@ -154,13 +154,13 @@ var
 begin
   if AParent.IsMyComputer then
   begin
-    NS := TNamespace.Create(PIDLMgr.AppendPIDL(AParent.AbsolutePIDL, APIDL), nil);
+    NS := TNamespace.Create(TCommonPIDLManager.AppendPIDL(AParent.AbsolutePIDL, APIDL), nil);
     if NS.Removable then
       TVirtualNameSpaceList(Data).Add(NS)
     else
       NS.Free
   end else
-    TVirtualNameSpaceList(Data).Add(TNamespace.Create(PIDLMgr.AppendPIDL(AParent.AbsolutePIDL, APIDL), nil));
+    TVirtualNameSpaceList(Data).Add(TNamespace.Create(TCommonPIDLManager.AppendPIDL(AParent.AbsolutePIDL, APIDL), nil));
   Result := True
 end;
 
@@ -207,7 +207,14 @@ procedure TVirtualSendToMenu.Populate(MenuItem: TMenuItem);
     try
       // No messages
       NS.EnumerateFolder(0, False, NonFolders, False, EnumSendToCallback, L);
-      L.Sort(SendToMenuSort);
+      L.Sort(TComparer<TNamespace>.Construct(
+        function(const Item1, Item2: TNamespace): Integer
+        begin
+          if Assigned(Item1) and Assigned(Item2) then
+            Result := Item2.ComparePIDL(Item1.RelativePIDL, False)
+          else
+            Result := 0
+        end));
       for I := 0 to L.Count - 1 do begin
         SendToIndex := SendToItems.Add(L[I]);
         M := TMenuItem.Create(Self);

@@ -799,7 +799,7 @@ begin
       // Dispatch the item change only for the last item
       if I = C - 1 then
         Exclude(FState, bvsChangeItemsLoading);
-      NS := TNamespace.Create(PIDLMgr.LoadFromStream(S), nil);
+      NS := TNamespace.Create(TCommonPIDLManager.LoadFromStream(S), nil);
       if NS.FileSystem and NS.Folder then
       begin
         if DirectoryExists(NS.NameForParsing) then
@@ -1043,7 +1043,7 @@ begin
     LocalCount := NSList.Count;
     S.WriteBuffer(LocalCount, SizeOf(LocalCount));
     for i := 0 to LocalCount - 1 do
-      PIDLMgr.SaveToStream(S, NSList[i].AbsolutePIDL);
+      TCommonPIDLManager.SaveToStream(S, NSList[i].AbsolutePIDL);
   finally
     NSList.Free
   end

@@ -145,7 +145,7 @@ var
   DoAdd: Boolean;
   Allow: Boolean;
 begin
-  NS := TNamespace.Create(PIDLMgr.AppendPIDL(AParent.AbsolutePIDL, APIDL), nil);
+  NS := TNamespace.Create(TCommonPIDLManager.AppendPIDL(AParent.AbsolutePIDL, APIDL), nil);
   DoAdd := True;
 
   if NS.Hidden and not(accHidden in FContents) then

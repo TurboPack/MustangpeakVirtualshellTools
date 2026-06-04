@@ -174,7 +174,7 @@ begin
     for i := 0 to PIDLs.Count - 1 do
     begin
       // The list owns the PIDLs
-      PIDL := PIDLMgr.CopyPIDL(PIDLs[i]);
+      PIDL := TCommonPIDLManager.CopyPIDL(PIDLs[i]);
       VirtualMultiPathExplorerEasyListview1.AddCustomItem(nil, TNamespace.Create(PIDL, nil), True);
     end
   finally

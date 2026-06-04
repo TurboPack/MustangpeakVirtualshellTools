@@ -3577,7 +3577,7 @@ begin
     if (dsfMyComputer in SpecialDriveFolders) and Assigned(PIDL) then
     begin
       Button := TShellToolButton( ButtonList.AddButton);
-      Button.Namespace := TNamespace.Create(PIDLMgr.CopyPIDL(PIDL), nil);
+      Button.Namespace := TNamespace.Create(TCommonPIDLManager.CopyPIDL(PIDL), nil);
       Button.CaptionOptions := ButtonCaptionOptions;
       DoAddButton(Button.Namespace, Allow);
       if not Allow then
@@ -3605,7 +3605,7 @@ begin
         begin
           while EnumIDList.Next(1, SubPIDL, celtFetched) = NOERROR do
           begin
-            NS := TNamespace.Create(PIDLMgr.AppendPIDL(PIDL, SubPIDL), nil);
+            NS := TNamespace.Create(TCommonPIDLManager.AppendPIDL(PIDL, SubPIDL), nil);
 
             IsDrive := WideIsDrive(NS.NameForParsing);
             IsFloppy :=  IsDrive and ((NS.NameForParsing[1] = 'A') or (NS.NameForParsing[1] = 'B'));
@@ -3792,7 +3792,7 @@ begin
             Request := TShellIconThreadRequest.Create;
             Request.ID := TID_ICON;
             Request.Window := Parent;
-            Request.PIDL := PIDLMgr.CopyPIDL(Namespace.AbsolutePIDL);
+            Request.PIDL := TCommonPIDLManager.CopyPIDL(Namespace.AbsolutePIDL);
             Request.Priority := 0;
             Request.Tag := NativeInt(Self);
             GlobalThreadManager.AddRequest(Request, True);
@@ -3817,7 +3817,7 @@ begin
   inherited;
   if Assigned(Namespace) then
     FreeAndNil(FNamespace);
-  Namespace := TNamespace.Create(PIDLMgr.LoadFromStream(S), nil)
+  Namespace := TNamespace.Create(TCommonPIDLManager.LoadFromStream(S), nil)
 end;
 
 function TShellToolButton.SaveToDataObject(const DataObject: ICommonDataObject): Boolean;
@@ -3837,7 +3837,7 @@ procedure TShellToolButton.SaveToStream(S: TStream);
 begin
   inherited;
   if Assigned(Namespace) then
-    PIDLMgr.SaveToStream(S, Namespace.AbsolutePIDL);
+    TCommonPIDLManager.SaveToStream(S, Namespace.AbsolutePIDL);
 end;
 
 procedure TShellToolButton.SetCaptionOptions(const Value: TCaptionOptions);
@@ -4302,7 +4302,7 @@ end;
 
 function TVSTShellToolbar.GetPIDLSize: integer;
 begin
-  Result := PIDLMgr.PIDLSize(FPIDL)
+  Result := TCommonPIDLManager.PIDLSize(FPIDL)
 end;
 
 function TVSTShellToolbar.LoadFromDataObject(DataObject: IDataObject): Boolean;

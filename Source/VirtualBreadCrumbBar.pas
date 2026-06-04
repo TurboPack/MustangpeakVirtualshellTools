@@ -357,7 +357,7 @@ end;
 function TCustomVirtualBreadCrumbBar.GetPIDL: PItemIDList;
 begin
   if Assigned(FNamespace) then
-    Result := PIDLMgr.CopyPIDL( Namespace.AbsolutePIDL)
+    Result := TCommonPIDLManager.CopyPIDL( Namespace.AbsolutePIDL)
   else
     Result := nil
 end;
@@ -548,7 +548,7 @@ begin
     PIDLList := TCommonPIDLList.Create;
     try
       PIDLList.SharePIDLs := True;
-      PIDLMgr.ParsePIDL(Namespace.AbsolutePIDL, PIDLList, True);
+      TCommonPIDLManager.ParsePIDL(Namespace.AbsolutePIDL, PIDLList, True);
       Crumbs.Add( TBreadCrumbBarPathObject.Create( Self, TNamespace.Create(nil, nil)));
       for i := 0 to PIDLList.Count - 1 do
         Crumbs.Add( TBreadCrumbBarPathObject.Create( Self, TNamespace.Create(PIDLList[i], nil)));
@@ -607,7 +607,7 @@ begin
           Rebuild;
         end
       end;
-      PIDLMgr.FreePIDL(PIDL)
+      TCommonPIDLManager.FreePIDL(PIDL)
     end
   end
 end;
@@ -632,7 +632,7 @@ begin
         end
       end
     end else
-      FNamespace := TNamespace.Create(PIDLMgr.CopyPIDL(Value), nil)
+      FNamespace := TNamespace.Create(TCommonPIDLManager.CopyPIDL(Value), nil)
   end
 end;
 
