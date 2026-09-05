@@ -104,7 +104,7 @@ type
   //
   TListModeLayoutData = record
     {$IFDEF SpTBX} Splitter: TSpTBXSplitter; {$ELSE} Splitter: TVirtualSplitter; {$ENDIF}
-    iPosition: Integer;
+    iPosition: NativeInt;
   end;
 
   // Custom painter for the Report item, it paints the arrow on the right side when
@@ -356,8 +356,8 @@ type
     FViewList: TList;
     function GetFocusedView: TColumnModeEasyListview;
     function GetHeader: TVirtualHeaderBarAttributes;
-    function GetViews(Index: Integer): TColumnModeEasyListview;
-    function GetViewCount: Integer;
+    function GetViews(Index: NativeInt): TColumnModeEasyListview;
+    function GetViewCount: NativeInt;
     procedure SetActive(const Value: Boolean);
     procedure SetBandHilight(const Value: Boolean);
     procedure SetBandHilightColor(const Value: TColor);
@@ -379,14 +379,14 @@ type
     procedure SetSelectionChangeTimeInterval(const Value: Word);
     procedure SetShowInactive(const Value: Boolean);
     procedure SetSortFolderFirstAlways(const Value: Boolean);
-    procedure SetViews(Index: Integer; Value: TColumnModeEasyListview);
+    procedure SetViews(Index: NativeInt; Value: TColumnModeEasyListview);
   protected
     function AddView(PIDL: PItemIDList; AWidth: Integer): TColumnModeEasyListview; virtual;
-    function ViewNamespace(Index: Integer): TNamespace;
+    function ViewNamespace(Index: NativeInt): TNamespace;
     {$IFDEF SpTBX}
-    function ViewSplitter(Index: Integer): TSpTBXSplitter;
+    function ViewSplitter(Index: NativeInt): TSpTBXSplitter;
     {$ELSE}
-    function ViewSplitter(Index: Integer): TVirtualSplitter;
+    function ViewSplitter(Index: NativeInt): TVirtualSplitter;
     {$ENDIF}
     procedure ClearViews;
     procedure CMColorChanged(var Msg: TMessage); message CM_COLORCHANGED;
@@ -442,7 +442,7 @@ type
     procedure ListviewMouseUp(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
     procedure ListviewRootChange(Sender: TCustomVirtualExplorerEasyListview);
     procedure RebuildView;
-    procedure RemoveView(Index: Integer);
+    procedure RemoveView(Index: NativeInt);
     procedure ScrollbarSetPosition(NewPos: Integer);
     procedure ScrollLeft;
     procedure ScrollRight;
@@ -519,9 +519,9 @@ type
     property SmoothScrollDelta: Integer read FSmoothScrollDelta write FSmoothScrollDelta default 0;
     property SortFolderFirstAlways: Boolean read FSortFolderFirstAlways write SetSortFolderFirstAlways default False;
     property State: TListModeViewStates read FState write FState;
-    property ViewCount: Integer read GetViewCount;
+    property ViewCount: NativeInt read GetViewCount;
     property ViewList: TList read FViewList write FViewList;
-    property Views[Index: Integer]: TColumnModeEasyListview read GetViews write SetViews; default;
+    property Views[Index: NativeInt]: TColumnModeEasyListview read GetViews write SetViews; default;
   public
     constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
@@ -613,7 +613,7 @@ type
 implementation
 
 uses
-  System.Types, System.UITypes;
+  System.Types, System.UITypes, MPShellFunc;
 
 type
   TEasyListviewHack = class(TCustomEasyListview);
@@ -960,12 +960,12 @@ begin
   Result := HeaderBar.Attribs
 end;
 
-function TCustomVirtualColumnModeView.GetViews(Index: Integer): TColumnModeEasyListview;
+function TCustomVirtualColumnModeView.GetViews(Index: NativeInt): TColumnModeEasyListview;
 begin
   Result := TColumnModeEasyListview( ViewList[Index])
 end;
 
-function TCustomVirtualColumnModeView.GetViewCount: Integer;
+function TCustomVirtualColumnModeView.GetViewCount: NativeInt;
 begin
   Result := ViewList.Count
 end;
@@ -1071,7 +1071,7 @@ end;
 
 procedure TCustomVirtualColumnModeView.ClearSelections;
 var
-  i: Integer;
+  i: NativeInt;
 begin
   for i := 0 to ViewCount - 1 do
     Views[i].Selection.ClearAll;
@@ -1079,7 +1079,7 @@ end;
 
 procedure TCustomVirtualColumnModeView.ClickColumn(ColumnIndex: Integer);
 var
-  i: Integer;
+  i: NativeInt;
 begin
   // TODO Rebuild??  Test!!!!!
   for i := 0 to ViewCount - 1 do
@@ -1091,7 +1091,7 @@ end;
 
 procedure TCustomVirtualColumnModeView.CMColorChanged(var Msg: TMessage);
 var
-  i: Integer;
+  i: NativeInt;
 begin
   inherited;
   for i := 0 to ViewCount - 1 do
@@ -1349,9 +1349,9 @@ end;
 
 procedure TCustomVirtualColumnModeView.FlushFreeViewList(FlushQueue: Boolean);
 var
-  i: Integer;
+  i: NativeInt;
   Msg: TMsg;
-  RePostQuitCode: Integer;
+  RePostQuitCode: WPARAM;
   RePostQuit: Boolean;
 begin
   // Flush the Queue
@@ -1368,7 +1368,7 @@ begin
       end
     end;
     if RePostQuit then
-      PostQuitMessage(RePostQuitCode);
+      PostQuitMessage(ToInt32(RePostQuitCode));
   end;
 
   try
@@ -1381,7 +1381,7 @@ end;
 
 procedure TCustomVirtualColumnModeView.FlushThreadRequests;
 var
-  i: Integer;
+  i: NativeInt;
 begin
   for i := 0 to ViewCount - 1 do
     GlobalThreadManager.FlushAllMessageCache(Views[i]);
@@ -1393,7 +1393,7 @@ procedure TCustomVirtualColumnModeView.HilightPath(PIDL: PItemIDList);
 //
 var
   PIDLList: TCommonPIDLList;
-  i: Integer;
+  i: NativeInt;
   Item: TExplorerItem;
 begin
   Include(FState, lmvsHilightingPath);
@@ -1504,18 +1504,18 @@ begin
   HeaderBar.Update
 end;
 
-function TCustomVirtualColumnModeView.ViewNamespace(Index: Integer): TNamespace;
+function TCustomVirtualColumnModeView.ViewNamespace(Index: NativeInt): TNamespace;
 begin
   Result := Views[Index].RootFolderNamespace
 end;
 
 {$IFDEF SpTBX}
-function TCustomVirtualColumnModeView.ViewSplitter(Index: Integer): TSpTBXSplitter;
+function TCustomVirtualColumnModeView.ViewSplitter(Index: NativeInt): TSpTBXSplitter;
 begin
   Result := Views[Index].Info.Splitter
 end;
 {$ELSE}
-function TCustomVirtualColumnModeView.ViewSplitter(Index: Integer): TVirtualSplitter;
+function TCustomVirtualColumnModeView.ViewSplitter(Index: NativeInt): TVirtualSplitter;
 begin
   Result := Views[Index].Info.Splitter
 end;
@@ -1535,7 +1535,7 @@ end;
 
 procedure TCustomVirtualColumnModeView.Rebuild;
 var
-  i: Integer;
+  i: NativeInt;
   PIDL: PItemIDList;
 begin
   PIDL := nil;
@@ -1583,7 +1583,7 @@ end;
 procedure TCustomVirtualColumnModeView.SetDefaultColumnWidth(
   const Value: Integer);
 var
-  i: Integer;
+  i: NativeInt;
 begin
   if FDefaultColumnWidth <> Value then
   begin
@@ -1595,7 +1595,7 @@ end;
 
 procedure TCustomVirtualColumnModeView.SetFileObjects(const Value: TFileObjects);
 var
-  i: Integer;
+  i: NativeInt;
   OldPath: TNamespace;
 begin
   if FFileObjects <> Value then
@@ -1620,7 +1620,7 @@ end;
 
 procedure TCustomVirtualColumnModeView.SetGrouped(const Value: Boolean);
 var
-  i: Integer;
+  i: NativeInt;
 begin
   if FGrouped <> Value then
   begin
@@ -1639,7 +1639,7 @@ end;
 
 procedure TCustomVirtualColumnModeView.SetGroupingColumn(const Value: Integer);
 var
-  i: Integer;
+  i: NativeInt;
   OldCol: TEasyColumn;
 begin
   if FGroupingColumn <> Value then
@@ -1691,7 +1691,7 @@ end;
 procedure TCustomVirtualColumnModeView.SetSortFolderFirstAlways(
   const Value: Boolean);
 var
-  i: Integer;
+  i: NativeInt;
 begin
   if Value <> FSortFolderFirstAlways then
   begin
@@ -1736,7 +1736,7 @@ end;
 
 procedure TCustomVirtualColumnModeView.ClearViews;
 var
-  i: Integer;
+  i: NativeInt;
 begin
   try
     FlushThreadRequests;
@@ -1785,7 +1785,7 @@ end;
 
 procedure TCustomVirtualColumnModeView.SetDefaultSortColumn(const Value: Integer);
 var
-  i: Integer;
+  i: NativeInt;
 begin
   if Value <> FDefaultSortColumn then
   begin
@@ -1801,7 +1801,7 @@ end;
 
 procedure TCustomVirtualColumnModeView.SetDefaultSortDir(const Value: TEasySortDirection);
 var
-  i: Integer;
+  i: NativeInt;
 begin
   if Value <> FDefaultSortDir then
   begin
@@ -1817,7 +1817,7 @@ end;
 
 procedure TCustomVirtualColumnModeView.SetHilightActiveColumn(const Value: Boolean);
 var
-  i: Integer;
+  i: NativeInt;
 begin
   if FHilightActiveColumn <> Value then
   begin
@@ -1829,7 +1829,7 @@ end;
 
 procedure TCustomVirtualColumnModeView.SetHilightColumnColor(const Value: TColor);
 var
-  i: Integer;
+  i: NativeInt;
 begin
   if FHilightColumnColor <> Value then
   begin
@@ -1846,7 +1846,7 @@ end;
 
 procedure TCustomVirtualColumnModeView.RebuildView;
 
-  function PrevViewWidth(iIndex: Integer): Integer;
+  function PrevViewWidth(iIndex: NativeInt): Integer;
   begin
     if iIndex <= 0 then
       Result := 0
@@ -1859,7 +1859,8 @@ procedure TCustomVirtualColumnModeView.RebuildView;
 
   function PathFitsInWindow(var PathWidth: Integer): Boolean;
   var
-    PathLength, i, PrevWidth: Integer;
+    PathLength, PrevWidth: Integer;
+    I: NativeInt;
   begin
     PathWidth := 0;
     if Assigned(Path) then
@@ -1915,9 +1916,9 @@ procedure TCustomVirtualColumnModeView.RebuildView;
     end
   end;
 
-  procedure InsertViews(Count: Integer);
+  procedure InsertViews(Count: NativeInt);
   var
-    i: Integer;
+    i: NativeInt;
   begin
     for i := 0 to Count - 1 do
       AddView(nil, DefaultColumnWidth);
@@ -1930,9 +1931,9 @@ procedure TCustomVirtualColumnModeView.RebuildView;
       InsertViews(2 - ViewCount)
   end;
 
-  procedure DeleteViews(Count: Integer);
+  procedure DeleteViews(Count: NativeInt);
   var
-    i: Integer;
+    i: NativeInt;
   begin
     for i := ViewCount - 1 downto ViewCount - Count do
       RemoveView(i)
@@ -1940,7 +1941,7 @@ procedure TCustomVirtualColumnModeView.RebuildView;
 
   procedure ReIndexViews;
   var
-    i: Integer;
+    i: NativeInt;
   begin
     for i := 0 to ViewCount - 1 do
       Views[i].FInfo.iPosition := i
@@ -1949,7 +1950,7 @@ procedure TCustomVirtualColumnModeView.RebuildView;
   procedure SetRootFoldersAndActivate;
   var
     PIDLList: TCommonPIDLList;
-    i: Integer;
+    i: NativeInt;
   begin
     if (ViewCount > 0) and Assigned(Path) then
     begin
@@ -2135,7 +2136,7 @@ begin
   DoRebuild;
 end;
 
-procedure TCustomVirtualColumnModeView.RemoveView(Index: Integer);
+procedure TCustomVirtualColumnModeView.RemoveView(Index: NativeInt);
 begin
   DeleteListview(Views[Index]);
 end;
@@ -2148,7 +2149,7 @@ end;
 procedure TCustomVirtualColumnModeView.ScrollLeft;
 var
   View: TColumnModeEasyListview;
-  Position: Integer;
+  Position: NativeInt;
 begin
   View := FocusedView;
   if not Assigned(View) and (ViewCount > 0) then
@@ -2178,7 +2179,7 @@ end;
 procedure TCustomVirtualColumnModeView.ScrollRight;
 var
   View: TColumnModeEasyListview;
-  Position: Integer;
+  Position: NativeInt;
 begin
   View := FocusedView;
   SelectionChangeTimerEvent(FocusedView);
@@ -2213,7 +2214,7 @@ end;
 
 procedure TCustomVirtualColumnModeView.SetActive(const Value: Boolean);
 var
-  i: Integer;
+  i: NativeInt;
 begin
   if FActive <> Value then
   begin
@@ -2291,7 +2292,7 @@ end;
 
 procedure TCustomVirtualColumnModeView.SetShowInactive(const Value: Boolean);
 var
-  i: Integer;
+  i: NativeInt;
 begin
   for i := 0 to ViewCount - 1 do
   begin
@@ -2307,7 +2308,7 @@ begin
   FShowInactive := Value;
 end;
 
-procedure TCustomVirtualColumnModeView.SetViews(Index: Integer; Value: TColumnModeEasyListview);
+procedure TCustomVirtualColumnModeView.SetViews(Index: NativeInt; Value: TColumnModeEasyListview);
 begin
   ViewList[Index] := Value
 end;
@@ -2360,7 +2361,7 @@ end;
 
 procedure TCustomVirtualColumnModeView.WMKillFocus(var Msg: TWMKillFocus);
 var
-  i: Integer;
+  i: NativeInt;
 begin
   inherited;
   for i := 0 to ViewCount - 1 do
@@ -2399,7 +2400,7 @@ end;
 
 procedure TCustomVirtualColumnModeView.WMSetFocus(var Msg: TWMSetFocus);
 var
-  i: Integer;
+  i: NativeInt;
 begin
   inherited;
   PostMessage(Handle, WM_POSTFOCUSBACKTOVIEW, 0, 0);
@@ -2424,7 +2425,7 @@ end;
 
 procedure TCustomVirtualColumnModeView.WMPostViewLosingFocus(var Msg: TMessage);
 var
-  i: Integer;
+  i: NativeInt;
 begin
   if FocusedView = nil then
   begin
@@ -2452,7 +2453,7 @@ var
 begin
   Request := Msg.Request as TPIDLThreadRequest;
   try
-    case Request.ID of
+    case ToInt32(Request.ID) of
       TID_ICON:
         begin
           if Details.Thumbnail.Picture.Bitmap.Empty then
@@ -2639,7 +2640,7 @@ end;
 
 procedure TColumnModeEasyListview.WMSetFocus(var Msg: TWMSetFocus);
 var
-  i: Integer;
+  i: NativeInt;
 begin
   inherited;
   ColumnModeView.LastFocusedView := Self;
@@ -2716,7 +2717,7 @@ var
   PaintInfo: TPaintStruct;
   R: TRect;
   Pt, OffsetR: TPoint;
-  i: Integer;
+  i: NativeInt;
   DrawTextFlags: TCommonDrawTextWFlags;
   NS: TNamespace;
 begin
@@ -2938,7 +2939,7 @@ end;
 function TListModeDetails.MaxTitleWidth(DetailArray: TDetailInfoArray;
   AFont: TFont): TSize;
 var
-  i: Integer;
+  i: NativeInt;
   Size: TSize;
 begin
   Result.cx := 0;
@@ -2957,7 +2958,7 @@ end;
 
 procedure TListModeDetails.ClearInfoList;
 var
-  i: Integer;
+  i: NativeInt;
 begin
   try
     for i := 0 to DetailInfoList.Count - 1 do
@@ -2972,7 +2973,7 @@ end;
 
 procedure TListModeDetails.OnDetailsPaint(Sender: TObject);
 var
-  i: Integer;
+  i: NativeInt;
   Info: PDetailInfo;
   DrawTextFlags: TCommonDrawTextWFlags;
 begin
@@ -3003,7 +3004,8 @@ const
   SPACING = 4;
 
 var
-  i, MaxTitleWidth, MaxTitleHeight, Top, MinWidth: Integer;
+  i: NativeInt;
+  MaxTitleWidth, MaxTitleHeight, Top, MinWidth: Integer;
   Info: PDetailInfo;
   DrawTextFlags: TCommonDrawTextWFlags;
   R: TRect;
@@ -3112,7 +3114,7 @@ end;
 
 procedure TListModeDetails.BuildDetailInfo(Details: TCommonStringDynArray);
 var
-  i: Integer;
+  i: NativeInt;
   Info: PDetailInfo;
 begin
   ClearInfoList;
@@ -3130,7 +3132,7 @@ procedure TListModeDetails.WindowProcHook(var Msg: TMessage);
 begin
   if Msg.Msg = WM_LBUTTONDBLCLK then
   begin
-    if (HiWord(Msg.lParam) < Thumbnail.BoundsRect.Bottom) and (LoWord(Msg.lParam) < Thumbnail.BoundsRect.Right) then
+    if (HiWord(ToUInt32(Msg.lParam)) < Thumbnail.BoundsRect.Bottom) and (LoWord(Msg.lParam) < Thumbnail.BoundsRect.Right) then
       ShellExecuteNamespace
   end else
   if Assigned(OldWndProc) then

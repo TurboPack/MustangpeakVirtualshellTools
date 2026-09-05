@@ -59,6 +59,9 @@ type
 
 implementation
 
+uses
+  MPShellFunc;
+
 { TCommandLinePipe }
 
 constructor TCommandLinePipe.Create(AOwner: TComponent);
@@ -199,14 +202,14 @@ function TCommandLinePipe.ReadResult: AnsiString;
 begin
   ReadFrom(MemStream);
   SetLength(Result, MemStream.Size);
-  Move(PAnsiChar(Result)^, MemStream.Memory^, MemStream.Size);
+  Move(PAnsiChar(Result)^, MemStream.Memory^, ToNativeInt(MemStream.Size));
 end;
 
 procedure TCommandLinePipe.DOSCommand(Command: AnsiString);
 var
   Written: DWORD;
 begin
-  if not WriteFile(hPipe2WriteDuplicate, PAnsiChar(Command)^, Length(Command), Written, nil) then
+  if not WriteFile(hPipe2WriteDuplicate, PAnsiChar(Command)^, ToUInt32(Length(Command)), Written, nil) then
     windows.beep(100, 100);
 
     Exit;
@@ -220,7 +223,7 @@ procedure TCommandLinePipe.SendTo(Stream: TMemoryStream);
 var
   Written: DWORD;
 begin
-  if not WriteFile(hPipe2WriteDuplicate, Stream.Memory^, Stream.Size, Written, nil) then
+  if not WriteFile(hPipe2WriteDuplicate, Stream.Memory^, ToUInt32(Stream.Size), Written, nil) then
     windows.beep(100, 100);
 end;
 

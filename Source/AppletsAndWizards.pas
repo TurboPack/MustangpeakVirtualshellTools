@@ -367,6 +367,9 @@ var
 
 implementation
 
+uses
+  MPShellFunc;
+
 var
   FormatDrive: function(Owner: HWND; Drive: UINT; FormatID: UINT; OptionFlags: UINT): DWORD; stdcall;
   PickIconDlg: function(Owner: HWND; FileName: Pointer; MaxFileNameChars: DWORD; var IconIndex: DWORD): LongBool; stdcall;
@@ -500,7 +503,7 @@ end;
 
 function TAppletsAndWizards.Launch(const s: string): Boolean;
 begin
-  Result := Launch(AnsiString(S));
+  Result := Launch(ToAnsiString(S));
 end;
 
 function TAppletsAndWizards.MicrosoftApps(App: TMicrosoftApp): Boolean;
@@ -620,7 +623,7 @@ function TAppletsAndWizards.SHFormatDrive(
 begin
   if Assigned(FormatDrive) then
   begin
-    case FormatDrive(Application.Handle, Ord(UpCase(DriveLetter)) - $41, 0, 0) of
+    case FormatDrive(Application.Handle, ToUInt32(Ord(UpCase(DriveLetter)) - $41), 0, 0) of
       SHFMT_NOFORMAT: Result := fdNotFormatable;
       SHFMT_CANCEL: Result := fdCancel;
       SHFMT_ERROR: Result := fdError;
@@ -645,7 +648,7 @@ begin
     OldLen := Length(FileName);
     if Win32Platform = VER_PLATFORM_WIN32_WINDOWS then
     begin
-      s := AnsiString(FileName);
+      s := ToAnsiString(FileName);
       SetLength(s, MAX_PATH);
       s[OldLen + 1] := #0;
     end else
@@ -661,7 +664,7 @@ begin
     begin
       Result := PickIconDlg(Application.Handle, PAnsiChar(s), MAX_PATH, IconIndex);
       SetLength(s, lstrLenA(PAnsiChar(s)));
-      FileName := string(s)
+      FileName := AsString(s);
     end
   end else
     Result := False;
@@ -701,9 +704,9 @@ begin
         PWideChar(Description), Flags);
     end else
     begin
-      WorkingPathA := AnsiString(WorkingPath);
-      CaptionA := AnsiString(Caption);
-      DescriptionA := AnsiString(Description);
+      WorkingPathA := ToAnsiString(WorkingPath);
+      CaptionA := ToAnsiString(Caption);
+      DescriptionA := ToAnsiString(Description);
       RunFileDlg(Window, Icon, PAnsiChar(WorkingPathA), PAnsiChar(CaptionA),
         PAnsiChar(DescriptionA), Flags);
     end
@@ -779,9 +782,9 @@ begin
            if RunFileDlgW.Hdr.code = RFN_VALIDATE then
            begin
              SetLength(TempFilePathW, lstrlenW(RunFileDlgW.lpFile));
-             MoveMemory(PWideChar(TempFilePathW), PWideChar(RunFileDlgW.lpFile), Length(TempFilePathW) * 2);
+             MoveMemory(PWideChar(TempFilePathW), PWideChar(RunFileDlgW.lpFile), ToNativeUInt(Length(TempFilePathW)) * 2);
              SetLength(TempWorkingDirW, lstrlenW(RunFileDlgW.lpDirectory));
-             MoveMemory(PWideChar(TempWorkingDirW), PWideChar(RunFileDlgW.lpDirectory), Length(TempWorkingDirW) * 2);
+             MoveMemory(PWideChar(TempWorkingDirW), PWideChar(RunFileDlgW.lpDirectory), ToNativeUInt(Length(TempWorkingDirW) * 2));
              RunResult := frOk;
              DoRunFile(TempFilePathW, TempWorkingDirW, RunResult);
            end;
@@ -795,7 +798,7 @@ begin
              SetLength(TempWorkingDirA, lstrlenA(RunFileDlgA.lpDirectory));
              lstrcpyA(PAnsiChar(TempWorkingDirA), RunFileDlgA.lpDirectory);
              RunResult := frOk;
-             DoRunFile(string(TempFilePathA), string(TempWorkingDirA), RunResult);
+             DoRunFile(AsString(TempFilePathA), AsString(TempWorkingDirA), RunResult);
            end;
          end;
          case RunResult of

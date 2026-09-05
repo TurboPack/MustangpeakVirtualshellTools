@@ -235,12 +235,12 @@ type
   // Implementation of a Reference counted list
   TVirtualReferenceCountedList = class(TThreadList)
   protected
-    FRefCount: integer;
+    FRefCount: NativeInt;
   public
     procedure AddRef;
     procedure Clear; virtual;
     procedure Release;
-    property RefCount: integer read FRefCount;
+    property RefCount: NativeInt read FRefCount;
   end;
 
   // Encapsulates a reference counted TList that contains TVirtualShellEvent objects.
@@ -402,7 +402,7 @@ type
     procedure SetMapVirtualFolders(const Value: Boolean);
   protected
     procedure CheckForAutoRelease;
-    function FindControlIndex(const Control: TVirtualChangeControl): integer;
+    function FindControlIndex(const Control: TVirtualChangeControl): NativeInt;
     function FindRegisteredControl(const Control: TWinControl): TVirtualChangeControl;
     procedure FreeShellNotifyThread;
     procedure FreeKernelNotifyThread;
@@ -452,10 +452,10 @@ type
   private
     FEventList: TThreadList;
     FStub: ICallbackStub;
-    FTimerID: Integer;
+    FTimerID: NativeUInt;
     FExplorerWndList: TThreadList;
   protected
-    function FindExplorerWnd(ExplorerWnd: TWinControl): Integer;
+    function FindExplorerWnd(ExplorerWnd: TWinControl): NativeInt;
     procedure ClearEventList;
 
     procedure EndTimer;
@@ -463,7 +463,7 @@ type
     procedure Timer(HWnd: HWND; Msg: UINT; idEvent: UINT; dwTime: DWORD); stdcall;
     property ExplorerWndList: TThreadList read FExplorerWndList write FExplorerWndList;
     property Stub: ICallbackStub read FStub write FStub;
-    property TimerID: Integer read FTimerID write FTimerID;
+    property TimerID: NativeUInt read FTimerID write FTimerID;
     property EventList: TThreadList read FEventList write FEventList;
   public
     constructor Create;
@@ -494,7 +494,9 @@ implementation
 
 uses
   MPShellTypes,
-  MPShellUtilities;
+  MPShellUtilities,
+  MPShellFunc;
+
 type
   TShellILIsEqual = function(PIDL1: PItemIDList; PIDL2: PItemIDList): LongBool; stdcall;
   TShellILIsParent = function(PIDL1: PItemIDList; PIDL2: PItemIDList; ImmediateParent: Boolean): LongBool; stdcall;
@@ -578,7 +580,7 @@ begin
     Size := PIDLSize(APIDL);
     Result := Malloc.Alloc(Size);
     if Result <> nil then
-      CopyMemory(Result, APIDL, Size);
+      CopyMemory(Result, APIDL, ToNativeUInt(Size));
   end else
     Result := nil
 end;
@@ -691,7 +693,7 @@ end;
 
 procedure TVirtualShellEventList.Clear;
 var
-  i: integer;
+  i: NativeInt;
   List: TList;
 begin
   List := LockList;
@@ -721,7 +723,11 @@ end;
 
 procedure TVirtualReferenceCountedList.AddRef;
 begin
+{$IFDEF CPUX86}
   InterlockedIncrement(FRefCount)
+{$ELSE}
+  InterlockedIncrement64(FRefCount)
+{$ENDIF}
 end;
 
 procedure TVirtualReferenceCountedList.Clear;
@@ -731,7 +737,11 @@ end;
 
 procedure TVirtualReferenceCountedList.Release;
 begin
-  InterlockedDecrement (FRefCount);
+{$IFDEF CPUX86}
+  InterlockedDecrement(FRefCount);
+{$ELSE}
+  InterlockedDecrement64(FRefCount);
+{$ENDIF}
   if FRefCount <= 0 then
     Free;
 end;
@@ -798,10 +808,10 @@ begin
   PIDLMgr.Free;
 end;
 
-function TVirtualChangeNotifier.FindControlIndex(const Control: TVirtualChangeControl): integer;
+function TVirtualChangeNotifier.FindControlIndex(const Control: TVirtualChangeControl): NativeInt;
 var
   List: TList;
-  i: integer;
+  i: NativeInt;
 begin
   Result := -1;
   List := ControlList.LockList;
@@ -823,7 +833,7 @@ function TVirtualChangeNotifier.FindRegisteredControl(
   const Control: TWinControl): TVirtualChangeControl;
 var
   List: TList;
-  i: integer;
+  i: NativeInt;
 begin
   Result := nil;
   List := ControlList.LockList;
@@ -1032,7 +1042,7 @@ procedure TVirtualChangeNotifier.ListenerWndProc(var AMsg: TMessage);
 
 var
   lControl: TVirtualChangeControl;
-  lCount: Integer;
+  lCount: NativeInt;
   lList: TList;
   lTempList: TVirtualShellEventList;
 begin
@@ -1117,7 +1127,7 @@ function TVirtualChangeNotifier.RegisterKernelChangeNotify(Control: TWinControl;
 // Registers the Control with the Kernel Change Notification System
 var
   ChangeControl: TVirtualChangeControl;
-  Index: integer;
+  Index: NativeInt;
   List: TList;
   DoTrigger: Boolean;
 begin
@@ -1185,7 +1195,7 @@ begin
 
   EnterCriticalSection(FSpecialFolderRegisterLock);
   try
-    SHGetSpecialFolderLocation(0, SpecialFolder, PIDL);
+    SHGetSpecialFolderLocation(0, ToInt32(SpecialFolder), PIDL);
     if Assigned(PIDL) then
     begin
       PIDLMgr := TCommonPIDLManager.Create;
@@ -1245,7 +1255,7 @@ function TVirtualChangeNotifier.RegisterShellChangeNotify(Control: TWinControl):
 // Registers the Control with the Shell Change Notification System
 var
   ChangeControl: TVirtualChangeControl;
-  Index: integer;
+  Index: NativeInt;
   List: TList;
 begin
   Result := False;
@@ -1309,7 +1319,7 @@ procedure TVirtualChangeNotifier.StripDuplicates(List: TList);
   // It also eliminates reduncany by getting the highest common denominator in the
   // path structure
   var
-    i, j: integer;
+    i, j: NativeInt;
   begin
     for i := 0 to List.Count - 1 do
     begin
@@ -1345,7 +1355,7 @@ end;
 procedure TVirtualChangeNotifier.UnRegisterAllNotify;
 var
   List: TList;
-  i: integer;
+  i: NativeInt;
   Controls: array of TWinControl;
 begin
   // We can not have the list locked when we UnRegister a notify (Kernel mainly)
@@ -1373,7 +1383,7 @@ function TVirtualChangeNotifier.UnRegisterKernelChangeNotify(
   Control: TWinControl): Boolean;
 var
   ChangeControl: TVirtualChangeControl;
-  Index: integer;
+  Index: NativeInt;
   List: TList;
   DoTrigger: Boolean;
 begin
@@ -1417,7 +1427,7 @@ function TVirtualChangeNotifier.UnRegisterShellChangeNotify(
   Control: TWinControl): Boolean;
 var
   ChangeControl: TVirtualChangeControl;
-  Index: integer;
+  Index: NativeInt;
   List: TList;
 begin
   List := ControlList.LockList;
@@ -1546,7 +1556,7 @@ type
 
   procedure RemoveEventFromWatchArray( var WatchArray: TKernelWatchRec; EventIndex: Integer);
   var
-    i: Integer;
+    i: NativeInt;
   begin
     if EventIndex < Length(WatchArray.Handles) then
     begin
@@ -1570,7 +1580,8 @@ type
       FILE_NOTIFY_CHANGE_SIZE or FILE_NOTIFY_CHANGE_LAST_WRITE;
   var
     List: TList;
-    i: integer;
+    i: Int32;
+    iNative: NativeInt;
     ChangeControl: TVirtualChangeControl;
     HandleIndex: integer;
     PIDL: PItemIDList;
@@ -1605,9 +1616,9 @@ type
         end;
 
         // These are the WatchFolders specified by the registered Change Windows
-        for i := 0 to List.Count - 1 do
+        for iNative := 0 to List.Count - 1 do
         begin
-          ChangeControl := TVirtualChangeControl( List[i]);
+          ChangeControl := TVirtualChangeControl( List[iNative]);
           if (ChangeControl.KernelChangeRegistered) then
           begin
             if (ChangeControl.WatchFolder <> '') then
@@ -1649,7 +1660,9 @@ type
 
 var
   RunLoop: Boolean;
-  WaitIndex, i, RegisteredCount: integer;
+  WaitIndex: Int32;
+  i: NativeInt;
+  RegisteredCount: integer;
   WatchArray: TKernelWatchRec;
   Malloc: IMalloc;
   Index: Integer;
@@ -1675,8 +1688,8 @@ begin
       begin
         while RunLoop and not Terminated do
         begin
-          WaitIndex := WaitForMultipleObjects(Length(WatchArray.Handles),
-            PWOHandleArray(@WatchArray.Handles[0]), False, INFINITE);
+          WaitIndex := ToInt32(WaitForMultipleObjects(ToUInt32(Length(WatchArray.Handles)),
+            PWOHandleArray(@WatchArray.Handles[0]), False, INFINITE));
           if not Terminated then
           begin
             InvalidNamespace := False;
@@ -1987,7 +2000,7 @@ begin
     { Message sent by shell }
     WM_CHANGENOTIFY_NT:
       begin
-        Handle := SHChangeNotificationLock(WParam, LParam, SNR, Event);
+        Handle := SHChangeNotificationLock(WParam, ToUInt32(LParam), SNR, Event);
         if Handle <> 0 then
         try
           AddEventToList(Event, SNR, 0, 0);
@@ -1997,7 +2010,7 @@ begin
       end;
     WM_CHANGENOTIFY:
       begin
-        AddEventToList(lParam, PShellNotifyRec(wParam), 0, 0);
+        AddEventToList(ToUInt32(lParam), PShellNotifyRec(wParam), 0, 0);
 
         if MapVirtualFolders then
         begin
@@ -2027,7 +2040,7 @@ begin
             end;
             if OwnP1 or OwnP2 then
             begin
-              AddEventToList(lParam, @Rec, 0, 0);
+              AddEventToList(ToUInt32(lParam), @Rec, 0, 0);
               if OwnP1 then
                 ThreadPIDLMgr.FreePIDL(Rec.PIDL1);
               if OwnP2 then
@@ -2038,7 +2051,7 @@ begin
       end;
     WM_CHANGENOTIFY_CUSTOM:
       begin
-        AddEventToList(lParam, PShellNotifyRec(wParam), 0, 0);
+        AddEventToList(ToUInt32(lParam), PShellNotifyRec(wParam), 0, 0);
         Malloc.Free(PShellNotifyRec(wParam).PIDL1);
         Malloc.Free(PShellNotifyRec(wParam).PIDL2);
         Dispose(PShellNotifyRec(wParam));
@@ -2182,7 +2195,7 @@ end;
 destructor TVirtualChangeDispatchThread.Destroy;
 var
   Malloc: IMalloc;
-  i: integer;
+  i: NativeInt;
 begin
   inherited;
   if WorkerChangeEvent <> 0 then
@@ -2199,7 +2212,7 @@ end;
 procedure TVirtualChangeDispatchThread.Execute;
 var
   TempList: TVirtualShellEventList;
-  i: integer;
+  i: NativeInt;
   DoneAdding: Boolean;
   WList, List: TList;
   LocalPIDLMgr: TCommonPIDLManager;
@@ -2221,7 +2234,7 @@ begin
         // Update when no more items are being added or a reasonable amount of time has elapsed
         while not DoneAdding do
         begin
-          Sleep(VirtualShellNotifyRefreshRate);
+          Sleep(ToUInt32(VirtualShellNotifyRefreshRate));
           EnterCriticalSection(FAddLock);
           try
             DoneAdding := not AddingEvents;
@@ -2591,7 +2604,7 @@ end;
 procedure TShellNotifyManager.ClearEventList;
 var
   List: TList;
-  i: Integer;
+  i: NativeInt;
 begin
   List := EventList.LockList;
   try
@@ -2606,10 +2619,10 @@ begin
   end
 end;
 
-function TShellNotifyManager.FindExplorerWnd(ExplorerWnd: TWinControl): Integer;
+function TShellNotifyManager.FindExplorerWnd(ExplorerWnd: TWinControl): NativeInt;
 var
   List: TList;
-  i: Integer;
+  i: NativeInt;
 begin
   Result := -1;
   List := ExplorerWndList.LockList;
@@ -2625,7 +2638,7 @@ end;
 function TShellNotifyManager.OkToDispatch: Boolean;
 var
   List: TList;
-  i: Integer;
+  i: NativeInt;
   ExplorerWnd: TWinControl;
   ShellNotify: IVirtualShellNotify;
 begin
@@ -2662,7 +2675,7 @@ procedure TShellNotifyManager.ReDispatchShellNotify(Event: TVirtualShellEventLis
 var
   List: TList;
   Duplicate: Boolean;
-  i: Integer;
+  i: NativeInt;
 begin
   StartTimer;
   Duplicate := False;
@@ -2707,7 +2720,7 @@ procedure TShellNotifyManager.Timer(HWnd: HWND; Msg: UINT; idEvent: UINT;
 var
   VList,
   EList: TList;
-  i, j: Integer;
+  i, j: NativeInt;
   NotifyMsg: TMessage;
   ShellNotify: IVirtualShellNotify;
 begin
@@ -2740,7 +2753,7 @@ end;
 procedure TShellNotifyManager.UnRegisterExplorerWnd(ExplorerWnd: TWinControl);
 var
   List: TList;
-  i: Integer;
+  i: NativeInt;
 begin
   List := ExplorerWndList.LockList;
   try

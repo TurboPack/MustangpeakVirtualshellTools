@@ -640,6 +640,7 @@ type
 
   TVirtualWordArray = array of Word;
   TBooleanArray = array of Boolean;
+  TVirtualNativeIntArray = TArray<NativeInt>;
 
   TColumnWidths = TVirtualWordArray;
   TColumnOrder = TVirtualWordArray;
@@ -663,7 +664,7 @@ type
     Width: TColumnWidths;
     Position: TColumnOrder;
     Visible: TBooleanArray;
-    SortColumn: Integer; // Added in Stream Version 4
+    SortColumn: NativeInt; // Added in Stream Version 4
     SortDir: Integer;    // Added in Stream Version 4
     DefaultSortDir: Integer; // Added in Stream Version 4  // Depreciated, this should not be saved on a per folder basis it is global to the Listview
   end;
@@ -900,7 +901,7 @@ type
   private
     FViews: TViewList;
     function GetView(ViewName: string): TView;
-    function GetViewCount: Integer;
+    function GetViewCount: NativeInt;
     function GetViewName(Index: integer): string;
     procedure SetViewName(Index: integer; NewViewName: string);
   protected
@@ -918,7 +919,7 @@ type
     procedure SaveToFile(FileName: string; Version: integer = VETStreamStorageVer; ReadVerFromStream: Boolean = False); override;
 
     property View[ViewName: string]: TView read GetView;
-    property ViewCount: integer read GetViewCount;
+    property ViewCount: NativeInt read GetViewCount;
     property ViewName[Index: integer]: string read GetViewName write SetViewName;
   end;
 
@@ -2282,7 +2283,7 @@ type
 
     { Scrolling support }
     FAutoScrollTimerStub: ICallbackStub;    // Stub for timer callback function (object method)
-    FAutoScrollTimer: integer;        // Timer Handle
+    FAutoScrollTimer: NativeUInt;      // Timer Handle
     FAutoScrollSlowTime: integer;     // Scroll time when mouse is down and dragged a few pixels out of window
     FAutoScrollFastTime: integer;    // Scroll time when mouse is down and dragged > 20 pixels out of window
     FAutoScrollWindow: TWinControl;  // The windows that recieves the WM_VScroll messages
@@ -2933,7 +2934,8 @@ uses
   {$ELSE}
   ColumnForm,
   {$ENDIF}
-  Imm;
+  Imm,
+  MPShellFunc;
 
  {$R VirtualExplorerTreeExt.res}
 
@@ -2963,13 +2965,13 @@ begin
 end;
 
 procedure NodeNamespaceQuickSort(NodeArray: TNodeSearchArray;
-  const ParentFolder: IShellFolder; L, R: Integer);
+  const ParentFolder: IShellFolder; L, R: NativeInt);
 ///
 /// NOTE:  Make sure any changes to this method are reflected in both VirtualExplorerTree.pas
 //         and VirtualExplorerListview.pas
 ///
 var
-  I, J: Integer;
+  I, J: NativeInt;
   P, T: TNodeSearchRec;
 begin
   if L < R then
@@ -3000,9 +3002,9 @@ begin
 end;
 
 function NodeListBinarySearch(Target: PItemIDList; List: TNodeStorageList;
-  const ParentFolder: IShellFolder; Min, Max: Longint) : Longint;
+  const ParentFolder: IShellFolder; Min, Max: NativeInt) : NativeInt;
 var
-  Middle : LongInt;
+  Middle : NativeInt;
   CompareResult: ShortInt;
 begin
   // During the search the target's index will be between
@@ -3031,11 +3033,11 @@ begin
 end;
 
 function NodeListInsertPt(Target: PItemIDList; List: TNodeStorageList;
-  const ParentFolder: IShellFolder; Min, Max: Longint): integer;
+  const ParentFolder: IShellFolder; Min, Max: NativeInt): NativeInt;
 { IMPORTANT................                                                     }
 { This function assumes that the List is already sorted.                        }
 var
-  Middle : LongInt;
+  Middle : NativeInt;
   CompareResult: ShortInt;
 begin
   // During the search the target's index will be between
@@ -3065,7 +3067,7 @@ end;
 procedure ReadFolder(Folder: IShellFolder; Flags: DWORD; var APIDLArray: TPIDLArray; Sorted: Boolean; var PIDLsRead: Integer);
 var
   EnumIDList: IEnumIDList;
-  ArrayLength: Integer;
+  ArrayLength: NativeInt;
   pceltFetched: LongWord;
   TempPIDL: PItemIDList;
   OldWow64: Pointer;
@@ -4187,7 +4189,7 @@ function TCustomVirtualExplorerTree.DoEndEdit(pCancel: Boolean = False): Boolean
 var
   Msg: TMsg;
   NS: TNamespace;
-  RePostQuitCode: Integer;
+  RePostQuitCode: WPARAM;
   RePostQuit: Boolean;
 begin
   // Refresh the cached information to reflect the edited name
@@ -4216,7 +4218,7 @@ begin
       DispatchMessage(Msg)
     end;
     if RePostQuit then
-      PostQuitMessage(RePostQuitCode)
+      PostQuitMessage(ToInt32(RePostQuitCode))
   end;
   Result := inherited DoEndEdit;
 end;
@@ -4531,7 +4533,7 @@ function TCustomVirtualExplorerTree.DoInitChildren(Node: PVirtualNode; var Child
 var
   ChildNode: PVirtualNode;
 begin
-  ChildCount := ExpandNamespaceFolder(Node);
+  ChildCount := ToUInt32(ExpandNamespaceFolder(Node));
 
   // Unfortunately it is necessary to force all the nodes to be initialized
   // in order to ensure that the check state is save for nodes that have never
@@ -4679,7 +4681,7 @@ function TCustomVirtualExplorerTree.DoKeyAction(var CharCode: Word;
 
     function FindLastDisplayed: PVirtualNode;
     var
-      i: Integer;
+      i: Int64;
     begin
       Result := TopNode;
       if Assigned(Result) then
@@ -5271,7 +5273,7 @@ begin
           begin
             // Let the tree redraw itself if a dialog is popped
             // get reset when the NS callback in the AfterValidEnumIDList event
-            CurrentUpdateCount := UpdateCount;
+            CurrentUpdateCount := ToInt32(UpdateCount);
             while UpdateCount > 0 do
               EndUpdate;
 
@@ -5282,7 +5284,7 @@ begin
             { there is no children.                                                   }
             if Node.ChildCount > 0 then
               Sort(Node, Header.SortColumn, Header.SortDirection, False);
-            Result := Node.ChildCount;
+            Result := ToInt32(Node.ChildCount);
 
             if ThreadedEnum and not (csDesigning in ComponentState) then
               EnumThreadFinished;
@@ -5355,7 +5357,7 @@ begin
         if Msg.Message = WM_QUIT then
         begin
           RePostQuit := True;
-          RePostQuitCode := Msg.WParam
+          RePostQuitCode := ToInt32(Msg.WParam)
         end else
         if Msg.wParam <> ID_TIMER_ENUMBKGND then
         begin
@@ -6093,7 +6095,7 @@ begin
       Result := True;
       S := NS.NameParseAddressInFolder;
       if (Length(S) = 3) and (S[2] = ':') and (S[3] = '\') and NS.Removable then
-        Result := DiskInDrive(AnsiChar(AnsiString(S)[1]));
+        Result := DiskInDrive(AnsiChar(ToAnsiString(S)[1]));
       if not Result then
       begin
         BeginUpdate;
@@ -6512,7 +6514,9 @@ procedure TCustomVirtualExplorerTree.ReReadAndRefreshNode(Node: PVirtualNode; So
 //         and VirtualExplorerListview.pas
 ///
 var
-  i, j, PIDLsRead, NodesRead, PIDLArrayLen, NodeArrayLen: Integer;
+  i: NativeInt;
+  j: NativeInt;
+  PIDLsRead, NodesRead, PIDLArrayLen, NodeArrayLen: Integer;
   PIDLArray: TPIDLArray;
   NS, NewNS: TNamespace;
   NodeArray: TNodeSearchArray;
@@ -6910,7 +6914,7 @@ begin
           begin
             if Msg.Message = WM_QUIT then
             begin
-              RePostQuitCode := Msg.WParam;
+              RePostQuitCode := ToInt32(Msg.WParam);
               RePostQuit := True
             end else
             begin
@@ -7299,8 +7303,8 @@ begin
           end;
           for i := 0 to Header.Columns.Count - 1 do
           begin
-            StorageNode.Storage.Column.Width[i] := Header.Columns.Items[i].Width;
-            StorageNode.Storage.Column.Position[i] := Header.Columns.Items[i].Position;
+            StorageNode.Storage.Column.Width[i] := ToUInt16(Header.Columns.Items[i].Width);
+            StorageNode.Storage.Column.Position[i] := ToUInt16(Header.Columns.Items[i].Position);
             StorageNode.Storage.Column.Visible[i] := coVisible in Header.Columns.Items[i].Options;
           end;
         end
@@ -7531,7 +7535,7 @@ var
 begin
   try
     try
-      case Msg.RequestID of
+      case ToInt32(Msg.RequestID) of
         TID_ICON:
           begin
             IconRequest := Msg.Request as TShellIconThreadRequest;
@@ -7802,11 +7806,11 @@ procedure TCustomVirtualExplorerTree.WMShellNotify(var Msg: TMessage);
 ///
 
 var
-  Count: integer;
+  Count: NativeInt;
   Node: PVirtualNode;
   ShellEventList: TVirtualShellEventList;
   ShellEvent: TVirtualShellEvent;
-  i: integer;
+  i: NativeInt;
   NS: TNamespace;
   WS: string;
   MappedDriveNotification: Boolean;
@@ -8067,7 +8071,7 @@ end;
 procedure TCustomVirtualExplorerTree.WMTimer(var Msg: TWMTimer);
 var
   ShowAnimation: Boolean;
-  i: Integer;
+  i: NativeInt;
   Node: PVirtualNode;
   NewNodeData : PNodeData;
   Allow: Boolean;
@@ -8238,7 +8242,7 @@ procedure TVETPersistent.ReStoreLeafPIDLs(VET: TCustomVirtualExplorerTree;
 { state.  It uses the VET function WalkPIDLToNode to accomplish this then does  }
 { the final expand.                                                             }
 var
-  i: integer;
+  i: NativeInt;
   Node: PVirtualNode;
 begin
   VET.BeginUpdate;
@@ -8268,7 +8272,8 @@ var
   NodeArray: TNodeSearchArray;
   NodesRead: Integer;
   Desktop, Folder: IShellFolder;
-  i, j, PIDLArrayLen, NodeArrayLen: Integer;
+  i, j, NodeArrayLen: Integer;
+  PIDLArrayLen: NativeInt;
   Compare: ShortInt;
 begin
   VET.ClearSelection;
@@ -8578,7 +8583,7 @@ end;
 
 destructor TViewList.Destroy;
 var
-  i: integer;
+  i: NativeInt;
 begin
   for i := 0 to Count - 1 do
     TObject( List[i]).Free;
@@ -8595,7 +8600,8 @@ procedure TViewList.LoadFromStream(S: TStream; Version: integer = VETStreamStora
 { Loads the TView objects from the stream S.                                    }
 var
   i: integer;
-  ViewCount, NewViewIndex: integer;
+  ViewCount: integer;
+  NewViewIndex: NativeInt;
 begin
   inherited;
   S.ReadBuffer(ViewCount, SizeOf(ViewCount));
@@ -8618,7 +8624,7 @@ procedure TViewList.SaveToStream(S: TStream; Version: integer = VETStreamStorage
   WriteVerToStream: Boolean = False);
 { Write the TView objects to the stream S                                       }
 var
-  i: integer;
+  i: NativeInt;
 begin
   inherited;
   S.WriteBuffer(Count, SizeOf(Count));
@@ -8672,7 +8678,7 @@ end;
 function TViewManager.GetView(ViewName: string): TView;
 { Locates the View by the name ViewName.                                        }
 var
-  i: integer;
+  i: NativeInt;
 begin
   Result := nil;
   for i := 0 to Views.Count - 1 do
@@ -8680,7 +8686,7 @@ begin
       Result := Views[i]
 end;
 
-function TViewManager.GetViewCount: Integer;
+function TViewManager.GetViewCount: NativeInt;
 begin
   Result := Views.Count
 end;
@@ -8780,7 +8786,7 @@ end;
 
 procedure TViewManager.Clear;
 var
-  i: integer;
+  i: NativeInt;
 begin
   for i := Views.Count - 1 downto 0 do
   begin
@@ -8820,7 +8826,7 @@ end;
 
 procedure TLeafNodeList.Clear;
 var
-  i: integer;
+  i: NativeInt;
 begin
   if not ShareNodes then
     for i := 0 to Count - 1 do
@@ -8858,8 +8864,8 @@ end;
 
 procedure TLeafNodeList.SaveToStream(S: TStream; Version: integer = VETStreamStorageVer; WriteVerToStream: Boolean = False);
 var
-  i: integer;
-  ItemCount: integer;
+  i: NativeInt;
+  ItemCount: NativeInt;
 begin
   inherited;
   ItemCount := Count;
@@ -8906,7 +8912,7 @@ procedure TColumnManager.StoreColumnWidth(Column: integer);
 begin
   ValidateColumnWidths;
   { Save the default widths }
-  ColumnWidths[Column].Width := VET.Header.Columns[Column].Width;
+  ColumnWidths[Column].Width := ToUInt32(VET.Header.Columns[Column].Width);
 end;
 
 procedure TColumnManager.ToggleWidthAutoFit(ColumnIndex: integer);
@@ -8921,7 +8927,7 @@ begin
     ColumnWidths[ColumnIndex].WidthView := cwv_AutoFit
   end else
   begin
-    VET.Header.Columns.Items[ColumnIndex].Width := ColumnWidths[ColumnIndex].Width;
+    VET.Header.Columns.Items[ColumnIndex].Width := ToInt32(ColumnWidths[ColumnIndex].Width);
     ColumnWidths[ColumnIndex].WidthView := cwv_Default
   end
 end;
@@ -8937,7 +8943,7 @@ begin
     ColumnWidths[ColumnIndex].WidthView := cwv_Minimize
   end else
   begin
-    VET.Header.Columns.Items[ColumnIndex].Width := ColumnWidths[ColumnIndex].Width;
+    VET.Header.Columns.Items[ColumnIndex].Width := ToInt32(ColumnWidths[ColumnIndex].Width);
     ColumnWidths[ColumnIndex].WidthView := cwv_Default
   end
 end;
@@ -9035,7 +9041,7 @@ procedure TContextMenuManager.ContextMenuShowCallback(
     ZeroMemory(@MenuInfo, SizeOf(MenuInfo));
     MenuInfo.cbSize := SizeOf(MenuInfo);
     MenuInfo.fMask := MIIM_TYPE;
-    GetMenuItemInfo(Menu, Index, True, MenuInfo);
+    GetMenuItemInfo(Menu, ToUInt32(Index), True, MenuInfo);
     Result :=  MenuInfo.fType and MFT_SEPARATOR  <> 0
   end;
 
@@ -9056,11 +9062,11 @@ begin
         S := Namespace.ContextMenuVerb(GetMenuItemID(Menu, i));
         if StrComp(PChar(S), 'link') = 0 then
         begin
-          DeleteMenu(Menu, i, MF_BYPOSITION);
+          DeleteMenu(Menu, ToUInt32(i), MF_BYPOSITION);
           if IndexIsSeparator(i - 1) then
           begin
             if (GetMenuItemCount(Menu) = i) or IndexIsSeparator(i) then
-              DeleteMenu(Menu, i - 1, MF_BYPOSITION)
+              DeleteMenu(Menu, ToUInt32(i) - 1, MF_BYPOSITION)
           end;
           Done := True
         end;
@@ -9096,12 +9102,12 @@ begin
     if MenuShown then
       if Owner.ValidateNamespace(ActiveNode, lNS) then
       begin
-        if HiWord(AWParam) and MF_POPUP <> 0 then
-          lChildMenu := GetSubMenu(ALParam, LoWord(AWParam))
+        if HiWord(ToUInt32(AWParam)) and MF_POPUP <> 0 then
+          lChildMenu := GetSubMenu(ToNativeUInt(ALParam), LoWord(AWParam))
         else
           lChildMenu := 0;
         Owner.DoContextMenuSelect(lNS, LoWord(AWParam), lChildMenu,
-          HiWord(AWParam) and MF_MOUSESELECT <> 0);
+          HiWord(ToUInt32(AWParam)) and MF_MOUSESELECT <> 0);
       end
   end
 end;
@@ -10225,7 +10231,7 @@ var
   lBackupHeader: TBytesStream;
   lColData: PColumnData;
   lColumn: TVirtualTreeColumn;
-  lCount: UInt32;
+  lCount: Int32;
   lInner: Integer;
   lItems: TStringList;
   lVET: TCustomVirtualExplorerTree;
@@ -10250,7 +10256,7 @@ begin
           begin
             lInner := 0;
             { Create the nodes ordered in columns items relative position }
-            while (lInner < lVET.Header.Columns.Count) and (lVET.Header.Columns[lInner].Position <> lCount) do
+            while (lInner < lVET.Header.Columns.Count) and (lVET.Header.Columns[lInner].Position <> ToUInt32(lCount)) do
               Inc(lInner);
 
             lColumn := lVET.Header.Columns[lInner];
@@ -10342,7 +10348,7 @@ begin
     while Assigned(LocalChildNode) do
     begin
       LocalColData := VST.GetNodeData(LocalChildNode);
-      VET.Header.Columns[LocalColData.ColumnIndex].Position := i;
+      VET.Header.Columns[LocalColData.ColumnIndex].Position := ToUInt32(i);
       if LocalColData.Enabled then
         VET.Header.Columns[LocalColData.ColumnIndex].Options :=
            VET.Header.Columns[LocalColData.ColumnIndex].Options + [coVisible]
@@ -10622,7 +10628,7 @@ end;
 
 procedure TNodeStorage.Assign(Source: TNodeStorage);
 var
-  i: integer;
+  i: NativeInt;
   Node: TNodeStorage;
 begin
   if Assigned(Source) then
@@ -10748,7 +10754,7 @@ procedure TNodeStorage.LoadFromStream(S: TStream; Version: integer = VETStreamSt
 var
   ChildNodes, StoreUserData: Boolean;
   Size: integer;
-  i: integer;
+  i: NativeInt;
   Str: AnsiString;
   UserClass: TPersistentClass;
 begin
@@ -10801,7 +10807,7 @@ begin
       SetLength(Str, Size);
       S.read(PAnsiChar(Str)^, Size);
       // Find it in the registered classes
-      UserClass := FindClass(string(Str));
+      UserClass := FindClass(AsString(Str));
       // Create an instance of it and load it
       Storage.UserData := TUserDataStorage( UserClass.Create);
       Storage.UserData.LoadFromStream(S, Version, ReadVerFromStream);
@@ -10840,7 +10846,7 @@ procedure TNodeStorage.SaveToStream(S: TStream; Version: integer = VETStreamStor
   WriteVerToStream: Boolean = False);
 var
   ChildNodes, StoreUserData: Boolean;
-  Size: integer;
+  Size: NativeInt;
   Str: AnsiString;
 begin
   inherited;
@@ -10880,7 +10886,7 @@ begin
       // Save the Classname so we can construct a class of this type later
       Size := Length(Storage.UserData.ClassName);
       S.write(Size, SizeOf(Size));
-      Str := AnsiString(Storage.UserData.ClassName);
+      Str := ToAnsiString(Storage.UserData.ClassName);
       S.write(PAnsiChar(Str)^, Size);
       Storage.UserData.SaveToStream(S, Version, WriteVerToStream);
     end
@@ -10902,7 +10908,7 @@ end;
 
 procedure TNodeStorageList.Clear;
 var
-  i: integer;
+  i: NativeInt;
 begin
   for i := 0 to Count - 1 do
     Items[i].Free;
@@ -10984,7 +10990,7 @@ end;
 procedure TNodeStorageList.SaveToStream(S: TStream; Version: integer = VETStreamStorageVer;
   WriteVerToStream: Boolean = False);
 var
-  C, i: integer;
+  C, i: NativeInt;
 begin
   inherited;
   C := Count;
@@ -11099,7 +11105,7 @@ function TRootNodeStorage.GetCheckedFileNames: TStrings;
   procedure RecurseStorage(S: TNodeStorage; Strings: TStrings);
   var
     NS: TNamespace;
-    i: integer;
+    i: NativeInt;
     Str: string;
   begin
     NS := TNamespace.Create(S.AbsolutePIDL, nil);
@@ -11118,7 +11124,7 @@ function TRootNodeStorage.GetCheckedFileNames: TStrings;
   end;
 
 var
-  OldErrorMode: integer;
+  OldErrorMode: UInt32;
 begin
   OldErrorMode := SetErrorMode(SEM_FAILCRITICALERRORS or SEM_NOOPENFILEERRORBOX);
   try
@@ -11134,7 +11140,7 @@ function TRootNodeStorage.GetCheckedPIDLs: TCommonPIDLList;
 
   procedure RecurseStorage(S: TNodeStorage; PIDLs: TCommonPIDLList);
   var
-    i: integer;
+    i: NativeInt;
   begin
     if S.Storage.Check.CheckState = csCheckedNormal then
       PIDLs.Add(S.AbsolutePIDL);
@@ -11178,7 +11184,7 @@ function TRootNodeStorage.ProcessNode(RelativePIDL: PItemIDList; CurrentNode: TN
 { Forces the node to be returned, creating any parent nodes as it needs along    }
 { the way.                                                                       }
 var
-  i: integer;
+  i: NativeInt;
   NewNode: TNodeStorage;
 begin
   { Create the ChildList if necessary }
@@ -11226,7 +11232,7 @@ end;
 
 procedure TRootNodeStorage.SetCheckedPIDLs(const Value: TCommonPIDLList);
 var
-  i: integer;
+  i: NativeInt;
   Storage: TNodeStorage;
 begin
   Clear;
@@ -11996,8 +12002,8 @@ end;
 procedure TCustomVirtualExplorerCombobox.PaintCombo(APaintDC: HDC);
 var
   lCanvas: TCanvas;
-  lCtlState: Integer;
-  lCtlType: Integer;
+  lCtlState: Int32;
+  lCtlType: Int32;
   lDefaultDraw: Boolean;
   lDetails: TThemedElementDetails;
   lOldColor: TColor;
@@ -12119,7 +12125,7 @@ begin
         lCtlState := DFCS_SCROLLCOMBOBOX;
         if (vcbsDropDownButtonPressed in FVETComboState) or Flat then
           lCtlState := lCtlState or DFCS_FLAT;
-        DrawFrameControl(APaintDC, FButtonRect, lCtlType, lCtlState);
+        DrawFrameControl(APaintDC, FButtonRect, ToUInt32(lCtlType), ToUInt32(lCtlState));
       end;
     end;
 
@@ -12169,10 +12175,10 @@ begin
           FillRect(APaintDC, lRect, Brush.Handle);
           Brush.Color := lOldColor;
           DrawFocusRect(APaintDC, lRect);
-          lrgbBk := ColorToRGB(clHighLight);
+          lrgbBk := ToUInt32(ColorToRGB(clHighLight));
         end
         else
-          lrgbBk := ColorToRGB(Color);
+          lrgbBk := ToUInt32(ColorToRGB(Color));
 
         { Draw the Image }
         if Active and (not ComboEdit.IsEditing or (csDesigning in ComponentState)) then
@@ -13218,7 +13224,7 @@ function TPopupExplorerDropDown.RowHeight: Cardinal;
 // times the result of the function will be used for the initial height
 
 begin
-  Result := PopupExplorerTree.DefaultNodeHeight
+  Result := ToUInt32(PopupExplorerTree.DefaultNodeHeight);
 end;
 
 procedure TPopupExplorerDropDown.SetComboBoxStyle(const Value: TComboBoxStyle);
@@ -13360,7 +13366,7 @@ var
   i, StepSize: integer;
   ScreenDC: hDC;
   R: TRect;
-  Flags: Longword;
+  Flags: UInt32;
   Animate: BOOL;
 begin
   { Respect the systems settings for animation }
@@ -13378,7 +13384,7 @@ begin
           Flags := AW_SLIDE or AW_VER_NEGATIVE
         else
           Flags := AW_SLIDE or AW_VER_POSITIVE;
-        AnimateWindow(Handle, AnimationSpeed, Flags)
+        AnimateWindow(Handle, ToUInt32(AnimationSpeed), Flags)
       end else
       begin
         BackBits := TBitmap.Create;
@@ -13399,7 +13405,7 @@ begin
             begin
               BitBlt(ScreenDC, Left, Top + BackBits.Height - I * StepSize,
                 BackBits.Width, I * StepSize, BackBits.Canvas.Handle, 0, 0, SRCCOPY);
-              Sleep(AnimationSpeed div 16);
+              Sleep(ToUInt32(AnimationSpeed div 16));
             end
           end else
           begin
@@ -13407,7 +13413,7 @@ begin
             begin
               BitBlt(ScreenDC, Left, Top, BackBits.Width, i * StepSize,
                 BackBits.Canvas.Handle, 0, BackBits.Height - i * StepSize, SRCCOPY);
-              Sleep(AnimationSpeed div 16);
+              Sleep(ToUInt32(AnimationSpeed div 16));
             end;
           end;
           SetWindowPos(Handle, 0, Left, Top, Width, Height, SWP_SHOWWINDOW or SWP_NOACTIVATE);
@@ -13428,7 +13434,7 @@ procedure TDropDownWnd.AutoPositionPopup(AControl: TWinControl;
 var
   Pt: TPoint;
   OldTop: integer;
-  BorderW: Cardinal;
+  BorderW: UInt32;
   PotentialW,
   PotentialH: integer;
 begin
@@ -13439,10 +13445,10 @@ begin
   begin
     PotentialW := AControl.Width;
     if (poSizeable in PopupOptions) then
-      BorderW := GetSystemMetrics(SM_CYSIZEFRAME)
+      BorderW := ToUInt32(GetSystemMetrics(SM_CYSIZEFRAME))
     else
-      BorderW := GetSystemMetrics(SM_CYFRAME);
-    PotentialH := RowHeight * DropDownCount + BorderW;
+      BorderW := ToUInt32(GetSystemMetrics(SM_CYFRAME));
+    PotentialH := ToInt32(RowHeight * DropDownCount + BorderW);
     if Assigned(InitialExtents) then
     begin
       if InitialExtents.x > 0 then
@@ -13525,7 +13531,7 @@ begin
     if psScrollingDown in FPopupStates then
       Dir := SB_LINEDOWN;
     if Dir <> $FFFF then
-      AutoScrollWindow.Perform(WM_VSCROLL, MAKELONG(Dir, 0), 0);
+      AutoScrollWindow.Perform(WM_VSCROLL, ToNativeUInt(MAKELONG(Dir, 0)), 0);
     RefreshScrollbar
   end
 end;
@@ -14007,12 +14013,12 @@ begin
   begin
     Include(FPopupStates, psFastScroll);
     Exclude(FPopupStates, psSlowScroll);
-    FAutoScrollTimer := SetTimer(Handle, ID_TIMER_AUTOSCROLL, AutoScrollFastTime, FAutoScrollTimerStub.StubPointer);
+    FAutoScrollTimer := SetTimer(Handle, ID_TIMER_AUTOSCROLL, ToUInt32(AutoScrollFastTime), FAutoScrollTimerStub.StubPointer);
   end else
   begin
     Include(FPopupStates, psSlowScroll);
     Exclude(FPopupStates, psFastScroll);
-    FAutoScrollTimer := SetTimer(Handle, 100, AutoScrollSlowTime, FAutoScrollTimerStub.StubPointer);
+    FAutoScrollTimer := SetTimer(Handle, 100, ToUInt32(AutoScrollSlowTime), FAutoScrollTimerStub.StubPointer);
   end
 end;
 
@@ -14152,7 +14158,7 @@ end;
 
 procedure TSizeGrabber.PaintGrabber(DC: hDC);
 var
-  Flags: Longword;
+  Flags: UInt32;
   X1, X2: integer;
   Bitmap: TBitmap;
   ImageList: TImageList;
@@ -14206,7 +14212,7 @@ begin
 
         if Transparent then
         begin
-          DrawThemeBackground(ThemeScrollbar, Bitmap.Canvas.Handle, SBP_SIZEBOX, Flags, ClientRect, nil);
+          DrawThemeBackground(ThemeScrollbar, Bitmap.Canvas.Handle, SBP_SIZEBOX, ToInt32(Flags), ClientRect, nil);
 
           // Flip horizontally if necessary
           StretchBlt(Bitmap.Canvas.Handle, 0, X1, Width, X2, Bitmap.Canvas.Handle, 0, 0, Width, Height, SRCCOPY);
@@ -14223,7 +14229,7 @@ begin
           end
         end else
         begin
-          DrawThemeBackground(ThemeScrollbar, Bitmap.Canvas.Handle, SBP_SIZEBOX, Flags, ClientRect, nil);
+          DrawThemeBackground(ThemeScrollbar, Bitmap.Canvas.Handle, SBP_SIZEBOX, ToInt32(Flags), ClientRect, nil);
           // StretchBlt can flip a bitmap with a '-' sign between rectangles
           StretchBlt(DC, 0, X1, Width, X2, Bitmap.Canvas.Handle, 0, 0, Width, Height, SRCCOPY);
         end
@@ -14687,7 +14693,7 @@ var
 begin
   inherited;
   P := NativeInt( GetNodeData(pEventArgs.Node)^);
-  pEventArgs.CellText := Strings[P];
+  pEventArgs.CellText := Strings[ToInt32(P)];
 end;
 
 procedure TPopupAutoCompleteTree.DoUpdateList(const CurrentEditContents:
@@ -14803,7 +14809,7 @@ end;
 procedure TPopupAutoCompleteTree.UpdateList(CurrentEditStr: string);
 var
   Handled: Boolean;
-  i: NativeInt;
+  i: Int32;
   TestString: string;
 begin
   Handled := False;
@@ -14914,12 +14920,12 @@ end;
 
 function TPopupExplorerOptions.GetDefaultNodeHeight: Cardinal;
 begin
-  Result := PopupExplorerDropDown.PopupExplorerTree.DefaultNodeHeight
+  Result := ToUInt32(PopupExplorerDropDown.PopupExplorerTree.DefaultNodeHeight);
 end;
 
 function TPopupExplorerOptions.GetDropDownCount: integer;
 begin
-  Result := PopupExplorerDropDown.DropDownCount
+  Result := ToInt32(PopupExplorerDropDown.DropDownCount);
 end;
 
 function TPopupExplorerOptions.GetIndent: integer;
@@ -14989,12 +14995,12 @@ end;
 
 procedure TPopupExplorerOptions.SetDefaultNodeHeight(const Value: Cardinal);
 begin
-  PopupExplorerDropDown.PopupExplorerTree.DefaultNodeHeight := Value
+  PopupExplorerDropDown.PopupExplorerTree.DefaultNodeHeight := ToInt32(Value);
 end;
 
 procedure TPopupExplorerOptions.SetDropDownCount(const Value: integer);
 begin
-  PopupExplorerDropDown.DropDownCount := Value
+  PopupExplorerDropDown.DropDownCount := ToUInt32(Value);
 end;
 
 procedure TPopupExplorerOptions.SetIndent(const Value: integer);
@@ -15080,12 +15086,12 @@ end;
 
 function TPopupAutoCompleteOptions.GetDefaultNodeHeight: Cardinal;
 begin
-  Result := PopupAutoCompleteDropDown.PopupAutoCompleteTree.DefaultNodeHeight
+  Result := ToUInt32(PopupAutoCompleteDropDown.PopupAutoCompleteTree.DefaultNodeHeight);
 end;
 
 function TPopupAutoCompleteOptions.GetDropDownCount: integer;
 begin
-  Result := PopupAutoCompleteDropDown.DropDownCount
+  Result := ToInt32(PopupAutoCompleteDropDown.DropDownCount);
 end;
 
 function TPopupAutoCompleteOptions.GetIndent: integer;
@@ -15155,12 +15161,12 @@ end;
 
 procedure TPopupAutoCompleteOptions.SetDefaultNodeHeight(const Value: Cardinal);
 begin
-  PopupAutoCompleteDropDown.PopupAutoCompleteTree.DefaultNodeHeight := Value
+  PopupAutoCompleteDropDown.PopupAutoCompleteTree.DefaultNodeHeight := ToInt32(Value);
 end;
 
 procedure TPopupAutoCompleteOptions.SetDropDownCount(const Value: integer);
 begin
-  PopupAutoCompleteDropDown.DropDownCount := Value
+  PopupAutoCompleteDropDown.DropDownCount := ToUInt32(Value);
 end;
 
 procedure TPopupAutoCompleteOptions.SetIndent(const Value: integer);
@@ -15374,7 +15380,7 @@ end;
 
 function TPopupAutoCompleteDropDown.RowHeight: Cardinal;
 begin
-   Result := PopupAutoCompleteTree.DefaultNodeHeight;
+   Result := ToUInt32(PopupAutoCompleteTree.DefaultNodeHeight);
 end;
 
 procedure TPopupAutoCompleteDropDown.SetPopupOptions(const Value: TPopupOptions);
@@ -15565,7 +15571,8 @@ procedure TVirtualBkGndEnumThreadList.Flush;
 var
   L: TList;
   Done: Boolean;
-  i, Count: Integer;
+  i: NativeInt;
+  Count: Integer;
 begin
   Done := False;
   Count := 0;

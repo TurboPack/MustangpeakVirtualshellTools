@@ -125,7 +125,7 @@ type
   TCustomVirtualShellHistory = class;
   TBaseVirtualShellPersistent = class;
 
-  TVSPChangeEvent = procedure(Sender: TBaseVirtualShellPersistent; ItemIndex: Integer; ChangeType: TVSHChangeType) of object;
+  TVSPChangeEvent = procedure(Sender: TBaseVirtualShellPersistent; ItemIndex: NativeInt; ChangeType: TVSHChangeType) of object;
   TVSPGetImageEvent = procedure(Sender: TBaseVirtualShellPersistent; NS: TNamespace; var ImageList: TImageList; var ImageIndex: Integer) of object;
 
   TVSHMenuOptions = class(TPersistent)
@@ -167,7 +167,7 @@ type
     FLevels: Integer;
     FOnGetImage: TVSPGetImageEvent;
     FMenuOptions: TVSHMenuOptions;
-    FItemIndex: integer;
+    FItemIndex: NativeInt;
     FNamespaces: TList;
     FState: TBaseVSPStates;
   {$IFDEF EXPLORERCOMBOBOX_L}
@@ -180,9 +180,9 @@ type
     procedure SetMenuOptions(const Value: TVSHMenuOptions);
     function GetLargeSysImages: TImageList;
     function GetSmallSysImages: TImageList;
-    function GetItems(Index: integer): TNamespace;
-    procedure SetItemIndex(Value: integer);
-    function GetCount: integer;
+    function GetItems(Index: NativeInt): TNamespace;
+    procedure SetItemIndex(Value: NativeInt);
+    function GetCount: NativeInt;
     function GetHasBackItems: Boolean;
     function GetHasNextItems: Boolean;
   protected
@@ -193,15 +193,15 @@ type
     function DeleteDuplicates(NS: TNamespace): Boolean;
     procedure ValidateLevels;
     procedure DoGetImage(NS: TNamespace; var ImageList: TImageList; var ImageIndex: Integer); virtual;
-    procedure DoItemChange(ItemIndex: Integer; ChangeType: TVSHChangeType);
+    procedure DoItemChange(ItemIndex: NativeInt; ChangeType: TVSHChangeType);
     procedure OnMenuItemClick(Sender: TObject); virtual;
     procedure OnMenuItemDraw(Sender: TObject; ACanvas: TCanvas; ARect: TRect; Selected: Boolean); virtual;
     procedure OnMenuItemMeasure(Sender: TObject; ACanvas: TCanvas; var Width, Height: Integer); virtual;
 
-    property Count: integer read GetCount;
+    property Count: NativeInt read GetCount;
     property HasBackItems: Boolean read GetHasBackItems;
     property HasNextItems: Boolean read GetHasNextItems;
-    property ItemIndex: integer read FItemIndex write SetItemIndex;
+    property ItemIndex: NativeInt read FItemIndex write SetItemIndex;
     property LargeSysImages: TImageList read GetLargeSysImages;
     property Levels: Integer read FLevels write SetLevels default 10;
     property MenuOptions: TVSHMenuOptions read FMenuOptions write SetMenuOptions;
@@ -222,9 +222,9 @@ type
     constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
 
-    function Add(Value: TNamespace; Release: Boolean = False; SelectAsIndex: Boolean = True): integer; virtual;
+    function Add(Value: TNamespace; Release: Boolean = False; SelectAsIndex: Boolean = True): NativeInt; virtual;
     procedure Clear; virtual;
-    procedure Delete(Index: integer);
+    procedure Delete(Index: NativeInt);
     procedure FillPopupMenu(Popupmenu: TPopupMenu; FillDirection: TFillPopupDirection;
       ClearItemText: string = ''); virtual;
     {$IFDEF USE_TOOLBAR_TB2K}
@@ -239,7 +239,7 @@ type
     procedure SaveToRegistry(RootKey: DWORD; SubKey: string);
 
     property State: TBaseVSPStates read FState write FState;
-    property Items[Index: integer]: TNamespace read GetItems; default;
+    property Items[Index: NativeInt]: TNamespace read GetItems; default;
   end;
 
   TCustomVirtualShellMRU = class(TBaseVirtualShellPersistent)
@@ -272,7 +272,7 @@ type
 
   TCustomVirtualShellHistory = class(TBaseVirtualShellPersistent)
   public
-    function Add(Value: TNamespace; Release: Boolean = False; SelectAsIndex: Boolean = True): integer; override;
+    function Add(Value: TNamespace; Release: Boolean = False; SelectAsIndex: Boolean = True): NativeInt; override;
     procedure Clear; override;
     procedure Back;
     procedure Next;
@@ -312,6 +312,7 @@ uses
   TypInfo,
   {$ENDIF}
   Forms,
+  MPShellFunc,
   VirtualTrees;
 
 {$IFDEF USE_TOOLBAR_TB2K}
@@ -332,7 +333,7 @@ end;
 //WMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWM
 { TCustomVirtualShellHistory}
 function TCustomVirtualShellHistory.Add(Value: TNamespace;
-  Release: Boolean = False; SelectAsIndex: Boolean = True): integer;
+  Release: Boolean = False; SelectAsIndex: Boolean = True): NativeInt;
 begin
   Result := -1;
   if Assigned(Value) then
@@ -405,7 +406,7 @@ end;
 //WMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWM
 { TBaseVirtualShellPersistent}
 function TBaseVirtualShellPersistent.Add(Value: TNamespace;
-  Release: Boolean = False; SelectAsIndex: Boolean = True): integer;
+  Release: Boolean = False; SelectAsIndex: Boolean = True): NativeInt;
 var
   NS: TNamespace;
 begin
@@ -504,7 +505,7 @@ begin
   Result := TVSHMenuOptions.Create;
 end;
 
-procedure TBaseVirtualShellPersistent.Delete(Index: integer);
+procedure TBaseVirtualShellPersistent.Delete(Index: NativeInt);
 var
   Temp: TNamespace;
   Changed: Boolean;
@@ -553,7 +554,7 @@ begin
     OnGetImage(Self, NS, ImageList, ImageIndex);
 end;
 
-procedure TBaseVirtualShellPersistent.DoItemChange(ItemIndex: integer; ChangeType: TVSHChangeType);
+procedure TBaseVirtualShellPersistent.DoItemChange(ItemIndex: NativeInt; ChangeType: TVSHChangeType);
 begin
   if Assigned(OnChange) and not(csDestroying in ComponentState) then
     OnChange(Self, ItemIndex, ChangeType);
@@ -566,7 +567,7 @@ procedure TBaseVirtualShellPersistent.FillPopupMenu(Popupmenu: TPopupMenu;
 //the corresponding Back or Next Namespaces folder names.
 //When UnicodeEnabled is true the PopupMenu is OwnerDrawed to draw the widestrings.
 
-  procedure AddToPopup(AIndex: integer);
+  procedure AddToPopup(AIndex: NativeInt);
   var
     M: TMenuItem;
   begin
@@ -599,7 +600,7 @@ procedure TBaseVirtualShellPersistent.FillPopupMenu(Popupmenu: TPopupMenu;
   end;
 
 var
-  i: integer;
+  i: NativeInt;
 begin
   Popupmenu.Items.Clear;
   if Count > 0 then
@@ -715,7 +716,7 @@ begin
 end;
 {$ENDIF}
 
-function TBaseVirtualShellPersistent.GetCount: integer;
+function TBaseVirtualShellPersistent.GetCount: NativeInt;
 begin
   Result := Namespaces.Count
 end;
@@ -731,7 +732,7 @@ begin
   Result := ItemIndex < Count - 1;
 end;
 
-function TBaseVirtualShellPersistent.GetItems(Index: integer): TNamespace;
+function TBaseVirtualShellPersistent.GetItems(Index: NativeInt): TNamespace;
 begin
   if (Index > -1) and (Index < Count) then
     Result := TNamespace(Namespaces[Index])
@@ -773,7 +774,7 @@ begin
     if Reg.OpenKey(SubKey, False) and Reg.ValueExists(REGISTRYDATASIZE) then
     begin
       Stream.Size := Reg.ReadInteger(REGISTRYDATASIZE);
-      Reg.ReadBinaryData(REGISTRYDATA, Stream.Memory^, Stream.Size);
+      Reg.ReadBinaryData(REGISTRYDATA, Stream.Memory^, ToInt32(Stream.Size));
       LoadFromStream(Stream);
     end
   finally
@@ -788,7 +789,7 @@ procedure TBaseVirtualShellPersistent.LoadFromStream(S: TStream);
 var
   C, I: integer;
   NS: TNamespace;
-  OldErrorMode: Integer;
+  OldErrorMode: UInt32;
 begin
   Include(FState, bvsChangeItemsLoading);
   OldErrorMode := SetErrorMode(SEM_FAILCRITICALERRORS);
@@ -837,7 +838,8 @@ procedure TBaseVirtualShellPersistent.OnMenuItemDraw(Sender: TObject;
   ACanvas: TCanvas; ARect: TRect; Selected: Boolean);
 var
   WS: string;
-  i, Border: integer;
+  i: NativeInt;
+  Border: integer;
   ImageRect: TRect;
   TargetImageIndex: Integer;
   TargetImageList: TImageList;
@@ -935,7 +937,7 @@ procedure TBaseVirtualShellPersistent.OnMenuItemMeasure(Sender: TObject;
   ACanvas: TCanvas; var Width, Height: Integer);
 var
   WS: string;
-  i: integer;
+  i: NativeInt;
   Border: Integer;
 begin
   if Sender is TMenuItem then
@@ -1003,8 +1005,8 @@ begin
     if Reg.OpenKey(SubKey, True) then
     begin
       SaveToStream(Stream);
-      Reg.WriteInteger(REGISTRYDATASIZE, Stream.Size);
-      Reg.WriteBinaryData(REGISTRYDATA, Stream.Memory^, Stream.Size)
+      Reg.WriteInteger(REGISTRYDATASIZE, ToInt32(Stream.Size));
+      Reg.WriteBinaryData(REGISTRYDATA, Stream.Memory^, ToInt32(Stream.Size))
     end
   finally
     Reg.CloseKey;
@@ -1016,7 +1018,7 @@ end;
 
 procedure TBaseVirtualShellPersistent.SaveToStream(S: TStream; ForceSaveAllPaths: Boolean = False);
 var
-  i, LocalCount: integer;
+  i, LocalCount: NativeInt;
   NS: TNamespace;
   NSList: TVirtualNamespaceList;
   Store: Boolean;
@@ -1049,9 +1051,9 @@ begin
   end
 end;
 
-procedure TBaseVirtualShellPersistent.SetItemIndex(Value: integer);
+procedure TBaseVirtualShellPersistent.SetItemIndex(Value: NativeInt);
 var
-  PrevItemIndex: integer;
+  PrevItemIndex: NativeInt;
   NS: TNamespace;
 begin
   if Value < 0 then Value := 0
@@ -1151,7 +1153,7 @@ end;
 
 function TBaseVirtualShellPersistent.DeleteDuplicates(NS: TNamespace): Boolean;
 var
-  i: Integer;
+  i: NativeInt;
 begin
   Result := False;
   i := Namespaces.Count - 1;

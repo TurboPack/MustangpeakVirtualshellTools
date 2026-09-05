@@ -233,7 +233,7 @@ type
 implementation
 
 uses
-  System.UITypes;
+  System.UITypes, MPShellFunc;
 
 { TCustomOwnerDrawScrollbar }
 
@@ -254,7 +254,7 @@ begin
     Result := Max
   else begin
     PagesPerPixel := (Max - Min) / (R.Bottom - R.Top);
-    Result := Round(PagesPerPixel * (APixel - R.Top))
+    Result := ToInt32(Round(PagesPerPixel * (APixel - R.Top)))
   end
 end;
 
@@ -282,7 +282,7 @@ begin
   begin
     InflateRect(R, 0, -Metric(sbVThumbHeight) div 2);
     PixelsPerPage := (R.Bottom - R.Top) / (Max - Min);
-    Result := R.Top + Round(PixelsPerPage * Position)
+    Result := R.Top + ToInt32(Round(PixelsPerPage * Position))
   end
 end;
 
@@ -430,7 +430,7 @@ var
   lColorNew: TColor;
   lContentR: TRect;
   lDetails: TThemedElementDetails;
-  lFlags: Integer;
+  lFlags: UInt32;
   lHandled: Boolean;
   lPartState: Integer;
   lPartType: Integer;
@@ -668,7 +668,7 @@ begin
     if Enable and (not DelayTimer) and (TimerAutoScroll = 0) then
     begin
       KillDelayTimer;
-      TimerAutoScroll := SetTimer(Handle, ID_TIMERAUTOSCROLL, AutoScrollTime, nil)
+      TimerAutoScroll := SetTimer(Handle, ID_TIMERAUTOSCROLL, ToUInt32(AutoScrollTime), nil)
     end;
     if Enable and DelayTimer and (TimerAutoScrollDelay = 0) then
     begin
@@ -740,7 +740,7 @@ begin
         // Calculate the percent of the total window height that is visible (one page)
         // Note we are calcuating FMax and not using the adjusted Max returned by the property getter
         Percent := PageSize / (FMax - FMin);
-        Result := Round(Percent * Temp);
+        Result := ToInt32(Round(Percent * Temp));
         if Result < GetSystemMetrics(SM_CYVTHUMB) div 2 then
           Result := GetSystemMetrics(SM_CYVTHUMB) div 2;
         if Temp - Result < 0 then
@@ -866,14 +866,14 @@ function TCustomOwnerDrawScrollbar.SendScrollMsg(ScrollCode: Longword; NewPos: i
 // of the window.  Returns false if the scroll bar has no control parent
 
 var
-  Msg: Longword;
+  Msg: UInt32;
 begin
   Result := False;
   if Assigned(OwnerControl) then
   begin
     Msg := WM_VSCROLL;
     // Send the Scrollbar message
-    SendMessage(OwnerControl.Handle, Msg, WPARAM(MakeLong(ScrollCode, NewPos)), LPARAM(Self));
+    SendMessage(OwnerControl.Handle, Msg, WPARAM(MakeLong(ToUInt16(ScrollCode), ToUInt16(NewPos))), LPARAM(Self));
     // All code message are followed by EndScroll except Thumbtrack
     if ScrollCode <> SB_THUMBTRACK then
       SendMessage(OwnerControl.Handle, Msg, WPARAM(MakeLong(SB_ENDSCROLL, 0)), LPARAM(Self));
@@ -1091,7 +1091,7 @@ procedure TCustomOwnerDrawScrollbar.WMTimer(var Message: TWMTimer);
 var
   R: TRect;
 begin
-  case Message.TimerID of
+  case ToInt32(Message.TimerID) of
     ID_TIMERHOT:
         begin
           R := ClientRect;

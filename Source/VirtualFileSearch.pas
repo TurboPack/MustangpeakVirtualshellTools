@@ -110,7 +110,7 @@ type
     FThreadPriority: TThreadPriority;
 {$WARN SYMBOL_PLATFORM ON}
     FTimer: TTimer;
-    FUpdateRate: Integer;
+    FUpdateRate: UInt32;
   protected
     function BuildMask: Integer;
     procedure DoProgress(Results: TCommonPIDLList; var Handled: Boolean; var FreePIDLs: Boolean); virtual;
@@ -140,10 +140,13 @@ type
 {$WARN SYMBOL_PLATFORM OFF}
     property ThreadPriority: TThreadPriority read FThreadPriority write FThreadPriority default tpNormal;
 {$WARN SYMBOL_PLATFORM ON}
-    property UpdateRate: Integer read FUpdateRate write FUpdateRate default 500;
+    property UpdateRate: UInt32 read FUpdateRate write FUpdateRate default 500;
   end;
 
 implementation
+
+uses
+  MPShellFunc;
 
 { TVirtualFileSearchThread }
 constructor TVirtualFileSearchThread.Create(CreateSuspended: Boolean);
@@ -205,6 +208,7 @@ end;
 procedure TVirtualFileSearchThread.Execute;
 var
   i: Integer;
+  iNative: NativeInt;
   PIDLList: TCommonPIDLList;
 begin
   PIDLList := TCommonPIDLList.Create;
@@ -219,8 +223,8 @@ begin
   // Clean out the PIDL List
   LockThread;
   try
-    for i := 0 to PIDLList.Count - 1 do
-      SearchResultsLocal.Add(PIDLList[i]);
+    for iNative := 0 to PIDLList.Count - 1 do
+      SearchResultsLocal.Add(PIDLList[iNative]);
     PIDLList.Clear;
   finally
     UnlockThread;
@@ -233,7 +237,8 @@ var
   FindFileDataW: TWIN32FindDataW;
   FolderList: TStringList;
   FindHandle: THandle;
-  i, j: Integer;
+  i: Integer;
+  j: NativeInt;
   UseFile, Done: Boolean;
   PIDL: PItemIDList;
   CurrentPath, CurrentPathSpec: string;
@@ -390,7 +395,7 @@ begin
   FileFindThread.SearchCriteriaFileName.Assign(SearchCriteriaFilename);
 //  FileFindThread.SearchCriteriaContent.Assign(SearchCriteriaContent);
   FileFindThread.CaseSensitive := CaseSensitive;
-  FileFindThread.FileMask := BuildMask;
+  FileFindThread.FileMask := ToUInt32(BuildMask);
   FileFindThread.Priority := ThreadPriority;
   FileFindThread.Resume;
   Timer.Interval := UpdateRate;

@@ -90,7 +90,7 @@ type
 implementation
 
 uses
-  TypInfo, System.Types;
+  System.TypInfo, System.Types, System.Generics.Defaults;
 
 {$IFDEF USE_TOOLBAR_TB2K}
 procedure SetTBItemCaption(Item: TTBCustomItem; Caption: string);
@@ -106,14 +106,6 @@ begin
     SetWideStrProp(Item, PropInfo, Caption);
 end;
 {$ENDIF}
-
-function SendToMenuSort(Item1, Item2: Pointer): Integer;
-begin
-  if Assigned(Item1) and Assigned(Item2) then
-    Result := TNamespace(Item2).ComparePIDL(TNamespace(Item1).RelativePIDL, False)
-  else
-    Result := 0
-end;
 
 { TVirtualSendToMenu }
 
@@ -198,7 +190,8 @@ procedure TVirtualSendToMenu.Populate(MenuItem: TMenuItem);
   procedure Fill(NS: TNamespace; NonFolders: Boolean);
   var
     M: TMenuItem;
-    I, SendToIndex: Integer;
+    I: NativeInt;
+    SendToIndex: NativeInt;
     L: TVirtualNameSpaceList;
   begin
     // Fill a temp Namespace List with the shell send-to items
@@ -207,7 +200,14 @@ procedure TVirtualSendToMenu.Populate(MenuItem: TMenuItem);
     try
       // No messages
       NS.EnumerateFolder(0, False, NonFolders, False, EnumSendToCallback, L);
-      L.Sort(SendToMenuSort);
+      L.Sort(TComparer<TNamespace>.Construct(
+        function(const ALeft, ARight: TNamespace): Integer
+        begin
+          if Assigned(ALeft) and Assigned(ARight) then
+            Result := ARight.ComparePIDL(ALeft.RelativePIDL, False)
+          else
+            Result := 0;
+        end));
       for I := 0 to L.Count - 1 do begin
         SendToIndex := SendToItems.Add(L[I]);
         M := TMenuItem.Create(Self);
@@ -224,7 +224,7 @@ procedure TVirtualSendToMenu.Populate(MenuItem: TMenuItem);
 
 var
   NS: TNamespace;
-  OldErrorMode: Integer;
+  OldErrorMode: UInt32;
 begin
   OldErrorMode := SetErrorMode(SEM_FAILCRITICALERRORS or SEM_NOOPENFILEERRORBOX);
   try

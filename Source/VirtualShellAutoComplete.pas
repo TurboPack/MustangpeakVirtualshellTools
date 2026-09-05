@@ -211,7 +211,7 @@ end;
 
 function TCustomVirtualShellAutoComplete.GetStrings: TStringList;
 var
-  i: integer;
+  i: NativeInt;
 begin
   FStrings.Clear;
   for i := 0 to Namespaces.Count - 1 do

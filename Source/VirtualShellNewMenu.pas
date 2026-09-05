@@ -200,7 +200,7 @@ type
 implementation
 
 uses
-  System.IOUtils;
+  System.IOUtils, MPShellFunc;
 
 resourcestring
   STextDocument = 'Text Document';
@@ -301,7 +301,7 @@ begin
       if lHandle <> INVALID_HANDLE_VALUE then
       try
         // should work for Unicode
-        FileWrite(lHandle, Data^, DataSize)
+        FileWrite(lHandle, Data^, ToUInt32(DataSize))
       finally
         FileClose(lHandle);
         SHChangeNotify(SHCNE_CREATE, SHCNF_PATHW, PWideChar(ANewFileTargetPath), nil);
@@ -605,7 +605,7 @@ end;
 
 procedure TVirtualShellNewItemList.StripDuplicates;
 var
-  i, j: integer;
+  i, j: NativeInt;
   TestItem: TVirtualShellNewItem;
 begin
   for i := Count - 1 downto 0 do
@@ -675,7 +675,7 @@ end;
 
 procedure TVirtualShellNewMenu.CreateMenuItems(ParentItem: TMenuItem);
 var
-  i: integer;
+  i: NativeInt;
   NewMenuItem: TVirtualShellNewMenuItem;
   Allow: Boolean;
 begin

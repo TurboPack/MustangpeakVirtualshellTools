@@ -142,7 +142,7 @@ type
     FDirectory: string;
     FLoadedFromFile: Boolean;
     FStreamVersion: Integer;
-    FSize: Integer;
+    FSize: Int64;
     FInvalidCount: Integer;
     FThumbWidth: Integer;
     FThumbHeight: Integer;
@@ -173,7 +173,7 @@ type
     property InvalidCount: Integer read FInvalidCount;
     property LoadedFromFile: Boolean read FLoadedFromFile write FLoadedFromFile;
     property StreamVersion: Integer read FStreamVersion;
-    property Size: Integer read FSize;
+    property Size: Int64 read FSize;
   end;
 
   TCustomThumbsManager = class(TPersistent)
@@ -296,7 +296,7 @@ procedure SpConvertJPGStreamToBitmap(MS: TMemoryStream; OutBitmap: TBitmap);
 implementation
 
 uses
-  System.Types, System.Math, System.IOUtils
+  System.Types, System.Math, System.IOUtils, MPShellFunc
 {$IFDEF USEIMAGEEN}, ImageEnIo, ImageEnProc, hyieutils, iexBitmaps, iexHelperFunctions{$ENDIF};
 
 //WMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWM
@@ -364,7 +364,7 @@ function GetCrwOrientation(AStream: TStream): Integer;
           begin
             AStream.Seek(AStart+12, soFromBeginning);
             AStream.ReadBuffer(lwValue, Sizeof(lwValue));
-            AOrientation := lwValue;
+            AOrientation := ToInt32(lwValue);
           end;
       end;
     finally
@@ -382,7 +382,7 @@ begin
     AStream.ReadBuffer(wAlign, Sizeof(wAlign));
     AStream.ReadBuffer(iSize, Sizeof(iSize));
     AStream.ReadBuffer(acSignature, 8);
-    ReadDir(AStream, 26, AStream.Size-26, 0, Result);
+    ReadDir(AStream, 26, ToInt32(AStream.Size-26), 0, Result);
     if Result = 270 then
       Result := 8
     else if Result = 90 then
@@ -884,8 +884,8 @@ begin
       else if (lExt = cExtWMF) or (lExt = cExtEMF) then
       begin
         lWMFScale := Min(1, Min(AThumbW/lPicture.Graphic.Width, AThumbH/lPicture.Graphic.Height));
-        lPicture.Graphic.Width := Round(lPicture.Graphic.Width * lWMFScale);
-        lPicture.Graphic.Height := Round(lPicture.Graphic.Height * lWMFScale);
+        lPicture.Graphic.Width := ToInt32(Round(lPicture.Graphic.Width * lWMFScale));
+        lPicture.Graphic.Height := ToInt32(Round(lPicture.Graphic.Height * lWMFScale));
       end;
     end;
 
@@ -1027,7 +1027,7 @@ const
   cStringEXIF = 'Exif';
 var
   lDummy: UInt32;
-  lExifMarker_Offset: UInt32;
+  lExifMarker_Offset: Int64;
   lIFD_Exif_Offset: UInt32;
   lIFD1_Offset: UInt32;
   lIsMotorola: Boolean; // BigEndian
@@ -1089,13 +1089,13 @@ var
     lBuffer: string;
     lCardinal1: UInt32;
     lCardinal2: UInt32;
-    lCnt2: Integer;
+    lCnt2: UInt32;
     lCount: UInt16;
     lDouble: Double;
     lInner: Integer;
     lLong: UInt16;
     lMyCount: UInt32;
-    lMyPos: UInt32;
+    lMyPos: Int64;
     lMyTag: UInt16;
     lMyType: UInt16;
     lMyValue: UInt32;
@@ -1135,7 +1135,7 @@ var
               AStream.Seek(lMyPos + cASCIIMagicNumber2, soBeginning)
             else
               AStream.Seek(lExifMarker_Offset + lMyValue, soBeginning);
-            lBuffer := ReadString(lMyCount);
+            lBuffer := ReadString(ToInt32(lMyCount));
           end;
           cTagShort: // Short
           begin
@@ -1289,8 +1289,8 @@ var
   lStream: TVirtualFileStream;
   lStringStream: TStringStream;
   lThumbBuffer: string;
-  lThumbOffset: UInt32;
-  lThumbSize: UInt32;
+  lThumbOffset: Int32;
+  lThumbSize: Int32;
 begin
   Result := nil;
   lThumbOffset := 0;
@@ -1347,7 +1347,7 @@ begin
 
     if (lThumbOffset > 0) and (lThumbSize > 0) then
     begin
-      lStream.Seek(lOfs + lThumbOffset + 12, soBeginning);
+      lStream.Seek(ToInt32(lOfs) + lThumbOffset + 12, soBeginning);
       lStringStream := TStringStream.Create;
       try
         lStringStream.CopyFrom(lStream, lThumbSize);
@@ -1436,11 +1436,11 @@ end;
 
 procedure SpWriteMemoryStreamToStream(const AStream: TStream; AMemoryStream: TMemoryStream);
 var
-  lSize: Integer;
+  lSize: Int64;
 begin
   lSize := AMemoryStream.Size;
   AStream.WriteBuffer(lSize, SizeOf(lSize));
-  AStream.WriteBuffer(AMemoryStream.Memory^, lSize);
+  AStream.WriteBuffer(AMemoryStream.Memory^, ToNativeInt(lSize));
 end;
 
 function SpReadBitmapFromStream(ST: TStream; B: TBitmap): Boolean;

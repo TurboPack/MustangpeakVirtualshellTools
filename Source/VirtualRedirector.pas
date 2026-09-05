@@ -163,7 +163,7 @@ type
 implementation
 
 uses
-  SysUtils, AnsiStrings;
+  System.SysUtils, System.AnsiStrings, MPShellFunc;
 
 { TCustomVirtualRedirector }
 
@@ -413,7 +413,7 @@ begin
       if (Command[Length(Command)-1] <> #10) and (Command[Length(Command)] <> #13) then
         Command := Command + LineFeed
     end;
-    BytesToWrite := Length(Command);
+    BytesToWrite := ToUInt32(Length(Command));
     WriteFile(PipeOut, PAnsiChar(Command)^, BytesToWrite, BytesWritten, nil);
     if BytesWritten <> BytesToWrite then
       raise Exception.Create(STR_ERRORWRITINGINPIPE);
@@ -432,19 +432,19 @@ var
   Allow: Boolean;
 begin
   Allow := True;
-  DoChangeDir(string(NewDir), Allow);
+  DoChangeDir(AsString(NewDir), Allow);
   if Allow then
   begin
     // Are we on a different drive?
-    if LowerCase(WideExtractFileDrive(string(FCurrentDir))) <> LowerCase(WideExtractFileDrive(string(NewDir))) then
+    if LowerCase(WideExtractFileDrive(AsString(FCurrentDir))) <> LowerCase(WideExtractFileDrive(AsString(NewDir))) then
     begin
       // Different drive, change drives first
-      WriteUni(WideStripTrailingBackslash(WideExtractFileDrive(string(NewDir)) + ' /d', True));  // Need switch for across network drives
+      WriteUni(WideStripTrailingBackslash(WideExtractFileDrive(AsString(NewDir)) + ' /d', True));  // Need switch for across network drives
       // If not the root drive then change the directory
-      if not WideIsDrive(string(NewDir)) then
-        WriteUni('cd ' + ShortFileName(string(NewDir)));
+      if not WideIsDrive(AsString(NewDir)) then
+        WriteUni('cd ' + ShortFileName(AsString(NewDir)));
     end else
-      WriteUni('cd ' + ShortFileName(string(NewDir)));
+      WriteUni('cd ' + ShortFileName(AsString(NewDir)));
     FCurrentDir := NewDir;
   end;
 end;
@@ -461,8 +461,8 @@ begin
   begin
     // The ANSI convert will be the same size buffer
     OEMToCharA(PAnsiChar( Data), PAnsiChar(Data));
-    AnsiStrings.Trim( AnsiString(Data));
-    Result := AnsiString(AdjustLineBreaks(string(Data)));
+    Data := System.AnsiStrings.Trim(Data);
+    Result := ToAnsiString(AdjustLineBreaks(AsString(Data)));
   end else
     Result := ''
 end;
@@ -475,7 +475,7 @@ end;
 procedure TVirtualCommandLineRedirector.Write(Command: AnsiString);
 begin
   // We need watch for some special commands that we must handle differently
-  if AnsiStrings.AnsiPos('xcopy', LowerCase(Command)) > 0 then
+  if System.AnsiStrings.AnsiPos('xcopy', LowerCase(Command)) > 0 then
   begin
   // xcopy is a separate executable that the command shell will launch.  The
   // redirection doess not work well with child new processes launched from our
@@ -487,7 +487,7 @@ end;
 
 procedure TVirtualCommandLineRedirector.WriteUni(const Command: string);
 begin
-  Write(AnsiString(Command));
+  Write(ToAnsiString(Command));
 end;
 
 { TProcessTeminateThread }
@@ -525,7 +525,7 @@ begin
       begin
         if AvailableBytes > 0 then
         begin
-          Mem := AllocMem(AvailableBytes + 1);
+          Mem := AllocMem(ToNativeInt(AvailableBytes + 1));
           if ReadFile(PipeIn, Mem^, AvailableBytes, BytesRead, nil) then
             PostMessage(TargetWnd, WM_NEWINPUT, WPARAM(Mem), 0);
         end
@@ -534,7 +534,7 @@ begin
       begin
         if AvailableBytes > 0 then
         begin
-          Mem := AllocMem(AvailableBytes + 1);
+          Mem := AllocMem(ToNativeInt(AvailableBytes + 1));
           if ReadFile(PipeErrorIn, Mem^, AvailableBytes, BytesRead, nil) then
             PostMessage(TargetWnd, WM_ERRORINPUT, WPARAM(Mem), 0);
         end

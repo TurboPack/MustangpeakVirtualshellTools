@@ -817,7 +817,7 @@ var
 implementation
 
 uses
-  System.Types, ActnList, Forms, VirtualShellNotifier;
+  System.Types, Vcl.ActnList, Vcl.Forms, MPShellFunc, VirtualShellNotifier;
 
 function RectWidth(ARect: TRect): integer;
 begin
@@ -890,7 +890,7 @@ begin
   begin
     TextBounds := Rect(0, 0, Client.Right - Client.Left, 0);
     DrawText(DC, PWideChar(Caption), Length(Caption), TextBounds,
-      DT_CALCRECT or BiDiFlags);
+      ToUInt32(DT_CALCRECT or BiDiFlags));
     TextSize := Point(TextBounds.Right - TextBounds.Left, TextBounds.Bottom -
       TextBounds.Top);
   end
@@ -1153,21 +1153,22 @@ end;
 procedure TCustomWideSpeedButton.DrawButtonText(DC: HDC; const Caption: string;
   TextBounds: TRect; Enabled: Boolean; BiDiFlags: Integer);
 var
-  OldColor, Flags, OldMode: Longword;
+  OldColor: UInt32;
+  Flags, OldMode: Int32;
 begin
   OldMode := SetBkMode(DC, Windows.TRANSPARENT);
   Flags := {DT_CENTER or }DT_VCENTER or BiDiFlags;
   if not Enabled then
   begin
     OffsetRect(TextBounds, 1, 1);
-    OldColor := SetTextColor(DC, ColorToRGB(clBtnHighlight));
-    DrawText(DC, PWideChar(Caption), Length(Caption), TextBounds, Flags);
+    OldColor := SetTextColor(DC, ToUInt32(ColorToRGB(clBtnHighlight)));
+    DrawText(DC, PWideChar(Caption), Length(Caption), TextBounds, ToUInt32(Flags));
     OffsetRect(TextBounds, -1, -1);
-    SetTextColor(DC, ColorToRGB(clBtnShadow));
-    DrawText(DC, PWideChar(Caption), Length(Caption), TextBounds, Flags);
-    SetTextColor(DC, ColorToRGB(OldColor));
+    SetTextColor(DC, ToUInt32(ColorToRGB(clBtnShadow)));
+    DrawText(DC, PWideChar(Caption), Length(Caption), TextBounds, ToUInt32(Flags));
+    SetTextColor(DC, ToUInt32(ColorToRGB(TColor.FromUInt32(OldColor))));
   end else
-    DrawText(DC, PWideChar(Caption), Length(Caption), TextBounds, Flags);
+    DrawText(DC, PWideChar(Caption), Length(Caption), TextBounds, ToUInt32(Flags));
   SetBkMode(DC, OldMode);
 end;
 
@@ -1294,7 +1295,7 @@ procedure TCustomWideSpeedButton.PaintButton(DC: HDC; ForDragImage: Boolean = Fa
         if (Ng>255) then Ng:=255;
         if (Nb<0)   then Nb:=0;
         if (Nb>255) then Nb:=255;
-        Result:=RGB(Nr, Ng, Nb);
+        Result:=TColor.FromUInt32(RGB(ToUInt8(Nr), ToUInt8(Ng), ToUInt8(Nb)));
       end
     else
       Result:=Color1;
@@ -1307,12 +1308,13 @@ procedure TCustomWideSpeedButton.PaintButton(DC: HDC; ForDragImage: Boolean = Fa
 
 var
   R, TempR: TRect;
-  PartType, PartState: Longword;
+  PartType, PartState: Int32;
   Brush: TBrush;
 
   Offset, GlyphPos: TPoint;
   TextRect, GlyphRect: TRect;
-  BiDiFlags, dwTextFlags2, rgbFg: Longword;
+  BiDiFlags, dwTextFlags2: Int32;
+  rgbFg: UInt32;
 // OldOrg: TPoint;
 begin
   if Visible then
@@ -1393,7 +1395,7 @@ begin
         dwTextFlags2 := 0;
 
       DrawThemeText(ThemeToolbar, DC, PartType, PartState, PWideChar(Caption),
-        Length(Caption), BiDiFlags, dwTextFlags2, TextRect);
+        Length(Caption), ToUInt32(BiDiFlags), ToUInt32(dwTextFlags2), TextRect);
     end else // No Themes
     begin
 
@@ -1426,7 +1428,7 @@ begin
       // If it is not enabled blend it with to backgound to make it weaker looking
       if not Enabled then
       begin
-        rgbFg := ColorToRGB(Color);
+        rgbFg := ToUInt32(ColorToRGB(Color));
         dwTextFlags2 :=  dwTextFlags2 or ILD_BLEND50;
       end;
 
@@ -1438,7 +1440,7 @@ begin
 
       // Draw the Glyph and the Text
       if Assigned(ImageList) and (ImageIndex > -1) then
-        ImageList_DrawEx(ImageList.Handle, ImageIndex, DC, GlyphPos.X, GlyphPos.Y, 0, 0, CLR_NONE, rgbFg, dwTextFlags2);
+        ImageList_DrawEx(ImageList.Handle, ImageIndex, DC, GlyphPos.X, GlyphPos.Y, 0, 0, CLR_NONE, ToUInt32(rgbFg), ToUInt32(dwTextFlags2));
       DrawButtonText(DC, Caption, TextRect, Enabled, BiDiFlags);
     end
   end;
@@ -1616,7 +1618,7 @@ end;
 procedure TCustomWideSpeedButton.TimerStubProc(Wnd: HWnd; uMsg, idEvent: UINT;
   dwTime: DWORD);
 var
-  Temp: integer;
+  Temp: THandle;
 begin
   if not PtInRect(ClientRect, ScreenToClient(Mouse.CursorPos)) and (FTimer <> 0)  then
   begin
@@ -1776,7 +1778,7 @@ function TCustomVirtualToolbar.CalcMaxButtonSize(Font: TFont): TSize;
 // and returns the larget value found for each direction
 
 var
-  i: integer;
+  i: NativeInt;
   R: TRect;
 begin
   ZeroMemory(@Result, SizeOf(Result));
@@ -2361,7 +2363,7 @@ function TCustomVirtualToolbar.GetViewportBounds: TRect;
 // Used for Autosizing the parent window
 
 var
-  i: integer;
+  i: NativeInt;
 begin
  // Result := CaptionButton.BoundsRect;
   SetRect(Result, 0, 0, 0, 0);
@@ -2418,7 +2420,7 @@ end;
 
 procedure TCustomVirtualToolbar.LoadFromStream(S: TStream);
 var
-  Count, i: integer;
+  Count, i: NativeInt;
 begin
   BeginUpdate;
   try
@@ -2516,7 +2518,7 @@ end;
 
 procedure TCustomVirtualToolbar.RebuildToolbar;
 var
-  i: integer;
+  i: NativeInt;
 begin
   if not (csCreating in ControlState) and (FLockUpdateCount = 0) then
   begin
@@ -2555,7 +2557,7 @@ end;
 
 procedure TCustomVirtualToolbar.SaveToStream(S: TStream);
 var
-  i: integer;
+  i: NativeInt;
 begin
   i := ButtonList.Count;
   S.write(i, SizeOf(i));
@@ -2596,7 +2598,7 @@ end;
 
 procedure TCustomVirtualToolbar.SetButtonLayout(const Value: TButtonLayout);
 var
-  i: integer;
+  i: NativeInt;
 begin
   if FButtonLayout <> Value then
   begin
@@ -2609,7 +2611,7 @@ end;
 
 procedure TCustomVirtualToolbar.SetButtonMargin(const Value: integer);
 var
-  i: integer;
+  i: NativeInt;
 begin
   if FButtonMargin <> Value then
   begin
@@ -2622,7 +2624,7 @@ end;
 
 procedure TCustomVirtualToolbar.SetButtonSpacing(const Value: integer);
 var
-  i: integer;
+  i: NativeInt;
 begin
   if FButtonSpacing <> Value then
   begin
@@ -2668,7 +2670,7 @@ end;
 
 procedure TCustomVirtualToolbar.PaintToolbar(DC: HDC);
 var
-  i: Integer;
+  i: NativeInt;
   Pt: TPoint;
 begin
   if FLockUpdateCount = 0 then
@@ -2754,7 +2756,7 @@ procedure TCustomVirtualToolbar.SetOptions(const Value: TVirtualToolbarOptions);
 
 var
   OldOptions: TVirtualToolbarOptions;
-  i: integer;
+  i: NativeInt;
   ImageList: TCustomImageList;
 
 begin
@@ -2855,7 +2857,7 @@ procedure TCustomVirtualToolbar.StoreBackGndBitmap;
           SetViewportOrgEx(BkGndDC, OldPt.x, OldPt.y, nil);
         end else
         begin
-          Brush := CreateSolidBrush(ColorToRGB(Color));
+          Brush := CreateSolidBrush(ToUInt32(ColorToRGB(Color)));
           OldBrush := SelectObject(BkGndDC, Brush);
           FillRect(BkGndDC, ClientRect, Brush);
           SelectObject(BkGndDC, OldBrush);
@@ -2983,7 +2985,8 @@ end;
 
 procedure TCustomVirtualToolbar.ArrangeButtons;
 var
-  i, DeltaX, DeltaY: integer;
+  i: NativeInt;
+  DeltaX, DeltaY: integer;
   ButtonArea: TRect;
   Size: TSize;
 begin
@@ -3341,7 +3344,7 @@ procedure TVirtualButtonList.Clear;
 // decendants)
 
 var
-  i: integer;
+  i: NativeInt;
   Button: TCustomWideSpeedButton;
 begin
   for i := Count - 1 downto 0 do
@@ -3501,10 +3504,10 @@ procedure TCaptionButton.PaintButton(DC: HDC; ForDragImage: Boolean = False);
 // Overriden method to paint the static text "button"
 
 var
-  BiDiFlags: Longword;
+  BiDiFlags: Int32;
   TextBounds, R: TRect;
   OldMode: integer;
-  PartType, PartState, dwTextFlags1, dwTextFlags2: Longword;
+  PartType, PartState, dwTextFlags1, dwTextFlags2: Int32;
 begin
   if Caption <> '' then
   begin
@@ -3521,7 +3524,7 @@ begin
       dwTextFlags1 := DT_CENTER or DT_SINGLELINE or DT_VCENTER;
       dwTextFlags2 := 0;
       DrawThemeText(ThemeToolbar, DC, PartType, PartState, PWideChar(Caption),
-        Length(Caption), dwTextFlags1 or BiDiFlags, dwTextFlags2, R);
+        Length(Caption), ToUInt32(dwTextFlags1 or BiDiFlags), ToUInt32(dwTextFlags2), R);
     end else
     begin
       TextBounds := ClientRect;
@@ -3529,7 +3532,7 @@ begin
       InflateRect(TextBounds, -2, -2);
       dwTextFlags1 := DT_CENTER or DT_SINGLELINE or DT_VCENTER;
       DrawText(DC, PWideChar(Caption), Length(Caption), TextBounds,
-        dwTextFlags1 or BiDiFlags);
+        ToUInt32(dwTextFlags1 or BiDiFlags));
       SetBkMode(DC, OldMode);
     end;
   end
@@ -3935,7 +3938,7 @@ end;
 procedure TCustomVirtualShellToolbar.SetButtonCaptionOptions(
   const Value: TCaptionOptions);
 var
-  i: integer;
+  i: NativeInt;
 begin
   if FButtonCaptionOptions <> Value then
   begin
@@ -3993,7 +3996,7 @@ var
   Request: TShellIconThreadRequest;
 begin
   try
-    case Msg.RequestID of
+    case ToInt32(Msg.RequestID) of
       TID_ICON:
         begin
           Request := Msg.Request as TShellIconThreadRequest;
@@ -4018,10 +4021,10 @@ end;
 
 procedure TCustomVirtualShellToolbar.WMShellNotify(var Msg: TMessage);
 var
-  Count: Integer;
+  Count: NativeInt;
   ShellEventList: TVirtualShellEventList;
   ShellEvent: TVirtualShellEvent;
-  i: integer;
+  i: NativeInt;
   List: TList;
   ReCreatedOnce: Boolean;
   NS: TNamespace;
@@ -4138,7 +4141,7 @@ end;
 
 procedure TCustomVirtualSpecialFolderToolbar.CreateButtons;
 
-  procedure CreateSpecialButton(CSIDL_BUTTON: Longword);
+  procedure CreateSpecialButton(CSIDL_BUTTON: Int32);
   var
     PIDL: PItemIDList;
     Button: TShellToolButton;
@@ -4328,7 +4331,7 @@ begin
       Stream.read(@LocalPIDLSize, SizeOf(LocalPIDLSize), @BytesRead);
       SHGetMalloc(Malloc);
       PIDL := Malloc.Alloc(LocalPIDLSize);
-      Stream.read(@PIDL^, LocalPIDLSize, @BytesRead);
+      Stream.read(@PIDL^, ToUInt32(LocalPIDLSize), @BytesRead);
       Result := True;
     end
 end;
@@ -4345,6 +4348,7 @@ var
   {$endif}
   Int: integer;
   BytesWritten: LongInt;
+  lHandle: THandle;
 begin
   Result := True;
   ZeroMemory(@StgMedium, SizeOf(StgMedium));
@@ -4357,11 +4361,11 @@ begin
       Stream := IStream( StgMedium.stm);
       Stream.Seek(0, STREAM_SEEK_SET, NewPos);
 
-      Int := GetCurrentProcess;
-      Stream.write(@Int, SizeOf(Int), @BytesWritten);
+      lHandle := GetCurrentProcess;
+      Stream.write(@lHandle, SizeOf(lHandle), @BytesWritten);
       Int := PIDLSize;
       Stream.write(@Int, SizeOf(Int), @BytesWritten);
-      Stream.write(@FPIDL^, PIDLSize, @BytesWritten);
+      Stream.write(@FPIDL^, ToUInt32(PIDLSize), @BytesWritten);
 
       // Give it to the data object
       Result := Succeeded(DataObject.SetData(GetFormatEtc, StgMedium, True))
@@ -4369,6 +4373,6 @@ begin
 end;
 
 initialization
-  CF_VSTSHELLTOOLBAR := RegisterClipboardFormat(CFSTR_VSTSHELLTOOLBAR);
+  CF_VSTSHELLTOOLBAR := ToUInt16(RegisterClipboardFormat(CFSTR_VSTSHELLTOOLBAR));
 
 end.

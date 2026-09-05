@@ -219,7 +219,7 @@ type
 
   TColumnPositionIndex = packed record
     Index,              // "normal" index of the column based on the column enumeration order
-    Position: Word;     // position the user has defined that index to be in the header
+    Position: NativeInt;     // position the user has defined that index to be in the header
   end;
 
   TGroupingModifiedArray = array of TGroupingModifiedRec;
@@ -316,14 +316,14 @@ type
   private
     FAddTitleColumnCaption: Boolean;
   public
-    FDetailRequest: TCommonIntegerDynArray;
+    FDetailRequest: TCommonNativeDynArray;
     FDetails: TCommonStringDynArray;
 
     function HandleRequest: Boolean; override;
     procedure Assign(Source: TPersistent); override;
 
     property AddTitleColumnCaption: Boolean read FAddTitleColumnCaption write FAddTitleColumnCaption;
-    property DetailRequest: TCommonIntegerDynArray read FDetailRequest write FDetailRequest;
+    property DetailRequest: TCommonNativeDynArray read FDetailRequest write FDetailRequest;
     property Details: TCommonStringDynArray read FDetails write FDetails;
   end;
 
@@ -444,9 +444,9 @@ type
   TExtensionColorCodeList = class(TStreamableClass)
   private
     FItemList: TList;
-    function GetCount: Integer;
-    function GetItems(Index: Integer): TExtensionColorCode;
-    procedure SetItems(Index: Integer; Value: TExtensionColorCode);
+    function GetCount: NativeInt;
+    function GetItems(Index: NativeInt): TExtensionColorCode;
+    procedure SetItems(Index: NativeInt; Value: TExtensionColorCode);
   protected
     property ItemList: TList read FItemList write FItemList;
   public
@@ -459,8 +459,8 @@ type
     function Find(ExtList: string): TExtensionColorCode;
     procedure LoadFromStream(S: TStream; Version: integer = 0; ReadVerFromStream: Boolean = False); override;
     procedure SaveToStream(S: TStream; Version: integer = 0; WriteVerToStream: Boolean = False); override;
-    property Count: Integer read GetCount;
-    property Items[Index: Integer]: TExtensionColorCode read GetItems write SetItems; default;
+    property Count: NativeInt read GetCount;
+    property Items[Index: NativeInt]: TExtensionColorCode read GetItems write SetItems; default;
   end;
 
   // ***************************************************************
@@ -547,7 +547,7 @@ type
   private
     FCategory: TGUID;             // The GUID of the Category for grouping
     FCategoryType: TEasyCategoryType;
-    FColumn: Integer;             // The header column that maps to the Category
+    FColumn: NativeInt;             // The header column that maps to the Category
     FColumnID: TSHColumnID;       // The SCID of the header column
     FEnumerated: Boolean; // True if the Category was aquired through ICategoryProvider.EnumCategories
     FIsDefault: Boolean;  // True if the Category is the default category defined by the namespace through ICategoryProvider.GetDefaultCategory
@@ -555,7 +555,7 @@ type
   public
     property Category: TGUID read FCategory;
     property CategoryType: TEasyCategoryType read FCategoryType;
-    property Column: Integer read FColumn;
+    property Column: NativeInt read FColumn;
     property ColumnID: TSHColumnID read FColumnID;
     property Enumerated: Boolean read FEnumerated write FEnumerated;
     property IsDefault: Boolean read FIsDefault;
@@ -565,17 +565,17 @@ type
   TCategories = class
   private
     FCategoryList: TList;
-    function GetCategories(Index: Integer): TCategory;
-    function GetCount: Integer;
+    function GetCategories(Index: NativeInt): TCategory;
+    function GetCount: NativeInt;
   protected
-    procedure Delete(Index: Integer);
+    procedure Delete(Index: NativeInt);
   public
     constructor Create;
     destructor Destroy; override;
     function Add: TCategory;
     procedure Clear;
-    property Categories[Index: Integer]: TCategory read GetCategories; default;
-    property Count: Integer read GetCount;
+    property Categories[Index: NativeInt]: TCategory read GetCategories; default;
+    property Count: NativeInt read GetCount;
   end;
 
   TVirtualCustomFileTypes = class(TPersistent)
@@ -746,7 +746,7 @@ type
     function GetEnumThread: TVirtualBackGndEnumThread;
     function GetExtensionColorCodeList: TExtensionColorCodeList;
     function GetGroupingColumn: Integer;
-    function GetItemCount: Integer;
+    function GetItemCount: NativeInt;
     function GetPaintInfoColumn: TEasyPaintInfoColumn;
     function GetPaintInfoGroup: TEasyPaintInfoGroup;
     function GetPaintInfoItem: TEasyPaintInfoItem;
@@ -837,13 +837,13 @@ type
     procedure DoItemCreateEditor(Item: TEasyItem; var Editor: IEasyCellEditor); override;
     procedure DoItemCustomView(Item: TEasyItem; ViewStyle: TEasyListStyle; var View: TEasyViewItemClass); override;
     procedure DoItemDblClick(Button: TCommonMouseButton; MousePos: TPoint; HitInfo: TEasyHitInfoItem); override;
-    procedure DoItemGetCaption(AItem: TEasyItem; AColumn: Integer; var ACaption: string); override;
+    procedure DoItemGetCaption(AItem: TEasyItem; AColumn: NativeInt; var ACaption: string); override;
     procedure DoItemGetEditCaption(Item: TEasyItem; Column: TEasyColumn; var Caption: string); override;
-    procedure DoItemGetImageIndex(Item: TEasyItem; Column: Integer; ImageKind: TEasyImageKind; var ImageIndex: TCommonImageIndexInteger); override;
-    procedure DoItemGetTileDetail(Item: TEasyItem; Line: Integer; var Detail: Integer); override;
-    procedure DoItemGetTileDetailCount(Item: TEasyItem; var Count: Integer); override;
-    procedure DoItemPaintText(Item: TEasyItem; Position: Integer; ACanvas: TCanvas); override;
-    procedure DoItemSetCaption(Item: TEasyItem; Column: Integer; const Caption: string); override;
+    procedure DoItemGetImageIndex(Item: TEasyItem; Column: NativeInt; ImageKind: TEasyImageKind; var ImageIndex: TCommonImageIndexInteger); override;
+    procedure DoItemGetTileDetail(Item: TEasyItem; Line: NativeInt; var Detail: Integer); override;
+    procedure DoItemGetTileDetailCount(Item: TEasyItem; var Count: NativeInt); override;
+    procedure DoItemPaintText(Item: TEasyItem; Position: NativeInt; ACanvas: TCanvas); override;
+    procedure DoItemSetCaption(Item: TEasyItem; Column: NativeInt; const Caption: string); override;
     procedure DoItemThumbnailDraw(AItem: TEasyItem; ACanvas: TCanvas; ARect: TRect; AAlphaBlender: TEasyAlphaBlender; var ADoDefault: Boolean); override;
     procedure DoKeyAction(var CharCode: Word; var Shift: TShiftState; var DoDefault: Boolean); override;
     procedure DoLoadStorageToRoot(StorageNode: TNodeStorage); virtual;
@@ -955,7 +955,7 @@ type
     property GroupingColumn: Integer read GetGroupingColumn write SetGroupingColumn;
     property GroupingFileSizeArray: TGroupingFileSizeArray read FGroupingFileSizeArray write FGroupingFileSizeArray;
     property GroupingModifiedArray: TGroupingModifiedArray read FGroupingModifiedArray write FGroupingModifiedArray;
-    property ItemCount: Integer read GetItemCount;
+    property ItemCount: NativeInt read GetItemCount;
     property LastDropTargetNS: TNamespace read FLastDropTargetNS write FLastDropTargetNS;
     property Lock: TRTLCriticalSection read FLock write FLock;
     property Malloc: IMalloc read FMalloc write FMalloc;
@@ -1023,7 +1023,7 @@ type
     function CreateNewFolder(TargetPath: string): Boolean; overload;
     function CreateNewFolder(TargetPath: string; var NewFolder: string): Boolean; overload;
     function CreateNewFolder(TargetPath, SuggestedFolderName: string; var NewFolder: string): Boolean; overload;
-    function FindInsertPosition(WindowX, WindowY: Integer; var Group: TEasyGroup): Integer;
+    function FindInsertPosition(WindowX, WindowY: Integer; var Group: TEasyGroup): NativeInt;
     function FindItemByPath(Path: string): TEasyItem;
     function FindItemByPIDL(PIDL: PItemIDList): TExplorerItem;
     function GroupClass:  TExplorerGroupClass;
@@ -1404,14 +1404,14 @@ type
 
   TCustomVirtualMultiPathExplorerEasyListview = class(TCustomVirtualExplorerEasyListview)
   private
-    FColumnIndex: Integer;
+    FColumnIndex: NativeInt;
   protected
     function DoItemCompare(Column: TEasyColumn; Group: TEasyGroup; Item1: TEasyItem; Item2: TEasyItem): Integer; override;
     procedure DoCustomColumnAdd; override;
     procedure DoCustomColumnCompare(Column: TExplorerColumn; Group: TEasyGroup; Item1: TExplorerItem; Item2: TExplorerItem; var CompareResult: Integer); override;
     procedure DoCustomColumnGetCaption(Column: TExplorerColumn; Item: TExplorerItem; var Caption: string); override;
     procedure ScanAndDeleteInValidItems;
-    property ColumnIndex: Integer read FColumnIndex write FColumnIndex;
+    property ColumnIndex: NativeInt read FColumnIndex write FColumnIndex;
   public
     constructor Create(AOwner: TComponent); override;
     function RereadAndRefresh(DoSort: Boolean): TEasyItem; override;
@@ -1820,7 +1820,7 @@ procedure AddThumbRequest(AWindow: TWinControl; AItem: TExplorerItem; AThumbSize
 procedure LoadDefaultGroupingModifiedArray(var GroupingModifiedArray: TGroupingModifiedArray; CaptionsOnly: Boolean);
 procedure LoadDefaultGroupingFileSizeArray(var GroupingFileSizeArray: TGroupingFileSizeArray; CaptionsOnly: Boolean);
 function ListBinarySearch(Target: PItemIDList; List: TEasyItemArray; const ParentFolder: IShellFolder; Min, Max: Longint) : Longint;
-procedure ItemNamespaceQuickSort(ItemArray: TEasyItemArray; const ParentFolder: IShellFolder; L, R: Integer);
+procedure ItemNamespaceQuickSort(ItemArray: TEasyItemArray; const ParentFolder: IShellFolder; L, R: NativeInt);
 procedure SaveHeaderState(Listview: TCustomVirtualExplorerEasyListview; var HeaderState: TVirtualExplorerEasyListviewHeaderState); overload;
 procedure SaveHeaderState(Listview: TCustomVirtualExplorerEasyListview; HeaderState: PVirtualExplorerEasyListviewHeaderState); overload;
 procedure SaveHeaderStateToStream(TargetStream: TStream; HeaderState: TVirtualExplorerEasyListviewHeaderState);
@@ -1828,7 +1828,7 @@ procedure LoadHeaderState(Listview: TCustomVirtualExplorerEasyListview; HeaderSt
 procedure LoadHeaderStateFromStream(SourceStream: TStream; var HeaderState: TVirtualExplorerEasyListviewHeaderState);
 procedure HeaderStateSort(PositionType: PositionSortType; HeaderState: TVirtualExplorerEasyListviewHeaderState);
 function HeaderStateValidate(HeaderState: TVirtualExplorerEasyListviewHeaderState): Boolean;
-function HeaderStateCount(HeaderState: TVirtualExplorerEasyListviewHeaderState): Integer;
+function HeaderStateCount(HeaderState: TVirtualExplorerEasyListviewHeaderState): NativeInt;
 procedure SaveListviewToDefaultColumnWidths(Listview: TCustomVirtualExplorerEasyListview);
 procedure SaveListviewToColumnArray(Listview: TCustomVirtualExplorerEasyListview; var ColumnWidths: TColumnWidthArray);
 procedure LoadListviewWidthDefaultColumnWidths(Listview: TCustomVirtualExplorerEasyListview);
@@ -1837,7 +1837,8 @@ procedure LoadListviewWithColumnArray(Listview: TCustomVirtualExplorerEasyListvi
 implementation
 
 uses
-  TypInfo, System.Types, System.UITypes, Dialogs, Vcl.Forms;
+  System.TypInfo, System.Types, System.UITypes, Vcl.Dialogs, Vcl.Forms,
+  MPShellFunc;
 
 type
   TEasySelectionManagerHack = class(TEasySelectionManager);
@@ -1888,7 +1889,7 @@ begin
   end
 end;
 
-function HeaderStateCount(HeaderState: TVirtualExplorerEasyListviewHeaderState): Integer;
+function HeaderStateCount(HeaderState: TVirtualExplorerEasyListviewHeaderState): NativeInt;
 begin
   Result := -1;
   if HeaderStateValidate(HeaderState) then
@@ -1902,12 +1903,12 @@ begin
             (Length(HeaderState.Position) = Length(HeaderState.SortDirection))
 end;
 
-procedure PositionQuickSort(PositionType: PositionSortType; HeaderState: TVirtualExplorerEasyListviewHeaderState; L, R: Integer);
+procedure PositionQuickSort(PositionType: PositionSortType; HeaderState: TVirtualExplorerEasyListviewHeaderState; L, R: NativeInt);
 ///
 ///
 var
-  I, J: Integer;
-  Middle: Integer;
+  I, J: NativeInt;
+  Middle: NativeInt;
   TempVisible: Boolean;
   TempWidth: Integer;
   TempPosition: TColumnPositionIndex;
@@ -1974,7 +1975,7 @@ end;
 
 procedure SaveHeaderState(Listview: TCustomVirtualExplorerEasyListview; var HeaderState: TVirtualExplorerEasyListviewHeaderState);
 var
-  i: Integer;
+  i: NativeInt;
 begin
   SetLength(HeaderState.Visible, Listview.Header.Columns.Count);
   SetLength(HeaderState.Width, Listview.Header.Columns.Count);
@@ -1992,7 +1993,7 @@ end;
 
 procedure SaveHeaderStateToStream(TargetStream: TStream; HeaderState: TVirtualExplorerEasyListviewHeaderState);
 var
-  Count: Integer;
+  Count: NativeInt;
 begin
   if HeaderStateValidate(HeaderState) then
   begin
@@ -2008,7 +2009,7 @@ end;
 
 procedure LoadHeaderState(Listview: TCustomVirtualExplorerEasyListview; HeaderState: TVirtualExplorerEasyListviewHeaderState);
 var
-  i: Integer;
+  i: NativeInt;
 begin
   Listview.BeginUpdate;
   try
@@ -2081,7 +2082,7 @@ end;
 
 procedure LoadDefaultGroupingModifiedArray(var GroupingModifiedArray: TGroupingModifiedArray; CaptionsOnly: Boolean);
 var
-  i: Integer;
+  i: NativeInt;
 begin
   GROUPINGFILESIZE[0] := STR_GROUPSIZEZERO;
   GROUPINGFILESIZE[1] :=  STR_GROUPSIZETINY;
@@ -2120,7 +2121,7 @@ end;
 
 procedure LoadDefaultGroupingFileSizeArray(var GroupingFileSizeArray: TGroupingFileSizeArray; CaptionsOnly: Boolean);
 var
-  i: Integer;
+  i: NativeInt;
 begin
   SetLength(GroupingFileSizeArray, High(GROUPINGFILESIZE) + 1);
   for i := 0 to Length(GroupingFileSizeArray) - 1 do
@@ -2170,7 +2171,7 @@ end;
 
 function ShellCollectionSort(Column: TEasyColumn; Item1, Item2: TEasyItem): Integer;
 var
-  Index: Integer;
+  Index: NativeInt;
 begin
   if not Assigned(Column) then
     Index := 0
@@ -2183,13 +2184,13 @@ begin
     Result := -Result
 end;
 
-procedure ItemNamespaceQuickSort(ItemArray: TEasyItemArray; const ParentFolder: IShellFolder; L, R: Integer);
+procedure ItemNamespaceQuickSort(ItemArray: TEasyItemArray; const ParentFolder: IShellFolder; L, R: NativeInt);
 ///
 /// NOTE:  Make sure any changes to this method are reflected in both VirtualExplorerTree.pas
 //         and VirtualExplorerListview.pas
 ///
 var
-  I, J: Integer;
+  I, J: NativeInt;
   P, T: TEasyItem;
 begin
   if L < R then
@@ -2525,7 +2526,7 @@ end;
 function TCustomVirtualExplorerEasyListview.DoItemCompare(Column: TEasyColumn;
   Group: TEasyGroup; Item1: TEasyItem; Item2: TEasyItem): Integer;
 var
-  ColumnIndex: Integer;
+  ColumnIndex: NativeInt;
   DoDefault, IsFolder1, IsFolder2: Boolean;
   NS1, NS2: TNamespace;
 begin
@@ -2602,7 +2603,7 @@ begin
       Result := inherited ExecuteDragDrop(AvailableEffects, DataObjectInf, DropSource, dwEffect)
     end else begin
       ldwEffect := DWord(dwEffect);
-      Result := SHDoDragDrop(Handle, DataObjectInf, nil, DropEffectStatesToDropEffect(AvailableEffects), ldwEffect);
+      Result := SHDoDragDrop(Handle, DataObjectInf, nil, ToUInt32(DropEffectStatesToDropEffect(AvailableEffects)), ldwEffect);
       dwEffect := Integer(ldwEffect);
     end;
   end else
@@ -2846,7 +2847,7 @@ begin
     NS.Free;
 end;
 
-function TCustomVirtualExplorerEasyListview.FindInsertPosition(WindowX, WindowY: Integer; var Group: TEasyGroup): Integer;
+function TCustomVirtualExplorerEasyListview.FindInsertPosition(WindowX, WindowY: Integer; var Group: TEasyGroup): NativeInt;
 var
   ViewPt: TPoint;
 begin
@@ -2901,7 +2902,7 @@ begin
   Result := (View = elsReport) or Header.ShowInAllViews
 end;
 
-function TCustomVirtualExplorerEasyListview.GetItemCount: Integer;
+function TCustomVirtualExplorerEasyListview.GetItemCount: NativeInt;
 begin
   Result := Groups.ItemCount
 end;
@@ -3018,7 +3019,7 @@ function TCustomVirtualExplorerEasyListview.LoadStorageToRoot(StorageNode: TNode
 // Copies the view settings stored in the StorageNode to the control
 //
 var
-  i: Integer;
+  i: NativeInt;
   NS: TNamespace;
 begin
   Result := False;
@@ -3228,7 +3229,7 @@ var
   lColumn: TEasyColumn;
   lColumnNames: TVirtualStringTree;
   lColumnSettings: TFormColumnSettings;
-  lCount: Integer;
+  lCount: NativeInt;
   lInner: Integer;
   lItem: {$IFDEF USE_TOOLBAR_TB2K}TTBCustomItem{$ELSE}TVirtualMenuItem{$ENDIF};
   lItems: TStringList;
@@ -3273,7 +3274,7 @@ begin
               lColData.Title := lColumn.Caption;
               lColData.Enabled := lColumn.Visible;
               lColData.Width := lColumn.Width;
-              lColData.ColumnIndex := lColumn.Index;
+              lColData.ColumnIndex := ToInt32(lColumn.Index);
             end
             else
               lItems.AddObject(lColumn.Caption, lColumn);
@@ -3282,12 +3283,12 @@ begin
 
         for lCount := 0 to lItems.Count - 1 do
         begin
-          lColumn := lItems.Objects[lCount] as TEasyColumn;
+          lColumn := lItems.Objects[ToInt32(lCount)] as TEasyColumn;
           lColData := lColumnNames.GetNodeData(lColumnNames.AddChild(nil));
           lColData.Title := lColumn.Caption;
           lColData.Enabled := lColumn.Visible;
           lColData.Width := lColumn.Width;
-          lColData.ColumnIndex := lColumn.Index;
+          lColData.ColumnIndex := ToInt32(lColumn.Index);
         end;
 
         Header.SaveToStream(lBackupHeader);
@@ -3554,7 +3555,7 @@ begin
 end;
 
 procedure TCustomVirtualExplorerEasyListview.DoItemPaintText(Item: TEasyItem;
-  Position: Integer; ACanvas: TCanvas);
+  Position: NativeInt; ACanvas: TCanvas);
 var
   ColorCode: TExtensionColorCode;
 begin
@@ -3695,7 +3696,7 @@ end;
 procedure TCustomVirtualExplorerEasyListview.EnumThreadTimer(Enable: Boolean);
 var
   Msg: TMsg;
-  RePostQuitCode: Integer;
+  RePostQuitCode: WPARAM;
   RePostQuit: Boolean;
 begin
   if HandleAllocated then
@@ -3727,7 +3728,7 @@ begin
         end
       end;
       if RePostQuit then
-        PostQuitMessage(RePostQuitCode);
+        PostQuitMessage(ToInt32(RePostQuitCode));
     end
   end
 end;
@@ -3736,7 +3737,7 @@ procedure TCustomVirtualExplorerEasyListview.FlushDetailsOfThread;
 var
   Msg: TMsg;
   R: TCommonThreadRequest;
-  RePostQuitCode: Integer;
+  RePostQuitCode: WPARAM;
   RePostQuit: Boolean;
 begin
   if Assigned(DetailsOfThread) then
@@ -3762,7 +3763,7 @@ begin
           end
         end;
         if RepostQuit then
-          PostQuitMessage(RePostQuitCode);
+          PostQuitMessage(ToInt32(RePostQuitCode));
       end;
       if Assigned(DetailsOfThread) then
         DetailsOfThread.FlushRequestList;
@@ -3907,7 +3908,7 @@ end;
 
 procedure TCustomVirtualExplorerEasyListview.OrphanThreadsFree;
 var
-  i: Integer;
+  i: NativeInt;
   Temp: TCommonThread;
 begin
   for i := OrphanThreadList.Count - 1 downto 0 do
@@ -3925,7 +3926,7 @@ procedure TCustomVirtualExplorerEasyListview.PackTileStrings(NS: TNamespace);
 //
 // Packs the strings by removing any blank strings
 var
-  i, j: Integer;
+  i, j: NativeInt;
 begin
   for i := Length(NS.TileDetail) - 1 downto 0 do
   begin
@@ -4009,7 +4010,9 @@ end;
 
 procedure TCustomVirtualExplorerEasyListview.SaveToStream(S: TStream);
 var
-  TempInt, i, Version: Integer;
+  TempInt: NativeInt;
+  i: NativeInt;
+  Version: Integer;
 begin
   inherited SaveToStream(S);
   Version := CURRENT_EASYLISTVIEWEXPLORER_STREAM_VERSION;
@@ -4413,7 +4416,7 @@ procedure TCustomVirtualExplorerEasyListview.ContextMenuShowCallback(Namespace: 
     ZeroMemory(@MenuInfo, SizeOf(MenuInfo));
     MenuInfo.cbSize := SizeOf(MenuInfo);
     MenuInfo.fMask := MIIM_TYPE;
-    GetMenuItemInfo(Menu, Index, True, MenuInfo);
+    GetMenuItemInfo(Menu, ToUInt32(Index), True, MenuInfo);
     Result :=  MenuInfo.fType and MFT_SEPARATOR  <> 0
   end;
 
@@ -4434,11 +4437,11 @@ begin
         S := Namespace.ContextMenuVerb(GetMenuItemID(Menu, i));
         if WideStrComp(PWideChar(S), 'link') = 0 then
         begin
-          DeleteMenu(Menu, i, MF_BYPOSITION);
+          DeleteMenu(Menu, ToUInt32(i), MF_BYPOSITION);
           if IndexIsSeparator(i - 1) then
           begin
             if (GetMenuItemCount(Menu) = i) or IndexIsSeparator(i) then
-              DeleteMenu(Menu, i - 1, MF_BYPOSITION)
+              DeleteMenu(Menu, ToUInt32(i - 1), MF_BYPOSITION)
           end;
           Done := True
         end;
@@ -4644,7 +4647,7 @@ begin
     DoShellExecute(Selection.First);
 end;
 
-procedure TCustomVirtualExplorerEasyListview.DoItemGetCaption(AItem: TEasyItem; AColumn: Integer; var ACaption: string);
+procedure TCustomVirtualExplorerEasyListview.DoItemGetCaption(AItem: TEasyItem; AColumn: NativeInt; var ACaption: string);
 var
   lCount: Integer;
   lDetailsOfRequest: TEasyDetailStringsThreadRequest;
@@ -4726,7 +4729,7 @@ begin
   inherited DoItemGetCaption(AItem, AColumn, ACaption);
 end;
 
-procedure TCustomVirtualExplorerEasyListview.DoItemGetImageIndex(Item: TEasyItem; Column: Integer; ImageKind: TEasyImageKind; var ImageIndex: TCommonImageIndexInteger);
+procedure TCustomVirtualExplorerEasyListview.DoItemGetImageIndex(Item: TEasyItem; Column: NativeInt; ImageKind: TEasyImageKind; var ImageIndex: TCommonImageIndexInteger);
 var
   NS: TNamespace;
   IconRequest: TShellIconThreadRequest;
@@ -4785,7 +4788,7 @@ begin
   inherited DoItemGetImageIndex(Item, Column, ImageKind, ImageIndex);
 end;
 
-procedure TCustomVirtualExplorerEasyListview.DoItemGetTileDetail(Item: TEasyItem; Line: Integer; var Detail: Integer);
+procedure TCustomVirtualExplorerEasyListview.DoItemGetTileDetail(Item: TEasyItem; Line: NativeInt; var Detail: Integer);
 var
   NS: TNamespace;
   TileRequest: TEasyDetailsThreadRequest;
@@ -4827,7 +4830,7 @@ begin
   end
 end;
 
-procedure TCustomVirtualExplorerEasyListview.DoItemGetTileDetailCount(Item: TEasyItem; var Count: Integer);
+procedure TCustomVirtualExplorerEasyListview.DoItemGetTileDetailCount(Item: TEasyItem; var Count: NativeInt);
 var
   NS: TNamespace;
 begin
@@ -4835,7 +4838,7 @@ begin
     Count := Length(NS.TileDetail) + 1;
 end;
 
-procedure TCustomVirtualExplorerEasyListview.DoItemSetCaption(Item: TEasyItem; Column: Integer; const Caption: string);
+procedure TCustomVirtualExplorerEasyListview.DoItemSetCaption(Item: TEasyItem; Column: NativeInt; const Caption: string);
 begin
   if Column < 1 then
   begin
@@ -4954,7 +4957,7 @@ begin
           ARect := Scrollbars.MapViewRectToWindowRect(ARect, True);
           IntersectRect(ARect, ARect, ClientRect);
           if Color < 0 then
-            AlphaBlend(0, ACanvas.Handle, ARect, Point(0, 0), cbmConstantAlphaAndColor, 198, GetSysColor(Color and $000000FF))
+            AlphaBlend(0, ACanvas.Handle, ARect, Point(0, 0), cbmConstantAlphaAndColor, 198, ToInt32(GetSysColor(Color and $000000FF)))
           else
             AlphaBlend(0, ACanvas.Handle, ARect, Point(0, 0), cbmConstantAlphaAndColor, 198, Color)
         end;
@@ -5058,7 +5061,7 @@ begin
       if Assigned(LastDropTargetNS) then
       begin
         dwEffect := DropEffectStatesToDropEffect(AvailableEffects);
-        if Succeeded(LastDropTargetNS.Drop(DataObject, KeyStatesToKey(KeyState), WindowPt, dwEffect)) then
+        if Succeeded(LastDropTargetNS.Drop(DataObject, ToInt32(KeyStatesToKey(KeyState)), WindowPt, dwEffect)) then
           DesiredEffect := DropEffectToDropEffectState(dwEffect);
       end
     end;
@@ -5081,7 +5084,7 @@ begin
     LastDropTargetNS := RootFolderNamespace;
     dwEffect := DropEffectStatesToDropEffect(AvailableEffects);
     if Assigned(LastDropTargetNS) then
-      LastDropTargetNS.DragEnter(DragDataObject, KeyStatesToKey(KeyState), WindowPt, dwEffect);
+      LastDropTargetNS.DragEnter(DragDataObject, ToInt32(KeyStatesToKey(KeyState)), WindowPt, dwEffect);
     DesiredEffect := DropEffectToDropEffectState(dwEffect)
   end;
   inherited DoOLEDropTargetDragEnter(DataObject, KeyState, WindowPt, AvailableEffects, DesiredEffect);
@@ -5126,14 +5129,14 @@ begin
       begin
         // Don't let the drag item drop on itself.
         if not DataObjectContainsPIDL(LastDropTargetNS.AbsolutePIDL, DragDataObject) then
-          LastDropTargetNS.DragEnter(DragDataObject, KeyStatesToKey(KeyState), WindowPt, dwEffect)
+          LastDropTargetNS.DragEnter(DragDataObject, ToInt32(KeyStatesToKey(KeyState)), WindowPt, dwEffect)
         else
          LastDropTargetNS := nil
       end
     end;
     DesiredEffect := cdeNone;
     if Assigned(LastDropTargetNS) then
-      if Succeeded(LastDropTargetNS.DragOver(KeyStatesToKey(KeyState), WindowPt, dwEffect)) then
+      if Succeeded(LastDropTargetNS.DragOver(ToInt32(KeyStatesToKey(KeyState)), WindowPt, dwEffect)) then
         DesiredEffect := DropEffectToDropEffectState(dwEffect)
   end;
   inherited DoOLEDropTargetDragOver(KeyState, WindowPt, AvailableEffects, DesiredEffect);
@@ -5302,7 +5305,7 @@ begin
         // DON'T RELEASE THE REQUEST IN THE CALLBACK
         if Assigned(OnThreadCallback) then
           OnThreadCallBack(Self, AMsg);
-        case AMsg.RequestID of
+        case ToInt32(AMsg.RequestID) of
           TID_ICON:
           begin
             if ValidateNamespace(lItem, lNamespace) then
@@ -5399,10 +5402,10 @@ begin
             else
               LargeIconSize := GetSystemMetrics(SM_CXICON);
             Reg.WriteString('Shell Icon Size', IntToStr(LargeIconSize + 1));
-            SendMessage(Handle, WM_SETTINGCHANGE, SPI_SETNONCLIENTMETRICS, WPARAM(PChar('WindowMetrics')));
+            SendMessage(Handle, WM_SETTINGCHANGE, SPI_SETNONCLIENTMETRICS, LPARAM(PChar('WindowMetrics')));
             FileIconInit(True); // Flush the cached Icons
             Reg.WriteString('Shell Icon Size', IntToStr(LargeIconSize));
-            SendMessage(Handle, WM_SETTINGCHANGE, SPI_SETNONCLIENTMETRICS, WPARAM(PChar('WindowMetrics')));
+            SendMessage(Handle, WM_SETTINGCHANGE, SPI_SETNONCLIENTMETRICS, LPARAM(PChar('WindowMetrics')));
             FileIconInit(True); // Flush the cached Icons
           end;
         except // Quiet failure
@@ -5420,7 +5423,7 @@ end;
 
 procedure TCustomVirtualExplorerEasyListview.InvalidateImageByIndex(ImageIndex: Integer);
 var
-  i, j: Integer;
+  i, j: NativeInt;
   NS: TNamespace;
 begin
   for j := 0 to Groups.Count - 1 do
@@ -5594,7 +5597,8 @@ var
   Category: TGUID;
   WS: string;
   EnumGUID: IEnumGUID;
-  Fetched, i: UINT;
+  Fetched: UINT;
+  I: NativeInt;
   NewCategory: TCategory;
   Provider: ICategoryProvider;
   Categorizer: ICategorizer;
@@ -5650,7 +5654,7 @@ begin
     for i := 0 to Header.Columns.Count - 1 do
     begin
       Category := GUID_NULL;
-      if Succeeded(NS.ShellFolder2.MapColumnToSCID(i, pscid)) then
+      if Succeeded(NS.ShellFolder2.MapColumnToSCID(ToUInt32(i), pscid)) then
         if Succeeded(Provider.CanCategorizeOnSCID(pscid)) then
           if Succeeded(Provider.GetCategoryForSCID(pscid, Category)) then
           begin
@@ -5661,7 +5665,7 @@ begin
             if IsEqualGUID(GUID_NULL, Category) then
             begin
               // If Category is NULL that means use the "standard" Categorizors
-              case i of
+              case ToInt32(i) of
                 0: CategoryInfo[i].FCategory := CLSID_AlphabeticalCategorizer;
                 1: CategoryInfo[i].FCategory := CLSID_SizeCategorizer;
                 2: CategoryInfo[i].FCategory := CLSID_DriveTypeCategorizer;
@@ -5758,7 +5762,7 @@ end;
 
 procedure TCustomVirtualExplorerEasyListview.RebuildShellHeader;
 
-  function ValidIndex(TestIndex: Integer): Boolean;
+  function ValidIndex(TestIndex: NativeInt): Boolean;
   begin
     Result := TestIndex <= High(VET_DEFAULT_DRIVES_COLUMNWIDTHS)
   end;
@@ -5875,7 +5879,8 @@ function TCustomVirtualExplorerEasyListview.RereadAndRefresh(DoSort: Boolean): T
   end;
 
 var
-  i, j, PIDLsRead, ItemsRead, PIDLArrayLen, ItemArrayLen: Integer;
+  i: NativeInt;
+  j, PIDLsRead, ItemsRead, PIDLArrayLen, ItemArrayLen: Integer;
   PIDLArray: TPIDLArray;
   ItemArray: TEasyItemArray;
   Compare: ShortInt;
@@ -6050,7 +6055,7 @@ end;
 procedure TCustomVirtualExplorerEasyListview.SetChangeNotifierEnabled(Value: Boolean);
 var
   Msg: TMsg;
-  RePostQuitCode: Integer;
+  RePostQuitCode: WPARAM;
   RePostQuit: Boolean;
 begin
   if (ComponentState * [csDesigning, csLoading] = [] )and not (csCreating in ControlState) then
@@ -6083,7 +6088,7 @@ begin
             end
           end;
           if RePostQuit then
-            PostQuitMessage(RePostQuitCode);
+            PostQuitMessage(ToInt32(RePostQuitCode));
 
         ChangeNotifier.UnRegisterShellChangeNotify(Self);
         FChangeNotifierEnabled := False;
@@ -6559,7 +6564,7 @@ procedure TCustomVirtualExplorerEasyListview.SaveRootToStorage(StorageNode: TNod
 // Copies the current view settings of the control to the passed StorageNode.
 // To copy a saved StorageNode to the control see LoadStorageToRoot
 var
-  i: Integer;
+  i: NativeInt;
 begin
   if Assigned(StorageNode) then
   begin
@@ -6581,8 +6586,8 @@ begin
         StorageNode.Storage.Column.SortDir := Integer(Header.Columns[i].SortDirection);
       end;
       StorageNode.Storage.Column.Visible[i] := Header.Columns[i].Visible;
-      StorageNode.Storage.Column.Position[i] := Header.Columns[i].Position;
-      StorageNode.Storage.Column.Width[i] := Header.Columns[i].Width;
+      StorageNode.Storage.Column.Position[i] := ToUInt16(Header.Columns[i].Position);
+      StorageNode.Storage.Column.Width[i] := ToUInt16(Header.Columns[i].Width);
     end;
     DoSaveRootToStorage(StorageNode)
   end;
@@ -6622,7 +6627,7 @@ end;
 
 procedure TCustomVirtualExplorerEasyListview.TestVisiblilityForSingleColumn;
 var
-  i: Integer;
+  i: NativeInt;
 begin
   if (Header.FixedSingleColumn and (View = elsReport)) then
   begin
@@ -6678,12 +6683,13 @@ end;
 
 procedure TCustomVirtualExplorerEasyListview.WMChangeCBChain(var Msg: TMessage);
 var
-  RemovedWnd, NextWnd: HWnd;
+  RemovedWnd: WPARAM;
+  NextWnd: LPARAM;
 begin
   RemovedWnd := Msg.WParam;
   NextWnd := Msg.LParam;
   if RemovedWnd = ClipChainWnd then
-    ClipChainWnd := NextWnd    // If it's our "next guy", then re-adjust the next guy pointer
+    ClipChainWnd := ToNativeUInt(NextWnd)    // If it's our "next guy", then re-adjust the next guy pointer
   else
     SendMessage(ClipChainWnd, WM_CHANGECBCHAIN, RemovedWnd, NextWnd); // else just pass the remove notice along
   Msg.Result := 0;   {we handled it}
@@ -6709,7 +6715,7 @@ procedure TCustomVirtualExplorerEasyListview.WMDetailsOfThread(var Msg: TWMThrea
 var
   AnItem: TExplorerItem;
   NS: TNamespace;
-  Column: Integer;
+  Column: NativeInt;
 begin
   inherited;
   AnItem := TExplorerItem(Msg.Request.Item);
@@ -6793,11 +6799,11 @@ procedure TCustomVirtualExplorerEasyListview.WMShellNotify(var Msg: TMessage);
 ///
 
 var
-  Count: integer;
+  Count: NativeInt;
   Item: TExplorerItem;
   ShellEventList: TVirtualShellEventList;
   ShellEvent: TVirtualShellEvent;
-  i: integer;
+  i: NativeInt;
   NS: TNamespace;
   WS: string;
   MappedDriveNotification: Boolean;
@@ -7066,7 +7072,7 @@ end;
 procedure TCustomVirtualExplorerEasyListview.WMTimer(var Msg: TWMTimer);
 var
   ShowAnimation: Boolean;
-  i: Integer;
+  i: NativeInt;
   Allow: Boolean;
   NS: TNamespace;
   LocalList:  TCommonPIDLList;
@@ -7173,7 +7179,7 @@ end;
 
 function TEasyDetailsThreadRequest.HandleRequest: Boolean;
 var
-  i: Integer;
+  i: NativeInt;
 begin
   Result := True;
   SetLength(FDetails, Length(DetailRequest));
@@ -7266,9 +7272,9 @@ procedure LoadThumbInfoFromAlbum(AListview: TCustomVirtualExplorerEasyListview; 
 var
   lAlbumT: TThumbInfo;
   lExplorerItem: TExplorerItem;
-  lCount: Integer;
+  lCount: NativeInt;
   lIndex: Integer;
-  lInner: Integer;
+  lInner: NativeInt;
   lItem: TEasyItem;
   lItems: TEasyItems;
   lNamespace: TNamespace;
@@ -7314,9 +7320,9 @@ end;
 procedure SaveThumbInfoToAlbum(AListview: TCustomVirtualExplorerEasyListview; AAlbum: TThumbAlbum);
 var
   lCompressed: Boolean;
-  lCount: Integer;
+  lCount: NativeInt;
   lExplorerItem: TExplorerItem;
-  lInner: Integer;
+  lInner: NativeInt;
   lItem: TEasyItem;
   lItems: TEasyItems;
   lNameSpace: TNamespace;
@@ -7459,19 +7465,19 @@ begin
   FCategoryList.Add(Result);
 end;
 
-function TCategories.GetCategories(Index: Integer): TCategory;
+function TCategories.GetCategories(Index: NativeInt): TCategory;
 begin
   Result := TCategory(FCategoryList[Index])
 end;
 
-function TCategories.GetCount: Integer;
+function TCategories.GetCount: NativeInt;
 begin
   Result := FCategoryList.Count;
 end;
 
 procedure TCategories.Clear;
 var
-  i: Integer;
+  i: NativeInt;
 begin
   try
     for i := 0 to FCategoryList.Count - 1 do
@@ -7481,7 +7487,7 @@ begin
   end
 end;
 
-procedure TCategories.Delete(Index: Integer);
+procedure TCategories.Delete(Index: NativeInt);
 begin
   TObject( FCategoryList.Items[Index]).Free;
   FCategoryList.Delete(Index)
@@ -7620,7 +7626,7 @@ end;
 { TEasyDetailStringsThreadRequest }
 function TEasyDetailStringsThreadRequest.HandleRequest: Boolean;
 var
-  i: Integer;
+  i: NativeInt;
   NS: TNamespace;
   WS, Title: string;
 begin
@@ -7721,7 +7727,7 @@ procedure TELVPersistent.RestoreList(ELV: TCustomVirtualExplorerEasyListview; Re
 var
   VEEL: TVirtualExplorerEasyListview;
   Item: TExplorerItem;
-  i: Integer;
+  i: NativeInt;
   Sel: TEasySelectionManagerHack;
 begin
   if States * [epsRestoring, epsSaving] = [] then
@@ -7846,7 +7852,7 @@ end;
 procedure TEasyExplorerMemoEditor.SelectFileName(FileNameOnly: Boolean);
 var
   P: PWideChar;
-  Position: Integer;
+  Position: NativeInt;
   Tail: PWideChar;
   TempItem: TExplorerItem;
   WS: string;
@@ -7872,7 +7878,7 @@ begin
   if Position = 0 then
     (Editor as TEasyMemo).SelectAll
   else
-    (Editor as TEasyMemo).SelLength := Position - 1;
+    (Editor as TEasyMemo).SelLength := ToInt32(Position - 1);
 end;
 
 function TEasyExplorerMemoEditor.SetEditorFocus: Boolean;
@@ -7903,7 +7909,7 @@ end;
 procedure TEasyExplorerStringEditor.SelectFileName(FileNameOnly: Boolean);
 var
   P: PWideChar;
-  Position: Integer;
+  Position: NativeInt;
   Tail: PWideChar;
   TempItem: TExplorerItem;
   WS: string;
@@ -7929,7 +7935,7 @@ begin
   if Position = 0 then
     (Editor as TEasyEdit).SelectAll
   else
-    (Editor as TEasyEdit).SelLength := Position - 1;
+    (Editor as TEasyEdit).SelLength := ToInt32(Position - 1);
 end;
 
 function TEasyExplorerStringEditor.SetEditorFocus: Boolean;
@@ -8242,7 +8248,7 @@ end;
 
 function TCustomVirtualMultiPathExplorerEasyListview.DoItemCompare(Column: TEasyColumn; Group: TEasyGroup; Item1: TEasyItem; Item2: TEasyItem): Integer;
 var
-  iColumn: Integer;
+  iColumn: NativeInt;
   DoDefault: Boolean;
 begin
   if Assigned(Column) and TExplorerColumn(Column).IsCustom then
@@ -8438,19 +8444,19 @@ begin
   end
 end;
 
-function TExtensionColorCodeList.GetCount: Integer;
+function TExtensionColorCodeList.GetCount: NativeInt;
 begin
   Result := ItemList.Count
 end;
 
-function TExtensionColorCodeList.GetItems(Index: Integer): TExtensionColorCode;
+function TExtensionColorCodeList.GetItems(Index: NativeInt): TExtensionColorCode;
 begin
   Result := TExtensionColorCode( ItemList[Index])
 end;
 
 procedure TExtensionColorCodeList.Assign(Source: TPersistent);
 var
-  i: Integer;
+  i: NativeInt;
   ColorCodeList: TExtensionColorCodeList;
 begin
   if Source is TExtensionColorCodeList then
@@ -8464,7 +8470,7 @@ end;
 
 procedure TExtensionColorCodeList.Clear;
 var
-  i: Integer;
+  i: NativeInt;
 begin
   for i := 0 to ItemList.Count - 1 do
     TObject( Items[i]).Free;
@@ -8506,15 +8512,19 @@ end;
 
 procedure TExtensionColorCodeList.SaveToStream(S: TStream; Version: integer = 0; WriteVerToStream: Boolean = False);
 var
-  i: Integer;
+  i: NativeInt;
 begin
   inherited SaveToStream(S, Version, WriteVerToStream);
+{$IFDEF CPUX86}
   StreamHelper.WriteInteger(S, ItemList.Count);
+{$ELSE}
+  StreamHelper.WriteInt64(S, ItemList.Count);
+{$ENDIF}
   for i := 0 to ItemList.Count - 1 do
     Items[i].SaveToStream(S, Version, WriteVerToStream)
 end;
 
-procedure TExtensionColorCodeList.SetItems(Index: Integer; Value: TExtensionColorCode);
+procedure TExtensionColorCodeList.SetItems(Index: NativeInt; Value: TExtensionColorCode);
 begin
   ItemList[Index] := Value
 end;
@@ -8545,7 +8555,7 @@ begin
   FBold := StreamHelper.ReadBoolean(S);
   FItalic := StreamHelper.ReadBoolean(S);
   FUnderLine := StreamHelper.ReadBoolean(S);
-  ExtensionMask := string(StreamHelper.ReadAnsiString(S));
+  ExtensionMask := AsString(StreamHelper.ReadAnsiString(S));
 end;
 
 procedure TExtensionColorCode.SaveToStream(S: TStream; Version: integer = 0; WriteVerToStream: Boolean = False);
@@ -8600,7 +8610,7 @@ begin
       // Make them all 6 lines tall with 3x3 pixels margin
       ResizedResult.Bottom := Result.Top + (6 * RectHeight(FontHeightR)) + 6;
       // Make the thumbnail width 1.4x the height
-      ResizedResult.Right := Result.Left + RectWidth(ResizedResult) + Round( RectHeight(ResizedResult) * 1.4);
+      ResizedResult.Right := Result.Left + ToInt32(RectWidth(ResizedResult) + Round( RectHeight(ResizedResult) * 1.4));
       SetRect(FThumbRect, Result.Right + 6, ResizedResult.Top + 6, ResizedResult.Right - 6, ResizedResult.Bottom - 6);
 
       T := SpCreateThumbInfoFromFile(Item.Namespace, RectWidth(ThumbRect), RectHeight(ThumbRect), True, True, True, True, LV.Color);
