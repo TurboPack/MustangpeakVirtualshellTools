@@ -235,12 +235,12 @@ type
   // Implementation of a Reference counted list
   TVirtualReferenceCountedList = class(TThreadList)
   protected
-    FRefCount: NativeInt;
+    FRefCount: {$IFDEF CPUX86}Integer{$ELSE}Int64{$ENDIF};
   public
     procedure AddRef;
     procedure Clear; virtual;
     procedure Release;
-    property RefCount: NativeInt read FRefCount;
+    property RefCount: {$IFDEF CPUX86}Integer{$ELSE}Int64{$ENDIF} read FRefCount;
   end;
 
   // Encapsulates a reference counted TList that contains TVirtualShellEvent objects.
